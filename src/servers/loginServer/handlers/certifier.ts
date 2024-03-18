@@ -1,4 +1,5 @@
 import { PacketType } from "../../../common/packetType";
+import { buildEncryptionKeyFromString, decryptByteArray } from "../../../libraries/aes";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { IPacketHandler, PacketHandler } from "../../../libraries/packetHandler";
 
@@ -15,6 +16,13 @@ export default class CertifierHandler implements IPacketHandler {
   }
 
   execute(): void {
-    console.log(this) //;
+    const key = buildEncryptionKeyFromString('dldhsvmflvm', 16)
+    const password = decryptByteArray(this.passwordByte, key);
+
+    console.log({
+      msgVersion: this.msgVersion,
+      username: this.username,
+      password
+    })
   }
 }
