@@ -63,7 +63,7 @@ export class TcpServer {
               HandlerClass
             );
             if (decoratedKey) {
-              // this.handlers.set(decoratedKey, HandlerClass);
+              this.handlers.set(decoratedKey, HandlerClass);
             }
           }
         })
