@@ -1,10 +1,10 @@
-# NODE.js FlyFF Emulator
+# NODE-FlyFF - Fly For Fun V15 Emulator
 
 ## GPL-3.0 License
 This project is licensed under the GPL-3.0 License.
 
 ## Description
-Node.js FlyFF Emulator is an open-source project aiming to create a Fly For Fun (FlyFF) emulator using Node.js. It focuses on implementing game logic and networking for version 15 of the FlyFF game.
+Node-FlyFF is an open-source project aiming to create a Fly For Fun (FlyFF) emulator using Node.js. It focuses on implementing game logic and networking for version 15 of the FlyFF game.
 
 ⚠️ This project is **not** affiliated with Gala Lab. ⚠️
 
