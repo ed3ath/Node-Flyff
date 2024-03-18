@@ -10,7 +10,7 @@ Node.js FlyFF Emulator is an open-source project aiming to create a Fly For Fun 
 
 ## Technical Information
 - Language: TypeScript (Node.js)
-- Node.js Version: Latest (18 or higher)
+- Node.js Version: 18 or higher
 - Application Type: Console
 - Database Type: SQLite, MySQL (SQLite for now)
 - Configuration Files Type: TBA (YAML or JSON)
