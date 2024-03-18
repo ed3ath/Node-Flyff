@@ -1,4 +1,4 @@
-import { PacketType } from "../common/packetType";
+import { PacketType, ToStringHex } from "../common/packetType";
 import { BinaryStream } from "./binaryStream";
 
 export interface IFlyffPacket {
@@ -44,9 +44,9 @@ export class FlyffPacket extends BinaryStream {
     return packet;
   }
 
-  static createWithHeader(packetHeader: Buffer) {
+  static createWithHeader(packetHeader: PacketType) {
     const packet = FlyffPacket.createEmpty();
-    packet.writeUInt32LE(parseInt(packetHeader.toString('hex'), 16)); // Update content length after header
+    packet.writeUInt32LE(parseInt(ToStringHex(packetHeader), 16)); // Update content length after header
     return packet;
   }
 

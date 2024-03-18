@@ -1,5 +1,3 @@
-
-import FlyFlyffPacket from '../helpers/flyFlyffPacket';
 // import { DefineText } from './DefineText';
 // import { DefineSpecialEffects } from './DefineSpecialEffects';
 import { WorldObjectType } from '../common/worldObjectTypes';

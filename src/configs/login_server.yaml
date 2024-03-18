@@ -1,0 +1,11 @@
+server:
+  host: '127.0.0.1'
+  port: 23000
+  build-version: '20100412'
+  account-verification: true
+  password-encryption-key : 'dldhsvmflvm'
+  max-connection: 1000
+  client-buffer-size: 128
+database:
+  provider: 'sqlite' # 'sqlite' | 'mysql' | 'mssql'
+  connection-string: './data/db/accounts.db'

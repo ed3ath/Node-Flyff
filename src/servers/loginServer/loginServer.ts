@@ -6,9 +6,6 @@ import { ServerTypes } from "../../common/serverTypes";
 export default class LoginServer extends TcpServer {
   // logger: Logger;
   constructor() {
-    super({
-      port: 23000,
-      handlersPath: __dirname
-    });
+    super(__dirname);
   }
 }

@@ -1,15 +1,25 @@
 import { PacketType } from "../common/packetType";
 import { FlyffPacket } from "./flyffPacket";
+import { TcpServer, UserConnection } from "./tcpServer";
 
+export type HandlerConstructor = new (...args: any) => PacketHandler;
 
-export type HandlerConstructor = new (packet: FlyffPacket) => IPacketHandler;
-
-export function PacketHandler(key: PacketType): ClassDecorator {
+export function SetPacketType(key: PacketType): ClassDecorator {
   return function (target: any) {
     Reflect.defineMetadata("packetType", key, target);
   };
 }
 
-export interface IPacketHandler {
-  execute(): void;
+export class PacketHandler {
+  userConnection: UserConnection;
+  server: TcpServer;
+
+  constructor() {}
+
+  execute(): void {}
+
+  send(packet: FlyffPacket) {
+    console.log(packet);
+    this.userConnection.send(packet);
+  }
 }

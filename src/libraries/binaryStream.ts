@@ -158,7 +158,7 @@ export class BinaryStream {
   }
 
   writeBuffer (buffer: any, value: BigInt | number | undefined = undefined, method: string = '') {
-    if (!value && !method) {
+    if (value && method) {
       buffer[method](value, 0)
     }
     this.writeBytes(buffer)

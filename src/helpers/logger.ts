@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { ServerTypes } from "../common/serverTypes";
 
-export function SetLogger(sender: ServerTypes) {
+export function SetLogger(sender: ServerTypes | string) {
   return function (target: any) {
     target.sender = sender;
   };

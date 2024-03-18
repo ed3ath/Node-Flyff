@@ -1,18 +1,14 @@
 import crypto from "crypto";
 
-export function encryptByteArray(input: any, key: any) {
+export function encryptByteArray(input: Buffer, key: Buffer): string {
   const iv = Buffer.alloc(16, 0);
 
-  const cipher: any = crypto.createCipheriv("aes-128-cbc", key, iv);
-  cipher.setAutoPadding(false);
+  const cipher = crypto.createCipheriv("aes-128-cbc", key, iv);
+  let encryptedChunks = Buffer.concat([cipher.update(input), cipher.final()]);
 
-  let encrypted = "";
-  input.forEach((byte: any) => {
-    encrypted += cipher.update(Buffer.from([byte]), "utf8", "hex");
-  });
-  encrypted += cipher.final("hex");
+  let encryptedString = encryptedChunks.toString("hex");
 
-  return encrypted;
+  return encryptedString;
 }
 
 export function decryptByteArray(input: any, key: any) {
@@ -41,9 +37,12 @@ export function decryptString(input: any, key: any) {
 
 export function buildEncryptionKeyFromString(
   encryptionKey: string,
-  keySize = 32,
+  keySize = 16,
   encoding: BufferEncoding = "utf8"
 ) {
+  if (keySize > 16) {
+    keySize = 16;
+  }
   const keyBytes = Buffer.from(encryptionKey, encoding);
   if (keyBytes.length < keySize) {
     return Buffer.concat([
@@ -53,4 +52,10 @@ export function buildEncryptionKeyFromString(
   } else {
     return keyBytes.subarray(0, keySize);
   }
+}
+
+export function generateMD5(input: string, salt = '') {
+  const hash = crypto.createHash('md5');
+  hash.update(salt + input);
+  return hash.digest('hex');
 }
