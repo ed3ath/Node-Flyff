@@ -1,15 +1,14 @@
-import { ServerTypes } from "./common/serverTypes";
 import cluster from "cluster";
-
-import LoginServer from "./servers/loginServer/loginServer";
+import { ServerType } from "./common/serverType";
+import _ from "lodash";
+import loginServer from "./servers/loginServer/loginServer";
 
 if (cluster.isPrimary) {
   cluster.fork({
-    server: ServerTypes.LOGIN_SERVER,
+    server: ServerType.LOGIN_SERVER,
   });
 } else {
-  if (process.env.server === ServerTypes.LOGIN_SERVER) {
-    const server = new LoginServer();
-    server.start();
+  if (_.get(process, "env.server") === ServerType.LOGIN_SERVER) {
+    loginServer()
   }
 }

@@ -1,10 +1,10 @@
 import clc from "cli-color";
 import moment from "moment";
 
-import { ServerTypes } from "../common/serverTypes";
+import { ServerType } from "../common/serverType";
 
 export class Logger {
-  private readonly sender: ServerTypes | string = "MAIN";
+  private readonly sender: ServerType | string = "MAIN";
 
   private static readonly SeverityMap: any = {
     info: clc.cyan,
@@ -14,7 +14,7 @@ export class Logger {
     main: clc.magenta,
   };
 
-  constructor(sender: ServerTypes | string) {
+  constructor(sender: ServerType | string) {
     this.sender = sender;
   }
 
@@ -42,7 +42,7 @@ export class Logger {
     console.log(
       clc.blue(moment().format("LTS")) +
         " " +
-        Logger.SeverityMap[level](`[${this.sender.toUpperCase()}]`) +
+        Logger.SeverityMap[level](`[${this.sender.toUpperCase()}] ${level.toUpperCase()} -`) +
         " " +
         clc.white.bold(message.join(" "))
     );

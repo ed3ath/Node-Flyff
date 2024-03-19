@@ -10,3 +10,6 @@ database:
   - name: 'account'
     provider: 'sqlite' # 'sqlite' | 'mysql' | 'mssql'
     connection-string: './data/db/accounts.db'
+  - name: 'game'
+    provider: 'sqlite'
+    connection-string: './data/db/game.db'

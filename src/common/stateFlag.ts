@@ -1,4 +1,4 @@
-export enum StateFlags {
+export enum StateFlag {
   OBJSTAF_COMBAT = 0x00000001,
   OBJSTAF_WALK = 0x00000002,
   OBJSTAF_SIT = 0x00000004,

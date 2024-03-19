@@ -1,4 +1,4 @@
-export enum ServerTypes {
+export enum ServerType {
   DATABASE_SERVER = "Database Server",
   LOGIN_SERVER = "Login Server",
   CORE_SERVER = "Core Server",

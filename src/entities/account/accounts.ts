@@ -11,7 +11,7 @@ export interface IAccount extends Account {
   deleted: boolean;
   lastActivity: number;
 }
-@Entity()
+@Entity("Account")
 export default class Account extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
