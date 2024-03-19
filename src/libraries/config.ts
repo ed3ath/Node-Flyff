@@ -1,17 +1,19 @@
-import { Logger, SetLogger } from "../helpers/logger";
+import { Logger } from "../helpers/logger";
 
 import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 
-@SetLogger("Config")
 export class ConfigLoader {
+  logger: Logger
   serverName: string;
   config: any;
 
   constructor(serverName: string) {
+    this.logger = new Logger("Config Loader")
     this.serverName = serverName.trim().toLowerCase().replace(/\s/g, "_");
     this.config = this.loadConfig();
+    this.logger.success("Loaded configuration");
   }
 
   loadConfig() {
@@ -24,7 +26,7 @@ export class ConfigLoader {
       const configFile = fs.readFileSync(configPath, "utf8");
       return yaml.load(configFile);
     } catch (err) {
-      Logger.error(
+      this.logger.error(
         `Error loading configuration for server ${this.serverName}:`,
         err
       );

@@ -1,0 +1,11 @@
+server:  
+  ip: '127.0.0.1'
+  port: 15000
+  master-password: 'StrongPassword'
+database:
+  - name: 'account'
+    provider: 'sqlite'
+    connection-string: './data/db/accounts.db'
+  - name: 'game'
+    provider: 'sqlite'
+    connection-string: './data/db/game.db'

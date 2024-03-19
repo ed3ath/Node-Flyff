@@ -7,5 +7,6 @@ server:
   max-connection: 1000
   client-buffer-size: 128
 database:
-  provider: 'sqlite' # 'sqlite' | 'mysql' | 'mssql'
-  connection-string: './data/db/accounts.db'
+  - name: 'account'
+    provider: 'sqlite' # 'sqlite' | 'mysql' | 'mssql'
+    connection-string: './data/db/accounts.db'

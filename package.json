@@ -20,6 +20,7 @@
     "js-yaml": "^4.1.0",
     "moment": "^2.30.1",
     "reflect-metadata": "^0.2.1",
+    "socket.io": "^4.7.5",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20"
   },

@@ -1,6 +1,7 @@
 import { PacketType } from "../common/packetType";
+import { IAccount } from "../servers/loginServer/models/account/accounts";
 import { FlyffPacket } from "./flyffPacket";
-import { TcpServer, UserConnection } from "./tcpServer";
+import { TcpServer, IUserConnection } from "./tcpServer";
 
 export type HandlerConstructor = new (...args: any) => PacketHandler;
 
@@ -11,8 +12,8 @@ export function SetPacketType(key: PacketType): ClassDecorator {
 }
 
 export class PacketHandler {
-  userConnection: UserConnection;
-  server: TcpServer;
+  userConnection: IUserConnection;
+  server: TcpServer
 
   constructor() {}
 

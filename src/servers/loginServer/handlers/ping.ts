@@ -1,7 +1,6 @@
 import { PacketType } from "../../../common/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler, SetPacketType } from "../../../libraries/packetHandler";
-import { UserConnection } from "../../../libraries/tcpServer";
 
 @SetPacketType(PacketType.PING)
 export default class PingHandler extends PacketHandler {
