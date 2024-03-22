@@ -1,8 +1,8 @@
 // import { DefineText } from './DefineText';
 // import { DefineSpecialEffects } from './DefineSpecialEffects';
-import { WorldObjectType } from '../common/worldObjectTypes';
+import { WorldObjectType } from '../common/worldObjectType';
 import { ObjectState } from '../common/objectState';
-import { StateFlags } from '../common/stateFlags';
+import { StateFlags } from '../common/stateFlag';
 import { StateMode } from '../common/stateMode';
 
 import { FFRandom } from '../helpers/FFRandom';

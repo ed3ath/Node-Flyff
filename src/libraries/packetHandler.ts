@@ -1,6 +1,8 @@
 import { PacketType } from "../common/packetType";
+import { Logger } from "../helpers/logger";
 import { FlyffPacket } from "./flyffPacket";
-import { TcpServer, UserConnection } from "./tcpServer";
+import { TcpServer } from "./tcpServer";
+import { IUserConnection } from "../interfaces/connection";
 
 export type HandlerConstructor = new (...args: any) => PacketHandler;
 
@@ -11,15 +13,25 @@ export function SetPacketType(key: PacketType): ClassDecorator {
 }
 
 export class PacketHandler {
-  userConnection: UserConnection;
-  server: TcpServer;
+  logger: Logger;
+  userConnection!: IUserConnection;
+  server!: TcpServer;
 
-  constructor() {}
+  constructor() {
+    this.logger = new Logger("Packet Handler");
+  }
 
-  execute(): void {}
+  async execute(): Promise<void> {}
 
   send(packet: FlyffPacket) {
-    console.log(packet);
     this.userConnection.send(packet);
   }
+
+  wrappedExecute = async () => {
+    try {
+      await this.execute()
+    } catch (e) {
+      this.logger.error(e);
+    }
+  };
 }

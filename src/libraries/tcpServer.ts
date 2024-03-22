@@ -1,112 +1,63 @@
 import "reflect-metadata";
 import { createServer, Server, Socket } from "net";
-import * as fs from "fs-extra";
-import * as path from "path";
-import { cwd } from "process";
 
 import { FlyffPacket } from "./flyffPacket";
 import { HandlerConstructor } from "./packetHandler";
 import { PacketType, ToStringHex } from "../common/packetType";
 import { Logger } from "../helpers/logger";
-import { ConfigLoader } from "./config";
-import { ServerTypes } from "../common/serverTypes";
-import { Database } from "../database/database";
+import { ServerType } from "../common/serverType";
+import { IUserConnection } from "../interfaces/connection";
+import { IRedisClient } from "../interfaces/redis";
 
 // Interface for server configuration
-export interface ServerConfig {
+export interface IServerConfig {
   host: string;
   port: number;
-  buildVersion?: string;
-  accountVerification?: boolean;
-  passwordEncryptionKey?: string;
-  maxConnection: number;
-  clientBufferSize: number;
 }
 
 // Main TCP Server class
 export class TcpServer {
-  private options: ServerConfig;
+  private serverType: ServerType;
+  private options: IServerConfig;
   private server!: Server;
-  private connections: Map<number, UserConnection> = new Map();
   private handlers: Map<PacketType, HandlerConstructor> = new Map();
-  basePath: string;
-  config: ConfigLoader;
-  database: Database;
+  private connections: Map<number, IUserConnection> = new Map();
+  instance!: any
+  redisClient!: IRedisClient;
+  logger: Logger;
 
   // Constructor to initialize TcpServer instance
-  constructor(basePath: string) {
-    this.basePath = basePath ?? cwd(); // Set base path to current working directory if not provided
+  constructor(serverType: ServerType, options: IServerConfig) {
+    this.logger = new Logger(serverType);
+    this.serverType = serverType;
+    this.options = options;
   }
 
   // Method to start the server
   start() {
-    this.loadConfig()
-      .then(() => {
-        this.loadHandlers()
-          .then(() => {
-            // Initialize database connection
-            const dbConfig = this.config.getValue("database");
-            this.database = new Database({
-              type: dbConfig.provider,
-              database: dbConfig["connection-string"],
-            });
-            this.database.basePath = this.basePath;
-            this.database
-              .start()
-              .then(() => {
-                // Create and start TCP server
-                this.server = createServer(this.onConnection.bind(this));
-                this.server.listen(
-                  this.options.port,
-                  this.options.host,
-                  this.onServerStart.bind(this)
-                );
-              })
-              .catch(this.onError.bind(this));
-          })
-          .catch(this.onError.bind(this));
-      })
-      .catch(this.onError.bind(this));
+    this.logger.main("Starting...");
+    if (!this.handlers.size) {
+      this.logger.warn("No packet handlers imported.");
+    }
+    this.server = createServer(this.onConnection.bind(this));
+    this.server.listen(
+      this.options.port,
+      this.options.host,
+      this.onServerStart.bind(this)
+    );
   }
 
-  // Method to load server configuration
-  protected async loadConfig() {
-    this.config = new ConfigLoader(ServerTypes.LOGIN_SERVER);
-    Logger.success("Loaded configuration");
-    this.options = this.config.getValue("server");
+  addHandlers(handlers: Map<PacketType, HandlerConstructor>) {
+    this.handlers = handlers;
   }
 
-  // Method to load packet handlers
-  protected async loadHandlers() {
-    if (!this.basePath) {
-      throw new Error(`Cannot find path ${this.basePath}`);
-    }
-    const handlersFolder = path.join(this.basePath, "handlers");
-    if (fs.existsSync(handlersFolder)) {
-      const files = fs.readdirSync(handlersFolder);
-      if (files.length) {
-        await Promise.all(
-          files.map(async (file) => {
-            const handlerModule = await import(path.join(handlersFolder, file));
-            if (handlerModule && handlerModule.default) {
-              const HandlerClass = handlerModule.default as HandlerConstructor;
-              const decoratedKey = Reflect.getMetadata(
-                "packetType",
-                HandlerClass
-              );
-              if (decoratedKey) {
-                this.handlers.set(decoratedKey, HandlerClass);
-              }
-            }
-          })
-        );
-      }
-    }
+  addRedisClient(redisClient: IRedisClient) {
+    this.redisClient = redisClient;
   }
 
   // Method called when server starts listening
   protected onServerStart(): void {
-    Logger.info(
+    this.logger.info(
       `Server listening on ${this.options.host}:${this.options.port}`
     );
   }
@@ -115,15 +66,17 @@ export class TcpServer {
   protected onConnection(socket: Socket): void {
     const userConnection = new UserConnection(socket);
     this.connections.set(userConnection.sessionId, userConnection);
-    Logger.success(
+    this.logger.success(
       `New connection established with session ID: ${userConnection.sessionId} (${socket.remoteAddress}:${socket.remotePort})`
     );
 
-    // Send welcome packet to the client
-    const packet = FlyffPacket.createEmpty();
-    packet.writeUInt32LE(PacketType.WELCOME);
-    packet.writeUInt32LE(userConnection.sessionId);
-    userConnection.send(packet);
+    if (this.serverType !== ServerType.CORE_SERVER) {
+      // Send welcome packet to the client
+      const packet = FlyffPacket.createEmpty();
+      packet.writeUInt32LE(PacketType.WELCOME);
+      packet.writeUInt32LE(userConnection.sessionId);
+      userConnection.send(packet);
+    }
 
     // Attach event listeners for data, close, and error events
     socket.on("data", (data) => this.onData(data, userConnection));
@@ -134,18 +87,19 @@ export class TcpServer {
   }
 
   // Method called when data is received from a client
-  protected onData(data: Buffer, userConnection: UserConnection): void {
+  protected onData(data: Buffer, userConnection: IUserConnection): void {
     const packet = new FlyffPacket(data);
+
     const HandlerClass = this.handlers.get(packet.PacketType);
     if (HandlerClass) {
       // Execute the corresponding packet handler
       const handlerInstance = new HandlerClass(packet);
       handlerInstance.userConnection = userConnection;
       handlerInstance.server = this;
-      handlerInstance.execute();
+      handlerInstance.wrappedExecute();
     } else {
       // Log unimplemented packet type
-      Logger.warn(
+      this.logger.warn(
         `Unimplemented packet ${this.getPacketTypeId(
           packet.PacketType
         )} (${ToStringHex(packet.PacketType)})`
@@ -157,16 +111,17 @@ export class TcpServer {
   protected onDisconnect(sessionId: number): void {
     if (this.connections.has(sessionId)) {
       this.connections.delete(sessionId);
-      Logger.warn(`Connection with session ID ${sessionId} closed`);
+      this.logger.warn(`Connection with session ID ${sessionId} closed`);
     }
   }
 
   // Method called when an error occurs
   protected onError(error: Error, sessionId: number | null = null): void {
+    console.log(error);
     if (sessionId) {
-      Logger.error(`Error occurred for session ID ${sessionId}: ${error}`);
+      this.logger.error(`Error occurred for session ID ${sessionId}: ${error}`);
     } else {
-      Logger.error(error);
+      this.logger.error(error);
     }
   }
 
@@ -181,17 +136,18 @@ export class TcpServer {
   }
 
   // Method to disconnect a user
-  disconnectUser(userConnection: UserConnection) {
+  disconnectUser(userConnection: IUserConnection) {
     userConnection.socket.destroy();
   }
 
   // Method to check if a user is connected
-  isUserConnected = (userConnection: UserConnection) =>
+  isUserConnected = (userConnection: IUserConnection) =>
     this.connections.has(userConnection.sessionId);
 }
 
-// Class representing a user connection
 export class UserConnection {
+  public userId: number | null = null;
+  public username: string | null = null;
   public readonly sessionId: number;
   public readonly socket: Socket;
 
@@ -202,10 +158,10 @@ export class UserConnection {
   }
 
   // Method called when data is received (can be overridden)
-  protected onData(_packet: FlyffPacket): void { }
+  protected onData(packet: FlyffPacket): void {}
 
   // Method to send a packet to the client
-  send(packet: FlyffPacket) {
+  send(packet: FlyffPacket): void {
     this.socket.write(FlyffPacket.appendHeader(packet.buffer));
   }
 }

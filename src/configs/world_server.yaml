@@ -1,0 +1,76 @@
+server:
+  host: '127.0.0.1'
+  port: 5400
+security:
+  master-password: 'StrongPassword'
+redis:
+  host: '127.0.0.1'
+  port: 6379
+  password: ''
+  tls: false
+settings:
+  name: 'Channel 1'    
+  maximum-users: 100
+  pk-enabled: false
+  language: 'en'
+  maps:
+    - "WI_WORLD_MADRIGAL"
+    - "WI_DUNGEON_FL_MAS"
+  rates:
+    gold: 1
+    experience: 1
+    drop: 1
+  npc-buff:
+    default:
+    - name: MaFl_Helper_ver12
+      min: 1
+      max: 20
+      buffs:
+      - skill-id: SI_ASS_HEAL_PATIENCE
+        level: 7
+        time: 3600
+      - skill-id: SI_ASS_CHEER_HEAPUP
+        level: 7
+        time: 3600
+    additional:
+    - name: MaFl_Helper_ver12
+      min: 1
+      max: 120
+      buffs:
+      - skill-id: SI_ASS_HEAL_PATIENCE
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_QUICKSTEP
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_HASTE
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_CATSREFLEX
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_CANNONBALL
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_MENTALSIGN
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_HEAPUP
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_BEEFUP
+        level: 20
+        time: 3600
+      - skill-id: SI_ASS_CHEER_ACCURACY
+        level: 20
+        time: 3600
+      - skill-id: SI_RIN_SUP_PROTECT
+        level: 10
+        time: 3600
+database:
+  - name: 'account'
+    provider: 'sqlite'
+    connection-string: './data/db/accounts.db'
+  - name: 'game'
+    provider: 'sqlite'
+    connection-string: './data/db/game.db'

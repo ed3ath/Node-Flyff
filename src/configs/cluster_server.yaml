@@ -1,0 +1,78 @@
+server:
+  host: '127.0.0.1'
+  port: 28000
+security:
+  master-password: 'StrongPassword'
+redis:
+  host: '127.0.0.1'
+  port: 6379
+  password: ''
+  tls: false
+settings:
+  name: 'Node-Flyff'
+  login-protect: false
+  maps:
+    - WI_WORLD_MADRIGAL
+    - WI_DUNGEON_FL_MAS
+  rates:
+    experience: 1
+    drop: 1
+    gold: 1
+  death-penality-enabled: true
+  mails:
+    shipping-cost: 500
+  messenger:
+    maximum-friends: 100
+  customization:
+    face-cost: 1000000
+    hair-cost: 2000000
+    hair-color-cost: 4000000
+  drops:
+    ownership-time: 7
+    despawn-time: 120
+  default-character:
+    man:
+      level: 1
+      gold: 0
+      strength: 15
+      stamina: 15
+      dexterity: 15
+      intelligence: 15
+      map: 1
+      pos-x: 6968
+      pos-y: 100
+      pos-z: 3328
+      equipped:
+        hat: -1
+        body: II_ARM_M_VAG_SUIT01
+        hand: II_ARM_M_VAG_GAUNTLET01
+        boots: II_ARM_M_VAG_BOOTS01
+        right-weapon: II_WEA_SWO_WOODEN
+        left-weapon: -1
+      inventory: []
+    woman:
+      level: 1
+      gold: 0
+      strength: 15
+      stamina: 15
+      dexterity: 15
+      intelligence: 15
+      map: 1
+      pos-x: 6968
+      pos-y: 100
+      pos-z: 3328
+      equipped:
+        hat: -1
+        body: II_ARM_F_VAG_SUIT01
+        hand: II_ARM_F_VAG_GAUNTLET01
+        boots: II_ARM_F_VAG_BOOTS01
+        right-weapon: II_WEA_SWO_WOODEN
+        left-weapon: -1
+      inventory: []
+database:
+  - name: 'account'
+    provider: 'sqlite'
+    connection-string: './data/db/accounts.db'
+  - name: 'game'
+    provider: 'sqlite'
+    connection-string: './data/db/game.db'

@@ -1,5 +1,8 @@
 import { PacketType } from "../../../common/packetType";
-import { PacketHandler, SetPacketType } from "../../../libraries/packetHandler";
+import {
+  PacketHandler,
+  SetPacketType,
+} from "../../../libraries/packetHandler";
 
 @SetPacketType(PacketType.ERROR)
 export default class PingHandler extends PacketHandler {
@@ -7,9 +10,11 @@ export default class PingHandler extends PacketHandler {
     super();
   }
 
-  execute(): void {
-    if ( this.server.isUserConnected(this.userConnection)) {
-        this.server.disconnectUser(this.userConnection);
+  async execute(): Promise<void> {
+    if (
+      this.server.instance?.server?.isUserConnected(this.userConnection)
+    ) {
+      this.server.instance.server.disconnectUser(this.userConnection);
     }
   }
 }
