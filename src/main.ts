@@ -1,14 +1,22 @@
-import cluster from "cluster";
-import { ServerType } from "./common/serverType";
-import _ from "lodash";
-import loginServer from "./servers/loginServer/loginServer";
+import loginServer from "./servers/loginServer/";
+import clusterServer from "./servers/clusterServer/";
+import worldServer from "./servers/worldServer";
 
-if (cluster.isPrimary) {
-  cluster.fork({
-    server: ServerType.LOGIN_SERVER,
-  });
-} else {
-  if (_.get(process, "env.server") === ServerType.LOGIN_SERVER) {
-    loginServer()
-  }
+// Parse command-line arguments
+const args = process.argv.slice(2); // Remove "node" and script filename from args
+const serverType = args[0];
+
+switch (serverType) {
+  case "login":
+    loginServer();
+    break;
+  case "cluster":
+    clusterServer();
+    break;
+  case "world":
+    worldServer();
+    break;
+  default:
+    console.error("Invalid server type:", serverType);
+    process.exit(1);
 }

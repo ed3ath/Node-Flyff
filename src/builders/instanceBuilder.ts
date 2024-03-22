@@ -1,73 +1,120 @@
 import { DataSource } from "typeorm";
+import _ from "lodash";
 
 import { TcpServer } from "../libraries/tcpServer";
-import { ConfigBuilder, IConfig } from "./configBuilder";
+import { ConfigBuilder } from "./configBuilder";
 import { DatabaseBuilder } from "./databaseBuilder";
 import { HandlerBuilder } from "./handlerBuilder";
 import { ServerBuilder } from "./serverBuilder";
 import { HandlerConstructor } from "../libraries/packetHandler";
 import { PacketType } from "../common/packetType";
 import { sleep } from "../helpers/sleep";
+import { IConfig } from "../interfaces/config";
+import { RedisBuilder } from "./redisBuilder";
+import { Redis } from "ioredis";
+import { IInstance } from "../interfaces/instance";
+import { IDatabaseOptions } from "../interfaces/database";
+import { IRedisClient } from "../interfaces/redis";
 
 export class InstanceBuilder {
-  private config: IConfig | null;
-  private server: TcpServer;
-  private databases: Map<string, DataSource> = new Map();
-  private serverHandlers: Map<PacketType, HandlerConstructor> = new Map();
-  private clientHandlers: Map<PacketType, HandlerConstructor> = new Map();
+  config: IConfig | null;
+  databaseBuilder: DatabaseBuilder;
+  handlerBuilder: HandlerBuilder;
+  serverBuilder: ServerBuilder;
+  redisBuilder: RedisBuilder;
 
   constructor() {}
 
   buildConfig(_: (builder: ConfigBuilder) => void): void {
     const builder = new ConfigBuilder();
     _(builder);
-    builder.build();
-    this.config = builder.getValues();
+    this.config = builder.build();
   }
 
-  async buildDatabase(_: (builder: DatabaseBuilder) => void): Promise<void> {
+  buildDatabase(_: (builder: DatabaseBuilder) => void): void {
     const builder = new DatabaseBuilder();
     _(builder);
-    this.databases = builder.getDatabase();
+    this.databaseBuilder = builder;
   }
 
-  async buildHandlers(_: (builder: HandlerBuilder) => void): Promise<void> {
+  buildHandlers(_: (builder: HandlerBuilder) => void): void {
     const builder = new HandlerBuilder();
     _(builder);
-    builder.build();
-    if(builder.type === 'server') {
-      this.serverHandlers = builder.getHandlers();
-    } else {
-      this.clientHandlers = builder.getHandlers();
-    }
+    this.handlerBuilder = builder;
   }
 
-  async buildServer(_: (builder: ServerBuilder) => void): Promise<void> {
+  buildServer(_: (builder: ServerBuilder) => void): void {
     const builder = new ServerBuilder();
     _(builder);
-    await sleep(3000); // sleep for 3 seconds (temp solution)
-    builder.build()
-    this.server = builder.getServer();
+    this.serverBuilder = builder;
   }
 
-  getConfig = () => this.config;
+  buildRedis(_: (builder: RedisBuilder) => void): void {
+    const builder = new RedisBuilder();
+    _(builder);
+    this.redisBuilder = builder;
+  }
 
-  getServer = () => this.server;
+  async build(): Promise<IInstance> {
+    // build config
+    let server: TcpServer | null = null;
+    let publisher: Redis | null = null;
+    let subscriber: Redis | null = null;
+    let client: IRedisClient | null = null;
+    let databases: Map<string, DataSource> = new Map();
+    let handlers: Map<PacketType, HandlerConstructor> = new Map();
 
-  getDatabases = () => this.databases;
+    // build database
+    await Promise.all(
+      _.map(_.get(this.config, "database", []), async (options: any) => {
+        await this.databaseBuilder.addConnection({
+          name: options.name,
+          dataSource: {
+            type: _.get(options, "provider", "sqlite"),
+            database: _.get(options, "connection-string", options.name),
+            url: _.get(options, "url"),
+            host: _.get(options, "host"),
+            port: _.get(options, "port"),
+            username: _.get(options, "username"),
+            password: _.get(options, "password"),
+          },
+          entities: [],
+        } as IDatabaseOptions);
+      })
+    );
+    databases = await this.databaseBuilder.build();
 
-  getDatabase = (name: string) => this.databases.get(name);
+    await this.handlerBuilder.loadHandlers();
+    handlers = this.handlerBuilder.build();
 
-  getServerHandlers = () => this.serverHandlers;
+    if (this.redisBuilder) {
+      const redis = this.redisBuilder.build();
+      publisher = redis.publisher;
+      subscriber = redis.subscriber;
+      client = redis.client;
+    }
 
-  getClientHandlers = () => this.clientHandlers
+    if (handlers) {
+      this.serverBuilder.addHandlers(handlers);
+      if (client) {
+        this.serverBuilder.addRedisClient(client);
+      }
+      server = this.serverBuilder.build();
+    }
+    const instance: IInstance = {
+      config: this.config,
+      server,
+      handlers,
+      publisher,
+      subscriber,
+      client,
+      databases,
+      getDatabase: (db: string) => databases.get(db),
+    };
 
-  getInstance = () => ({
-    config: this.config,
-    server: this.server,
-    databases: this.databases,
-    serverHandlers: this.serverHandlers,
-    clientHandlers: this.clientHandlers,
-    getDatabase: this.getDatabase
-  });
+    if (server) {
+      server.instance = instance;
+    }
+    return instance;
+  }
 }

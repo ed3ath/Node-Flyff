@@ -1,9 +1,9 @@
-import { PacketType } from "../../../../common/packetType";
-import { FlyffPacket } from "../../../../libraries/flyffPacket";
+import { PacketType } from "../../../common/packetType";
+import { FlyffPacket } from "../../../libraries/flyffPacket";
 import {
   PacketHandler,
   SetPacketType,
-} from "../../../../libraries/packetHandler";
+} from "../../../libraries/packetHandler";
 
 @SetPacketType(PacketType.PING)
 export default class PingHandler extends PacketHandler {

@@ -1,15 +1,20 @@
 server:
   host: '127.0.0.1'
   port: 23000
+security:
   build-version: '20100412'
-  account-verification: true
+  master-password: 'StrongPassword'
   password-encryption-key : 'dldhsvmflvm'
+settings:
+  account-verification: true
   max-connection: 1000
   client-buffer-size: 128
+redis:
+  host: '127.0.0.1'
+  port: 6379
+  password: ''
+  tls: false
 database:
   - name: 'account'
     provider: 'sqlite' # 'sqlite' | 'mysql' | 'mssql'
     connection-string: './data/db/accounts.db'
-  - name: 'game'
-    provider: 'sqlite'
-    connection-string: './data/db/game.db'

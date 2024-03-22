@@ -5,10 +5,7 @@ import yaml from "js-yaml";
 import { ConfigType } from "../common/configType";
 import { Logger } from "../helpers/logger";
 import { BuilderType } from "../common/builderType";
-
-export interface IConfig {
-  [key: string]: any;
-}
+import { IConfig } from "../interfaces/config";
 
 export class ConfigBuilder {
   private logger: Logger;
@@ -47,18 +44,18 @@ export class ConfigBuilder {
         : ConfigType.UNKNOWN;
   }
 
-  build(): void {
+  build(): IConfig | null {
     if (
       !this.basePath ||
       !this.configFile ||
       this.configType === ConfigType.UNKNOWN
     ) {
-      return;
+      return null;
     }
     const configPath = join(this.basePath, this.configFile);
     if (!fs.existsSync(configPath)) {
       this.logger.error(`Cannot find ${configPath}.`);
-      return;
+      return null;
     }
     if (this.configType === ConfigType.JSON) {
       this.config = fs.readJSONSync(configPath);
@@ -67,13 +64,8 @@ export class ConfigBuilder {
       this.config = yaml.load(configFile) as IConfig;
     }
     this.logger.success("Config successfully loaded");
-  }
-
-  getValue(key: string): any {
-    return this.config ? this.config[key] : null;
-  }
-
-  getValues() {
     return this.config;
   }
+
+  getConfig = () => this.config
 }

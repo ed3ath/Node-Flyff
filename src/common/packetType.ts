@@ -1,4 +1,8 @@
 export enum PacketType {
+  // Inter-server
+  CLUSTER_AUTH_REQ = 0x00003500,
+  CLUSTER_AUTH_RES = 0x00003501,
+  // Flyff Client
   WELCOME = 0x0000000,
   MY_REG = 0x00000001,
   PROC_SERVER_LIST = 0x00000002,

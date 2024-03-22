@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import CryptoJS from "crypto-js";
 
 export function encryptByteArray(input: Buffer, key: Buffer): string {
   const iv = Buffer.alloc(16, 0);
@@ -27,12 +28,30 @@ export function decryptByteArray(input: any, key: any) {
   return decrypted.replace(/\0+$/, "");
 }
 
-export function encryptString(input: any, key: any) {
-  return encryptByteArray(Buffer.from(input, "utf8"), key);
+export function encryptString(input: string, key: string) {
+  return CryptoJS.AES.encrypt(input, key).toString();
 }
 
-export function decryptString(input: any, key: any) {
-  return decryptByteArray(input, key);
+export function decryptString(input: string, key: string) {
+  return CryptoJS.AES.decrypt(input, key).toString(CryptoJS.enc.Utf8);
+}
+
+export function parseMessage(message: string) {
+  try {
+    // Remove all non-printable ASCII characters, control characters, and whitespace
+    const cleanedMessage = message.trim();
+    return JSON.parse(cleanedMessage);
+  } catch {
+    return null;
+  }
+}
+
+export function isValidEncryptionString(input: any, key: any) {
+  try {
+    return !!decryptString(input, key);
+  } catch {
+    return false;
+  }
 }
 
 export function buildEncryptionKeyFromString(
@@ -54,8 +73,30 @@ export function buildEncryptionKeyFromString(
   }
 }
 
-export function generateMD5(input: string, salt = '') {
-  const hash = crypto.createHash('md5');
+export function generateMD5(input: string, salt = "") {
+  const hash = crypto.createHash("md5");
   hash.update(salt + input);
-  return hash.digest('hex');
+  return hash.digest("hex");
+}
+
+export function generateKeyPair() {
+  const curve = crypto.createECDH("secp256k1");
+  return curve.generateKeys("hex", "compressed");
+}
+
+export function signMessage(message: string | Buffer, key: Buffer) {
+  const hmac = crypto.createHmac("sha256", key);
+  hmac.update(
+    typeof message === "string" ? Buffer.from(message, "hex") : message
+  );
+  return hmac.digest("hex");
+}
+
+export function verify(
+  message: string | Buffer,
+  signature: string,
+  key: Buffer
+) {
+  const calculatedSignature = signMessage(message, key);
+  return signature === calculatedSignature;
 }

@@ -2,7 +2,7 @@ import { PacketType } from "../common/packetType";
 import { Logger } from "../helpers/logger";
 import { FlyffPacket } from "./flyffPacket";
 import { TcpServer } from "./tcpServer";
-import { IUserConnection } from "./connection";
+import { IUserConnection } from "../interfaces/connection";
 
 export type HandlerConstructor = new (...args: any) => PacketHandler;
 
@@ -14,8 +14,8 @@ export function SetPacketType(key: PacketType): ClassDecorator {
 
 export class PacketHandler {
   logger: Logger;
-  userConnection: IUserConnection;
-  server: TcpServer;
+  userConnection!: IUserConnection;
+  server!: TcpServer;
 
   constructor() {
     this.logger = new Logger("Packet Handler");

@@ -1,35 +1,15 @@
-import { DataSource, DataSourceOptions } from "typeorm";
-import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
-import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
-import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 import _ from "lodash";
 import fs from "fs-extra";
 import { Logger } from "../helpers/logger";
 import { join } from "path";
+import { DataSource, DataSourceOptions } from "typeorm";
+import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOptions";
+import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+
 import { BuilderType } from "../common/builderType";
-
-export enum ConnectionType {
-  MARIADB = "mariadb",
-  MYSQL = "mysql",
-  LITE = "sqlite",
-  POSTGRES = "postgres",
-}
-
-export interface IDataSource {
-  type: ConnectionType;
-  database: string;
-  url?: string;
-  host?: string;
-  port?: string;
-  username?: string;
-  password?: string;
-}
-
-export interface IDatabaseOptions {
-  name: string;
-  dataSource: IDataSource;
-  entities: [];
-}
+import { IDataSource, IDatabaseOptions } from "../interfaces/database";
+import { DatabaseType } from "../common/databaseType";
 
 export class DatabaseBuilder {
   private logger: Logger;
@@ -47,12 +27,12 @@ export class DatabaseBuilder {
 
   getOptionByType(options: IDataSource) {
     switch (options.type) {
-      case ConnectionType.MYSQL:
-      case ConnectionType.MARIADB:
+      case DatabaseType.MYSQL:
+      case DatabaseType.MARIADB:
         return options as MysqlConnectionOptions;
-      case ConnectionType.LITE:
+      case DatabaseType.LITE:
         return options as SqliteConnectionOptions;
-      case ConnectionType.POSTGRES:
+      case DatabaseType.POSTGRES:
         return options as PostgresConnectionOptions;
       default:
         return options as DataSourceOptions;
@@ -115,9 +95,6 @@ export class DatabaseBuilder {
         ", "
       )}] successfully added`
     );
-  }
-
-  getDatabase() {
     return this.database;
   }
 }

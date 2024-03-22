@@ -7,22 +7,13 @@ import { PacketType } from "../common/packetType";
 import { Logger } from "../helpers/logger";
 import { BuilderType } from "../common/builderType";
 
-interface Config {
-  [key: string]: any;
-}
-
 export class HandlerBuilder {
   private logger: Logger;
   private basePath: string;
   private handlers: Map<PacketType, HandlerConstructor> = new Map();
-  type: string;
 
   constructor() {
     this.logger = new Logger(BuilderType.HANDLER_BUILDER);
-  }
-
-  setType(type: string) {
-    this.type = type;
   }
 
   setBasePath(basePath: string): void {
@@ -39,7 +30,7 @@ export class HandlerBuilder {
       return;
     }
 
-    const handlersFolder = join(this.basePath, "handlers", this.type);
+    const handlersFolder = join(this.basePath, "handlers");
     if (!fs.existsSync(handlersFolder)) return;
 
     const files = fs.readdirSync(handlersFolder);
@@ -59,15 +50,8 @@ export class HandlerBuilder {
     );
   }
 
-  build(): void {
-    if (!this.basePath || !this.handlers.size) {
-      return;
-    }
-
+  build(): Map<PacketType, HandlerConstructor> {    
     this.logger.success("Loaded", this.handlers.size, "handlers");
-  }
-
-  getHandlers(): any {
     return this.handlers;
   }
 }

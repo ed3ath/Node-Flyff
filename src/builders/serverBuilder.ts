@@ -4,6 +4,8 @@ import { TcpServer } from "../libraries/tcpServer";
 import { HandlerConstructor } from "../libraries/packetHandler";
 import { Logger } from "../helpers/logger";
 import { BuilderType } from "../common/builderType";
+import { Redis, RedisOptions } from "ioredis";
+import { IRedisClient } from "../interfaces/redis";
 
 export interface IServerConfig {
   host: string;
@@ -18,8 +20,8 @@ export interface IServerConfig {
 export class ServerBuilder {
   private logger: Logger;
   private server: TcpServer;
-  private options: IServerConfig;
-  private handlers: Map<PacketType, HandlerConstructor>;
+  private handlers: Map<PacketType, HandlerConstructor> = new Map();
+  private redisClient: IRedisClient;
   serverType: ServerType;
 
   constructor() {}
@@ -29,21 +31,23 @@ export class ServerBuilder {
     this.serverType = type;
   }
 
-  addServer(options: IServerConfig) {
-    this.options = options;
+  addServer(server: TcpServer) {
+    this.server = server;
   }
 
   addHandlers(handlers: Map<PacketType, HandlerConstructor>) {
     this.handlers = handlers;
   }
 
-  build() {
-    if (!this.serverType || !this.options || !this.addHandlers) return
-    this.server = new TcpServer(this.serverType, this.options, this.handlers);
-    this.server.create()
+  addRedisClient(redisClient: IRedisClient) {
+    this.redisClient = redisClient;
   }
 
-  getServer() {
+  build(): TcpServer | null {
+    if (!this.serverType) return null;
+    this.server.addHandlers(this.handlers);
+    this.server.addRedisClient(this.redisClient);
+    this.server.start();
     return this.server;
   }
 }

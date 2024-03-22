@@ -2,7 +2,7 @@ import { PacketType, ToStringHex } from "../common/packetType";
 import { BinaryStream } from "./binaryStream";
 
 export interface IFlyffPacket {
-  HEADER_NUMBER: number;
+  FLYFF_HEADER_NUMBER: number;
   PACKET_DATA_START_OFFSET: number;
   HeaderNumber: number;
   Header: Buffer;
@@ -17,7 +17,8 @@ export interface IFlyffPacket {
 }
 
 export class FlyffPacket extends BinaryStream {
-  static HEADER_NUMBER = 0x5e;
+  static FLYFF_HEADER_NUMBER = 0x5e;
+  static CORE_HEADER_NUMBER = 0x4d;
   static PACKET_DATA_START_OFFSET = 5;
 
   HeaderNumber!: number;
@@ -26,7 +27,7 @@ export class FlyffPacket extends BinaryStream {
 
   constructor(
     packetBuffer: Buffer = Buffer.alloc(0),
-    ignorePacketHeader = false
+    ignorePacketHeader = false,
   ) {
     super(packetBuffer);
 
@@ -39,14 +40,27 @@ export class FlyffPacket extends BinaryStream {
 
   static createEmpty() {
     const packet = new FlyffPacket();
-    packet.writeByte(FlyffPacket.HEADER_NUMBER);
-    packet.writeUInt32LE(0);
+    packet.writeByte(FlyffPacket.FLYFF_HEADER_NUMBER);
+    packet.writeUInt32(0);
+    return packet;
+  }
+
+  static createEmptyCore(){
+    const packet = new FlyffPacket();
+    packet.writeByte(FlyffPacket.CORE_HEADER_NUMBER);
+    packet.writeUInt32(0);
     return packet;
   }
 
   static createWithHeader(packetHeader: PacketType) {
     const packet = FlyffPacket.createEmpty();
     packet.writeUInt32LE(parseInt(ToStringHex(packetHeader), 16)); // Update content length after header
+    return packet;
+  }
+
+  static createCoreHeader(packetHeader: PacketType, le = false) {
+    const packet = FlyffPacket.createEmptyCore();
+    packet.writeUInt32(parseInt(ToStringHex(packetHeader), 16)); // Update content length after header
     return packet;
   }
 
@@ -77,6 +91,12 @@ export class FlyffPacket extends BinaryStream {
   }
 
   writeString(value: string = "") {
+    const stringBytes = BinaryStream.STRING_ENCODER.encode(value);
+    this.writeInt32(stringBytes.length);
+    this.writeBytes(stringBytes as Buffer);
+  }
+
+  writeStringLE(value: string = "") {
     const stringBytes = BinaryStream.STRING_ENCODER.encode(value);
     this.writeInt32LE(stringBytes.length);
     this.writeBytes(stringBytes as Buffer);

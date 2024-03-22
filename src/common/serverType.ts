@@ -1,7 +1,7 @@
 export enum ServerType {
-  DATABASE_SERVER = "Database Server",
-  LOGIN_SERVER = "Login Server",
-  CORE_SERVER = "Core Server",
-  CLUSTER_SERVER = "Cluster Server",
-  WORLD_SERVER = "World Server",
+  DATABASE_SERVER = "DatabaseServer",
+  LOGIN_SERVER = "LoginServer",
+  CORE_SERVER = "CoreServer",
+  CLUSTER_SERVER = "ClusterServer",
+  WORLD_SERVER = "WorldServer",
 }
