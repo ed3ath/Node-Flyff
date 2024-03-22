@@ -8,6 +8,7 @@ import { Logger } from "../helpers/logger";
 import { ServerType } from "../common/serverType";
 import { IUserConnection } from "../interfaces/connection";
 import { IRedisClient } from "../interfaces/redis";
+import { IConfig } from "../interfaces/config";
 
 // Interface for server configuration
 export interface IServerConfig {
@@ -19,12 +20,14 @@ export interface IServerConfig {
 export class TcpServer {
   private serverType: ServerType;
   private options: IServerConfig;
-  private server!: Server;
-  private handlers: Map<PacketType, HandlerConstructor> = new Map();
-  private connections: Map<number, IUserConnection> = new Map();
-  instance!: any
+  time: number;
+  server!: Server;
+  handlers: Map<PacketType, HandlerConstructor> = new Map();
+  connections: Map<number, IUserConnection> = new Map();
+  instance!: any;
   redisClient!: IRedisClient;
   logger: Logger;
+  config: IConfig;
 
   // Constructor to initialize TcpServer instance
   constructor(serverType: ServerType, options: IServerConfig) {
@@ -47,6 +50,10 @@ export class TcpServer {
     );
   }
 
+  setConfig(config: IConfig) {
+    this.config = config;
+  }
+
   addHandlers(handlers: Map<PacketType, HandlerConstructor>) {
     this.handlers = handlers;
   }
@@ -60,6 +67,7 @@ export class TcpServer {
     this.logger.info(
       `Server listening on ${this.options.host}:${this.options.port}`
     );
+    this.time = new Date().getTime();
   }
 
   // Method called when a new connection is established
@@ -126,7 +134,7 @@ export class TcpServer {
   }
 
   // Utility method to get packet type ID as string
-  private getPacketTypeId(value: number): string | undefined {
+  getPacketTypeId(value: number): string | undefined {
     for (const key in PacketType) {
       if (PacketType[key as keyof typeof PacketType] === value) {
         return key;
@@ -163,5 +171,9 @@ export class UserConnection {
   // Method to send a packet to the client
   send(packet: FlyffPacket): void {
     this.socket.write(FlyffPacket.appendHeader(packet.buffer));
+  }
+
+  disconnect(): void {
+    this.socket.destroy();
   }
 }

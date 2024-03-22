@@ -8,6 +8,7 @@ export interface ICluster {
 }
 
 export interface IChannel {
+  id?: number;
   name: string;
   host: string;
   port: string;

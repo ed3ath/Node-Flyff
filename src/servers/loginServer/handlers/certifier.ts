@@ -9,10 +9,10 @@ import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler, SetPacketType } from "../../../libraries/packetHandler";
 
 import { ErrorType } from "../../../common/errorType";
-import { IAccount } from "../../../entities/account/accounts";
 import { LoginServer } from "../loginServer";
 import { IChannel, ICluster } from "../../../interfaces/cluster";
 import _ from "lodash";
+import { IAccount } from '../../../interfaces/account';
 
 @SetPacketType(PacketType.CERTIFY)
 export default class CertifierHandler extends PacketHandler {
@@ -78,20 +78,6 @@ export default class CertifierHandler extends PacketHandler {
     }
     return true;
   }
-
-  getRandomInt(min, max) {
-    // Calculate the range of possible values
-    const range = max - min + 1;
-  
-    // Generate random bytes
-    const randomBytes = crypto.randomBytes(4); // 4 bytes for 32-bit integer
-  
-    // Convert bytes to an unsigned integer (32-bit)
-    const randomNumber = randomBytes.readUInt32BE();
-  
-    // Map the random number to the desired range
-    return min + Math.floor(randomNumber / (0xffffffff / range));
-  }
   
 
   async sendServerList() {
@@ -119,9 +105,8 @@ export default class CertifierHandler extends PacketHandler {
       packet.writeInt32LE(0); // Maximum users
 
       cluster.channels.forEach((channel: IChannel, j) => {
-        const channelId = j + 1;
         packet.writeInt32LE(clusterId); // cluster id
-        packet.writeInt32LE(this.getRandomInt(1000, 6566545)); // channel id
+        packet.writeInt32LE(channel.id as number); // channel id
         packet.writeStringLE(channel.name);
         packet.writeStringLE(channel.host);
         packet.writeInt32LE(0); // b18 ?

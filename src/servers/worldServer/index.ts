@@ -1,6 +1,6 @@
 import { join } from "path";
 import _ from "lodash";
-import cron from "node-cron";
+import cron, { ScheduledTask } from "node-cron";
 
 import { InstanceBuilder } from "../../builders/instanceBuilder";
 import { ConfigBuilder } from "../../builders/configBuilder";
@@ -15,11 +15,12 @@ import { MessageCommand, RedisChannel } from "../../common/redisTypes";
 import {
   buildEncryptionKeyFromString,
   decryptString,
-  encryptString,
+  encryptMessage,
   isValidEncryptionString,
   parseMessage,
 } from "../../libraries/crypto";
 import { RedisBuilder } from "../../builders/redisBuilder";
+import { FFRandom } from "../../helpers/FFRandom";
 
 export default async () => {
   const instanceBuilder = new InstanceBuilder();
@@ -54,9 +55,12 @@ function worldIntercom(instance: IInstance) {
   const logger = server?.logger;
   const master = buildEncryptionKeyFromString(
     config?.security["master-password"]
-  ).toString('hex');
+  ).toString("hex");
+
+  let scheduler: ScheduledTask;
 
   const channel: IChannel = {
+    id: randomId(),
     name: config?.settings.name,
     host: config?.server.host,
     port: config?.server.port,
@@ -66,14 +70,22 @@ function worldIntercom(instance: IInstance) {
     pkEnabled: config?.settings["pk-enabled"],
   };
 
-  const encryptMessage = (message: string, key: string) => {
-    return encryptString(message, key);
-  };
+  subscriber?.subscribe(RedisChannel.CLUSTER_CHANNEL, (err) => {
+    if (!err) {
+      setTimeout(() => {
+        sendMessage(MessageCommand.ADD_CHANNEL, channel);
+      }, 500); // for dev: temp delay for 500ms
+    } else {
+      logger?.error(err);
+    }
+  });
+  subscriber?.on("message", processChannelMessage.bind(this));
 
-  const processChannelMessage = (
-    redisChannel: RedisChannel,
-    message: string
-  ) => {
+  function randomId() {
+    return FFRandom.random(0, Math.pow(2, 32) / 2 - 1);
+  }
+
+  function processChannelMessage(redisChannel: RedisChannel, message: string) {
     if (redisChannel !== RedisChannel.CLUSTER_CHANNEL) return;
     if (!isValidEncryptionString(message, master)) return; // reject invalid messages
     const decrypted = parseMessage(decryptString(message, master));
@@ -81,22 +93,47 @@ function worldIntercom(instance: IInstance) {
       if (decrypted.sender === ServerType.WORLD_SERVER) return;
       // console.log(decrypted);
       switch (decrypted.command) {
-        case MessageCommand.CLUSTER_ONLINE:
+        case MessageCommand.CLUSTER_ONLINE: {
           sendMessage(MessageCommand.ADD_CHANNEL, channel);
           break;
+        }
 
-        case MessageCommand.CHANNEL_ADDED:
+        case MessageCommand.CHANNEL_ADDED: {
           // console.log(decrypted.data.name, channel.name);
           if (decrypted.data.name === channel.name) {
-            cron.schedule("*/15 * * * * *", () => {
-              sendMessage(MessageCommand.PING, channel);
-            });
+            schedulePing();
           }
           break;
+        }
+
+        case MessageCommand.CHANNEL_EXIST: {
+          if (decrypted.data.name === channel.name) {
+            schedulePing();
+          }
+          break
+        }
+
+        case MessageCommand.CHANNEL_ID_EXIST: {
+          if (decrypted.data.name === channel.name) {
+            channel.id = randomId();
+            sendMessage(MessageCommand.ADD_CHANNEL, channel);
+          }
+          break
+        }
       }
     }
-  };
-  const sendMessage = (command: MessageCommand, message: any = null) => {
+  }
+
+  function schedulePing() {
+    if (scheduler) {
+      scheduler.stop();
+    }
+    scheduler = cron.schedule("*/15 * * * * *", () => {
+      sendMessage(MessageCommand.PING, channel);
+    });
+  }
+
+  function sendMessage(command: MessageCommand, message: any = null) {
     publisher?.publish(
       RedisChannel.CLUSTER_CHANNEL,
       encryptMessage(
@@ -110,18 +147,5 @@ function worldIntercom(instance: IInstance) {
         master
       )
     );
-  };
-
-  subscriber?.subscribe(RedisChannel.CLUSTER_CHANNEL, (err) => {
-    if (!err) {
-      sendMessage(MessageCommand.ADD_CHANNEL, channel);
-    } else {
-      logger?.error(err);
-    }
-  });
-  subscriber?.on("message", processChannelMessage.bind(this));
-
-  global.worldServer = {
-    channel,
-  };
+  }
 }

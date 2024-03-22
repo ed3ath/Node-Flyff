@@ -6,7 +6,7 @@ export interface IFlyffPacket {
   PACKET_DATA_START_OFFSET: number;
   HeaderNumber: number;
   Header: Buffer;
-  
+
   createEmpty(): IFlyffPacket;
   createWithHeader(packetHeader: Buffer): IFlyffPacket;
   getMessageLength(buffer: Buffer, littleMedia: boolean): number;
@@ -23,7 +23,7 @@ export class FlyffPacket extends BinaryStream {
 
   HeaderNumber!: number;
   DataLength!: number;
-  PacketType!: PacketType
+  PacketType!: PacketType;
 
   constructor(
     packetBuffer: Buffer = Buffer.alloc(0),
@@ -45,7 +45,7 @@ export class FlyffPacket extends BinaryStream {
     return packet;
   }
 
-  static createEmptyCore(){
+  static createEmptyCore() {
     const packet = new FlyffPacket();
     packet.writeByte(FlyffPacket.CORE_HEADER_NUMBER);
     packet.writeUInt32(0);
@@ -58,7 +58,7 @@ export class FlyffPacket extends BinaryStream {
     return packet;
   }
 
-  static createCoreHeader(packetHeader: PacketType, le = false) {
+  static createCoreHeader(packetHeader: PacketType) {
     const packet = FlyffPacket.createEmptyCore();
     packet.writeUInt32(parseInt(ToStringHex(packetHeader), 16)); // Update content length after header
     return packet;
@@ -76,8 +76,7 @@ export class FlyffPacket extends BinaryStream {
   }
 
   static appendHeader(buffer: Buffer) {
-    const contentLength =
-      buffer.length - FlyffPacket.PACKET_DATA_START_OFFSET;
+    const contentLength = buffer.length - FlyffPacket.PACKET_DATA_START_OFFSET;
     const contentLengthBuffer = Buffer.alloc(4);
     contentLengthBuffer.writeUInt32LE(contentLength, 0);
     contentLengthBuffer.copy(buffer, 1, 0);

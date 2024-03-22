@@ -68,13 +68,14 @@ export class RedisClient implements IRedisClient {
     const cluster: any = await this.client.hgetall(
       clusterName?.includes("cluster:") ? clusterName : `cluster:${clusterName}`
     );
-    const channels: IChannel[] = []; // Initialize the array for channels
+    let channels: IChannel[] = []; // Initialize the array for channels
     if (cluster.channels) {
       // If channels exist in the clusterData, parse them
       const channelDataArray = JSON.parse(cluster.channels); // Assuming channels are stored as JSON strings
-      channelDataArray.forEach((channelData: IChannel) => {
-        // Parse each channel data object
-        const channel: IChannel = {
+      channels = _.map(
+        channelDataArray,
+        (channelData: IChannel) => ({
+          id: channelData.id,
           name: channelData.name,
           host: channelData.host,
           port: channelData.port,
@@ -82,9 +83,8 @@ export class RedisClient implements IRedisClient {
           currentUsers: channelData.currentUsers,
           enabled: channelData.enabled,
           pkEnabled: channelData.pkEnabled,
-        };
-        channels.push(channel); // Push the channel object to the channels array
-      });
+        })
+      );
     }
 
     if (!_.isNil(cluster) && !_.isEmpty(cluster)) {
@@ -112,6 +112,7 @@ export class RedisClient implements IRedisClient {
     if (clusterData) {
       if (_.some(clusterData.channels, (i) => i.name === channel.name)) return;
       const channelData = {
+        id: channel.id,
         name: channel.name,
         host: channel.host,
         port: channel.port,
@@ -140,9 +141,9 @@ export class RedisClient implements IRedisClient {
     const clusterKey = `cluster:${clusterName}`;
 
     if (clusterData) {
-      const existIndex = clusterData.channels.findIndex(
-        (i) => i.name === updatedChannel.name
-      );
+      const existIndex = _.findIndex(clusterData.channels, {
+        name: updatedChannel.name,
+      });
       if (existIndex >= 0) {
         clusterData.channels[existIndex] = {
           ...clusterData.channels[existIndex],
@@ -166,7 +167,7 @@ export class RedisClient implements IRedisClient {
     channelName: string
   ): Promise<IChannel | null> {
     const cluster = await this.getCluster(clusterName);
-    return cluster?.channels.find((i) => i.name === channelName) || null;
+    return _.find(cluster?.channels, { name: channelName }) || null;
   }
 
   async deleteChannel(clusterName: string, channelName: string): Promise<void> {
@@ -181,14 +182,17 @@ export class RedisClient implements IRedisClient {
         this.logger.error("Error parsing channels JSON:", error);
       }
 
-      const updatedChannels = channels.filter(
-        (channel) => channel.name !== channelName
-      );
+      const updatedChannels = _.filter(channels, { name: channelName });
       clusterData.channels = JSON.stringify(updatedChannels);
 
       await this.client.hmset(key, clusterData);
     } else {
       this.logger.error("Cluster not found:", clusterName);
     }
+  }
+
+  async getChannelById(clusterName: string, id: number): Promise<IChannel | undefined> {
+    const channels = await this.getAllChannels(clusterName);
+    return _.find(channels, { id });
   }
 }

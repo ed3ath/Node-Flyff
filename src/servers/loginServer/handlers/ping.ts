@@ -7,14 +7,23 @@ import {
 
 @SetPacketType(PacketType.PING)
 export default class PingHandler extends PacketHandler {
-  constructor() {
+  time: number;
+  timedOut: boolean;
+  
+  constructor(packet: FlyffPacket) {
     super();
+    try {
+      this.time = packet.readInt32LE();
+      this.timedOut = false;
+    } catch {
+      this.time = 0;
+      this.timedOut = true;
+    }
   }
 
   async execute(): Promise<void> {
     const packet = FlyffPacket.createWithHeader(PacketType.PING);
-    const time = Math.trunc(new Date().getTime() / 1000);
-    packet.writeInt32(time);
+    packet.writeInt32(this.time);
     this.send(packet);
   }
 }

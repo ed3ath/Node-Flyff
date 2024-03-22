@@ -18,6 +18,7 @@ import {
   isValidEncryptionString,
   parseMessage,
   decryptString,
+  encryptMessage,
 } from "../../libraries/crypto";
 import { RedisBuilder } from "../../builders/redisBuilder";
 
@@ -107,13 +108,6 @@ async function clusterIntercom(instance: IInstance) {
   });
   // ////// MAIN //////////
 
-  // ////// REDIS ////////
-
-  // ///// REDIS ///////
-
-  function encryptMessage(message: string, key: string) {
-    return encryptString(message, key);
-  }
   async function processChannelMessage(
     redisChannel: RedisChannel,
     message: string
@@ -160,26 +154,36 @@ async function clusterIntercom(instance: IInstance) {
       if (redisChannel === RedisChannel.CLUSTER_CHANNEL) {
         switch (decrypted.command) {
           case MessageCommand.ADD_CHANNEL: {
-            const channel = {
-              ...decrypted.data,
-              lastPing: new Date().getTime(),
-            };
-            await client?.insertChannel(initCluster.name, channel);
-            sendMessage(
-              RedisChannel.CLUSTER_CHANNEL,
-              MessageCommand.CHANNEL_ADDED,
-              channel
-            );
+            if (
+              await client?.getChannelById(initCluster.name, decrypted.data.id)
+            ) {
+              logger?.warn("A channel with id", decrypted.data.id, "already exist.");
+              sendMessage(RedisChannel.CLUSTER_CHANNEL, MessageCommand.CHANNEL_ID_EXIST, decrypted.data);
+            } else if (await client?.getChannel(initCluster.name, decrypted.data.name)) {
+              logger?.warn(decrypted.data.name, "already exist.");
+              sendMessage(RedisChannel.CLUSTER_CHANNEL, MessageCommand.CHANNEL_EXIST, decrypted.data);
+            } else {
+              const channel: IChannel = {
+                ...decrypted.data,
+                lastPing: new Date().getTime(),
+              };
+              await client?.insertChannel(initCluster.name, channel);
+              sendMessage(
+                RedisChannel.CLUSTER_CHANNEL,
+                MessageCommand.CHANNEL_ADDED,
+                channel
+              );
+            }
             break;
           }
           case MessageCommand.PING: {
             const channel: IChannel | null | undefined =
               await client?.getChannel(initCluster.name, decrypted.data.name);
             if (channel) {
-              const updated = {
+              const updated: IChannel = {
                 ...channel,
-                lastPing: new Date().getTime()
-              }
+                lastPing: new Date().getTime(),
+              };
               await client?.updateChannel(initCluster.name, updated);
             }
             break;

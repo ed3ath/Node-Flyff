@@ -99,6 +99,7 @@ export class InstanceBuilder {
       if (client) {
         this.serverBuilder.addRedisClient(client);
       }
+      this.serverBuilder.setConfig(this.config as IConfig);
       server = this.serverBuilder.build();
     }
     const instance: IInstance = {

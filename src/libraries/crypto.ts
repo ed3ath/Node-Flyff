@@ -100,3 +100,7 @@ export function verify(
   const calculatedSignature = signMessage(message, key);
   return signature === calculatedSignature;
 }
+
+export function encryptMessage (message: string, key: string) {
+  return encryptString(message, key);
+}

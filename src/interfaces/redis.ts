@@ -15,4 +15,8 @@ export interface IRedisClient {
     channelName: string
   ): Promise<IChannel | null>;
   deleteChannel(clusterName: string, channelName: string): Promise<void>;
+  getChannelById(
+    clusterName: string,
+    id: number
+  ): Promise<IChannel | undefined>;
 }

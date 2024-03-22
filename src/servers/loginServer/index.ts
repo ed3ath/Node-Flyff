@@ -15,6 +15,7 @@ import { MessageCommand, RedisChannel } from "../../common/redisTypes";
 import {
   buildEncryptionKeyFromString,
   decryptString,
+  encryptMessage,
   encryptString,
   isValidEncryptionString,
   parseMessage,
@@ -87,13 +88,6 @@ async function coreIntercom(instance: IInstance) {
 
   ////// MAIN //////////
 
-  ////// REDIS ////////
-
-  ///// REDIS ///////
-
-  function encryptMessage(message: string, key: string) {
-    return encryptString(message, key);
-  }
   async function processChannelMessage(channel: RedisChannel, message: string) {
     if (channel !== RedisChannel.CORE_CHANNEL) return;
     if (!isValidEncryptionString(message, master)) return; // reject invalid messages

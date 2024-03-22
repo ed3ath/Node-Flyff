@@ -8,4 +8,5 @@ export interface IUserConnection extends UserConnection {
   sessionId: number;
   socket: Socket;
   send(packet: FlyffPacket): void;
+  disconnect(): void;
 }

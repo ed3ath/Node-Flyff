@@ -31,6 +31,7 @@ export class PacketHandler {
     try {
       await this.execute()
     } catch (e) {
+      console.log(e)
       this.logger.error(e);
     }
   };

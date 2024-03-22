@@ -16,4 +16,6 @@ export enum MessageCommand {
   ADD_CHANNEL = "add_channel",
   CHANNEL_ADDED = "channel_added",
   CHANNEL_REMOVED = "channel_removed",
+  CHANNEL_EXIST = "channel_exist",
+  CHANNEL_ID_EXIST = "channel_id_exist",
 }
