@@ -14,14 +14,13 @@ import { DatabaseType } from "../common/databaseType";
 export class DatabaseBuilder {
   private logger: Logger;
   private entitiesPath: string;
-  readonly instance: DataSource;
-  private database: Map<string, DataSource> = new Map();
+  private database: DataSource;
 
   constructor() {
     this.logger = new Logger(BuilderType.DATABASE_BUILDER);
   }
 
-  setModelsPath(entitiesPath: string) {
+  setEntitiesPath(entitiesPath: string) {
     this.entitiesPath = entitiesPath;
   }
 
@@ -41,39 +40,37 @@ export class DatabaseBuilder {
 
   async addConnection(options: IDatabaseOptions) {
     try {
-      const entities = await this.loadEntities(options.name);
-      this.database.set(
-        options.name,
-        new DataSource({
-          ...this.getOptionByType(options.dataSource),
-          entities: [...entities] as any[],
-        })
-      );
+      const entities = await this.loadEntities();
+      this.database = new DataSource({
+        ...this.getOptionByType(options.dataSource),
+        entities: [...entities] as string[],
+      });
     } catch (error) {
       console.log(error);
       this.logger.error("Error adding connection:", error);
     }
   }
 
-  async loadEntities(name: string) {
+  async loadEntities() {
     const entities = new Set();
     try {
       if (!fs.existsSync(this.entitiesPath)) {
         throw new Error(`Cannot find path ${this.entitiesPath}`);
       }
-      const files = fs.readdirSync(join(this.entitiesPath, name));
+      const files = fs.readdirSync(join(this.entitiesPath));
       if (_.isEmpty(files)) return [];
       await Promise.all(
         _.map(files, async (file: string) => {
           if (
             file.endsWith(".ts") &&
-            fs.existsSync(join(this.entitiesPath, name, file))
+            fs.existsSync(join(this.entitiesPath, file))
           ) {
             // const module = await import();
-            entities.add(join(this.entitiesPath, name, file));
+            entities.add(join(this.entitiesPath, file));
           }
         })
       );
+      this.logger.success(`Loaded ${entities.size} entities`);
     } catch (error) {
       console.log(error);
       this.logger.error("Error loading models:", error);
@@ -82,19 +79,13 @@ export class DatabaseBuilder {
   }
 
   async build() {
-    await Promise.all(
-      _.map([...this.database.values()], async (database: DataSource) => {
-        await database.initialize();
-        await database.synchronize();
-      })
-    ).catch((e) => {
+    try {
+      await this.database.initialize();
+      await this.database.synchronize();
+    } catch (e) {
       this.logger.warn(e.message);
-    });
-    this.logger.success(
-      `Databases [${Array.from(this.database.keys()).join(
-        ", "
-      )}] successfully added`
-    );
+    }
+    this.logger.success(`Database successfully loaded`);
     return this.database;
   }
 }

@@ -1,15 +1,15 @@
 server:
-  host: '127.0.0.1'
+  host: "127.0.0.1"
   port: 28000
 security:
-  master-password: 'StrongPassword'
+  master-password: "StrongPassword"
 redis:
-  host: '127.0.0.1'
+  host: "127.0.0.1"
   port: 6379
-  password: ''
+  password: ""
   tls: false
 settings:
-  name: 'Node-Flyff'
+  name: "Node-Flyff"
   login-protect: false
   maps:
     - WI_WORLD_MADRIGAL
@@ -31,48 +31,32 @@ settings:
     ownership-time: 7
     despawn-time: 120
   default-character:
-    man:
-      level: 1
-      gold: 0
-      strength: 15
-      stamina: 15
-      dexterity: 15
-      intelligence: 15
-      map: 1
-      pos-x: 6968
-      pos-y: 100
-      pos-z: 3328
-      equipped:
+    level: 1
+    gold: 0
+    strength: 15
+    stamina: 15
+    dexterity: 15
+    intelligence: 15
+    map: 1
+    pos-x: 6968
+    pos-y: 100
+    pos-z: 3328
+    equipped:
+      male:
         hat: -1
         body: II_ARM_M_VAG_SUIT01
         hand: II_ARM_M_VAG_GAUNTLET01
         boots: II_ARM_M_VAG_BOOTS01
         right-weapon: II_WEA_SWO_WOODEN
         left-weapon: -1
-      inventory: []
-    woman:
-      level: 1
-      gold: 0
-      strength: 15
-      stamina: 15
-      dexterity: 15
-      intelligence: 15
-      map: 1
-      pos-x: 6968
-      pos-y: 100
-      pos-z: 3328
-      equipped:
+      female:
         hat: -1
         body: II_ARM_F_VAG_SUIT01
         hand: II_ARM_F_VAG_GAUNTLET01
         boots: II_ARM_F_VAG_BOOTS01
         right-weapon: II_WEA_SWO_WOODEN
         left-weapon: -1
-      inventory: []
+    inventory: []
 database:
-  - name: 'account'
-    provider: 'sqlite'
-    connection-string: './data/db/accounts.db'
-  - name: 'game'
-    provider: 'sqlite'
-    connection-string: './data/db/game.db'
+  provider: "sqlite"
+  connection-string: "./data/db/game.db"

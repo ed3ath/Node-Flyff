@@ -1,0 +1,24 @@
+{
+  "name": "MaFl_Loyah",
+  "oralText": "Hungry? Visit my sister Losha's Food Shop! *YUM*",
+  "introText": [
+    "My sister and I make a lot of super yummy food! One day, I hope to open a shop of my own, but I still have a lot to learn. Will you try some of our delicious Chicken Sticks? The secret's in the sauce!"
+  ],
+  "byeText": "Bon Appetit!",
+  "links": [
+    {
+      "id": "PRESENTATION",
+      "title": "Who are you?",
+      "texts": [
+        "My name is Loyah Encline, and I'm a cook for my elder sister Losha's Food Shop. We're working on a new recipe for Mushpoie Stew, but I can't tell you the ingredients. It's family secret!"
+      ]
+    },
+    {
+      "id": "BYE",
+      "title": "Goodbye!",
+      "texts": [
+        "Bon Appetit!"
+      ]
+    }
+  ]
+}

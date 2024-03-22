@@ -1,3 +1,4 @@
+import { ErrorType } from './../common/errorType';
 import { Socket } from "net";
 import { FlyffPacket } from "../libraries/flyffPacket";
 import { UserConnection } from "../libraries/tcpServer";
@@ -8,5 +9,6 @@ export interface IUserConnection extends UserConnection {
   sessionId: number;
   socket: Socket;
   send(packet: FlyffPacket): void;
+  sendError(errorType: ErrorType): void;
   disconnect(): void;
 }

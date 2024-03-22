@@ -1,4 +1,4 @@
-import { join } from "path";
+import path from "path";
 import _ from "lodash";
 import cron, { ScheduledTask } from "node-cron";
 
@@ -21,17 +21,18 @@ import {
 } from "../../libraries/crypto";
 import { RedisBuilder } from "../../builders/redisBuilder";
 import { FFRandom } from "../../helpers/FFRandom";
+import { ResourceBuilder } from "../../builders/resourceBuilder";
 
 export default async () => {
   const instanceBuilder = new InstanceBuilder();
 
   instanceBuilder.buildConfig((builder: ConfigBuilder) => {
-    builder.setBasePath(join(__dirname, "../../configs"));
+    builder.setBasePath(path.join(__dirname, "../../configs"));
     builder.setConfigFile("world_server.yaml");
   });
 
   instanceBuilder.buildDatabase((builder: DatabaseBuilder) => {
-    builder.setModelsPath(join(__dirname, "../../entities"));
+    builder.setEntitiesPath(path.join(__dirname, "../../database"));
   });
 
   instanceBuilder.buildHandlers((builder: HandlerBuilder) => {
@@ -46,6 +47,17 @@ export default async () => {
     builder.setServerType(ServerType.WORLD_SERVER);
     builder.addServer(new WorldServer(instanceBuilder.config?.server));
   });
+
+  instanceBuilder.buildResource((builder: ResourceBuilder) => {
+    const resPath = path.join(global.projectPath, "resources", "res");
+    builder.resourcePaths = {
+      item: path.join(resPath, "dataSub2", "propItem.txt"),
+      defineItem: path.join(resPath, "data", "defineItem.h"),
+      defineItemKind: path.join(resPath, "data", "defineItemKind.h"),
+      defineJob: path.join(resPath, "data", "defineJob.h"),
+    };
+  });
+
   const instance = await instanceBuilder.build();
   worldIntercom(instance);
 };
@@ -110,7 +122,7 @@ function worldIntercom(instance: IInstance) {
           if (decrypted.data.name === channel.name) {
             schedulePing();
           }
-          break
+          break;
         }
 
         case MessageCommand.CHANNEL_ID_EXIST: {
@@ -118,7 +130,7 @@ function worldIntercom(instance: IInstance) {
             channel.id = randomId();
             sendMessage(MessageCommand.ADD_CHANNEL, channel);
           }
-          break
+          break;
         }
       }
     }

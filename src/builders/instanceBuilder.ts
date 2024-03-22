@@ -15,6 +15,8 @@ import { Redis } from "ioredis";
 import { IInstance } from "../interfaces/instance";
 import { IDatabaseOptions } from "../interfaces/database";
 import { IRedisClient } from "../interfaces/redis";
+import { ResourceBuilder } from "./resourceBuilder";
+import { GameResources } from "../interfaces/resource";
 
 export class InstanceBuilder {
   config: IConfig | null;
@@ -22,6 +24,7 @@ export class InstanceBuilder {
   handlerBuilder: HandlerBuilder;
   serverBuilder: ServerBuilder;
   redisBuilder: RedisBuilder;
+  resourceBuilder: ResourceBuilder;
 
   constructor() {}
 
@@ -55,34 +58,38 @@ export class InstanceBuilder {
     this.redisBuilder = builder;
   }
 
+  buildResource(_: (builder: ResourceBuilder) => void): void {
+    const builder = new ResourceBuilder();
+    _(builder);
+    this.resourceBuilder = builder;
+  }
+
   async build(): Promise<IInstance> {
     // build config
     let server: TcpServer | null = null;
     let publisher: Redis | null = null;
     let subscriber: Redis | null = null;
     let client: IRedisClient | null = null;
-    let databases: Map<string, DataSource> = new Map();
+    let database: DataSource | null = null;
     let handlers: Map<PacketType, HandlerConstructor> = new Map();
+    let gameResources: GameResources | null = null;
 
     // build database
-    await Promise.all(
-      _.map(_.get(this.config, "database", []), async (options: any) => {
-        await this.databaseBuilder.addConnection({
-          name: options.name,
-          dataSource: {
-            type: _.get(options, "provider", "sqlite"),
-            database: _.get(options, "connection-string", options.name),
-            url: _.get(options, "url"),
-            host: _.get(options, "host"),
-            port: _.get(options, "port"),
-            username: _.get(options, "username"),
-            password: _.get(options, "password"),
-          },
-          entities: [],
-        } as IDatabaseOptions);
-      })
-    );
-    databases = await this.databaseBuilder.build();
+    if (this.config?.database) {
+      await this.databaseBuilder.addConnection({
+        dataSource: {
+          type: _.get(this.config?.database, "provider"),
+          database: _.get(this.config?.database, "connection-string"),
+          url: _.get(this.config?.database, "url"),
+          host: _.get(this.config?.database, "host"),
+          port: _.get(this.config?.database, "port"),
+          username: _.get(this.config?.database, "username"),
+          password: _.get(this.config?.database, "password"),
+        },
+        entities: [],
+      } as IDatabaseOptions);
+      database = await this.databaseBuilder.build();
+    }
 
     await this.handlerBuilder.loadHandlers();
     handlers = this.handlerBuilder.build();
@@ -94,7 +101,7 @@ export class InstanceBuilder {
       client = redis.client;
     }
 
-    if (handlers) {
+    if (this.serverBuilder && handlers) {
       this.serverBuilder.addHandlers(handlers);
       if (client) {
         this.serverBuilder.addRedisClient(client);
@@ -102,6 +109,11 @@ export class InstanceBuilder {
       this.serverBuilder.setConfig(this.config as IConfig);
       server = this.serverBuilder.build();
     }
+
+    if (this.resourceBuilder) {
+      gameResources = this.resourceBuilder.build();
+    }
+
     const instance: IInstance = {
       config: this.config,
       server,
@@ -109,8 +121,11 @@ export class InstanceBuilder {
       publisher,
       subscriber,
       client,
-      databases,
-      getDatabase: (db: string) => databases.get(db),
+      database,
+      gameResources,
+      getEntity: (entityName: string) => {
+        return database?.getRepository(entityName);
+      },
     };
 
     if (server) {

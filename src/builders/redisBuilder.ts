@@ -1,9 +1,5 @@
-import fs from "fs-extra";
-import { join } from "path";
 import _ from "lodash";
-
-import { HandlerConstructor } from "../libraries/packetHandler";
-import { PacketType } from "../common/packetType";
+;
 import { Logger } from "../helpers/logger";
 import { BuilderType } from "../common/builderType";
 import { Redis, RedisOptions } from "ioredis";
@@ -35,7 +31,7 @@ export class RedisBuilder {
       };
     }
 
-    this.logger.success("Redis successfully built");
+    this.logger.success("Redis successfully loaded");
     return {
       subscriber: new Redis(this.options),
       publisher: new Redis(this.options),

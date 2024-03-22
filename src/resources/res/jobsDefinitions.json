@@ -1,0 +1,130 @@
+{
+    "JOB_VAGRANT": {
+        "Parent": null,
+        "Type": "JTYPE_BASE"
+    },
+    "JOB_MERCENARY": {
+        "Parent": "JOB_VAGRANT",
+        "Type": "JTYPE_EXPERT"
+    },
+    "JOB_ACROBAT": {
+        "Parent": "JOB_VAGRANT",
+        "Type": "JTYPE_EXPERT"
+    },
+    "JOB_ASSIST": {
+        "Parent": "JOB_VAGRANT",
+        "Type": "JTYPE_EXPERT"
+    },
+    "JOB_MAGICIAN": {
+        "Parent": "JOB_VAGRANT",
+        "Type": "JTYPE_EXPERT"
+    },
+    "JOB_PUPPETEER": {
+        "Parent": "JOB_VAGRANT",
+        "Type": "JTYPE_EXPERT"
+    },
+    "JOB_KNIGHT": {
+        "Parent": "JOB_MERCENARY",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_BLADE": {
+        "Parent": "JOB_MERCENARY",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_JESTER": {
+        "Parent": "JOB_ACROBAT",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_RANGER": {
+        "Parent": "JOB_ACROBAT",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_RINGMASTER": {
+        "Parent": "JOB_ASSIST",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_BILLPOSTER": {
+        "Parent": "JOB_ASSIST",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_PSYCHIKEEPER": {
+        "Parent": "JOB_MAGICIAN",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_ELEMENTOR": {
+        "Parent": "JOB_MAGICIAN",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_GATEKEEPER": {
+        "Parent": "JOB_PUPPETEER",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_DOPPLER": {
+        "Parent": "JOB_PUPPETEER",
+        "Type": "JTYPE_PRO"
+    },
+    "JOB_KNIGHT_MASTER": {
+        "Parent": "JOB_KNIGHT",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_BLADE_MASTER": {
+        "Parent": "JOB_BLADE",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_JESTER_MASTER": {
+        "Parent": "JOB_JESTER",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_RANGER_MASTER": {
+        "Parent": "JOB_RANGER",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_RINGMASTER_MASTER": {
+        "Parent": "JOB_RINGMASTER",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_BILLPOSTER_MASTER": {
+        "Parent": "JOB_BILLPOSTER",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_PSYCHIKEEPER_MASTER": {
+        "Parent": "JOB_PSYCHIKEEPER",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_ELEMENTOR_MASTER": {
+        "Parent": "JOB_ELEMENTOR",
+        "Type": "JTYPE_MASTER"
+    },
+    "JOB_KNIGHT_HERO": {
+        "Parent": "JOB_KNIGHT_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_BLADE_HERO": {
+        "Parent": "JOB_BLADE_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_JESTER_HERO": {
+        "Parent": "JOB_JESTER_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_RANGER_HERO": {
+        "Parent": "JOB_RANGER_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_RINGMASTER_HERO": {
+        "Parent": "JOB_RINGMASTER_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_BILLPOSTER_HERO": {
+        "Parent": "JOB_BILLPOSTER_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_PSYCHIKEEPER_HERO": {
+        "Parent": "JOB_PSYCHIKEEPER_MASTER",
+        "Type": "JTYPE_HERO"
+    },
+    "JOB_ELEMENTOR_HERO": {
+        "Parent": "JOB_ELEMENTOR_MASTER",
+        "Type": "JTYPE_HERO"
+    }
+}

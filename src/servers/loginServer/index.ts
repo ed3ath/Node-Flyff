@@ -31,7 +31,7 @@ export default async () => {
   });
 
   instanceBuilder.buildDatabase((builder: DatabaseBuilder) => {
-    builder.setModelsPath(join(__dirname, "../../entities"));
+    builder.setEntitiesPath(join(__dirname, "../../database"));
   });
 
   instanceBuilder.buildHandlers((builder: HandlerBuilder) => {

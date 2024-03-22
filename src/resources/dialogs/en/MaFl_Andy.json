@@ -1,0 +1,25 @@
+{
+    "name": "MaFl_Andy",
+    "oralText": "Anyone who wants to become a Mercenary, be welcome to me! Congratulations that you are looking for a world full of adventure!",
+    "introText": [
+      "If you want something, then you have to pay first. Remember that."
+    ],
+    "byeText": "The sword of Mercenary will protect you.",
+    "links": [
+      {
+        "id": "PRESENTATION",
+        "title": "Who are you?",
+        "texts": [
+          "I'm Andy Kimu, the Mercenary Master. I am responsible for the examination to the Mercenary. I know almost everything, although I have only just begun."
+        ]
+      },
+      {
+        "id": "BYE",
+        "title": "Goodbye!",
+        "texts": [
+          "The sword of Mercenary will protect you."
+        ]
+      }
+    ]
+  }
+  

@@ -1,0 +1,22 @@
+{
+  "name": "MaFl_Peach",
+  "items": [
+    [
+      {
+        "itemId": 26461,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 20024,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [],
+    [],
+    []
+  ]
+}

@@ -1,16 +1,9 @@
-import { PacketType } from "../common/packetType";
 import { Logger } from "../helpers/logger";
 import { FlyffPacket } from "./flyffPacket";
 import { TcpServer } from "./tcpServer";
 import { IUserConnection } from "../interfaces/connection";
 
 export type HandlerConstructor = new (...args: any) => PacketHandler;
-
-export function SetPacketType(key: PacketType): ClassDecorator {
-  return function (target: any) {
-    Reflect.defineMetadata("packetType", key, target);
-  };
-}
 
 export class PacketHandler {
   logger: Logger;

@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "yarn build && node build/src/main.js",
+    "start": "ts-node src/main.ts",
     "dev": "nodemon src/main.ts",
     "dev:login": "yarn dev login",
     "clean": "rimraf coverage build tmp",

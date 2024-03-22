@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import _ from "lodash";
 
 import { PacketType } from "../../../common/packetType";
 import {
@@ -6,16 +6,14 @@ import {
   decryptByteArray,
 } from "../../../libraries/crypto";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
-import { PacketHandler, SetPacketType } from "../../../libraries/packetHandler";
-
+import { PacketHandler } from "../../../libraries/packetHandler";
+import { SetPacketType } from "../../../decorators/packetHandler";
 import { ErrorType } from "../../../common/errorType";
-import { LoginServer } from "../loginServer";
 import { IChannel, ICluster } from "../../../interfaces/cluster";
-import _ from "lodash";
-import { IAccount } from '../../../interfaces/account';
+import Account from "../../../database/account";
 
 @SetPacketType(PacketType.CERTIFY)
-export default class CertifierHandler extends PacketHandler {
+export default class Handler extends PacketHandler {
   msgVersion: string;
   username: string;
   passwordByte: Buffer;
@@ -27,35 +25,33 @@ export default class CertifierHandler extends PacketHandler {
     this.passwordByte = packet.readBytes(16 * 42);
   }
 
-  async execute(): Promise<void> {
-    const errorPacket = FlyffPacket.createWithHeader(PacketType.ERROR);
+  async execute(): Promise<void> {    
     if (
       this.server?.instance?.config?.security["build-version"] !==
       this.msgVersion
     ) {
-      errorPacket.writeUInt32LE(ErrorType.ILLEGAL_VER);
-      return this.send(errorPacket);
+      return this.userConnection.sendError(ErrorType.ILLEGAL_VER);
     }
     const key = buildEncryptionKeyFromString("dldhsvmflvm", 16);
     const password = decryptByteArray(this.passwordByte, key);
-    const accounts = this.server?.instance
-      ?.getDatabase("account")
-      .getRepository("Account");
+    const database = this.server?.instance?.getEntity("account");
 
-    const account = (await accounts?.findOne({
+    const account = (await database?.findOne({
       where: {
         username: this.username,
       },
-    })) as IAccount;
+    })) as Account;
 
     if (!account) {
-      errorPacket.writeUInt32LE(ErrorType.NO_ACCOUNT);
-      return this.send(errorPacket);
+      return this.userConnection.sendError(ErrorType.NO_ACCOUNT);
     } else if (account.password !== password) {
-      errorPacket.writeUInt32LE(ErrorType.INVALID_PASSWORD);
-      return this.send(errorPacket);
-    } else if (!this.validateAccount(errorPacket, account)) {
-      return this.send(errorPacket);
+      return this.userConnection.sendError(ErrorType.INVALID_PASSWORD);
+    } else if (account.deleted) {
+      return this.userConnection.sendError(ErrorType.NO_ACCOUNT);
+    } else if (account.banned) {
+      return this.userConnection.sendError(ErrorType.ACCOUNT_BANNED);
+    } else if (!account.verified) {
+      return this.userConnection.sendError(ErrorType.VERIFICATION_REQUIRED);
     } else {
       account.lastActivity = new Date().getTime();
       await account.save();
@@ -65,34 +61,22 @@ export default class CertifierHandler extends PacketHandler {
     }
   }
 
-  validateAccount(packet: FlyffPacket, account: IAccount): boolean {
-    if (account.deleted) {
-      packet.writeUInt32LE(ErrorType.NO_ACCOUNT);
-      return false;
-    } else if (account.banned) {
-      packet.writeUInt32LE(ErrorType.ACCOUNT_BANNED);
-      return false;
-    } else if (!account.verified) {
-      packet.writeUInt32LE(ErrorType.VERIFICATION_REQUIRED);
-      return false;
-    }
-    return true;
-  }
-  
-
   async sendServerList() {
     const packet = FlyffPacket.createWithHeader(PacketType.SERVER_LIST);
     const clusters = await this.server.redisClient.getAllClusters();
-    console.log(clusters)
+    console.log(clusters);
 
     packet.writeInt32LE(0); // Authentication key
     packet.writeByte(1);
     packet.writeStringLE(this.username);
-    packet.writeInt32LE(_.sumBy(clusters, 'channels.length') + clusters.length);
+    packet.writeInt32LE(_.sumBy(clusters, "channels.length") + clusters.length);
 
-    console.log("count", _.sumBy(clusters, 'channels.length') + clusters.length)
+    console.log(
+      "count",
+      _.sumBy(clusters, "channels.length") + clusters.length
+    );
 
-    clusters.forEach((cluster: ICluster, i: number) => {
+    _.forEach(clusters, (cluster: ICluster, i: number) => {
       // cluster.channels = []
       const clusterId = i + 1;
       packet.writeInt32LE(-1); // Parent server id
@@ -104,7 +88,7 @@ export default class CertifierHandler extends PacketHandler {
       packet.writeInt32LE(cluster.enabled ? 1 : 0);
       packet.writeInt32LE(0); // Maximum users
 
-      cluster.channels.forEach((channel: IChannel, j) => {
+      _.forEach(cluster.channels, (channel: IChannel, j) => {
         packet.writeInt32LE(clusterId); // cluster id
         packet.writeInt32LE(channel.id as number); // channel id
         packet.writeStringLE(channel.name);
@@ -115,7 +99,6 @@ export default class CertifierHandler extends PacketHandler {
         packet.writeInt32LE(channel.maxUsers);
       });
     });
-    console.log(packet.buffer.toString('hex'));
     return this.send(packet);
   }
 }

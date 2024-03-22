@@ -1,0 +1,25 @@
+{
+    "name": "MaFl_Mustang",
+    "oralText": "*Hic!* All those other jobs are useless. USELESS! You hear me? A Mercenary can cut through anything!",
+    "introText": [
+      "Ah, fresh meat! Who the heck are you and why are you talking to me? Only aspiring Mercenaries can have the privilege of speaking with the Great Mustang!"
+    ],
+    "byeText": "Oh good, you're leaving.",
+    "links": [
+      {
+        "id": "PRESENTATION",
+        "title": "Who are you?",
+        "texts": [
+          "I am Captain Mustang Loid of the Madrigal Job Training Center. You would be lucky to be trained by someone as handsome and talented as myself. Now, shoo!"
+        ]
+      },
+      {
+        "id": "BYE",
+        "title": "Goodbye!",
+        "texts": [
+          "Oh good, you're leaving."
+        ]
+      }
+    ]
+  }
+  

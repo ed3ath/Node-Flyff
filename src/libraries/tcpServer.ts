@@ -9,6 +9,8 @@ import { ServerType } from "../common/serverType";
 import { IUserConnection } from "../interfaces/connection";
 import { IRedisClient } from "../interfaces/redis";
 import { IConfig } from "../interfaces/config";
+import { IInstance } from "../interfaces/instance";
+import { ErrorType } from "../common/errorType";
 
 // Interface for server configuration
 export interface IServerConfig {
@@ -24,7 +26,7 @@ export class TcpServer {
   server!: Server;
   handlers: Map<PacketType, HandlerConstructor> = new Map();
   connections: Map<number, IUserConnection> = new Map();
-  instance!: any;
+  instance!: IInstance;
   redisClient!: IRedisClient;
   logger: Logger;
   config: IConfig;
@@ -171,6 +173,12 @@ export class UserConnection {
   // Method to send a packet to the client
   send(packet: FlyffPacket): void {
     this.socket.write(FlyffPacket.appendHeader(packet.buffer));
+  }
+
+  sendError(errorType: ErrorType) {
+    const packet = FlyffPacket.createWithHeader(PacketType.ERROR);
+    packet.writeUInt32LE(errorType);
+    return this.send(packet);
   }
 
   disconnect(): void {

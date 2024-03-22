@@ -6,6 +6,8 @@ import worldServer from "./servers/worldServer";
 const args = process.argv.slice(2); // Remove "node" and script filename from args
 const serverType = args[0];
 
+global.projectPath = __dirname;
+
 switch (serverType) {
   case "login":
     loginServer();

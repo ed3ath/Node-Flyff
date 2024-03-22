@@ -1,15 +1,13 @@
 import { PacketType } from "../../../common/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
-import {
-  PacketHandler,
-  SetPacketType,
-} from "../../../libraries/packetHandler";
+import { PacketHandler } from "../../../libraries/packetHandler";
+import { SetPacketType } from "../../../decorators/packetHandler";
 
 @SetPacketType(PacketType.PING)
-export default class PingHandler extends PacketHandler {
+export default class Handler extends PacketHandler {
   time: number;
   timedOut: boolean;
-  
+
   constructor(packet: FlyffPacket) {
     super();
     try {
