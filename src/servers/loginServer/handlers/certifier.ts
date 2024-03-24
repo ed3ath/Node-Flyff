@@ -25,7 +25,7 @@ export default class Handler extends PacketHandler {
     this.passwordByte = packet.readBytes(16 * 42);
   }
 
-  async execute(): Promise<void> {    
+  async execute(): Promise<void> {
     if (
       this.server?.instance?.config?.security["build-version"] !==
       this.msgVersion
@@ -66,17 +66,11 @@ export default class Handler extends PacketHandler {
   async sendServerList() {
     const packet = FlyffPacket.createWithHeader(PacketType.SERVER_LIST);
     const clusters = await this.server.redisClient.getAllClusters();
-    console.log(clusters);
 
     packet.writeInt32LE(0); // Authentication key
     packet.writeByte(1);
     packet.writeStringLE(this.username);
     packet.writeInt32LE(_.sumBy(clusters, "channels.length") + clusters.length);
-
-    console.log(
-      "count",
-      _.sumBy(clusters, "channels.length") + clusters.length
-    );
 
     _.forEach(clusters, (cluster: ICluster, i: number) => {
       // cluster.channels = []

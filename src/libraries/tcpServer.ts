@@ -12,6 +12,8 @@ import { IRedisClient } from "../interfaces/redis";
 import { IConfig } from "../interfaces/config";
 import { IInstance } from "../interfaces/instance";
 import { ErrorType } from "../common/errorType";
+import Character from "../database/character";
+import EquipmentItem from "../database/equipmentItem";
 
 // Interface for server configuration
 export interface IServerConfig {
@@ -206,9 +208,53 @@ export class UserConnection {
     this.socket.write(FlyffPacket.appendHeader(packet.buffer));
   }
 
-  sendError(errorType: ErrorType) {
+  sendError(errorType: ErrorType): void {
     const packet = FlyffPacket.createWithHeader(PacketType.ERROR);
     packet.writeUInt32LE(errorType);
+    return this.send(packet);
+  }
+
+  sendCharacterList(characters: Character[], authKey: number): void {
+    const packet = FlyffPacket.createWithHeader(PacketType.CHARACTER_LIST);
+    const filteredCharacters = _.filter(characters, { deleted: false });
+
+    packet.writeInt32LE(authKey);
+    packet.writeInt32LE(filteredCharacters.length || 0);
+
+    _.forEach(filteredCharacters, (character: Character) => {
+      packet.writeInt32LE(character.slot);
+      packet.writeInt32LE(character.id); // this number represents the selected character in the window
+      packet.writeInt32LE(character.mapId);
+      packet.writeInt32LE(0x0b + character.gender); // Model id
+      packet.writeStringLE(character.name);
+      packet.writeSingleLE(character.positionX);
+      packet.writeSingleLE(character.positionY);
+      packet.writeSingleLE(character.positionZ);
+      packet.writeInt32LE(character.id);
+      packet.writeInt32LE(0); // Party id
+      packet.writeInt32LE(0); // Guild id
+      packet.writeInt32LE(0); // War Id
+      packet.writeInt32LE(character.skinSetId);
+      packet.writeInt32LE(character.hairId);
+      packet.writeUInt32(character.hairColor);
+      packet.writeInt32LE(character.faceId);
+      packet.writeByte(character.gender);
+      packet.writeInt32LE(character.jobId);
+      packet.writeInt32LE(character.level);
+      packet.writeInt32LE(0); // Job Level (Maybe master or hero ?)
+      packet.writeInt32LE(character.strength);
+      packet.writeInt32LE(character.stamina);
+      packet.writeInt32LE(character.dexterity);
+      packet.writeInt32LE(character.intelligence);
+      packet.writeInt32LE(0); // Mode ??
+
+      packet.writeInt32LE(character.equipments.length);
+
+      _.forEach(character.equipments, (equipment: EquipmentItem) => {
+        packet.writeInt32LE(equipment.item.itemId);
+      });
+    });
+    packet.writeInt32LE(0);
     return this.send(packet);
   }
 

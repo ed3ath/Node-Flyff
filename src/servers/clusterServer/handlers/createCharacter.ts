@@ -13,7 +13,6 @@ import EquipmentItem from "../../../database/equipmentItem";
 import Item from "../../../database/item";
 import { GenderType } from "../../../common/genderType";
 import { ItemPartType } from "../../../common/itemPartyType";
-import { Repository, ObjectLiteral } from "typeorm";
 
 @SetPacketType(PacketType.CREATE_CHARACTER)
 export default class Handler extends PacketHandler {
@@ -95,25 +94,6 @@ export default class Handler extends PacketHandler {
       "default-character"
     );
 
-    //console.log(this.server.instance.gameResources);
-
-    console.log({
-      username: this.username,
-      password: this.password,
-      slot: this.slot,
-      characterName: this.characterName,
-      faceId: this.faceId,
-      costumeId: this.costumeId,
-      skinSet: this.skinSet,
-      hairMeshId: this.hairMeshId,
-      hairColor: this.hairColor,
-      gender: this.gender,
-      job: this.job,
-      headMesh: this.headMesh,
-      bankPin: this.bankPin,
-      authKey: this.authKey,
-    });
-
     const newCharacter = new Character();
     newCharacter.account = account;
     newCharacter.name = this.characterName;
@@ -171,14 +151,15 @@ export default class Handler extends PacketHandler {
     );
     await newCharacter.save();
 
-    account = (await accounts?.findOne({
+    const userCharacters = (await characters?.find({
       where: {
-        username: this.username,
-        password: this.password,
+        account: {
+          username: this.username,
+        },
       },
-    })) as Account;
-    console.log(account);
-    return this.sendCharacterList(accounts);
+      relations: ["account", "equipments", "equipments.item"],
+    })) as Character[];
+    this.userConnection.sendCharacterList(userCharacters, this.authKey);
   }
 
   async createPlayerItem(
@@ -210,62 +191,5 @@ export default class Handler extends PacketHandler {
 
       character.equipments.push(equipmentItem);
     }
-  }
-
-  async sendCharacterList(accounts: Repository<ObjectLiteral> | undefined) {
-    const account = (await accounts?.findOne({
-      where: {
-        username: this.username,
-        password: this.password,
-      },
-      relations: [
-        "characters",
-        "characters.equipments",
-        "characters.equipments.item",
-      ],
-    })) as Account;
-
-    const packet = FlyffPacket.createWithHeader(PacketType.CHARACTER_LIST);
-    const filteredCharacters = _.filter(account.characters, { deleted: false });
-
-    packet.writeInt32LE(this.authKey);
-    packet.writeInt32LE(filteredCharacters.length || 0);
-
-    _.forEach(filteredCharacters, (character: Character) => {
-      packet.writeInt32LE(character.slot);
-      packet.writeInt32LE(1); // this number represents the selected character in the window
-      packet.writeInt32LE(character.mapId);
-      packet.writeInt32LE(0x0b + character.gender); // Model id
-      packet.writeStringLE(character.name);
-      packet.writeSingleLE(character.positionX);
-      packet.writeSingleLE(character.positionY);
-      packet.writeSingleLE(character.positionZ);
-      packet.writeInt32LE(character.id);
-      packet.writeInt32LE(0); // Party id
-      packet.writeInt32LE(0); // Guild id
-      packet.writeInt32LE(0); // War Id
-      packet.writeInt32LE(character.skinSetId);
-      packet.writeInt32LE(character.hairId);
-      packet.writeInt32LE(character.hairColor);
-      packet.writeInt32LE(character.faceId);
-      packet.writeByte(character.gender);
-      packet.writeInt32LE(character.jobId);
-      packet.writeInt32LE(character.level);
-      packet.writeInt32LE(0); // Job Level (Maybe master or hero ?)
-      packet.writeInt32LE(character.strength);
-      packet.writeInt32LE(character.stamina);
-      packet.writeInt32LE(character.dexterity);
-      packet.writeInt32LE(character.intelligence);
-      packet.writeInt32LE(0); // Mode ??
-
-      packet.writeInt32LE(character.equipments.length);
-
-      _.forEach(character.equipments, (equipment: EquipmentItem) => {
-        packet.writeInt32LE(equipment.item.itemId);
-      });
-    });
-
-    packet.writeInt32LE(0); // Messenger?
-    return this.send(packet);
   }
 }

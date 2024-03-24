@@ -1,13 +1,12 @@
 import { Logger } from "../helpers/logger";
 import { FlyffPacket } from "./flyffPacket";
-import { TcpServer } from "./tcpServer";
-import { IUserConnection } from "../interfaces/connection";
+import { TcpServer, UserConnection } from "./tcpServer";
 
 export type HandlerConstructor = new (...args: any) => PacketHandler;
 
 export class PacketHandler {
   logger: Logger;
-  userConnection!: IUserConnection;
+  userConnection!: UserConnection;
   server!: TcpServer;
 
   constructor() {
