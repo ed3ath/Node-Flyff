@@ -42,7 +42,7 @@ export default class Handler extends PacketHandler {
     this.costumeId = packet.readByte();
     this.skinSet = packet.readByte();
     this.hairMeshId = packet.readByte();
-    this.hairColor = packet.readInt32LE();
+    this.hairColor = packet.readUInt32();
     this.gender = packet.readByte();
     this.job = packet.readByte();
     this.headMesh = packet.readByte();
@@ -93,7 +93,7 @@ export default class Handler extends PacketHandler {
 
     //console.log(this.server.instance.gameResources);
 
-    console.log( {
+    console.log({
       username: this.username,
       password: this.password,
       slot: this.slot,
@@ -107,8 +107,8 @@ export default class Handler extends PacketHandler {
       job: this.job,
       headMesh: this.headMesh,
       bankPin: this.bankPin,
-      authKey: this.authKey
-  });
+      authKey: this.authKey,
+    });
 
     const newCharacter = new Character();
     newCharacter.account = account;
@@ -124,7 +124,7 @@ export default class Handler extends PacketHandler {
     newCharacter.skinSetId = this.skinSet;
     newCharacter.hairId = this.hairMeshId;
     newCharacter.hairColor = this.hairColor;
-    newCharacter.faceId = this.faceId;
+    newCharacter.faceId = this.headMesh;
     newCharacter.jobId = DefineJob.JOB_VAGRANT;
     newCharacter.strength = defaultCharacter.strength;
     newCharacter.stamina = defaultCharacter.stamina;
@@ -173,7 +173,7 @@ export default class Handler extends PacketHandler {
         password: this.password,
       },
     })) as Account;
-    console.log(account)
+    console.log(account);
     return this.sendCharacterList(accounts);
   }
 
@@ -214,9 +214,12 @@ export default class Handler extends PacketHandler {
         username: this.username,
         password: this.password,
       },
-      relations: ["characters", "characters.equipments",  "characters.equipments.item"],
+      relations: [
+        "characters",
+        "characters.equipments",
+        "characters.equipments.item",
+      ],
     })) as Account;
-
 
     const packet = FlyffPacket.createWithHeader(PacketType.PLAYER_LIST);
 
@@ -241,7 +244,7 @@ export default class Handler extends PacketHandler {
       packet.writeInt32LE(character.skinSetId);
       packet.writeInt32LE(character.hairId);
       packet.writeInt32LE(character.hairColor);
-      packet.writeInt32(character.faceId);
+      packet.writeInt32LE(character.faceId);
       packet.writeByte(character.gender);
       packet.writeInt32LE(character.jobId);
       packet.writeInt32LE(character.level);
@@ -258,5 +261,8 @@ export default class Handler extends PacketHandler {
         packet.writeInt32LE(equipment.item.itemId);
       });
     });
+
+    packet.writeInt32LE(0); // Messenger?
+    return this.send(packet);
   }
 }
