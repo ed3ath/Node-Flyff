@@ -34,7 +34,7 @@ Before getting started, ensure you have the following software installed:
 3. Set up your database (SQLite or MySQL) and configure the connection in the appropriate configuration file.
 4. Setup Redis Server. [WSL](
 https://redis.io/docs/install/install-redis/install-redis-on-windows/)
-5. Start the server with `yarn dev`.
+5. Start the server with `yarn dev [server]` (login, cluster or world).
 
 ## Contributors
 - [List of contributors]
