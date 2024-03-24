@@ -16,10 +16,10 @@ Node-FlyFF is an open-source project aiming to create a Fly For Fun (FlyFF) emul
 - Configuration Files Type: TBA (YAML or JSON)
 - Environment: Visual Studio Code, any Node.js compatible editor
 
-## Dependencies
-- Net
-- Typeorm
-- Redis (Caching)
+## Pre-requisite
+- Redis-server (Caching)
+- WSL (for windows development)
+- Node.js 18
 
 ## Getting Started
 Please refer to our contributing guidelines if you're interested in contributing to the project.
