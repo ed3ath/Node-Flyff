@@ -52,6 +52,8 @@ export default class Handler extends PacketHandler {
       return this.userConnection.sendError(ErrorType.ACCOUNT_BANNED);
     } else if (!account.verified) {
       return this.userConnection.sendError(ErrorType.VERIFICATION_REQUIRED);
+    } else if (this.server.isUserAccountConnected(account.username)) {
+      return this.userConnection.sendError(ErrorType.ALREADY_CONNECTED);
     } else {
       account.lastActivity = new Date().getTime();
       await account.save();

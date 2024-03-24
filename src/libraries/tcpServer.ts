@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { createServer, Server, Socket } from "net";
+import _ from "lodash";
 
 import { FlyffPacket } from "./flyffPacket";
 import { HandlerConstructor } from "./packetHandler";
@@ -91,7 +92,7 @@ export class TcpServer {
 
     // Attach event listeners for data, close, and error events
     socket.on("data", async (data) => {
-      await this.onData(data, userConnection)
+      await this.onData(data, userConnection);
     });
     socket.on("close", () => this.onDisconnect(userConnection.sessionId));
     socket.on("error", (error) =>
@@ -100,7 +101,10 @@ export class TcpServer {
   }
 
   // Method called when data is received from a client
-  protected async onData(data: Buffer, userConnection: IUserConnection): Promise<void> {
+  protected async onData(
+    data: Buffer,
+    userConnection: IUserConnection
+  ): Promise<void> {
     const packet = new FlyffPacket(data);
 
     const HandlerClass = this.handlers.get(packet.PacketType);
@@ -150,12 +154,33 @@ export class TcpServer {
 
   // Method to disconnect a user
   disconnectUser(userConnection: IUserConnection) {
-    userConnection.socket.destroy();
+    userConnection.disconnect();
+  }
+
+  disconnectByAccount(account: string) {
+    const userConnection = this.getConnectionByAccount(account);
+
+    if (userConnection) {
+      userConnection.disconnect();
+    }
   }
 
   // Method to check if a user is connected
   isUserConnected = (userConnection: IUserConnection) =>
     this.connections.has(userConnection.sessionId);
+
+  isUserAccountConnected = (account: string) =>
+    !_.isNil(this.getConnectionByAccount(account));
+
+  getConnectionByAccount(account: string): UserConnection | null {
+    let userConnection: UserConnection | null = null;
+    this.connections.forEach((connection) => {
+      if (connection.username === account) {
+        userConnection = connection;
+      }
+    });
+    return userConnection;
+  }
 }
 
 export class UserConnection {
