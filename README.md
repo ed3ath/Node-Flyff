@@ -38,7 +38,6 @@ https://redis.io/docs/install/install-redis/install-redis-on-windows/)
 5. Start the server with `yarn dev [server]` (login, cluster or world).
 
 ## Contributors
-- [List of contributors]
  * [eD3ath](https://github.com/eD3ath)
 
 ## License
