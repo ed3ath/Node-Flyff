@@ -16,10 +16,10 @@ Node-FlyFF is an open-source project aiming to create a Fly For Fun (FlyFF) emul
 - Configuration Files Type: TBA (YAML or JSON)
 - Environment: Visual Studio Code, any Node.js compatible editor
 
-## Dependencies
-- Net
-- Typeorm
-- Redis (Caching)
+## Pre-requisite
+- Redis-server (Caching)
+- WSL (for windows development)
+- Node.js 18
 
 ## Getting Started
 Please refer to our contributing guidelines if you're interested in contributing to the project.
@@ -34,7 +34,7 @@ Before getting started, ensure you have the following software installed:
 3. Set up your database (SQLite or MySQL) and configure the connection in the appropriate configuration file.
 4. Setup Redis Server. [WSL](
 https://redis.io/docs/install/install-redis/install-redis-on-windows/)
-5. Start the server with `yarn dev`.
+5. Start the server with `yarn dev [server]` (login, cluster or world).
 
 ## Contributors
 - [List of contributors]
