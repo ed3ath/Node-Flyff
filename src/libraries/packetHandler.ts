@@ -20,12 +20,15 @@ export class PacketHandler {
     this.userConnection.send(packet);
   }
 
-  wrappedExecute = async () => {
+  async wrappedExecute() {
     try {
-      await this.execute()
+      await this.execute();
     } catch (e) {
-      console.log(e)
+      console.log(e);
       this.logger.error(e);
+      // if (this.userConnection) {
+      //   this.userConnection.disconnect();
+      // }
     }
-  };
+  }
 }

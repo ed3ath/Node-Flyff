@@ -75,6 +75,7 @@ export class TcpServer {
   // Method called when a new connection is established
   protected onConnection(socket: Socket): void {
     const userConnection = new UserConnection(socket);
+    if (this.isUserConnected(userConnection)) return;
     this.connections.set(userConnection.sessionId, userConnection);
     this.logger.success(
       `New connection established with session ID: ${userConnection.sessionId} (${socket.remoteAddress}:${socket.remotePort})`
@@ -89,7 +90,9 @@ export class TcpServer {
     }
 
     // Attach event listeners for data, close, and error events
-    socket.on("data", (data) => this.onData(data, userConnection));
+    socket.on("data", async (data) => {
+      await this.onData(data, userConnection)
+    });
     socket.on("close", () => this.onDisconnect(userConnection.sessionId));
     socket.on("error", (error) =>
       this.onError(error, userConnection.sessionId)
@@ -97,7 +100,7 @@ export class TcpServer {
   }
 
   // Method called when data is received from a client
-  protected onData(data: Buffer, userConnection: IUserConnection): void {
+  protected async onData(data: Buffer, userConnection: IUserConnection): Promise<void> {
     const packet = new FlyffPacket(data);
 
     const HandlerClass = this.handlers.get(packet.PacketType);
@@ -106,7 +109,7 @@ export class TcpServer {
       const handlerInstance = new HandlerClass(packet);
       handlerInstance.userConnection = userConnection;
       handlerInstance.server = this;
-      handlerInstance.wrappedExecute();
+      await handlerInstance.wrappedExecute();
     } else {
       // Log unimplemented packet type
       this.logger.warn(
@@ -168,7 +171,7 @@ export class UserConnection {
   }
 
   // Method called when data is received (can be overridden)
-  protected onData(packet: FlyffPacket): void {}
+  protected async onData(packet: FlyffPacket): Promise<void> {}
 
   // Method to send a packet to the client
   send(packet: FlyffPacket): void {

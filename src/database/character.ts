@@ -84,8 +84,6 @@ export default class Character extends BaseEntity {
   @Column({ nullable: false, default: 0 })
   experience: number;
 
-  @OneToMany(() => EquipmentItem, (equipmentItem) => equipmentItem.character, {
-    cascade: true,
-  })
+  @OneToMany(() => EquipmentItem, (equipmentItem) => equipmentItem.character)
   equipments: EquipmentItem[];
 }

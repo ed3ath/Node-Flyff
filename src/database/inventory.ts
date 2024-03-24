@@ -22,8 +22,6 @@ export default class Inventory extends BaseEntity {
   @Column({ default: 0 })
   gold: number;
 
-  @OneToMany(() => InventoryItem, (inventoryItem) => inventoryItem.inventory, {
-    cascade: true,
-  })
+  @OneToMany(() => InventoryItem, (inventoryItem) => inventoryItem.inventory)
   items: InventoryItem[];
 }

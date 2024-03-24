@@ -29,31 +29,27 @@ export class RedisClient implements IRedisClient {
   }
 
   async insertCluster(cluster: ICluster): Promise<void> {
-    // Construct the key for the cluster
     const key = `cluster:${cluster.name}`;
-    // Convert the cluster object to a plain object
     const clusterData = {
       name: cluster.name,
       host: cluster.host,
       port: cluster.port,
-      lastPing: cluster.lastPing || 0, // Default to 0 if lastPing is undefined
-      channels: JSON.stringify(cluster.channels), // Assuming channels is an array of objects
-      enabled: cluster.enabled ? "true" : "false", // Convert boolean to string representation
+      lastPing: cluster.lastPing || 0,
+      channels: JSON.stringify(cluster.channels),
+      enabled: cluster.enabled ? "true" : "false",
     };
-    // Set the hash fields in Redis
     await this.client.hmset(key, clusterData);
   }
 
   async updateCluster(cluster: ICluster): Promise<void> {
-    // Construct the key for the cluster
     const key = `cluster:${cluster.name}`;
     const clusterData = {
       name: cluster.name,
       host: cluster.host,
       port: cluster.port,
-      lastPing: cluster.lastPing || 0, // Default to 0 if lastPing is undefined
-      channels: JSON.stringify(cluster.channels), // Assuming channels is an array of objects
-      enabled: cluster.enabled ? "true" : "false", // Convert boolean to string representation
+      lastPing: cluster.lastPing || 0,
+      channels: JSON.stringify(cluster.channels),
+      enabled: cluster.enabled ? "true" : "false",
     };
 
     await this.client.hmset(key, clusterData);
@@ -64,14 +60,12 @@ export class RedisClient implements IRedisClient {
   }
 
   async getCluster(clusterName: string): Promise<ICluster | null> {
-    // Check if the key associated with the cluster exists in Redis
     const cluster: any = await this.client.hgetall(
       clusterName?.includes("cluster:") ? clusterName : `cluster:${clusterName}`
     );
-    let channels: IChannel[] = []; // Initialize the array for channels
+    let channels: IChannel[] = [];
     if (cluster.channels) {
-      // If channels exist in the clusterData, parse them
-      const channelDataArray = JSON.parse(cluster.channels); // Assuming channels are stored as JSON strings
+      const channelDataArray = JSON.parse(cluster.channels);
       channels = _.map(
         channelDataArray,
         (channelData: IChannel) => ({
@@ -93,8 +87,8 @@ export class RedisClient implements IRedisClient {
         host: cluster.host,
         port: parseInt(cluster.port),
         lastPing: parseInt(cluster.lastPing),
-        channels, // Assuming channels is an array property
-        enabled: cluster.enabled === "true", // Assuming enabled is stored as string "true" or "false"
+        channels,
+        enabled: cluster.enabled === "true",
       };
     }
     return null;

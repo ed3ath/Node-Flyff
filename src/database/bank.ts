@@ -25,8 +25,6 @@ export default class Bank extends BaseEntity {
   @Column({ default: 0 })
   gold: number;
 
-  @OneToMany(() => BankItem, (bankItem) => bankItem.bank, {
-    cascade: true,
-  })
+  @OneToMany(() => BankItem, (bankItem) => bankItem.bank)
   items: BankItem[];
 }

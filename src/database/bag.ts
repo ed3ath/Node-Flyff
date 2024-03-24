@@ -26,8 +26,6 @@ export default class Bag extends BaseEntity {
   @Column({ default: false })
   extra2: boolean;
 
-  @OneToMany(() => BagItem, (bagItem) => bagItem.bag, {
-    cascade: true,
-  })
+  @OneToMany(() => BagItem, (bagItem) => bagItem.bag)
   items: BagItem[];
 }

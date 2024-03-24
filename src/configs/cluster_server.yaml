@@ -43,19 +43,19 @@ settings:
     pos-z: 3328
     equipped:
       male:
-        hat: -1
+        hat:
         body: II_ARM_M_VAG_SUIT01
         hand: II_ARM_M_VAG_GAUNTLET01
         boots: II_ARM_M_VAG_BOOTS01
         right-weapon: II_WEA_SWO_WOODEN
-        left-weapon: -1
+        left-weapon:
       female:
-        hat: -1
+        hat:
         body: II_ARM_F_VAG_SUIT01
         hand: II_ARM_F_VAG_GAUNTLET01
         boots: II_ARM_F_VAG_BOOTS01
         right-weapon: II_WEA_SWO_WOODEN
-        left-weapon: -1
+        left-weapon:
     inventory: []
 database:
   provider: "sqlite"

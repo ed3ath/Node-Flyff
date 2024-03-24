@@ -7,11 +7,13 @@ import { IConfig } from "../../../interfaces/config";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
-import { GenderType } from "../../../common/genderType";
-import { SaveOptions, RemoveOptions } from "typeorm";
 import Character from "../../../database/character";
 import Account from "../../../database/account";
 import EquipmentItem from "../../../database/equipmentItem";
+import Item from "../../../database/item";
+import { GenderType } from "../../../common/genderType";
+import { ItemPartType } from "../../../common/itemPartyType";
+import { Repository, ObjectLiteral } from "typeorm";
 
 @SetPacketType(PacketType.CREATE_PLAYER)
 export default class Handler extends PacketHandler {
@@ -40,23 +42,24 @@ export default class Handler extends PacketHandler {
     this.costumeId = packet.readByte();
     this.skinSet = packet.readByte();
     this.hairMeshId = packet.readByte();
-    this.hairColor = packet.readUInt32();
+    this.hairColor = packet.readInt32LE();
     this.gender = packet.readByte();
     this.job = packet.readByte();
     this.headMesh = packet.readByte();
-    this.bankPin = packet.readInt32();
-    this.authKey = packet.readInt32();
+    this.bankPin = packet.readInt32LE();
+    this.authKey = packet.readInt32LE();
   }
 
   async execute(): Promise<void> {
-    const accounts = this.server?.instance?.getEntity("account");
-    const characters = this.server?.instance?.getEntity("character");
+    const accounts = this.server?.instance?.getEntity("Account");
+    const characters = this.server?.instance?.getEntity("Character");
 
-    const account = (await accounts?.findOne({
+    let account = (await accounts?.findOne({
       where: {
         username: this.username,
         password: this.password,
       },
+      relations: ["characters", "characters.equipments"],
     })) as Account;
 
     if (!account) {
@@ -88,70 +91,141 @@ export default class Handler extends PacketHandler {
       "default-character"
     );
 
-    console.log(this.server.instance.gameResources);
+    //console.log(this.server.instance.gameResources);
 
-    // const newCharacter = new Character();
-    // newCharacter.account = account;
-    // newCharacter.name = this.characterName;
-    // newCharacter.gender = this.gender;
-    // newCharacter.level = defaultCharacter.level;
-    // newCharacter.slot = this.slot;
-    // newCharacter.bankPin = this.bankPin;
-    // newCharacter.mapId = defaultCharacter.map;
-    // newCharacter.positionX = defaultCharacter["pos-x"];
-    // newCharacter.positionY = defaultCharacter["pos-y"];
-    // newCharacter.positionZ = defaultCharacter["pos-z"];
-    // newCharacter.hairId = this.hairMeshId;
-    // newCharacter.hairColor = this.hairColor;
-    // newCharacter.faceId = this.faceId;
-    // newCharacter.jobId = DefineJob.JOB_VAGRANT;
-    // newCharacter.strength = defaultCharacter.strength;
-    // newCharacter.stamina = defaultCharacter.stamina;
-    // newCharacter.intelligence = defaultCharacter.intelligence;
-    // newCharacter.dexterity = defaultCharacter.dexterity;
-    // newCharacter.gold = defaultCharacter.gold;
-    // newCharacter.save();
+    console.log( {
+      username: this.username,
+      password: this.password,
+      slot: this.slot,
+      characterName: this.characterName,
+      faceId: this.faceId,
+      costumeId: this.costumeId,
+      skinSet: this.skinSet,
+      hairMeshId: this.hairMeshId,
+      hairColor: this.hairColor,
+      gender: this.gender,
+      job: this.job,
+      headMesh: this.headMesh,
+      bankPin: this.bankPin,
+      authKey: this.authKey
+  });
 
-    return this.userConnection.sendError(ErrorType.USER_EXISTS);
+    const newCharacter = new Character();
+    newCharacter.account = account;
+    newCharacter.name = this.characterName;
+    newCharacter.gender = this.gender;
+    newCharacter.level = defaultCharacter.level;
+    newCharacter.slot = this.slot;
+    newCharacter.bankPin = this.bankPin;
+    newCharacter.mapId = defaultCharacter.map;
+    newCharacter.positionX = defaultCharacter["pos-x"];
+    newCharacter.positionY = defaultCharacter["pos-y"];
+    newCharacter.positionZ = defaultCharacter["pos-z"];
+    newCharacter.skinSetId = this.skinSet;
+    newCharacter.hairId = this.hairMeshId;
+    newCharacter.hairColor = this.hairColor;
+    newCharacter.faceId = this.faceId;
+    newCharacter.jobId = DefineJob.JOB_VAGRANT;
+    newCharacter.strength = defaultCharacter.strength;
+    newCharacter.stamina = defaultCharacter.stamina;
+    newCharacter.intelligence = defaultCharacter.intelligence;
+    newCharacter.dexterity = defaultCharacter.dexterity;
+    newCharacter.gold = defaultCharacter.gold;
+    newCharacter.equipments = [];
+    await newCharacter.save();
+
+    const gender = this.gender === GenderType.Male ? "male" : "female";
+    await this.createPlayerItem(
+      newCharacter,
+      defaultCharacter.equipped[gender].hat,
+      ItemPartType.Hat
+    );
+    await this.createPlayerItem(
+      newCharacter,
+      defaultCharacter.equipped[gender].body,
+      ItemPartType.UpperBody
+    );
+    await this.createPlayerItem(
+      newCharacter,
+      defaultCharacter.equipped[gender].hand,
+      ItemPartType.Hand
+    );
+    await this.createPlayerItem(
+      newCharacter,
+      defaultCharacter.equipped[gender]["right-weapon"],
+      ItemPartType.RightWeapon
+    );
+    await this.createPlayerItem(
+      newCharacter,
+      defaultCharacter.equipped[gender]["left-weapon"],
+      ItemPartType.LeftWeapon
+    );
+    await this.createPlayerItem(
+      newCharacter,
+      defaultCharacter.equipped[gender].boots,
+      ItemPartType.Foot
+    );
+    await newCharacter.save();
+
+    account = (await accounts?.findOne({
+      where: {
+        username: this.username,
+        password: this.password,
+      },
+    })) as Account;
+    console.log(account)
+    return this.sendCharacterList(accounts);
   }
 
   async createPlayerItem(
     character: Character,
-    itemId: number,
+    itemIdentifier: string | number,
     slot: number,
     quantity: number = 1,
     refinement: number = 0,
     element: number = 0,
     elementRefinement: number = 0
   ) {
-    // int itemId = GameResources.Current.Items.Get(itemIdentifier)?.Id ?? -1;
-    // if (itemId > 0)
-    // {
-    //     player.Items.Add(new PlayerItemEntity
-    //     {
-    //         StorageType = PlayerItemStorageType.Inventory,
-    //         Slot = slot,
-    //         Quantity = quantity,
-    //         Item = new ItemEntity
-    //         {
-    //             Id = itemId,
-    //             Refine = refine,
-    //             Element = element,
-    //             ElementRefine = elementRefine
-    //         }
-    //     });
-    // }
+    const item = await this.server.instance.gameResources?.itemResources?.get(
+      itemIdentifier
+    );
+    if (!_.isNil(item) && !_.isUndefined(item) && !_.isNaN(item.id)) {
+      const itemEntity = new Item();
+      itemEntity.itemId = item.id;
+      itemEntity.refinement = refinement;
+      itemEntity.element = element;
+      itemEntity.elementRefinement = elementRefinement;
+      await itemEntity.save();
+
+      const equipmentItem = new EquipmentItem();
+      equipmentItem.character = character;
+      equipmentItem.item = itemEntity;
+      equipmentItem.quantity = quantity;
+      equipmentItem.slot = slot;
+      await equipmentItem.save();
+
+      character.equipments.push(equipmentItem);
+    }
   }
 
-  async sendCharacterList(userCharacters: Character[]) {
+  async sendCharacterList(accounts: Repository<ObjectLiteral> | undefined) {
+    const account = (await accounts?.findOne({
+      where: {
+        username: this.username,
+        password: this.password,
+      },
+      relations: ["characters", "characters.equipments",  "characters.equipments.item"],
+    })) as Account;
+
+
     const packet = FlyffPacket.createWithHeader(PacketType.PLAYER_LIST);
 
-    console.log(userCharacters);
+    console.log(account.characters);
 
     packet.writeInt32LE(this.authKey);
-    packet.writeInt32LE(userCharacters?.length || 0);
+    packet.writeInt32LE(account.characters?.length || 0);
 
-    _.forEach(userCharacters, (character: Character) => {
+    _.forEach(account.characters, (character: Character) => {
       packet.writeInt32LE(character.slot);
       packet.writeInt32LE(1); // this number represents the selected character in the window
       packet.writeInt32LE(character.mapId);
@@ -166,8 +240,8 @@ export default class Handler extends PacketHandler {
       packet.writeInt32LE(0); // War Id
       packet.writeInt32LE(character.skinSetId);
       packet.writeInt32LE(character.hairId);
-      packet.writeUInt32(character.hairColor);
-      packet.writeInt32LE(character.faceId);
+      packet.writeInt32LE(character.hairColor);
+      packet.writeInt32(character.faceId);
       packet.writeByte(character.gender);
       packet.writeInt32LE(character.jobId);
       packet.writeInt32LE(character.level);

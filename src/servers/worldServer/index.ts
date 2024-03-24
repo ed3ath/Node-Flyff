@@ -50,12 +50,14 @@ export default async () => {
 
   instanceBuilder.buildResource((builder: ResourceBuilder) => {
     const resPath = path.join(global.projectPath, "resources", "res");
-    builder.resourcePaths = {
-      item: path.join(resPath, "dataSub2", "propItem.txt"),
+    builder.setResourcePath({
+      itemsProp: path.join(resPath, "dataSub2", "propItem.txt"),
+      itemsText: path.join(resPath, "dataSub2", "propItem.txt.txt"),
       defineItem: path.join(resPath, "data", "defineItem.h"),
       defineItemKind: path.join(resPath, "data", "defineItemKind.h"),
       defineJob: path.join(resPath, "data", "defineJob.h"),
-    };
+    });
+    builder.setRedisOptions(instanceBuilder?.config?.redis)
   });
 
   const instance = await instanceBuilder.build();

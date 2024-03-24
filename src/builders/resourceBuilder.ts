@@ -1,5 +1,4 @@
-import fs from "fs-extra";
-import path from "path";
+import { RedisOptions } from "ioredis";
 import _ from "lodash";
 
 import { Logger } from "../helpers/logger";
@@ -10,10 +9,15 @@ import { GameResources, ResourcePaths } from "../interfaces/resource";
 export class ResourceBuilder {
   private logger: Logger;
   resourcePaths: ResourcePaths;
-  items: ItemResources;
+  itemResources: ItemResources;
+  options: RedisOptions;
 
   constructor() {
     this.logger = new Logger(BuilderType.REDIS_BUILDER);
+  }
+
+  setRedisOptions(options: RedisOptions) {
+    this.options = options;
   }
 
   setResourcePath(resourcePaths: ResourcePaths): void {
@@ -21,16 +25,22 @@ export class ResourceBuilder {
   }
 
   build(): GameResources {
-    if (this.resourcePaths.item) {
-      this.items = new ItemResources(this.resourcePaths.defineItem, this.resourcePaths.item);
-      this.items.loadDefines();
-      this.items.loadItems();
+    if (this.options) {
+      this.itemResources = new ItemResources(this.options, this.resourcePaths);
 
-      console.log(this.items.itemsByName.get("IDS_PROPITEM_TXT_003420"))
+      if (
+        this.resourcePaths?.defineItem &&
+        this.resourcePaths?.itemsProp &&
+        this.resourcePaths?.itemsText
+      ) {
+        this.itemResources.loadDefines();
+        this.itemResources.loadItemsPropStrings();
+        this.itemResources.loadItemsProp();
+      }
     }
 
     return {
-      items: this.items,
+      itemResources: this.itemResources,
     };
   }
 }

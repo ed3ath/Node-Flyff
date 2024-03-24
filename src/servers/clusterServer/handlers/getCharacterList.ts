@@ -30,7 +30,6 @@ export default class Handler extends PacketHandler {
       this.server?.config?.settings?.name,
       this.channelId
     );
-
     if (!channel) {
       this.logger.warn(
         "Unable to get character list for",
@@ -39,16 +38,14 @@ export default class Handler extends PacketHandler {
       );
       this.userConnection.disconnect();
     }
-
-    const accounts = this.server?.instance?.getEntity("account");
-
+    const accounts = this.server?.instance?.getEntity("Account");
     const account = (await accounts?.findOne({
       where: {
         username: this.username,
         password: this.password,
       },
+      relations: ["characters", "characters.equipments",  "characters.equipments.item"],
     })) as Account;
-
     if (!account) {
       this.logger.warn(
         "Unable to get character list for",
@@ -57,20 +54,16 @@ export default class Handler extends PacketHandler {
       );
       this.userConnection.disconnect();
     }
-
     this.userConnection.username = account.username;
     this.userConnection.userId = account.id;
-
-    await this.sendCharacterList(account.characters)
+    await this.sendCharacterList(account.characters);
     if (channel?.host) {
-      this.sendChannelIp(channel.host)
+      this.sendChannelIp(channel.host);
     }
   }
 
   async sendCharacterList(userCharacters: Character[]) {
-    const packet = FlyffPacket.createWithHeader(PacketType.PLAYER_LIST);  
-
-    console.log(userCharacters)
+    const packet = FlyffPacket.createWithHeader(PacketType.PLAYER_LIST);
 
     packet.writeInt32LE(this.authKey);
     packet.writeInt32LE(userCharacters?.length || 0);
@@ -114,7 +107,7 @@ export default class Handler extends PacketHandler {
   }
   sendChannelIp(ip: string) {
     const packet = FlyffPacket.createWithHeader(PacketType.CACHE_ADDR);
-    packet.writeStringLE(ip)
+    packet.writeStringLE(ip);
     return this.send(packet);
   }
 }

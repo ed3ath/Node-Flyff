@@ -1,4 +1,4 @@
-import { join } from "path";
+import path, { join } from "path";
 import _ from "lodash";
 import cron from "node-cron";
 
@@ -14,13 +14,13 @@ import { IChannel, ICluster } from "../../interfaces/cluster";
 import { IInstance } from "../../interfaces/instance";
 import {
   buildEncryptionKeyFromString,
-  encryptString,
   isValidEncryptionString,
   parseMessage,
   decryptString,
   encryptMessage,
 } from "../../libraries/crypto";
 import { RedisBuilder } from "../../builders/redisBuilder";
+import { ResourceBuilder } from "../../builders/resourceBuilder";
 
 export default async () => {
   const instanceBuilder = new InstanceBuilder();
@@ -46,6 +46,11 @@ export default async () => {
     builder.setServerType(ServerType.CLUSTER_SERVER);
     builder.addServer(new ClusterServer(instanceBuilder.config?.server));
   });
+
+  instanceBuilder.buildResource((builder: ResourceBuilder) => {
+    builder.setRedisOptions(instanceBuilder?.config?.redis)
+  });
+  
   const instance = await instanceBuilder.build();
   clusterIntercom(instance);
 };
@@ -68,7 +73,7 @@ async function clusterIntercom(instance: IInstance) {
     enabled: true,
     channels: [],
   };
-  const clusterKey = `cluster:${initCluster.name}`;
+  // const clusterKey = `cluster:${initCluster.name}`;
 
   ////// MAIN //////////
   subscriber?.subscribe(...redisChannels, (err) => {

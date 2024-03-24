@@ -33,8 +33,6 @@ export default class Account extends BaseEntity {
   @Column({ nullable: true, default: 0 })
   lastActivity: number;
 
-  @OneToMany(() => Character, (character) => character.account, {
-    cascade: true,
-  })
+  @OneToMany(() => Character, (character) => character.account)
   characters: Character[];
 }
