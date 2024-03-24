@@ -27,6 +27,7 @@ Please refer to our contributing guidelines if you're interested in contributing
 Before getting started, ensure you have the following software installed:
 - Node.js
 - Visual Studio Code or any Node.js compatible editor
+- Redis-server (Requires WSL for windows development)
 
 ### Initial Setup
 1. Clone this repository.
