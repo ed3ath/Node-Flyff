@@ -105,7 +105,10 @@ export class TcpServer {
     data: Buffer,
     userConnection: IUserConnection
   ): Promise<void> {
-    const packet = new FlyffPacket(data);
+    const packet = new FlyffPacket(
+      data,
+      this.serverType === ServerType.LOGIN_SERVER
+    );
 
     const HandlerClass = this.handlers.get(packet.PacketType);
     if (HandlerClass) {

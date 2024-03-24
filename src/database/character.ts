@@ -30,7 +30,7 @@ export default class Character extends BaseEntity {
   @Column({ nullable: false })
   slot: number;
 
-  @Column({nullable: false, default: 0})
+  @Column({ nullable: false, default: 0 })
   bankPin: number;
 
   @Column({ nullable: false })
@@ -86,4 +86,7 @@ export default class Character extends BaseEntity {
 
   @OneToMany(() => EquipmentItem, (equipmentItem) => equipmentItem.character)
   equipments: EquipmentItem[];
+
+  @Column({ default: false })
+  deleted: boolean;
 }

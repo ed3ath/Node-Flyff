@@ -15,7 +15,7 @@ import { GenderType } from "../../../common/genderType";
 import { ItemPartType } from "../../../common/itemPartyType";
 import { Repository, ObjectLiteral } from "typeorm";
 
-@SetPacketType(PacketType.CREATE_PLAYER)
+@SetPacketType(PacketType.CREATE_CHARACTER)
 export default class Handler extends PacketHandler {
   username: string;
   password: string;
@@ -84,6 +84,10 @@ export default class Handler extends PacketHandler {
         "already taken"
       );
       return this.userConnection.sendError(ErrorType.USER_EXISTS);
+    }
+
+    if (_.some(account.characters, { deleted: false, slot: this.slot })) {
+      return this.userConnection.sendError(ErrorType.DUPLICATE_SLOT);
     }
 
     const defaultCharacter: IConfig = _.get(
@@ -221,14 +225,13 @@ export default class Handler extends PacketHandler {
       ],
     })) as Account;
 
-    const packet = FlyffPacket.createWithHeader(PacketType.PLAYER_LIST);
-
-    console.log(account.characters);
+    const packet = FlyffPacket.createWithHeader(PacketType.CHARACTER_LIST);
+    const filteredCharacters = _.filter(account.characters, { deleted: false });
 
     packet.writeInt32LE(this.authKey);
-    packet.writeInt32LE(account.characters?.length || 0);
+    packet.writeInt32LE(filteredCharacters.length || 0);
 
-    _.forEach(account.characters, (character: Character) => {
+    _.forEach(filteredCharacters, (character: Character) => {
       packet.writeInt32LE(character.slot);
       packet.writeInt32LE(1); // this number represents the selected character in the window
       packet.writeInt32LE(character.mapId);

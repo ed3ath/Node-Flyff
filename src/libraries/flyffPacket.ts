@@ -25,15 +25,12 @@ export class FlyffPacket extends BinaryStream {
   DataLength!: number;
   PacketType!: PacketType;
 
-  constructor(
-    packetBuffer: Buffer = Buffer.alloc(0),
-    ignorePacketHeader = false,
-  ) {
+  constructor(packetBuffer: Buffer = Buffer.alloc(0), login = false, ignoreHeaders = false) {
     super(packetBuffer);
 
-    if (packetBuffer.length && !ignorePacketHeader) {
+    if (packetBuffer.length > 0 && !ignoreHeaders) {
       this.HeaderNumber = this.readByte();
-      this.position += 12;
+      this.position += login ? 12 : 16;
       this.PacketType = this.readUInt32LE();
     }
   }

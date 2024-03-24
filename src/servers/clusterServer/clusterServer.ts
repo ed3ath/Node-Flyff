@@ -14,28 +14,4 @@ export class ClusterServer extends TcpServer {
   constructor(options: IServerConfig) {
     super(ServerType.CLUSTER_SERVER, options);
   }
-
-  protected async onData(data: Buffer, userConnection: IUserConnection) {
-    const packet = new FlyffPacket(data, true);
-    console.log(data.toString("hex"));
-    packet.HeaderNumber = packet.readByte();
-    packet.position += 16;
-    packet.PacketType = packet.readInt32LE();
-    
-    const HandlerClass = this.handlers.get(packet.PacketType);
-    if (HandlerClass) {
-      // Execute the corresponding packet handler
-      const handlerInstance = new HandlerClass(packet);
-      handlerInstance.userConnection = userConnection;
-      handlerInstance.server = this;
-      await handlerInstance.execute();
-    } else {
-      // Log unimplemented packet type
-      this.logger.warn(
-        `Unimplemented packet ${this.getPacketTypeId(
-          packet.PacketType
-        )} (${ToStringHex(packet.PacketType)})`
-      );
-    }
-  }
 }
