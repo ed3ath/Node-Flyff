@@ -1,19 +1,18 @@
 import fs from "fs-extra";
 import path from "path";
 import _ from "lodash";
-import { Logger } from "../../../helpers/logger";
-import { ItemProperties } from "../../../interfaces/itemProperties";
-import { ResourcePaths } from "../../../interfaces/resource";
 import Redis, { RedisOptions } from "ioredis";
 
-export class MonsterResources {
+import { Logger } from "../helpers/logger";
+import { ResourcePaths } from "../resources/resourcePaths";
+import { ItemProperties } from "../interfaces/resource";
+
+export class ItemResources {
   logger: Logger;
-  resourcePaths: ResourcePaths;
   redisClient: Redis;
 
-  constructor(options: RedisOptions, resourcePaths: ResourcePaths) {
+  constructor(options: RedisOptions) {
     this.logger = new Logger("Item Resources");
-    this.resourcePaths = resourcePaths;
     this.redisClient = new Redis(options);
   }
 
@@ -69,7 +68,7 @@ export class MonsterResources {
   }
 
   public async loadDefines(): Promise<void> {
-    const absolutePath = path.resolve(this.resourcePaths.defineItem);
+    const absolutePath = path.resolve(ResourcePaths.defineItem);
     if (!fs.existsSync(absolutePath)) {
       this.logger.error(
         `Unable to load items. Reason: cannot find '${absolutePath}' file.`
@@ -93,7 +92,7 @@ export class MonsterResources {
   }
 
   public async loadItemsPropStrings(): Promise<void> {
-    const absolutePath = path.resolve(this.resourcePaths.itemsText);
+    const absolutePath = path.resolve(ResourcePaths.itemsText);
     if (!fs.existsSync(absolutePath)) {
       this.logger.warn(
         `Unable to load items. Reason: cannot find '${absolutePath}' file.`
@@ -119,7 +118,7 @@ export class MonsterResources {
   }
 
   public async loadItemsProp(): Promise<void> {
-    const absolutePath = path.resolve(this.resourcePaths.itemsProp);
+    const absolutePath = path.resolve(ResourcePaths.itemsProp);
     if (!fs.existsSync(absolutePath)) {
       this.logger.warn(
         `Unable to load items. Reason: cannot find '${absolutePath}' file.`
@@ -139,7 +138,6 @@ export class MonsterResources {
 
       const id = await this.redisClient.hget("itemDefines", items[1]);
 
-      if (items[1] === "II_ARM_M_VAG_SUIT01") console.log(id, items[1]);
       if (!_.isNil(id)) {
         const szName =
           (await this.redisClient.hget(
@@ -222,7 +220,7 @@ export class MonsterResources {
       }
     });
 
-    this.logger.info(`${lines.length} items loaded.`);
+    this.logger.main(`${lines.length} items loaded.`);
   }
 
   tryParseInt(value: string) {

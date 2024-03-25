@@ -1,0 +1,33 @@
+revivalPenality:
+  - level: 1
+    value: 80
+  - level: 2
+    value: 60
+  - level: 5
+    value: 50
+  - level: 10
+    value: 40
+  - level: 200
+    value: 30
+decExpPenality:
+  - level: 20
+    value: 0
+  - level: 29
+    value: 6
+  - level: 59
+    value: 5
+  - level: 89
+    value: 4
+  - level: 99
+    value: 3
+  - level: 109
+    value: 2
+  - level: 129
+    value: 1.5
+  - level: 200
+    value: 1
+levelDownPenality:
+  - level: 20
+    value: 0
+  - level: 200
+    value: 1

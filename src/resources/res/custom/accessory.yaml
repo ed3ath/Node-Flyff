@@ -1,0 +1,2148 @@
+- id: II_SYS_SYS_EVE_BROKENMOONSTONEBOX
+  levels: []
+- id: II_GEN_JEW_EAR_FEELSOGOODOLDRING
+  levels: []
+- id: II_GEN_JEW_RIN_STRRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_STR
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_STR
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_STR
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_STR
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_STR
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_STR
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_STR
+          value: 7
+    - level: 7
+      attributes:
+        - id: DST_STR
+          value: 8
+    - level: 8
+      attributes:
+        - id: DST_STR
+          value: 9
+    - level: 9
+      attributes:
+        - id: DST_STR
+          value: 10
+    - level: 10
+      attributes:
+        - id: DST_STR
+          value: 11
+    - level: 11
+      attributes:
+        - id: DST_STR
+          value: 13
+    - level: 12
+      attributes:
+        - id: DST_STR
+          value: 15
+    - level: 13
+      attributes:
+        - id: DST_STR
+          value: 17
+    - level: 14
+      attributes:
+        - id: DST_STR
+          value: 19
+    - level: 15
+      attributes:
+        - id: DST_STR
+          value: 21
+    - level: 16
+      attributes:
+        - id: DST_STR
+          value: 24
+    - level: 17
+      attributes:
+        - id: DST_STR
+          value: 27
+    - level: 18
+      attributes:
+        - id: DST_STR
+          value: 31
+    - level: 19
+      attributes:
+        - id: DST_STR
+          value: 35
+    - level: 20
+      attributes:
+        - id: DST_STR
+          value: 40
+- id: II_GEN_JEW_RIN_STARING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_STA
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_STA
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_STA
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_STA
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_STA
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_STA
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_STA
+          value: 7
+    - level: 7
+      attributes:
+        - id: DST_STA
+          value: 8
+    - level: 8
+      attributes:
+        - id: DST_STA
+          value: 9
+    - level: 9
+      attributes:
+        - id: DST_STA
+          value: 10
+    - level: 10
+      attributes:
+        - id: DST_STA
+          value: 11
+    - level: 11
+      attributes:
+        - id: DST_STA
+          value: 13
+    - level: 12
+      attributes:
+        - id: DST_STA
+          value: 15
+    - level: 13
+      attributes:
+        - id: DST_STA
+          value: 17
+    - level: 14
+      attributes:
+        - id: DST_STA
+          value: 19
+    - level: 15
+      attributes:
+        - id: DST_STA
+          value: 21
+    - level: 16
+      attributes:
+        - id: DST_STA
+          value: 24
+    - level: 17
+      attributes:
+        - id: DST_STA
+          value: 27
+    - level: 18
+      attributes:
+        - id: DST_STA
+          value: 31
+    - level: 19
+      attributes:
+        - id: DST_STA
+          value: 35
+    - level: 20
+      attributes:
+        - id: DST_STA
+          value: 40
+- id: II_GEN_JEW_RIN_DEXRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_DEX
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_DEX
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_DEX
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_DEX
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_DEX
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_DEX
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_DEX
+          value: 7
+    - level: 7
+      attributes:
+        - id: DST_DEX
+          value: 8
+    - level: 8
+      attributes:
+        - id: DST_DEX
+          value: 9
+    - level: 9
+      attributes:
+        - id: DST_DEX
+          value: 10
+    - level: 10
+      attributes:
+        - id: DST_DEX
+          value: 11
+    - level: 11
+      attributes:
+        - id: DST_DEX
+          value: 13
+    - level: 12
+      attributes:
+        - id: DST_DEX
+          value: 15
+    - level: 13
+      attributes:
+        - id: DST_DEX
+          value: 17
+    - level: 14
+      attributes:
+        - id: DST_DEX
+          value: 19
+    - level: 15
+      attributes:
+        - id: DST_DEX
+          value: 21
+    - level: 16
+      attributes:
+        - id: DST_DEX
+          value: 24
+    - level: 17
+      attributes:
+        - id: DST_DEX
+          value: 27
+    - level: 18
+      attributes:
+        - id: DST_DEX
+          value: 31
+    - level: 19
+      attributes:
+        - id: DST_DEX
+          value: 35
+    - level: 20
+      attributes:
+        - id: DST_DEX
+          value: 40
+- id: II_GEN_JEW_RIN_INTRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_INT
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_INT
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_INT
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_INT
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_INT
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_INT
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_INT
+          value: 7
+    - level: 7
+      attributes:
+        - id: DST_INT
+          value: 8
+    - level: 8
+      attributes:
+        - id: DST_INT
+          value: 9
+    - level: 9
+      attributes:
+        - id: DST_INT
+          value: 10
+    - level: 10
+      attributes:
+        - id: DST_INT
+          value: 11
+    - level: 11
+      attributes:
+        - id: DST_INT
+          value: 13
+    - level: 12
+      attributes:
+        - id: DST_INT
+          value: 15
+    - level: 13
+      attributes:
+        - id: DST_INT
+          value: 17
+    - level: 14
+      attributes:
+        - id: DST_INT
+          value: 19
+    - level: 15
+      attributes:
+        - id: DST_INT
+          value: 21
+    - level: 16
+      attributes:
+        - id: DST_INT
+          value: 24
+    - level: 17
+      attributes:
+        - id: DST_INT
+          value: 27
+    - level: 18
+      attributes:
+        - id: DST_INT
+          value: 31
+    - level: 19
+      attributes:
+        - id: DST_INT
+          value: 35
+    - level: 20
+      attributes:
+        - id: DST_INT
+          value: 40
+- id: II_GEN_JEW_EAR_ATTEARRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_CHR_DMG
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_CHR_DMG
+          value: 15
+    - level: 2
+      attributes:
+        - id: DST_CHR_DMG
+          value: 20
+    - level: 3
+      attributes:
+        - id: DST_CHR_DMG
+          value: 25
+    - level: 4
+      attributes:
+        - id: DST_CHR_DMG
+          value: 30
+    - level: 5
+      attributes:
+        - id: DST_CHR_DMG
+          value: 35
+    - level: 6
+      attributes:
+        - id: DST_CHR_DMG
+          value: 41
+    - level: 7
+      attributes:
+        - id: DST_CHR_DMG
+          value: 48
+    - level: 8
+      attributes:
+        - id: DST_CHR_DMG
+          value: 56
+    - level: 9
+      attributes:
+        - id: DST_CHR_DMG
+          value: 66
+    - level: 10
+      attributes:
+        - id: DST_CHR_DMG
+          value: 77
+    - level: 11
+      attributes:
+        - id: DST_CHR_DMG
+          value: 90
+    - level: 12
+      attributes:
+        - id: DST_CHR_DMG
+          value: 105
+    - level: 13
+      attributes:
+        - id: DST_CHR_DMG
+          value: 125
+    - level: 14
+      attributes:
+        - id: DST_CHR_DMG
+          value: 150
+    - level: 15
+      attributes:
+        - id: DST_CHR_DMG
+          value: 170
+    - level: 16
+      attributes:
+        - id: DST_CHR_DMG
+          value: 200
+    - level: 17
+      attributes:
+        - id: DST_CHR_DMG
+          value: 235
+    - level: 18
+      attributes:
+        - id: DST_CHR_DMG
+          value: 275
+    - level: 19
+      attributes:
+        - id: DST_CHR_DMG
+          value: 320
+    - level: 20
+      attributes:
+        - id: DST_CHR_DMG
+          value: 375
+- id: II_GEN_JEW_EAR_DEFEARRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_ADJDEF
+          value: 44
+    - level: 1
+      attributes:
+        - id: DST_ADJDEF
+          value: 49
+    - level: 2
+      attributes:
+        - id: DST_ADJDEF
+          value: 54
+    - level: 3
+      attributes:
+        - id: DST_ADJDEF
+          value: 59
+    - level: 4
+      attributes:
+        - id: DST_ADJDEF
+          value: 64
+    - level: 5
+      attributes:
+        - id: DST_ADJDEF
+          value: 70
+    - level: 6
+      attributes:
+        - id: DST_ADJDEF
+          value: 76
+    - level: 7
+      attributes:
+        - id: DST_ADJDEF
+          value: 82
+    - level: 8
+      attributes:
+        - id: DST_ADJDEF
+          value: 89
+    - level: 9
+      attributes:
+        - id: DST_ADJDEF
+          value: 96
+    - level: 10
+      attributes:
+        - id: DST_ADJDEF
+          value: 104
+    - level: 11
+      attributes:
+        - id: DST_ADJDEF
+          value: 113
+    - level: 12
+      attributes:
+        - id: DST_ADJDEF
+          value: 123
+    - level: 13
+      attributes:
+        - id: DST_ADJDEF
+          value: 135
+    - level: 14
+      attributes:
+        - id: DST_ADJDEF
+          value: 150
+    - level: 15
+      attributes:
+        - id: DST_ADJDEF
+          value: 168
+    - level: 16
+      attributes:
+        - id: DST_ADJDEF
+          value: 189
+    - level: 17
+      attributes:
+        - id: DST_ADJDEF
+          value: 213
+    - level: 18
+      attributes:
+        - id: DST_ADJDEF
+          value: 240
+    - level: 19
+      attributes:
+        - id: DST_ADJDEF
+          value: 270
+    - level: 20
+      attributes:
+        - id: DST_ADJDEF
+          value: 310
+- id: II_GEN_JEW_NEC_HPNECKLACE
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_HP_MAX
+          value: 82
+    - level: 1
+      attributes:
+        - id: DST_HP_MAX
+          value: 118
+    - level: 2
+      attributes:
+        - id: DST_HP_MAX
+          value: 154
+    - level: 3
+      attributes:
+        - id: DST_HP_MAX
+          value: 190
+    - level: 4
+      attributes:
+        - id: DST_HP_MAX
+          value: 226
+    - level: 5
+      attributes:
+        - id: DST_HP_MAX
+          value: 262
+    - level: 6
+      attributes:
+        - id: DST_HP_MAX
+          value: 298
+    - level: 7
+      attributes:
+        - id: DST_HP_MAX
+          value: 334
+    - level: 8
+      attributes:
+        - id: DST_HP_MAX
+          value: 370
+    - level: 9
+      attributes:
+        - id: DST_HP_MAX
+          value: 418
+    - level: 10
+      attributes:
+        - id: DST_HP_MAX
+          value: 466
+    - level: 11
+      attributes:
+        - id: DST_HP_MAX
+          value: 514
+    - level: 12
+      attributes:
+        - id: DST_HP_MAX
+          value: 562
+    - level: 13
+      attributes:
+        - id: DST_HP_MAX
+          value: 610
+    - level: 14
+      attributes:
+        - id: DST_HP_MAX
+          value: 658
+    - level: 15
+      attributes:
+        - id: DST_HP_MAX
+          value: 706
+    - level: 16
+      attributes:
+        - id: DST_HP_MAX
+          value: 766
+    - level: 17
+      attributes:
+        - id: DST_HP_MAX
+          value: 826
+    - level: 18
+      attributes:
+        - id: DST_HP_MAX
+          value: 886
+    - level: 19
+      attributes:
+        - id: DST_HP_MAX
+          value: 946
+    - level: 20
+      attributes:
+        - id: DST_HP_MAX
+          value: 1018
+- id: II_GEN_JEW_NEC_MPNECKLACE
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_MP_MAX
+          value: 57
+    - level: 1
+      attributes:
+        - id: DST_MP_MAX
+          value: 65
+    - level: 2
+      attributes:
+        - id: DST_MP_MAX
+          value: 73
+    - level: 3
+      attributes:
+        - id: DST_MP_MAX
+          value: 81
+    - level: 4
+      attributes:
+        - id: DST_MP_MAX
+          value: 89
+    - level: 5
+      attributes:
+        - id: DST_MP_MAX
+          value: 97
+    - level: 6
+      attributes:
+        - id: DST_MP_MAX
+          value: 105
+    - level: 7
+      attributes:
+        - id: DST_MP_MAX
+          value: 113
+    - level: 8
+      attributes:
+        - id: DST_MP_MAX
+          value: 121
+    - level: 9
+      attributes:
+        - id: DST_MP_MAX
+          value: 129
+    - level: 10
+      attributes:
+        - id: DST_MP_MAX
+          value: 137
+    - level: 11
+      attributes:
+        - id: DST_MP_MAX
+          value: 146
+    - level: 12
+      attributes:
+        - id: DST_MP_MAX
+          value: 155
+    - level: 13
+      attributes:
+        - id: DST_MP_MAX
+          value: 164
+    - level: 14
+      attributes:
+        - id: DST_MP_MAX
+          value: 173
+    - level: 15
+      attributes:
+        - id: DST_MP_MAX
+          value: 182
+    - level: 16
+      attributes:
+        - id: DST_MP_MAX
+          value: 191
+    - level: 17
+      attributes:
+        - id: DST_MP_MAX
+          value: 200
+    - level: 18
+      attributes:
+        - id: DST_MP_MAX
+          value: 209
+    - level: 19
+      attributes:
+        - id: DST_MP_MAX
+          value: 218
+    - level: 20
+      attributes:
+        - id: DST_MP_MAX
+          value: 227
+- id: II_GEN_JEW_NEC_FPNECKLACE
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_FP_MAX
+          value: 57
+    - level: 1
+      attributes:
+        - id: DST_FP_MAX
+          value: 65
+    - level: 2
+      attributes:
+        - id: DST_FP_MAX
+          value: 73
+    - level: 3
+      attributes:
+        - id: DST_FP_MAX
+          value: 81
+    - level: 4
+      attributes:
+        - id: DST_FP_MAX
+          value: 89
+    - level: 5
+      attributes:
+        - id: DST_FP_MAX
+          value: 97
+    - level: 6
+      attributes:
+        - id: DST_FP_MAX
+          value: 105
+    - level: 7
+      attributes:
+        - id: DST_FP_MAX
+          value: 113
+    - level: 8
+      attributes:
+        - id: DST_FP_MAX
+          value: 121
+    - level: 9
+      attributes:
+        - id: DST_FP_MAX
+          value: 129
+    - level: 10
+      attributes:
+        - id: DST_FP_MAX
+          value: 137
+    - level: 11
+      attributes:
+        - id: DST_FP_MAX
+          value: 146
+    - level: 12
+      attributes:
+        - id: DST_FP_MAX
+          value: 155
+    - level: 13
+      attributes:
+        - id: DST_FP_MAX
+          value: 164
+    - level: 14
+      attributes:
+        - id: DST_FP_MAX
+          value: 173
+    - level: 15
+      attributes:
+        - id: DST_FP_MAX
+          value: 182
+    - level: 16
+      attributes:
+        - id: DST_FP_MAX
+          value: 191
+    - level: 17
+      attributes:
+        - id: DST_FP_MAX
+          value: 200
+    - level: 18
+      attributes:
+        - id: DST_FP_MAX
+          value: 209
+    - level: 19
+      attributes:
+        - id: DST_FP_MAX
+          value: 218
+    - level: 20
+      attributes:
+        - id: DST_FP_MAX
+          value: 227
+- id: II_GEN_JEW_RIN_FIRERING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_STR
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_STR
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_STR
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_STR
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_STR
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_STR
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_STR
+          value: 7
+        - id: DST_CRITICAL_BONUS
+          value: 1
+    - level: 7
+      attributes:
+        - id: DST_STR
+          value: 8
+        - id: DST_CRITICAL_BONUS
+          value: 1
+    - level: 8
+      attributes:
+        - id: DST_STR
+          value: 9
+        - id: DST_CRITICAL_BONUS
+          value: 1
+    - level: 9
+      attributes:
+        - id: DST_STR
+          value: 10
+        - id: DST_CRITICAL_BONUS
+          value: 1
+    - level: 10
+      attributes:
+        - id: DST_STR
+          value: 11
+        - id: DST_CRITICAL_BONUS
+          value: 1
+    - level: 11
+      attributes:
+        - id: DST_STR
+          value: 13
+        - id: DST_CRITICAL_BONUS
+          value: 2
+    - level: 12
+      attributes:
+        - id: DST_STR
+          value: 15
+        - id: DST_CRITICAL_BONUS
+          value: 2
+    - level: 13
+      attributes:
+        - id: DST_STR
+          value: 17
+        - id: DST_CRITICAL_BONUS
+          value: 2
+    - level: 14
+      attributes:
+        - id: DST_STR
+          value: 19
+        - id: DST_CRITICAL_BONUS
+          value: 2
+    - level: 15
+      attributes:
+        - id: DST_STR
+          value: 21
+        - id: DST_CRITICAL_BONUS
+          value: 3
+    - level: 16
+      attributes:
+        - id: DST_STR
+          value: 24
+        - id: DST_CRITICAL_BONUS
+          value: 3
+    - level: 17
+      attributes:
+        - id: DST_STR
+          value: 27
+        - id: DST_CRITICAL_BONUS
+          value: 3
+    - level: 18
+      attributes:
+        - id: DST_STR
+          value: 31
+        - id: DST_CRITICAL_BONUS
+          value: 4
+    - level: 19
+      attributes:
+        - id: DST_STR
+          value: 35
+        - id: DST_CRITICAL_BONUS
+          value: 4
+    - level: 20
+      attributes:
+        - id: DST_STR
+          value: 40
+        - id: DST_CRITICAL_BONUS
+          value: 5
+- id: II_GEN_JEW_RIN_LANDRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_STA
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_STA
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_STA
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_STA
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_STA
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_STA
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_STA
+          value: 7
+        - id: DST_ADJDEF_RATE
+          value: 1
+    - level: 7
+      attributes:
+        - id: DST_STA
+          value: 8
+        - id: DST_ADJDEF_RATE
+          value: 1
+    - level: 8
+      attributes:
+        - id: DST_STA
+          value: 9
+        - id: DST_ADJDEF_RATE
+          value: 1
+    - level: 9
+      attributes:
+        - id: DST_STA
+          value: 10
+        - id: DST_ADJDEF_RATE
+          value: 1
+    - level: 10
+      attributes:
+        - id: DST_STA
+          value: 11
+        - id: DST_ADJDEF_RATE
+          value: 1
+    - level: 11
+      attributes:
+        - id: DST_STA
+          value: 13
+        - id: DST_ADJDEF_RATE
+          value: 2
+    - level: 12
+      attributes:
+        - id: DST_STA
+          value: 15
+        - id: DST_ADJDEF_RATE
+          value: 2
+    - level: 13
+      attributes:
+        - id: DST_STA
+          value: 17
+        - id: DST_ADJDEF_RATE
+          value: 2
+    - level: 14
+      attributes:
+        - id: DST_STA
+          value: 19
+        - id: DST_ADJDEF_RATE
+          value: 2
+    - level: 15
+      attributes:
+        - id: DST_STA
+          value: 21
+        - id: DST_ADJDEF_RATE
+          value: 3
+    - level: 16
+      attributes:
+        - id: DST_STA
+          value: 24
+        - id: DST_ADJDEF_RATE
+          value: 3
+    - level: 17
+      attributes:
+        - id: DST_STA
+          value: 27
+        - id: DST_ADJDEF_RATE
+          value: 3
+    - level: 18
+      attributes:
+        - id: DST_STA
+          value: 31
+        - id: DST_ADJDEF_RATE
+          value: 4
+    - level: 19
+      attributes:
+        - id: DST_STA
+          value: 35
+        - id: DST_ADJDEF_RATE
+          value: 4
+    - level: 20
+      attributes:
+        - id: DST_STA
+          value: 40
+        - id: DST_ADJDEF_RATE
+          value: 5
+- id: II_GEN_JEW_RIN_ELECTRICRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_DEX
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_DEX
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_DEX
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_DEX
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_DEX
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_DEX
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_DEX
+          value: 7
+        - id: DST_PARRY
+          value: 1
+    - level: 7
+      attributes:
+        - id: DST_DEX
+          value: 8
+        - id: DST_PARRY
+          value: 1
+    - level: 8
+      attributes:
+        - id: DST_DEX
+          value: 9
+        - id: DST_PARRY
+          value: 1
+    - level: 9
+      attributes:
+        - id: DST_DEX
+          value: 10
+        - id: DST_PARRY
+          value: 1
+    - level: 10
+      attributes:
+        - id: DST_DEX
+          value: 11
+        - id: DST_PARRY
+          value: 1
+    - level: 11
+      attributes:
+        - id: DST_DEX
+          value: 13
+        - id: DST_PARRY
+          value: 2
+    - level: 12
+      attributes:
+        - id: DST_DEX
+          value: 15
+        - id: DST_PARRY
+          value: 2
+    - level: 13
+      attributes:
+        - id: DST_DEX
+          value: 17
+        - id: DST_PARRY
+          value: 2
+    - level: 14
+      attributes:
+        - id: DST_DEX
+          value: 19
+        - id: DST_PARRY
+          value: 2
+    - level: 15
+      attributes:
+        - id: DST_DEX
+          value: 21
+        - id: DST_PARRY
+          value: 3
+    - level: 16
+      attributes:
+        - id: DST_DEX
+          value: 24
+        - id: DST_PARRY
+          value: 3
+    - level: 17
+      attributes:
+        - id: DST_DEX
+          value: 27
+        - id: DST_PARRY
+          value: 3
+    - level: 18
+      attributes:
+        - id: DST_DEX
+          value: 31
+        - id: DST_PARRY
+          value: 4
+    - level: 19
+      attributes:
+        - id: DST_DEX
+          value: 35
+        - id: DST_PARRY
+          value: 4
+    - level: 20
+      attributes:
+        - id: DST_DEX
+          value: 40
+        - id: DST_PARRY
+          value: 5
+- id: II_GEN_JEW_RIN_WATERRING
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_INT
+          value: 1
+    - level: 1
+      attributes:
+        - id: DST_INT
+          value: 2
+    - level: 2
+      attributes:
+        - id: DST_INT
+          value: 3
+    - level: 3
+      attributes:
+        - id: DST_INT
+          value: 4
+    - level: 4
+      attributes:
+        - id: DST_INT
+          value: 5
+    - level: 5
+      attributes:
+        - id: DST_INT
+          value: 6
+    - level: 6
+      attributes:
+        - id: DST_INT
+          value: 7
+        - id: DST_SPELL_RATE
+          value: 1
+    - level: 7
+      attributes:
+        - id: DST_INT
+          value: 8
+        - id: DST_SPELL_RATE
+          value: 1
+    - level: 8
+      attributes:
+        - id: DST_INT
+          value: 9
+        - id: DST_SPELL_RATE
+          value: 1
+    - level: 9
+      attributes:
+        - id: DST_INT
+          value: 10
+        - id: DST_SPELL_RATE
+          value: 1
+    - level: 10
+      attributes:
+        - id: DST_INT
+          value: 11
+        - id: DST_SPELL_RATE
+          value: 1
+    - level: 11
+      attributes:
+        - id: DST_INT
+          value: 13
+        - id: DST_SPELL_RATE
+          value: 2
+    - level: 12
+      attributes:
+        - id: DST_INT
+          value: 15
+        - id: DST_SPELL_RATE
+          value: 2
+    - level: 13
+      attributes:
+        - id: DST_INT
+          value: 17
+        - id: DST_SPELL_RATE
+          value: 2
+    - level: 14
+      attributes:
+        - id: DST_INT
+          value: 19
+        - id: DST_SPELL_RATE
+          value: 2
+    - level: 15
+      attributes:
+        - id: DST_INT
+          value: 21
+        - id: DST_SPELL_RATE
+          value: 3
+    - level: 16
+      attributes:
+        - id: DST_INT
+          value: 24
+        - id: DST_SPELL_RATE
+          value: 3
+    - level: 17
+      attributes:
+        - id: DST_INT
+          value: 27
+        - id: DST_SPELL_RATE
+          value: 3
+    - level: 18
+      attributes:
+        - id: DST_INT
+          value: 31
+        - id: DST_SPELL_RATE
+          value: 4
+    - level: 19
+      attributes:
+        - id: DST_INT
+          value: 35
+        - id: DST_SPELL_RATE
+          value: 4
+    - level: 20
+      attributes:
+        - id: DST_INT
+          value: 40
+        - id: DST_SPELL_RATE
+          value: 5
+- id: II_GEN_JEW_EAR_ATTEARRINGEST
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_CHR_DMG
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_CHR_DMG
+          value: 17
+    - level: 2
+      attributes:
+        - id: DST_CHR_DMG
+          value: 22
+    - level: 3
+      attributes:
+        - id: DST_CHR_DMG
+          value: 28
+    - level: 4
+      attributes:
+        - id: DST_CHR_DMG
+          value: 33
+    - level: 5
+      attributes:
+        - id: DST_CHR_DMG
+          value: 39
+    - level: 6
+      attributes:
+        - id: DST_CHR_DMG
+          value: 45
+    - level: 7
+      attributes:
+        - id: DST_CHR_DMG
+          value: 53
+    - level: 8
+      attributes:
+        - id: DST_CHR_DMG
+          value: 62
+    - level: 9
+      attributes:
+        - id: DST_CHR_DMG
+          value: 73
+    - level: 10
+      attributes:
+        - id: DST_CHR_DMG
+          value: 85
+    - level: 11
+      attributes:
+        - id: DST_CHR_DMG
+          value: 99
+    - level: 12
+      attributes:
+        - id: DST_CHR_DMG
+          value: 116
+    - level: 13
+      attributes:
+        - id: DST_CHR_DMG
+          value: 138
+    - level: 14
+      attributes:
+        - id: DST_CHR_DMG
+          value: 165
+    - level: 15
+      attributes:
+        - id: DST_CHR_DMG
+          value: 187
+    - level: 16
+      attributes:
+        - id: DST_CHR_DMG
+          value: 220
+    - level: 17
+      attributes:
+        - id: DST_CHR_DMG
+          value: 259
+    - level: 18
+      attributes:
+        - id: DST_CHR_DMG
+          value: 303
+    - level: 19
+      attributes:
+        - id: DST_CHR_DMG
+          value: 352
+    - level: 20
+      attributes:
+        - id: DST_CHR_DMG
+          value: 413
+- id: II_GEN_JEW_EAR_MAGICRINGEST
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 17
+    - level: 2
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 22
+    - level: 3
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 28
+    - level: 4
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 33
+    - level: 5
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 39
+    - level: 6
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 45
+    - level: 7
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 53
+    - level: 8
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 62
+    - level: 9
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 73
+    - level: 10
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 85
+    - level: 11
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 99
+    - level: 12
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 116
+    - level: 13
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 138
+    - level: 14
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 165
+    - level: 15
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 187
+    - level: 16
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 220
+    - level: 17
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 259
+    - level: 18
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 303
+    - level: 19
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 352
+    - level: 20
+      attributes:
+        - id: DST_ADDMAGIC
+          value: 413
+- id: II_GEN_JEW_EAR_RANGERINGEST
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_YOY_DMG
+          value: 10
+        - id: DST_BOW_DMG
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_YOY_DMG
+          value: 17
+        - id: DST_BOW_DMG
+          value: 17
+    - level: 2
+      attributes:
+        - id: DST_YOY_DMG
+          value: 22
+        - id: DST_BOW_DMG
+          value: 22
+    - level: 3
+      attributes:
+        - id: DST_YOY_DMG
+          value: 28
+        - id: DST_BOW_DMG
+          value: 28
+    - level: 4
+      attributes:
+        - id: DST_YOY_DMG
+          value: 33
+        - id: DST_BOW_DMG
+          value: 33
+    - level: 5
+      attributes:
+        - id: DST_YOY_DMG
+          value: 39
+        - id: DST_BOW_DMG
+          value: 39
+    - level: 6
+      attributes:
+        - id: DST_YOY_DMG
+          value: 45
+        - id: DST_BOW_DMG
+          value: 45
+    - level: 7
+      attributes:
+        - id: DST_YOY_DMG
+          value: 53
+        - id: DST_BOW_DMG
+          value: 53
+    - level: 8
+      attributes:
+        - id: DST_YOY_DMG
+          value: 62
+        - id: DST_BOW_DMG
+          value: 62
+    - level: 9
+      attributes:
+        - id: DST_YOY_DMG
+          value: 73
+        - id: DST_BOW_DMG
+          value: 73
+    - level: 10
+      attributes:
+        - id: DST_YOY_DMG
+          value: 85
+        - id: DST_BOW_DMG
+          value: 85
+    - level: 11
+      attributes:
+        - id: DST_YOY_DMG
+          value: 99
+        - id: DST_BOW_DMG
+          value: 99
+    - level: 12
+      attributes:
+        - id: DST_YOY_DMG
+          value: 116
+        - id: DST_BOW_DMG
+          value: 116
+    - level: 13
+      attributes:
+        - id: DST_YOY_DMG
+          value: 138
+        - id: DST_BOW_DMG
+          value: 138
+    - level: 14
+      attributes:
+        - id: DST_YOY_DMG
+          value: 165
+        - id: DST_BOW_DMG
+          value: 165
+    - level: 15
+      attributes:
+        - id: DST_YOY_DMG
+          value: 187
+        - id: DST_BOW_DMG
+          value: 187
+    - level: 16
+      attributes:
+        - id: DST_YOY_DMG
+          value: 220
+        - id: DST_BOW_DMG
+          value: 220
+    - level: 17
+      attributes:
+        - id: DST_YOY_DMG
+          value: 259
+        - id: DST_BOW_DMG
+          value: 259
+    - level: 18
+      attributes:
+        - id: DST_YOY_DMG
+          value: 303
+        - id: DST_BOW_DMG
+          value: 303
+    - level: 19
+      attributes:
+        - id: DST_YOY_DMG
+          value: 352
+        - id: DST_BOW_DMG
+          value: 352
+    - level: 20
+      attributes:
+        - id: DST_YOY_DMG
+          value: 413
+        - id: DST_BOW_DMG
+          value: 413
+- id: II_GEN_JEW_EAR_DEFEARRINGEST
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_ADJDEF
+          value: 54
+    - level: 1
+      attributes:
+        - id: DST_ADJDEF
+          value: 59
+    - level: 2
+      attributes:
+        - id: DST_ADJDEF
+          value: 65
+    - level: 3
+      attributes:
+        - id: DST_ADJDEF
+          value: 70
+    - level: 4
+      attributes:
+        - id: DST_ADJDEF
+          value: 77
+    - level: 5
+      attributes:
+        - id: DST_ADJDEF
+          value: 84
+    - level: 6
+      attributes:
+        - id: DST_ADJDEF
+          value: 90
+    - level: 7
+      attributes:
+        - id: DST_ADJDEF
+          value: 98
+    - level: 8
+      attributes:
+        - id: DST_ADJDEF
+          value: 106
+    - level: 9
+      attributes:
+        - id: DST_ADJDEF
+          value: 114
+    - level: 10
+      attributes:
+        - id: DST_ADJDEF
+          value: 124
+    - level: 11
+      attributes:
+        - id: DST_ADJDEF
+          value: 135
+    - level: 12
+      attributes:
+        - id: DST_ADJDEF
+          value: 149
+    - level: 13
+      attributes:
+        - id: DST_ADJDEF
+          value: 165
+    - level: 14
+      attributes:
+        - id: DST_ADJDEF
+          value: 185
+    - level: 15
+      attributes:
+        - id: DST_ADJDEF
+          value: 208
+    - level: 16
+      attributes:
+        - id: DST_ADJDEF
+          value: 234
+    - level: 17
+      attributes:
+        - id: DST_ADJDEF
+          value: 264
+    - level: 18
+      attributes:
+        - id: DST_ADJDEF
+          value: 297
+    - level: 19
+      attributes:
+        - id: DST_ADJDEF
+          value: 341
+    - level: 20
+      attributes:
+        - id: DST_ADJDEF
+          value: 370
+- id: II_GEN_JEW_NEC_HPNECKLACEMR
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_HP_MAX
+          value: 82
+        - id: DST_RESIST_MAGIC
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_HP_MAX
+          value: 118
+        - id: DST_RESIST_MAGIC
+          value: 20
+    - level: 2
+      attributes:
+        - id: DST_HP_MAX
+          value: 154
+        - id: DST_RESIST_MAGIC
+          value: 30
+    - level: 3
+      attributes:
+        - id: DST_HP_MAX
+          value: 190
+        - id: DST_RESIST_MAGIC
+          value: 40
+    - level: 4
+      attributes:
+        - id: DST_HP_MAX
+          value: 226
+        - id: DST_RESIST_MAGIC
+          value: 50
+    - level: 5
+      attributes:
+        - id: DST_HP_MAX
+          value: 262
+        - id: DST_RESIST_MAGIC
+          value: 60
+    - level: 6
+      attributes:
+        - id: DST_HP_MAX
+          value: 298
+        - id: DST_RESIST_MAGIC
+          value: 70
+    - level: 7
+      attributes:
+        - id: DST_HP_MAX
+          value: 334
+        - id: DST_RESIST_MAGIC
+          value: 80
+    - level: 8
+      attributes:
+        - id: DST_HP_MAX
+          value: 370
+        - id: DST_RESIST_MAGIC
+          value: 90
+    - level: 9
+      attributes:
+        - id: DST_HP_MAX
+          value: 418
+        - id: DST_RESIST_MAGIC
+          value: 100
+    - level: 10
+      attributes:
+        - id: DST_HP_MAX
+          value: 466
+        - id: DST_RESIST_MAGIC
+          value: 115
+    - level: 11
+      attributes:
+        - id: DST_HP_MAX
+          value: 514
+        - id: DST_RESIST_MAGIC
+          value: 130
+    - level: 12
+      attributes:
+        - id: DST_HP_MAX
+          value: 562
+        - id: DST_RESIST_MAGIC
+          value: 145
+    - level: 13
+      attributes:
+        - id: DST_HP_MAX
+          value: 610
+        - id: DST_RESIST_MAGIC
+          value: 160
+    - level: 14
+      attributes:
+        - id: DST_HP_MAX
+          value: 658
+        - id: DST_RESIST_MAGIC
+          value: 175
+    - level: 15
+      attributes:
+        - id: DST_HP_MAX
+          value: 706
+        - id: DST_RESIST_MAGIC
+          value: 190
+    - level: 16
+      attributes:
+        - id: DST_HP_MAX
+          value: 766
+        - id: DST_RESIST_MAGIC
+          value: 210
+    - level: 17
+      attributes:
+        - id: DST_HP_MAX
+          value: 826
+        - id: DST_RESIST_MAGIC
+          value: 230
+    - level: 18
+      attributes:
+        - id: DST_HP_MAX
+          value: 886
+        - id: DST_RESIST_MAGIC
+          value: 250
+    - level: 19
+      attributes:
+        - id: DST_HP_MAX
+          value: 946
+        - id: DST_RESIST_MAGIC
+          value: 270
+    - level: 20
+      attributes:
+        - id: DST_HP_MAX
+          value: 1018
+        - id: DST_RESIST_MAGIC
+          value: 300
+- id: II_GEN_JEW_NEC_MPNECKLACEMR
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_MP_MAX
+          value: 57
+        - id: DST_RESIST_MAGIC
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_MP_MAX
+          value: 65
+        - id: DST_RESIST_MAGIC
+          value: 20
+    - level: 2
+      attributes:
+        - id: DST_MP_MAX
+          value: 73
+        - id: DST_RESIST_MAGIC
+          value: 30
+    - level: 3
+      attributes:
+        - id: DST_MP_MAX
+          value: 81
+        - id: DST_RESIST_MAGIC
+          value: 40
+    - level: 4
+      attributes:
+        - id: DST_MP_MAX
+          value: 89
+        - id: DST_RESIST_MAGIC
+          value: 50
+    - level: 5
+      attributes:
+        - id: DST_MP_MAX
+          value: 97
+        - id: DST_RESIST_MAGIC
+          value: 60
+    - level: 6
+      attributes:
+        - id: DST_MP_MAX
+          value: 105
+        - id: DST_RESIST_MAGIC
+          value: 70
+    - level: 7
+      attributes:
+        - id: DST_MP_MAX
+          value: 113
+        - id: DST_RESIST_MAGIC
+          value: 80
+    - level: 8
+      attributes:
+        - id: DST_MP_MAX
+          value: 121
+        - id: DST_RESIST_MAGIC
+          value: 90
+    - level: 9
+      attributes:
+        - id: DST_MP_MAX
+          value: 129
+        - id: DST_RESIST_MAGIC
+          value: 100
+    - level: 10
+      attributes:
+        - id: DST_MP_MAX
+          value: 137
+        - id: DST_RESIST_MAGIC
+          value: 115
+    - level: 11
+      attributes:
+        - id: DST_MP_MAX
+          value: 146
+        - id: DST_RESIST_MAGIC
+          value: 130
+    - level: 12
+      attributes:
+        - id: DST_MP_MAX
+          value: 155
+        - id: DST_RESIST_MAGIC
+          value: 145
+    - level: 13
+      attributes:
+        - id: DST_MP_MAX
+          value: 164
+        - id: DST_RESIST_MAGIC
+          value: 160
+    - level: 14
+      attributes:
+        - id: DST_MP_MAX
+          value: 173
+        - id: DST_RESIST_MAGIC
+          value: 175
+    - level: 15
+      attributes:
+        - id: DST_MP_MAX
+          value: 182
+        - id: DST_RESIST_MAGIC
+          value: 190
+    - level: 16
+      attributes:
+        - id: DST_MP_MAX
+          value: 191
+        - id: DST_RESIST_MAGIC
+          value: 210
+    - level: 17
+      attributes:
+        - id: DST_MP_MAX
+          value: 200
+        - id: DST_RESIST_MAGIC
+          value: 230
+    - level: 18
+      attributes:
+        - id: DST_MP_MAX
+          value: 209
+        - id: DST_RESIST_MAGIC
+          value: 250
+    - level: 19
+      attributes:
+        - id: DST_MP_MAX
+          value: 218
+        - id: DST_RESIST_MAGIC
+          value: 270
+    - level: 20
+      attributes:
+        - id: DST_MP_MAX
+          value: 227
+        - id: DST_RESIST_MAGIC
+          value: 300
+- id: II_GEN_JEW_NEC_FPNECKLACEMR
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_FP_MAX
+          value: 57
+        - id: DST_RESIST_MAGIC
+          value: 10
+    - level: 1
+      attributes:
+        - id: DST_FP_MAX
+          value: 65
+        - id: DST_RESIST_MAGIC
+          value: 20
+    - level: 2
+      attributes:
+        - id: DST_FP_MAX
+          value: 73
+        - id: DST_RESIST_MAGIC
+          value: 30
+    - level: 3
+      attributes:
+        - id: DST_FP_MAX
+          value: 81
+        - id: DST_RESIST_MAGIC
+          value: 40
+    - level: 4
+      attributes:
+        - id: DST_FP_MAX
+          value: 89
+        - id: DST_RESIST_MAGIC
+          value: 50
+    - level: 5
+      attributes:
+        - id: DST_FP_MAX
+          value: 97
+        - id: DST_RESIST_MAGIC
+          value: 60
+    - level: 6
+      attributes:
+        - id: DST_FP_MAX
+          value: 105
+        - id: DST_RESIST_MAGIC
+          value: 70
+    - level: 7
+      attributes:
+        - id: DST_FP_MAX
+          value: 113
+        - id: DST_RESIST_MAGIC
+          value: 80
+    - level: 8
+      attributes:
+        - id: DST_FP_MAX
+          value: 121
+        - id: DST_RESIST_MAGIC
+          value: 90
+    - level: 9
+      attributes:
+        - id: DST_FP_MAX
+          value: 129
+        - id: DST_RESIST_MAGIC
+          value: 100
+    - level: 10
+      attributes:
+        - id: DST_FP_MAX
+          value: 137
+        - id: DST_RESIST_MAGIC
+          value: 115
+    - level: 11
+      attributes:
+        - id: DST_FP_MAX
+          value: 146
+        - id: DST_RESIST_MAGIC
+          value: 130
+    - level: 12
+      attributes:
+        - id: DST_FP_MAX
+          value: 155
+        - id: DST_RESIST_MAGIC
+          value: 145
+    - level: 13
+      attributes:
+        - id: DST_FP_MAX
+          value: 164
+        - id: DST_RESIST_MAGIC
+          value: 160
+    - level: 14
+      attributes:
+        - id: DST_FP_MAX
+          value: 173
+        - id: DST_RESIST_MAGIC
+          value: 175
+    - level: 15
+      attributes:
+        - id: DST_FP_MAX
+          value: 182
+        - id: DST_RESIST_MAGIC
+          value: 190
+    - level: 16
+      attributes:
+        - id: DST_FP_MAX
+          value: 191
+        - id: DST_RESIST_MAGIC
+          value: 210
+    - level: 17
+      attributes:
+        - id: DST_FP_MAX
+          value: 200
+        - id: DST_RESIST_MAGIC
+          value: 230
+    - level: 18
+      attributes:
+        - id: DST_FP_MAX
+          value: 209
+        - id: DST_RESIST_MAGIC
+          value: 250
+    - level: 19
+      attributes:
+        - id: DST_FP_MAX
+          value: 218
+        - id: DST_RESIST_MAGIC
+          value: 270
+    - level: 20
+      attributes:
+        - id: DST_FP_MAX
+          value: 227
+        - id: DST_RESIST_MAGIC
+          value: 300
+- id: II_GEN_JEW_NEC_HPMPNECKLACE
+  levels:
+    - level: 0
+      attributes:
+        - id: DST_HP_MAX
+          value: 82
+        - id: DST_MP_MAX
+          value: 57
+    - level: 1
+      attributes:
+        - id: DST_HP_MAX
+          value: 118
+        - id: DST_MP_MAX
+          value: 65
+    - level: 2
+      attributes:
+        - id: DST_HP_MAX
+          value: 154
+        - id: DST_MP_MAX
+          value: 73
+    - level: 3
+      attributes:
+        - id: DST_HP_MAX
+          value: 190
+        - id: DST_MP_MAX
+          value: 81
+    - level: 4
+      attributes:
+        - id: DST_HP_MAX
+          value: 226
+        - id: DST_MP_MAX
+          value: 89
+    - level: 5
+      attributes:
+        - id: DST_HP_MAX
+          value: 262
+        - id: DST_MP_MAX
+          value: 97
+    - level: 6
+      attributes:
+        - id: DST_HP_MAX
+          value: 298
+        - id: DST_MP_MAX
+          value: 105
+    - level: 7
+      attributes:
+        - id: DST_HP_MAX
+          value: 334
+        - id: DST_MP_MAX
+          value: 113
+    - level: 8
+      attributes:
+        - id: DST_HP_MAX
+          value: 370
+        - id: DST_MP_MAX
+          value: 121
+    - level: 9
+      attributes:
+        - id: DST_HP_MAX
+          value: 418
+        - id: DST_MP_MAX
+          value: 129
+    - level: 10
+      attributes:
+        - id: DST_HP_MAX
+          value: 466
+        - id: DST_MP_MAX
+          value: 137
+    - level: 11
+      attributes:
+        - id: DST_HP_MAX
+          value: 514
+        - id: DST_MP_MAX
+          value: 146
+    - level: 12
+      attributes:
+        - id: DST_HP_MAX
+          value: 562
+        - id: DST_MP_MAX
+          value: 155
+    - level: 13
+      attributes:
+        - id: DST_HP_MAX
+          value: 610
+        - id: DST_MP_MAX
+          value: 164
+    - level: 14
+      attributes:
+        - id: DST_HP_MAX
+          value: 658
+        - id: DST_MP_MAX
+          value: 173
+    - level: 15
+      attributes:
+        - id: DST_HP_MAX
+          value: 706
+        - id: DST_MP_MAX
+          value: 182
+    - level: 16
+      attributes:
+        - id: DST_HP_MAX
+          value: 766
+        - id: DST_MP_MAX
+          value: 191
+    - level: 17
+      attributes:
+        - id: DST_HP_MAX
+          value: 826
+        - id: DST_MP_MAX
+          value: 200
+    - level: 18
+      attributes:
+        - id: DST_HP_MAX
+          value: 886
+        - id: DST_MP_MAX
+          value: 209
+    - level: 19
+      attributes:
+        - id: DST_HP_MAX
+          value: 946
+        - id: DST_MP_MAX
+          value: 218
+    - level: 20
+      attributes:
+        - id: DST_HP_MAX
+          value: 1018
+        - id: DST_MP_MAX
+          value: 227
+- id: II_GEN_JEW_RIN_SANTAEVENTRING
+  levels: []
+- id: II_GEN_JEW_RIN_RUDOLPHRING
+  levels: []
+- id: II_GEN_JEW_NEC_RUDOLPHNECKLACE
+  levels: []
+- id: II_GEN_JEW_EAR_RUDOLPHEARRING
+  levels: []

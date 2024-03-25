@@ -70,7 +70,7 @@ export class DatabaseBuilder {
           }
         })
       );
-      this.logger.success(`Loaded ${entities.size} entities`);
+      this.logger.main(`${entities.size} entities loaded`);
     } catch (error) {
       console.log(error);
       this.logger.error("Error loading models:", error);

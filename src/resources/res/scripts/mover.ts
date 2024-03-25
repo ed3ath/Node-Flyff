@@ -78,7 +78,7 @@ fs.readFile(
     const yamlData: string = yaml.dump(parsedSections);
 
     // Write YAML data to output file
-    fs.writeFile('output.yaml', yamlData, (err) => {
+    fs.writeFile(path.join(__dirname, '../custom', 'propMoverEx.yaml'), yamlData, (err) => {
         if (err) {
             console.error(err);
             return;

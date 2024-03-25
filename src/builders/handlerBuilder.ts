@@ -51,7 +51,7 @@ export class HandlerBuilder {
   }
 
   build(): Map<PacketType, HandlerConstructor> {    
-    this.logger.success("Loaded", this.handlers.size, "handlers");
+    this.logger.main(this.handlers.size, "handlers loaded");
     return this.handlers;
   }
 }

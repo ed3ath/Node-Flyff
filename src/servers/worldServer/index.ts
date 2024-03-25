@@ -49,17 +49,6 @@ export default async () => {
   });
 
   instanceBuilder.buildResource((builder: ResourceBuilder) => {
-    const resPath = path.join(global.projectPath, "resources", "res");
-    builder.setResourcePath({
-      itemsProp: path.join(resPath, "data", "propItem.txt"),
-      itemsText: path.join(resPath, "data", "propItem.txt.txt"),
-      defineItem: path.join(resPath, "data", "defineItem.h"),
-      defineItemKind: path.join(resPath, "data", "defineItemKind.h"),
-      defineJob: path.join(resPath, "data", "defineJob.h"),
-      moversProp: path.join(resPath, "data", "propMover..txt"),
-      moversText: path.join(resPath, "data", "propMover.txt.txt"),
-      moversEx: path.join(resPath, "custom", "propMoverEx.yaml"),
-    });
     builder.setRedisOptions(instanceBuilder?.config?.redis);
   });
 

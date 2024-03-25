@@ -101,6 +101,10 @@ export class InstanceBuilder {
       client = redis.client;
     }
 
+    if (this.resourceBuilder) {
+      gameResources = await this.resourceBuilder.build();
+    }
+
     if (this.serverBuilder && handlers) {
       this.serverBuilder.addHandlers(handlers);
       if (client) {
@@ -108,10 +112,6 @@ export class InstanceBuilder {
       }
       this.serverBuilder.setConfig(this.config as IConfig);
       server = this.serverBuilder.build();
-    }
-
-    if (this.resourceBuilder) {
-      gameResources = this.resourceBuilder.build();
     }
 
     const instance: IInstance = {
