@@ -19,4 +19,6 @@ export interface IRedisClient {
     clusterName: string,
     id: number
   ): Promise<IChannel | undefined>;
+  getNumpadId(username: string): Promise<number | null>
+  setNumpadId(username: string, numPadId: number): Promise<void>
 }

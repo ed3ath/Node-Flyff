@@ -66,19 +66,16 @@ export class RedisClient implements IRedisClient {
     let channels: IChannel[] = [];
     if (cluster.channels) {
       const channelDataArray = JSON.parse(cluster.channels);
-      channels = _.map(
-        channelDataArray,
-        (channelData: IChannel) => ({
-          id: channelData.id,
-          name: channelData.name,
-          host: channelData.host,
-          port: channelData.port,
-          maxUsers: channelData.maxUsers,
-          currentUsers: channelData.currentUsers,
-          enabled: channelData.enabled,
-          pkEnabled: channelData.pkEnabled,
-        })
-      );
+      channels = _.map(channelDataArray, (channelData: IChannel) => ({
+        id: channelData.id,
+        name: channelData.name,
+        host: channelData.host,
+        port: channelData.port,
+        maxUsers: channelData.maxUsers,
+        currentUsers: channelData.currentUsers,
+        enabled: channelData.enabled,
+        pkEnabled: channelData.pkEnabled,
+      }));
     }
 
     if (!_.isNil(cluster) && !_.isEmpty(cluster)) {
@@ -185,8 +182,22 @@ export class RedisClient implements IRedisClient {
     }
   }
 
-  async getChannelById(clusterName: string, id: number): Promise<IChannel | undefined> {
+  async getChannelById(
+    clusterName: string,
+    id: number
+  ): Promise<IChannel | undefined> {
     const channels = await this.getAllChannels(clusterName);
     return _.find(channels, { id });
+  }
+
+  async getNumpadId(username: string): Promise<number | null> {
+    const key = `numpadId:${username}`;
+    const numPadId = await this.client.get(key);
+    return numPadId !== null ? parseInt(numPadId) : null;
+  }
+
+  async setNumpadId(username: string, numPadId: number): Promise<void> {
+    const key = `numpadId:${username}`;
+    await this.client.set(key, numPadId);
   }
 }

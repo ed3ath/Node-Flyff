@@ -165,7 +165,7 @@ async function clusterIntercom(instance: IInstance) {
               logger?.warn("A channel with id", decrypted.data.id, "already exist.");
               sendMessage(RedisChannel.CLUSTER_CHANNEL, MessageCommand.CHANNEL_ID_EXIST, decrypted.data);
             } else if (await client?.getChannel(initCluster.name, decrypted.data.name)) {
-              logger?.warn(decrypted.data.name, "already exist.");
+              logger?.warn("Channel", decrypted.data.name, "already exist.");
               sendMessage(RedisChannel.CLUSTER_CHANNEL, MessageCommand.CHANNEL_EXIST, decrypted.data);
             } else {
               const channel: IChannel = {
@@ -178,6 +178,7 @@ async function clusterIntercom(instance: IInstance) {
                 MessageCommand.CHANNEL_ADDED,
                 channel
               );
+              logger?.info("Channel", decrypted.data.name, "has been added");
             }
             break;
           }

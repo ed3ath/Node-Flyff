@@ -85,18 +85,10 @@ textClient "textClient.inc"
 textServer "textServer.inc" 
 model      "mdlObj.inc" 
 model      "mdlDyna.inc" 
-billboard  "billboard.csv"
 world      "world.inc"
 terrain    "terrain.inc" 
 beginItem  "beginItem.inc" 
-/*
-propMover  "propMover.csv"
-propItem   "propItem.csv"
-propSkill  "propSkill.csv"
-propMotion "propMotion.csv"
-//property   "property.inc"
-//propObj    "propObj.csv"
-*/
+
 propMover  "propMover.txt"
 propItem   "propItem.txt"
 propSkill  "propSkill.txt"
@@ -106,7 +98,7 @@ propKarma  "propKarma.txt"
 
 
 propJob   "propJob.txt"
-propCtrl   "propCtrl.csv"
+propCtrl   "propCtrl.txt"
 propSkillAdd "propSkillAdd.csv"
 
 character "character.inc"
@@ -123,7 +115,6 @@ propQuest "propQuest-RequestBox2.inc"
 propQuest "propQuest-DungeonandPK.inc" 
 
 
-//parts      "parts.inc"
 expTable   "ExpTable.inc"
 help       "Client\help.inc"
 

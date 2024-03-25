@@ -4,7 +4,7 @@
 // worldDrop
 // dwFlag
 
-LANG_KOR	0	// kor
+LANG_KOR	// kor
 {
 	ItemProp
 	{
@@ -80,7 +80,7 @@ LANG_KOR	0	// kor
 		}
 	}
 }
-LANG_ENG	1	// eng
+LANG_USA	// eng
 {
 	ItemProp
 	{
@@ -421,7 +421,7 @@ LANG_ENG	1	// eng
 		}
 	}
 }
-LANG_ENG	2	// php
+LANG_PHP	// php
 {
 	ItemProp
 	{
@@ -811,7 +811,7 @@ LANG_ENG	2	// php
 		}
 	}
 }
-LANG_JAP	0
+LANG_JAP
 {
 	ItemProp
 	{
@@ -1124,7 +1124,7 @@ LANG_JAP	0
 		}
 	}
 }
-LANG_CHI	0
+LANG_CHI
 {
 	ItemProp
 	{
@@ -1437,7 +1437,7 @@ LANG_CHI	0
 		}
 	}
 }
-LANG_THA	0
+LANG_THA
 {
 	ItemProp
 	{
@@ -1752,7 +1752,7 @@ LANG_THA	0
 		}
 	}
 }
-LANG_TWN	0
+LANG_TWN	
 {
 	ItemProp
 	{
@@ -2087,7 +2087,7 @@ LANG_TWN	0
 		}
 	}
 }
-LANG_GER	0	// ger
+LANG_GER		// ger
 {
 	ItemProp
 	{
@@ -2428,7 +2428,7 @@ LANG_GER	0	// ger
 		}
 	}
 }
-LANG_SPA	0	// chl
+LANG_SPA		// chl
 {
 	ItemProp
 	{
@@ -2762,7 +2762,7 @@ LANG_SPA	0	// chl
 	}
 }
 
-LANG_FRE	0	// fre
+LANG_FRE		// fre
 {
 	ItemProp
 	{
@@ -3104,7 +3104,7 @@ LANG_FRE	0	// fre
 	}
 }
 
-LANG_POR	0
+LANG_POR	
 {
 	ItemProp
 	{
@@ -3446,7 +3446,7 @@ LANG_POR	0
 	}
 }
 
-LANG_VTN	0
+LANG_VTN	
 {
 	ItemProp
 	{

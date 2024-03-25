@@ -247,14 +247,16 @@
 #define TOT_RANDOM			0    // 랜덤 발동
 #define TOT_NOENDU		1    // 내구도가 0이면 발동
 
-#define	PK_TIGER	0
+#define	PK_NPC		-1
+#define	PK_TIGER		0
 #define	PK_LION		1
-#define	PK_RABBIT	2
-#define	PK_FOX	3
+#define	PK_RABBIT		2
+#define	PK_FOX			3
 #define	PK_DRAGON	4
 #define	PK_GRIFFIN	5
 #define	PK_UNICORN	6
-#define	PK_MAX	7
+#define	PK_MAX		7
+
 
 // 알 변환 결과에 의해 생성되는 아이템의 타입
 #define	TI_GENERIC	0
@@ -264,5 +266,19 @@
 
 // point type
 #define POINTTYPE_CAMPUS	1
+
+// weather type
+#define SEASON_NONE			0
+#define SEASON_SPRING		1
+#define SEASON_SUMMER		2
+#define SEASON_FALL			3
+#define SEASON_WINTER		4
+#define SEASON_MAX			5
+
+
+// 스킬이 부여된 아이템 사용 시 적용 대상(Item Skill Target)
+#define IST_SELF			1	// 자기 자신에게 발동
+#define IST_ANOTHER			2	// 상대방에게 발동
+
 
 #endif

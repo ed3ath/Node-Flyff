@@ -166,7 +166,7 @@ SkillKind
 
 SkillLevel
 {
-// 	레벨	0	1	2
+// 	커플 레벨	0	1	2	(SkillKind Index0 의 스킬레벨,SkillKind Index1 의 스킬레벨,SkillKind Index2 의 스킬레벨)
 	1	0	0	0
 	6	1	0	0
 	11	2	1	0

@@ -11,6 +11,7 @@ import { SetPacketType } from "../../../decorators/packetHandler";
 import { ErrorType } from "../../../common/errorType";
 import { IChannel, ICluster } from "../../../interfaces/cluster";
 import Account from "../../../database/account";
+import { uNumPad } from "../../../helpers/numPad";
 
 @SetPacketType(PacketType.CERTIFY)
 export default class Handler extends PacketHandler {

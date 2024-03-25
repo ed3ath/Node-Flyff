@@ -5,9 +5,12 @@ export interface ResourcePaths {
   itemsText: string;
   defineItem: string;
   defineItemKind: string;
-  defineJob: string;  
+  defineJob: string;
+  moversProp: string;
+  moversText: string;
+  moversEx: string;
 }
 
 export interface GameResources {
-  itemResources: ItemResources
+  itemResources: ItemResources;
 }

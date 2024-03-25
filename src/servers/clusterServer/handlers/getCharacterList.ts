@@ -7,6 +7,7 @@ import { SetPacketType } from "../../../decorators/packetHandler";
 import Account from "../../../database/account";
 import Character from "../../../database/character";
 import EquipmentItem from "../../../database/equipmentItem";
+import { uNumPad } from "../../../helpers/numPad";
 
 @SetPacketType(PacketType.GET_CHARACTER_LIST)
 export default class Handler extends PacketHandler {
@@ -65,11 +66,26 @@ export default class Handler extends PacketHandler {
     if (channel?.host) {
       this.sendChannelIp(channel.host);
     }
+    if (
+      this.server?.config?.settings["login-protect"]
+    ) {
+      await this.sendNumPadId();
+    }
   }
 
   sendChannelIp(ip: string) {
     const packet = FlyffPacket.createWithHeader(PacketType.CACHE_ADDR);
     packet.writeStringLE(ip);
     return this.send(packet);
+  }
+
+  async sendNumPadId() {
+    const numpadId = Math.floor(Math.random() * uNumPad.length);
+    await this.server.redisClient.setNumpadId(this.username, numpadId);
+    const packet = FlyffPacket.createWithHeader(
+      PacketType.LOGIN_PROTECT_NUMPAD
+    );
+    packet.writeUInt32LE(numpadId);
+    this.send(packet);
   }
 }

@@ -13,6 +13,14 @@
 #define CT_FG        6
 */
 
+//드랍률 증가 관련 스킬 2차 그룹명 정의
+#define	SK2_DROPRATE_UP	1
+
+//드랍률 증가 관련 스킬 3차 그룹명 정의
+#define SK3_ITEM_ALL	1
+#define	SK3_ITEM_RARE	2
+
+
 #define CT_STEP      1 // 원래 CT_START
 #define CT_CIRCLE    2
 #define CT_FINISH    3
@@ -77,7 +85,7 @@
 #define _NONE			0 //무속성
 #define _FIRE			1 //불속성
 #define _WATER			2 //물속성
-#define _ELECTRICITY		3 //전기속성
+#define _ELECTRICITY	3 //전기속성
 #define _WIND			4 //바람속성
 #define _EARTH			5 //땅속성
 
@@ -88,7 +96,7 @@
 #define AR_RANGE                     4 // 쏘는 무기
 #define AR_WAND                      5 // 완드 거리
 #define AR_HRANGE                    6 // 쏘는 무기
-#define AR_HWAND                      7 // 긴완드 거리
+#define AR_HWAND                     7 // 긴완드 거리
 
 // SpellAttribute
 #define SA_DIRECTDMG                 1 // 직접 데미지
@@ -97,20 +105,34 @@
 #define SA_OTHERS                    4 // 기타
 
 //	SpellType
-#define ST_MAGIC                     1 // 일반 마법
-#define ST_MIND                      2 // 정신 계열
-#define ST_POISON                    3 // 독 계열
-#define ST_ELECTRICITY               4 // 전기 계열
-#define ST_FIRE                      5 // 불 계열
-#define ST_WIND                      6 // 바람 계열
-#define ST_WATER                     7 // 물 계열
-#define ST_EARTH                     8 // 땅 계열
-#define ST_DARK                      9 // 어둠 계열
-#define ST_LIGHT                    10 // 빛 계열
-#define ST_FIREEARTH                11 // 불/땅 계열
-#define ST_ELECWIND                 12 // 전기/바람 계열
-#define ST_EARTHWIND                13 // 땅/바람 계열
-#define ST_EARTHWATER               14 // 땅/물 계열
+// #define ST_MIND                      2 // 정신 계열		// x
+// #define ST_POISON                    3 // 독 계열		// x
+// #define ST_DARK                      9 // 어둠 계열		// x
+// #define ST_LIGHT                    10 // 빛 계열		// x
+
+
+#define ST_MAGIC					0x01 // 일반 마법		// resource only
+
+#define ST_ELECTRICITY				0x02 // 전기 계열
+#define ST_FIRE						0x04 // 불 계열
+#define ST_EARTH					0x08 // 땅 계열
+#define ST_WIND						0x10 // 바람 계열
+#define ST_WATER					0x20 // 물 계열
+
+#define ST_ELECFIRE					0x06 // 전기/불 계열
+#define ST_ELECEARTH				0x0a // 전기/땅 계열
+#define ST_ELECWIND					0x12 // 전기/바람 계열
+#define ST_ELECWATER				0x22 // 전기/물 계열
+
+#define ST_FIREEARTH				0x0c // 불/땅 계열
+#define ST_FIREWIND					0x14 // 불/바람 계열
+#define ST_FIREWATER				0x24 // 불/물 계열
+
+#define ST_EARTHWIND				0x18 // 땅/바람 계열
+#define ST_EARTHWATER				0x28 // 땅/물 계열
+
+#define ST_WINDWATER				0x30 // 바람/물 계열
+
 
 // Skill Ready 기술준비시간
 #define SR_AFTER                     1 // 기술 사용후에 대기시간 발동
@@ -129,6 +151,10 @@
 //	Skill Type
 #define KT_MAGIC                     1 // 
 #define KT_SKILL                     2 // 
+
+// Buff Tick Type
+#define	BT_START					1	// Buff 시작과 동시에 적용(매 틱시에도 적용)
+#define	BT_TICK						2	// Buff 틱에만 적용
 
 // CardType
 #define CT_TELEPORT                  1 // 특정 지역으로 이동
@@ -164,40 +190,59 @@
 #define RANK_MATERIAL                6 //
 #define RANK_SUPER                   7 //
 #define RANK_GUARD                   8 //
+#define RANK_CITIZEN                 9 //
+#define RANK_MAX					 10 // 몬스터 랭크가 추가 될 경우 증가시킨다. propskill.csv 에 몬스터 적용 등급 값을 위한 파라미터
+
+//dwAreaColor
+#define AREA_NORMAL		1 // 일반 지역
+#define AREA_CASH		2 // 유료 맵 지역
+#define AREA_DUNGEON		3 // 일반 던전 지역
+#define AREA_INSTANCE		4 // 인스턴스 던전 지역
+
 
 // Character State(캐릭터 상태변경)
 #define CHS_NORMAL				0			// 일반
-#define CHS_GUARDARROW				0x00000001 // 화살을 막는 상태
-#define CHS_GUARDBULLET				0x00000002 // 총알을 막는 상태
-#define CHS_GROGGY				0x00000004 // 타격받은 상태(억!!)
-#define CHS_STUN				0x00000008 // 기절한 상태 - nProbability:확률 dwSkillTime:지속시간
-#define CHS_ANOMY				0x00000010 // 정신적 혼란상태(억!!)
-#define CHS_STARVE				0x00000020 // 굶주린 상태
-#define CHS_PLASYARM				0x00000040 // 손떨림으로 인한 공격불능상태
-#define CHS_MISSING				0x00000080 // 특정한 상황에 의해 헛손질한 상태
-#define CHS_DARK				0x00000100 // 명중률 저하 nProbability:확률 dwDestData2:수정될 명중치.
-#define CHS_LITHOSKIN				0x00000200 // 방어하는 량을 피해 입는다. 방어구에 심각한 피해를 준다.
-#define CHS_INVISIBILITY			0x00000400 // 방어하는 량을 피해 입는다. 방어구에 심각한 피해를 준다.
-#define CHS_POISON				0x00000800 // 독걸린 상태. nProbability:확률(CHANCE로 사용한것이면 =를함)  dwPainTime:몇초마다?  nDestData1 : 틱당데미지: dwSkilltime:지속시간
-#define CHS_SLOW				0x00001000 // 느려진 상태.
-#define CHS_DMGREFLECT				0x00002000 // 데미지 반사. 리플렉히트는 이걸로 안한다. 버프형태가 아니기 때문
-#define CHS_DOUBLE				0x00004000 // 2배 데미지 .
-#define CHS_BLEEDING			0x00008000 // 출혈 : 사용법은 독과 같음
-#define CHS_SILENT				0x00010000 // 침묵
-#define CHS_DMG_COUNTERATTACK	0x00020000 // 반격 대기중 : 가격당했을때 지정된확률(destData1)로 지정된스킬(destData2)이 발동됨.
-#define CHS_ATK_COUNTERATTACK	0x00040000 // 반격 대기중 : 공격당했을때 지정된확률(destData1)로 지정된스킬(destData2)이 발동됨.
+#define CHS_GUARDARROW			0x00000001	// 화살을 막는 상태
+#define CHS_GUARDBULLET			0x00000002	// 총알을 막는 상태
+#define CHS_GROGGY				0x00000004	// 타격받은 상태(억!!)
+#define CHS_STUN				0x00000008	// 기절한 상태 - nProbability:확률 dwSkillTime:지속시간
+#define CHS_ANOMY				0x00000010	// 정신적 혼란상태(억!!)
+#define CHS_STARVE				0x00000020	// 굶주린 상태
+#define CHS_PLASYARM			0x00000040	// 손떨림으로 인한 공격불능상태
+#define CHS_MISSING				0x00000080	// 특정한 상황에 의해 헛손질한 상태
+#define CHS_DARK				0x00000100	// 명중률 저하 nProbability:확률 dwDestData2:수정될 명중치.
+#define CHS_LITHOSKIN			0x00000200	// 방어하는 량을 피해 입는다. 방어구에 심각한 피해를 준다.
+#define CHS_INVISIBILITY		0x00000400	// 방어하는 량을 피해 입는다. 방어구에 심각한 피해를 준다.
+#define CHS_POISON				0x00000800	// 독걸린 상태. nProbability:확률(CHANCE로 사용한것이면 =를함)  dwPainTime:몇초마다?  nDestData1 : 틱당데미지: dwSkilltime:지속시간
+#define CHS_SLOW				0x00001000	// 느려진 상태.
+#define CHS_DMGREFLECT			0x00002000	// 데미지 반사. 리플렉히트는 이걸로 안한다. 버프형태가 아니기 때문
+#define CHS_DOUBLE				0x00004000	// 2배 데미지 .
+#define CHS_BLEEDING			0x00008000	// 출혈 : 사용법은 독과 같음
+#define CHS_SILENT				0x00010000	// 침묵
+#define CHS_DMG_COUNTERATTACK	0x00020000	// 반격 대기중 : 가격당했을때 지정된확률(destData1)로 지정된스킬(destData2)이 발동됨.
+#define CHS_ATK_COUNTERATTACK	0x00040000	// 반격 대기중 : 공격당했을때 지정된확률(destData1)로 지정된스킬(destData2)이 발동됨.
 #define CHS_LOOT				0x00080000	// 이동불가 상태.
 
-#define CHS_SETSTONE				0x00100000	// 석화 상태.
-#define CHS_DEBUFFALL				0x00200000	// 모든 상태영향 해제.
+#define CHS_SETSTONE			0x00100000	// 석화 상태.
+
+
+
+#define CHS_SLEEPING			0x00200000	// 잠자는 상태.
+#define CHS_DEBUFFALL			0x00400000	// 모든 상태영향 해제.
+
+#define	CHS_ATTACKSPEED_DOWN	0x00600000	// 공격속도 감소
+#define	CHS_CRITICALRATE_DOWN	0x00800000	// 치명타 확률 감소
+#define	CHS_CRITICALDMG_DOWN	0x01000000	//	치명타 추가 데미지 감소
+
 
 
 // 위에꺼 조합한 형태...
-#define CHS_DARK_POISON				0x00000900	// 독과 암흑
-#define CHS_DARK_POISON_STUN		0x00000908	// 독과 암흑과 스턴 
-#define CHS_LOOT_SLOW				0x00081000	// 이동장애상태 총집합(룻,스네어,슬로우등)
-#define	CHS_DARK_POISON_STUN_BLEEDING	0x00008908	// 독, 암흑, 스턴, 출혈
-#define CHS_DARK_POISON_STUN_BLEEDING_DEBUFFALL				0x0031d908	// 모든 상태영향 해제.독, 암흑, 스턴, 출혈,CHS_SILENT,CHS_SETSTONE,CHS_DOUBLE,CHS_SLOW
+// 윈도우 계산기 hex 로 설정하고 더함.
+#define CHS_DARK_POISON								0x00000900	// 독과 암흑
+#define CHS_DARK_POISON_STUN						0x00000908	// 독과 암흑과 스턴 
+#define CHS_LOOT_SLOW								0x00081000	// 이동장애상태 총집합(룻,스네어,슬로우등)
+#define	CHS_DARK_POISON_STUN_BLEEDING				0x00008908	// 독, 암흑, 스턴, 출혈
+#define CHS_DARK_POISON_STUN_BLEEDING_DEBUFFALL		0x0039D908	// 독, 암흑, 스턴, 출혈, 침묵, 석화, 2배, 감속, 슬리핑, 루팅   <----- 모든 디버프 해제하도록 변경 11.11.04 정도영
 
 // Belligerence
 #define BELLI_PEACEFUL                1 // 평화 - 공격 받아도 반격 안함 
@@ -246,6 +291,7 @@
 
 // DestParam1 추가
 // 캐릭터 관련
+#define DST_NONE					0
 #define DST_STR                      1   // Str			<-사용중
 #define DST_DEX                      2   // Dex			<-사용중
 #define DST_INT                      3   // Int			<-사용중
@@ -297,9 +343,9 @@
 #define DST_CLEARBUFF				49  // 버프 파괴.
 #define DST_CHR_STEALHP_IMM         50  // 대상으로부터 지정된 양의 hp를 흡수
 #define DST_ATTACKSPEED_RATE		51	// 공격속도 증가율 //#define DST_ABRASION                51  // Abrasion
-#define DST_HP_MAX_RATE				52		// DST_HP_MAX 퍼센트 버전		//#define DST_ADJROLL                 52  // AdjRoll
-#define DST_MP_MAX_RATE				53		// 동일							//#define DST_AP                      53  // 최대치까지 상승하게 되면 공격이 저지된다.(연속공격이 저지되며 ReAttackDelay 적용)	<-사용중
-#define DST_FP_MAX_RATE				54		// 동일							//#define DST_GROGGY                  54  // 피해동작 발생에 필요한 수치(공격이 정지되면서 피해동작을 취하게 된다. ReAttackDelay 동시 적용)
+#define DST_HP_MAX_RATE				52	// DST_HP_MAX 퍼센트 버전		//#define DST_ADJROLL                 52  // AdjRoll
+#define DST_MP_MAX_RATE				53	// 동일							//#define DST_AP                      53  // 최대치까지 상승하게 되면 공격이 저지된다.(연속공격이 저지되며 ReAttackDelay 적용)	<-사용중
+#define DST_FP_MAX_RATE				54	// 동일							//#define DST_GROGGY                  54  // 피해동작 발생에 필요한 수치(공격이 정지되면서 피해동작을 취하게 된다. ReAttackDelay 동시 적용)
 #define DST_CHR_WEAEATKCHANGE	    55	// 케릭터의 속성 공격력을 올려줌(무기에 속성 공격력이 없거나 무기를 바꿀시 해제됨)
 #define DST_CHR_STEALHP				56  // 가격한 데미지의 일정비율의HP를 흡수(흡혈)
 #define DST_CHR_CHANCESTUN			57  // 효과가 지속되는동안 공격시 (일정확률로Adj) 지정된 스킬(Chg) 발동.
@@ -329,21 +375,50 @@
 #define DST_MONSTER_DMG				79	// 몬스터 사냥시 데미지 증가
 #define DST_PVP_DMG					80	// PVP시 데미지 증가
 #define DST_MELEE_STEALHP			81	// 평타시 흡혈
-#define	DST_HEAL						82		// 자동 치유
-#define DST_ATKPOWER			83	// 공격력
+#define	DST_HEAL					82	// 자동 치유
+#define DST_ATKPOWER				83	// 공격력
 
 //	10차 전승 마스터 스킬 
-#define DST_ONEHANDMASTER_DMG             85	
-#define DST_TWOHANDMASTER_DMG             86
-#define DST_YOYOMASTER_DMG             87
-#define DST_BOWMASTER_DMG             88
-#define DST_KNUCKLEMASTER_DMG             89
-#define DST_HAWKEYE_RATE             90
-#define DST_RESIST_MAGIC_RATE             91
+#define DST_ONEHANDMASTER_DMG       85	
+#define DST_TWOHANDMASTER_DMG       86
+#define DST_YOYOMASTER_DMG          87
+#define DST_BOWMASTER_DMG           88
+#define DST_KNUCKLEMASTER_DMG       89
+#define DST_HAWKEYE_RATE            90
+#define DST_RESIST_MAGIC_RATE       91
 #define DST_GIFTBOX					92
 
 #define	DST_RESTPOINT_RATE			93	// 15차 휴식의 기운 증가율(%)
-#define MAX_ADJPARAMARY             94
+
+#define DST_IGNORE_DMG_PVP			94	// PVP 데미지 무시(절대치)
+
+
+// 19차 신규옵션
+#define	DST_TAKE_PVP_DMG_PHYSICAL_RATE		95		// PVP 시 받는 물리 데미지 변화 (입력값 -10 이면 10% 감소 적용)
+#define	DST_TAKE_PVP_DMG_MAGIC_RATE			96		// PVP 시 받는 마법 데미지 변화 (입력값 -10 이면 10% 감소 적용)
+#define	DST_TAKE_PVE_DMG_PHYSICAL_RATE		97		// PVE 시 받는 물리 데미지 변화 (입력값 -10 이면 10% 감소 적용)
+#define	DST_TAKE_PVE_DMG_MAGIC_RATE			98		// PVE 시 받는 마법 데미지 변화 (입력값 -10 이면 10% 감소 적용)
+#define	DST_DROP_ITEM_ALLGRADE_RATE			99		// 아이템 드롭률 변화 (입력값 -10 이면 10% 감소 적용)
+#define	DST_DROP_ITEM_ONEMORE_CHANCE		100		// 드롭 판정 재검사 (입력값 10 이면 10% 확률로 한번 더 굴림)
+#define	DST_GIVE_PVE_DMG_ELEMENT_FIRE_RATE		101	//	불속성 몬스터에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_PVE_DMG_ELEMENT_WATER_RATE		102	//	물속성 몬스터에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_PVE_DMG_ELEMENT_ELECT_RATE		103	//	전기속성 몬스터에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_PVE_DMG_ELEMENT_WIND_RATE		104	//	바람속성 몬스터에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_PVE_DMG_ELEMENT_EARTH_RATE		105	//	땅속성 몬스터에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_ADJ_ITEM_EQUIP_LEVEL				106	//	아이템 착용 레벨 변화(입력값 -1이면 레벨 1 하락)
+#define	DST_SKILL_LEVELUP_ALL					107	//	모든 스킬 레벨 증가
+#define	DST_GIVE_DMG_RATE_ENEMY_STUN			108	//	기절한 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_DARK			109	//	암흑 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_POISON			110	//	독 걸린 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_SLOW			111	//	느려진 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_BLEEDING		112	//	출혈 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_SILENT			113	//	침묵 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_LOOT			114	//	이동 불가 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_SETSTONE		115	//	석화 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+#define	DST_GIVE_DMG_RATE_ENEMY_SLEEPING		116	//	잠자는 상태의 몹에게 추가 피해 변화(입력값 10이면 10% 증가 적용)
+
+
+#define MAX_ADJPARAMARY             117
 
 // ADJPARAMARRAY에는 추가되지 않고, 현재값의 설정과 반환( GetPointParam, SetPointParam )에 사용하기 위한 식별자
 #define	DST_GOLD				10000
@@ -366,5 +441,30 @@
 #define DST_KILL_FP_RATE		10017
 #define DST_KILL_ALL_RATE		10018
 #define DST_ALL_DEC_RATE		10019
+
+#define	DST_FORCE_DAMAGE_MAX_HP_RATE		10020		// 최대 HP의 x%만큼 데미지를 입힌다. AdjParam 비율(최대10000%)
+#define	DST_FORCE_DAMAGE_SAFE_HP_RATE		10021		// 최대 HP의 x%의 HP가 남게 데미지를 입힌다. AdjParam 비율(최대10000%)
+#define	DST_FORCE_DAMAGE_VALUE				10022		// 절대치 데미지 주기 AdjParam(데미지)
+
+#define DST_HEAL_HP_RATE					10030		// HP 비율 회복 AdjParam(최대 10000%)
+#define DST_HEAL_MP_RATE					10031		// MP 비율 회복 AdjParam(최대 10000%)
+#define DST_HEAL_FP_RATE					10032		// FP 비율 회복 AdjParam(최대 10000%)
+#define DST_HEAL_HP_VALUE					10033		// HP 절대치 회복 AdjParam
+#define DST_HEAL_MP_VALUE					10034		// MP 절대치 회복 AdjParam
+#define DST_HEAL_FP_VALUE					10035		// FP 절대치 회복 AdjParam
+
+#define DST_DEBUFF_ALL_CLEAR				10036
+
+//11.10.04 사용된 버프 스킬 유지 조건 컬럼용 파라미터 추가(해당 사항 없는 스킬은 = 로 표기)
+#define	KEEP_EQUIP_YOYO					1				// 착용된 요요를 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_BOW					2				// 착용된 보우를 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_SWD					3				// 착용된 검을 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_AXE					4				// 착용된 도끼를 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_KNUCKLE				5				// 착용된 너클을 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_SHILED				6				// 착용된 방패를 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_DUALWEAPON			7				// 착용된 2개의 무기 중 1개를 착용 해제하면 풀리는 버프
+#define	KEEP_EQUIP_TWOHANDEDWEAPON		8				// 착용된 양손 무기를 해제하면 풀리는 버프
+#define	KEEP_EQUIP_ELEMENTALWEAPON		9				// 착용된 속성 무기를 해제하면 풀리는 버프
+
 
 #endif

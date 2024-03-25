@@ -51,6 +51,11 @@
 #define	WSS_ALIGNVBOTTOM 0x00000020L
 #define	WSS_ALIGNVCENTER 0x00000040L
 
+//added by gmpbigsun
+#define WSS_NOPICKUP		0x00000080L		//스태틱인경우 pickup대상에서 제외시킨다 ( no tile방식에서 )
+#define WSS_TORIGHT_AXISX	0x00000100L		// 오른쪽으로 움직이는 text
+#define WSS_TOLEFT_AXISX	0x00000200L		// 왼쪽으로 움직이는 text
+
 // 버튼 스타일 
 #define WBS_TEXT            0x00000001L
 #define WBS_SPRITE          0x00000002L 

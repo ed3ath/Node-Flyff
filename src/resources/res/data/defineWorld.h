@@ -6,6 +6,7 @@
 #define	WI_WORLD_KEBARAS	2
 #define	WI_WORLD_CISLAND	3
 #define	WI_WORLD_RARTESIA	4
+#define	WI_WORLD_DARKRARTESIA	5
 
 //심연의 탑(테스트용)
 #define WI_WORLD_HEAVEN01		21
@@ -26,8 +27,18 @@
 #define	WI_INSTANCE_DREADFULCAVE	123
 #define	WI_INSTANCE_RUSTIA			124
 #define	WI_INSTANCE_RUSTIA_1		125
+#define	WI_INSTANCE_BEHAMAH			126
+#define	WI_INSTANCE_KALGAS_1		127
+#define	WI_INSTANCE_KALGAS_2		128
+#define	WI_INSTANCE_UPRESIA			129
+#define	WI_INSTANCE_KALGAS			130
+#define	WI_INSTANCE_HERNEOS			131
+#define	WI_INSTANCE_SANPRES			132
+#define	WI_INSTANCE_UPRESIA_1		133
+#define	WI_INSTANCE_HERNEOS_1		134
+#define	WI_INSTANCE_SANPRES_1		135
 
-#define	WI_INSTANCE_LAST_ID			125	// 마지막 인던 아이디와 동일하게..
+#define	WI_INSTANCE_LAST_ID			135// 마지막 인던 아이디와 동일하게..
 
 // 151 ~ 170번 까지는 비밀의방 전용
 #define WI_DUNGEON_SECRET_0		151
@@ -71,6 +82,12 @@
 #define WI_DUNGEON_MUSCLE	210
 #define WI_DUNGEON_KRRR		220
 #define WI_DUNGEON_BEAR		230
+
+#define WI_WORLD_COLOSSEUM		231
+#define WI_WORLD_ARENA_1			232 // 아레나 지역
+#define WI_WORLD_FWC			233 // 월드챔피언십 경기장
+#define WI_WORLD_MARKET			234 // 중개거래시장
+#define WI_WORLD_RICHCASTLE		235	//부유성
 
 //241번 부터는 1:1길드대전장만 추가 해야 함.
 #define WI_WORLD_GUILDWAR1TO1_0	241

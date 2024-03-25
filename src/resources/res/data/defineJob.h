@@ -9,6 +9,12 @@
 #define JTYPE_MASTER	 5
 #define JTYPE_HERO	 6
 
+#ifdef __3RD_LEGEND16
+
+#define JTYPE_LEGEND_HERO	 7
+
+#endif // __3RD_LEGEND16
+
 #define MAX_JOB_SKILL			3
 #define MAX_EXPERT_SKILL		20
 #define MAX_PRO_SKILL			20
@@ -16,23 +22,50 @@
 #define MAX_MASTER_SKILL		1
 #define MAX_HERO_SKILL			1
 
+#ifdef __3RD_LEGEND16
+
+#define MAX_LEGEND_HERO_SKILL			6
+
+#endif // __3RD_LEGEND16
+
+
 #define MAX_JOB_LEVEL			15
 #define MAX_EXP_LEVEL			45
 #define MAX_PRO_LEVEL			30
 #define MAX_TROUPE_LEVEL		1
 
-#if __VER >= 15 // __HERO129_VER15				// 15차 히어로 레벨확장
-#define MAX_LEGEND_LEVEL			129	
-#define MAX_MONSTER_LEVEL			160	
-#else	// 15차 히어로 레벨확장
-#define MAX_LEGEND_LEVEL			121
-#endif	// 15차 히어로 레벨확장
 
-#if __VER >= 7 //__Y_MAX_LEVEL_8
-#define MAX_LEVEL				120
-#else //__Y_MAX_LEVEL_8
-#define MAX_LEVEL				150
-#endif //__Y_MAX_LEVEL_8
+
+#define MAX_MONSTER_LEVEL			160	
+
+#define MAX_GENERAL_LEVEL			120			// 일반, 마스터 캐릭 최고 레벨
+
+#ifdef __3RD_LEGEND16
+
+#define MAX_LEGEND_LEVEL			130			// 히어로 캐릭 최고 레벨
+
+#if __VER >= 17
+
+#define MAX_3RD_LEGEND_LEVEL		150			// 3차 전직 캐릭 최고 레벨 ( 139 -> 150 확장 )
+#define MAX_CHARACTER_LEVEL			150			// 기존 MAX_LEVEL 을 대체..캐릭터가 가질 수 있는 최고 레벨.. ( 139 -> 150 확장 )
+
+#else // __VER >= 17
+
+#define MAX_3RD_LEGEND_LEVEL		139			// 3차 전직 캐릭 최고 레벨
+#define MAX_CHARACTER_LEVEL			139			// 기존 MAX_LEVEL 을 대체..캐릭터가 가질 수 있는 최고 레벨..
+
+#endif // __VER >= 17
+
+#else // __3RD_LEGEND16
+
+#define MAX_LEGEND_LEVEL			129
+#define MAX_CHARACTER_LEVEL			129			// 기존 MAX_LEVEL 을 대체..캐릭터가 가질 수 있는 최고 레벨..
+
+#endif // __3RD_LEGEND16
+
+
+
+
 //-------------------------------------------------------
 // 직업 번호를 마음대로 바꾸면 안됩니다.
 // 바꾸고 싶으시면 seghope 상담을.. ㅋㅋ
@@ -84,10 +117,39 @@
 #define JOB_ELEMENTOR_HERO		31
 #define MAX_HERO	             32
 
+#ifdef __3RD_LEGEND16
+
+// 3차 직업
+#define	JOB_LORDTEMPLER_HERO	32
+#define JOB_STORMBLADE_HERO		33
+#define JOB_WINDLURKER_HERO		34
+#define JOB_CRACKSHOOTER_HERO	35
+#define JOB_FLORIST_HERO		36
+#define JOB_FORCEMASTER_HERO	37
+#define JOB_MENTALIST_HERO		38
+#define JOB_ELEMENTORLORD_HERO	39
+
+#define MAX_LEGEND_HERO	             40
+
+#endif // __3RD_LEGEND16
+
+
+
+
 //
 
 #if __VER >= 10    //#ifdef 	__LEGEND	//	9차 전승시스템	Neuz, World, Trans
+
+#ifdef __3RD_LEGEND16
+
+#define MAX_JOB                      40
+
+#else // __3RD_LEGEND16
+
 #define MAX_JOB                      32
+
+#endif // __3RD_LEGEND16
+
 #else //__LEGEND	//	9차 전승시스템	Neuz, World, Trans
 #define MAX_JOB                      16
 #endif	//__LEGEND	//	9차 전승시스템	Neuz, World, Trans
@@ -105,6 +167,13 @@
 #define DIS_RIFLE                   6 //
 #define DIS_MARIONETTE              7 //
 #define DIS_BOW			    32 // 새로 추가된 것
+#define DIS_CROSSBOW		33 // 크로스보우 3차직업
+
+#define DIS_MAGICBARUNA 		34 //3차 전직 새로운 보조 무기
+#define DIS_ZEMBARUNA 			35 //3차 전직 새로운 보조 무기
+#define DIS_SHILDBARUNA 		36 //3차 전직 새로운 보조 무기
+
+
 // 방어기술군
 #define DIS_SHIELD                  8 //
 #define DIS_DANCE                   9 //

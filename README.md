@@ -1,4 +1,4 @@
-# NODE-FlyFF - Fly For Fun V15 Emulator
+# NODE-FlyFF - Fly For Fun V19 Emulator
 
 ## GPL-3.0 License
 This project is licensed under the GPL-3.0 License.

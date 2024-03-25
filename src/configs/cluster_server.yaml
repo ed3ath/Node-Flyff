@@ -10,7 +10,7 @@ redis:
   tls: false
 settings:
   name: "Node-Flyff"
-  login-protect: false
+  login-protect: true
   maps:
     - WI_WORLD_MADRIGAL
     - WI_DUNGEON_FL_MAS

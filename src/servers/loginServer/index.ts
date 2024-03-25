@@ -67,7 +67,7 @@ async function coreIntercom(instance: IInstance) {
   });
   subscriber?.on("message", processChannelMessage.bind(this));
 
-  cron.schedule("*/30 * * * * *", async () => {
+  cron.schedule("*/10 * * * * *", async () => {
     const clusters = await client?.getAllClusters();
     clusters?.forEach(async (cluster) => {
       // console.log(cluster.lastPing, new Date().getTime());
@@ -77,7 +77,7 @@ async function coreIntercom(instance: IInstance) {
       ) {
         await client?.deleteCluster(cluster.name);
         sendMessage(MessageCommand.CLUSTER_REMOVED, cluster);
-        logger?.info(
+        logger?.warn(
           "Cluster",
           cluster.name,
           "has been removed. Reason: Timeout"
@@ -124,11 +124,21 @@ async function coreIntercom(instance: IInstance) {
               lastPing: new Date().getTime(),
             };
             await client?.insertCluster(newCluster);
+            logger?.info(
+              "Cluster",
+              newCluster.name,
+              "has been added."
+            );
           } else {
             await client?.updateCluster({
               ...decrypted.data,
               lastPing: new Date().getTime(),
             });
+            logger?.info(
+              "Cluster",
+              decrypted.data.name,
+              "has been updated."
+            );
           }
           sendMessage(MessageCommand.CLUSTER_ADDED, decrypted.data);
           break;
