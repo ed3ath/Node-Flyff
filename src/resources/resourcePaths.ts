@@ -17,4 +17,5 @@ export const ResourcePaths = {
   characterSchoolText: path.join(resPath, "data", "character-school.txt.txt"),
   dialogsDir: path.join(__dirname, "dialogs"),
   shopsDir: path.join(__dirname, "shops"),
+  job: path.join(resPath, "custom", "job.yaml"),
 };

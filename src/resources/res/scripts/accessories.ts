@@ -84,7 +84,7 @@ fs.readFile(
           console.error(err);
           return;
         }
-        console.log("Conversion completed. Output written to output.yaml");
+        console.log("Conversion completed. Output written to accessory.yaml");
       }
     );
   }

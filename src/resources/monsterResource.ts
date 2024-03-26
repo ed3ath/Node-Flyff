@@ -143,7 +143,7 @@ export class MonsterResources {
     _.forEach(lines, async (line) => {
       const monsterData = line.trim().split("\t");
 
-      const id = await this.redisClient.hget("objectDefines", monsterData[1]);
+      const id = await this.redisClient.hget("objectDefines", monsterData[0]);
 
       if (!_.isNil(id)) {
         const monster: MonsterProperties = {

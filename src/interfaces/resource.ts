@@ -1,6 +1,7 @@
 import { ItemResources } from "../resources/itemResource";
 import { MonsterResources } from "../resources/monsterResource";
 import { DefineAttributes } from "../common/defineAttributes";
+import { DefineJob, JobType } from "../common/defineJob";
 export interface GameResources {
   itemResources: ItemResources;
   monsterResources: MonsterResources;
@@ -200,4 +201,31 @@ export interface DialogLink {
   title: string;
   texts: Set<string>;
   questId?: number;
+}
+
+
+export interface JobProperties {
+  id: DefineJob,
+  identifier: string;
+  attackSpeed: number;
+  maxHpFactor: number;
+  maxMpFactor: number;
+  maxFpFactor: number;
+  defenseFactor: number;
+  hpRecoveryFactor: number;
+  mpRecoveryFactor: number;
+  fpRecoveryFactor: number;
+  meleeSword: number;
+  meleeAxe: number;
+  meleeStaff: number;
+  meleeStick: number;
+  meleeKnuckle: number;
+  magicWand: number;
+  blocking: number;
+  meleeYoyo: number;
+  critical: number;
+  type: JobType;
+  parent: JobType;
+  minLevel: number;
+  maxLevel: number;
 }
