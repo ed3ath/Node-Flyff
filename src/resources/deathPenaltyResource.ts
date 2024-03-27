@@ -82,7 +82,7 @@ export class DeathPenaltyResources {
   }
 
   public async loadDeathPenalty(): Promise<void> {
-    const absolutePath = path.resolve(ResourcePaths.expCharacter);
+    const absolutePath = path.resolve(ResourcePaths.deathPenalty);
     if (!fs.existsSync(absolutePath)) {
       this.logger.error(
         `Unable to load exp character. Reason: cannot find '${absolutePath}' file.`

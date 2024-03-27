@@ -20,4 +20,5 @@ export const ResourcePaths = {
   job: path.join(resPath, "custom", "job.yaml"),
   expCharacter: path.join(resPath, "custom", "expCharacter.yaml"),
   expDropLuck: path.join(resPath, "custom", "expDropLuck.yaml"),
+  deathPenalty: path.join(resPath, "custom", "deathPenalty.yaml"),
 };
