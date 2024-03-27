@@ -18,4 +18,6 @@ export const ResourcePaths = {
   dialogsDir: path.join(__dirname, "dialogs"),
   shopsDir: path.join(__dirname, "shops"),
   job: path.join(resPath, "custom", "job.yaml"),
+  expCharacter: path.join(resPath, "custom", "expCharacter.yaml"),
+  expDropLuck: path.join(resPath, "custom", "expDropLuck.yaml"),
 };

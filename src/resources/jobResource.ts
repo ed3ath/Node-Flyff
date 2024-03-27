@@ -26,7 +26,6 @@ export class JobResources {
       typeof jobIdentifier === "number"
         ? jobIdentifier
         : await this.redisClient.hget("jobDefines", jobIdentifier);
-    console.log(jobIdentifier, jobId);
     if (!_.isUndefined(jobId)) {
       return new Promise((resolve, reject) => {
         this.redisClient.hgetall(`job:${jobId}`, (err, data) => {

@@ -203,9 +203,8 @@ export interface DialogLink {
   questId?: number;
 }
 
-
 export interface JobProperties {
-  id: DefineJob,
+  id: DefineJob;
   identifier: string;
   attackSpeed: number;
   maxHpFactor: number;
@@ -228,4 +227,17 @@ export interface JobProperties {
   parent: JobType;
   minLevel: number;
   maxLevel: number;
+}
+
+export interface CharacterExp {
+  level: number;
+  exp: number;
+  pxp: number;
+  gp: number;
+  limitExp: number;
+}
+
+export interface DropLuck {
+  level: number;
+  chance: number[]
 }

@@ -8,6 +8,7 @@ import { GameResources } from "../interfaces/resource";
 import { MonsterResources } from "../resources/monsterResource";
 import { NpcResources } from "../resources/npcResource";
 import { JobResources } from "../resources/jobResource";
+import { ExpTableResources } from "../resources/expTableResource";
 
 export class ResourceBuilder {
   private logger: Logger;
@@ -15,7 +16,8 @@ export class ResourceBuilder {
   itemResources: ItemResources;
   monsterResources: MonsterResources;
   npcResources: NpcResources;
-  jobResources: JobResources
+  jobResources: JobResources;
+  expTableResources: ExpTableResources
 
   constructor() {
     this.logger = new Logger(BuilderType.REDIS_BUILDER);
@@ -31,6 +33,7 @@ export class ResourceBuilder {
       this.monsterResources = new MonsterResources(this.options);
       this.npcResources = new NpcResources(this.options);
       this.jobResources = new JobResources(this.options);
+      this.expTableResources = new ExpTableResources(this.options);
 
       await this.itemResources.loadDefines();
       await this.itemResources.loadItemsPropStrings();
@@ -48,6 +51,9 @@ export class ResourceBuilder {
 
       await this.jobResources.loadDefines();
       await this.jobResources.loadJobsProp();
+
+      await this.expTableResources.loadExpCharacter();
+      await this.expTableResources.loadExpDropLuck();
 
       // console.log(await this.jobResources.get("JOB_PSYCHIKEEPER_HERO"));
     }
