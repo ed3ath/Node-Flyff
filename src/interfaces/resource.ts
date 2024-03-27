@@ -241,3 +241,14 @@ export interface DropLuck {
   level: number;
   chance: number[]
 }
+
+export interface PenaltyValue {
+  level: number;
+  value: number;
+}
+
+export interface DeathPenalty {
+  revivalPenalty: PenaltyValue[];
+  decreaseExpPenalty: PenaltyValue[];
+  levelDownPenalty: PenaltyValue[]
+}

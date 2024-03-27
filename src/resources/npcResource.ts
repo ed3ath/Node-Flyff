@@ -11,6 +11,7 @@ import {
   NpcProperties,
   ShopProperties,
 } from "../interfaces/resource";
+import { tryJsonParse } from "../helpers/parsing";
 
 export class NpcResources {
   logger: Logger;
@@ -189,30 +190,6 @@ export class NpcResources {
     this.logger.main(`${npcData.length} npc loaded.`);
   }
 
-  tryParseInt(value: string) {
-    try {
-      return !_.isNaN(parseInt(value)) ? parseInt(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  tryParseFloat(value: string) {
-    try {
-      return !_.isNaN(parseFloat(value)) ? parseFloat(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  tryJsonParse(value: string) {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return value;
-    }
-  }
-
   parseDialog(
     dialog: Record<string, string> | undefined
   ): DialogProperties | undefined {
@@ -222,7 +199,7 @@ export class NpcResources {
       introText: dialog.introText,
       shoutText: dialog.oralText,
       byeText: dialog.byeText,
-      links: this.tryJsonParse(dialog.links),
+      links: tryJsonParse(dialog.links),
     };
   }
 
@@ -232,12 +209,8 @@ export class NpcResources {
     if (!shop || !shop?.name) return;
     return {
       name: shop.name,
-      items: this.tryJsonParse(shop.items),
+      items: tryJsonParse(shop.items),
     };
-  }
-
-  cleanString(value: string) {
-    return value === "=" ? "" : value;
   }
 
   cleanCache() {

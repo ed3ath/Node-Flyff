@@ -1,4 +1,4 @@
-revivalPenality:
+RevivalPenalty:
   - level: 1
     value: 80
   - level: 2
@@ -9,7 +9,7 @@ revivalPenality:
     value: 40
   - level: 200
     value: 30
-decExpPenality:
+decExpPenalty:
   - level: 20
     value: 0
   - level: 29
@@ -26,7 +26,7 @@ decExpPenality:
     value: 1.5
   - level: 200
     value: 1
-levelDownPenality:
+levelDownPenalty:
   - level: 20
     value: 0
   - level: 200

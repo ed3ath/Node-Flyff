@@ -1,14 +1,13 @@
-import { JobType } from "./../common/defineJob";
 import fs from "fs-extra";
 import path from "path";
-import _, { chain } from "lodash";
+import _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
 import yaml from "js-yaml";
 
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { CharacterExp, DropLuck } from "../interfaces/resource";
-import { DefineJob } from "../common/defineJob";
+import { tryParseInt, tryParseFloat } from "../helpers/parsing";
 
 export class ExpTableResources {
   logger: Logger;
@@ -19,7 +18,9 @@ export class ExpTableResources {
     this.redisClient = new Redis(options);
   }
 
-  public async getExpCharacter(level: string | number): Promise<CharacterExp | null> {
+  public async getExpCharacter(
+    level: string | number
+  ): Promise<CharacterExp | null> {
     return new Promise((resolve, reject) => {
       this.redisClient.hgetall(`expCharacter:${level}`, (err, data) => {
         if (err) {
@@ -28,11 +29,11 @@ export class ExpTableResources {
           resolve(
             data
               ? {
-                  level: this.tryParseInt(data.level),
-                  exp: this.tryParseFloat(data.level),
-                  pxp: this.tryParseFloat(data.level),
-                  gp: this.tryParseFloat(data.level),
-                  limitExp: this.tryParseFloat(data.level),
+                  level: tryParseInt(data.level),
+                  exp: tryParseFloat(data.level),
+                  pxp: tryParseFloat(data.level),
+                  gp: tryParseFloat(data.level),
+                  limitExp: tryParseFloat(data.level),
                 }
               : null
           );
@@ -51,7 +52,7 @@ export class ExpTableResources {
             data
               ? {
                   level: parseInt(data.level),
-                  chance: JSON.parse(data.chance)
+                  chance: JSON.parse(data.chance),
                 }
               : null
           );
@@ -95,49 +96,5 @@ export class ExpTableResources {
       });
     });
     this.logger.main(`${data.length} exp drop luck loaded.`);
-  }
-
-  tryParseInt(value: string) {
-    try {
-      return !_.isNaN(parseInt(value)) ? parseInt(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  tryParseFloat(value: string) {
-    try {
-      return !_.isNaN(parseFloat(value)) ? parseFloat(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  cleanString(value: string) {
-    return value === "=" ? "" : value;
-  }
-
-  cleanCache() {
-    return new Promise<void>((resolve, reject) => {
-      this.redisClient.keys("job:*", (err, keys) => {
-        if (err) {
-          reject(err);
-        } else {
-          if (keys) {
-            if (keys.length === 0) {
-              resolve();
-            } else {
-              this.redisClient.del(...keys, (delErr, reply) => {
-                if (delErr) {
-                  reject(delErr);
-                } else {
-                  resolve();
-                }
-              });
-            }
-          }
-        }
-      });
-    });
   }
 }

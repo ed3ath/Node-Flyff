@@ -6,6 +6,7 @@ import Redis, { RedisOptions } from "ioredis";
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { ItemProperties } from "../interfaces/resource";
+import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
 
 export class ItemResources {
   logger: Logger;
@@ -81,7 +82,7 @@ export class ItemResources {
     _.forEach(lines, async (line) => {
       if (_.trim(line).startsWith("#define")) {
         const parts = _.trim(line).split(/\s+/);
-        const id = this.tryParseInt(parts[2]);
+        const id = tryParseInt(parts[2]);
         const name = parts[1];
 
         if (!_.isNaN(id) && name !== "") {
@@ -142,75 +143,75 @@ export class ItemResources {
         const szName =
           (await this.redisClient.hget(
             "itemNames",
-            this.cleanString(items[2])
+            cleanString(items[2])
           )) || "";
         const szComment =
           (await this.redisClient.hget(
             "itemDescriptions",
-            this.cleanString(items[60])
+            cleanString(items[60])
           )) || "";
 
         const item: ItemProperties = {
-          id: this.tryParseInt(id),
-          ver6: this.tryParseInt(items[0]),
+          id: tryParseInt(id),
+          ver6: tryParseInt(items[0]),
           dwID: items[1],
           szName,
-          szNameId: this.cleanString(items[2]),
-          dwPackMax: this.tryParseInt(items[4]),
-          dwItemKind1: this.cleanString(items[5]),
-          dwItemKind2: this.cleanString(items[6]),
-          dwItemKind3: this.cleanString(items[7]),
-          dwItemJob: this.cleanString(items[8]),
+          szNameId: cleanString(items[2]),
+          dwPackMax: tryParseInt(items[4]),
+          dwItemKind1: cleanString(items[5]),
+          dwItemKind2: cleanString(items[6]),
+          dwItemKind3: cleanString(items[7]),
+          dwItemJob: cleanString(items[8]),
           bPermanence: items[9] === "TRUE",
           dwUseable: items[10] === "TRUE",
-          dwItemSex: this.tryParseInt(items[11]),
-          dwCost: this.tryParseInt(items[12]),
-          dwLimitLevel1: this.tryParseInt(items[14]),
-          dwParts: this.cleanString(items[15]),
-          dwAbilityMin: this.tryParseInt(items[16]),
-          dwAbilityMax: this.tryParseInt(items[17]),
-          eItemType: this.cleanString(items[18]),
-          dwItemLV: this.tryParseInt(items[19]),
-          dwItemRare: this.tryParseInt(items[20]),
-          dwAttackSpeed: this.tryParseFloat(items[21]),
-          dwDestParam1: this.tryParseInt(items[22]),
-          dwDestParam2: this.tryParseInt(items[23]),
-          dwDestParam3: this.tryParseInt(items[24]),
-          nAdjParamVal1: this.tryParseInt(items[25]),
-          nAdjParamVal2: this.tryParseInt(items[26]),
-          nAdjParamVal3: this.tryParseInt(items[27]),
-          dwCircleTime: this.tryParseInt(items[28]),
-          dwSfxObj: this.tryParseInt(items[29]),
-          dwSfxObj2: this.tryParseInt(items[30]),
-          dwSfxObj3: this.tryParseInt(items[31]),
-          dwSfxObj4: this.tryParseInt(items[32]),
-          dwSfxObj5: this.tryParseInt(items[33]),
-          dwSkillReady: this.tryParseInt(items[34]),
-          dwWeaponType: this.tryParseInt(items[35]),
-          dwItemAtkOrder1: this.tryParseInt(items[36]),
-          dwItemAtkOrder2: this.tryParseInt(items[37]),
-          dwItemAtkOrder3: this.tryParseInt(items[38]),
-          dwItemAtkOrder4: this.tryParseInt(items[39]),
-          dwSkillReadyType: this.tryParseInt(items[40]),
-          dwReferStat1: this.cleanString(items[41]),
-          dwAddSkillMin: this.tryParseInt(items[42]),
-          dwAddSkillMax: this.tryParseInt(items[43]),
-          dwReqMp: this.tryParseInt(items[44]),
-          dwReqFp: this.tryParseInt(items[45]),
+          dwItemSex: tryParseInt(items[11]),
+          dwCost: tryParseInt(items[12]),
+          dwLimitLevel1: tryParseInt(items[14]),
+          dwParts: cleanString(items[15]),
+          dwAbilityMin: tryParseInt(items[16]),
+          dwAbilityMax: tryParseInt(items[17]),
+          eItemType: cleanString(items[18]),
+          dwItemLV: tryParseInt(items[19]),
+          dwItemRare: tryParseInt(items[20]),
+          dwAttackSpeed: tryParseFloat(items[21]),
+          dwDestParam1: tryParseInt(items[22]),
+          dwDestParam2: tryParseInt(items[23]),
+          dwDestParam3: tryParseInt(items[24]),
+          nAdjParamVal1: tryParseInt(items[25]),
+          nAdjParamVal2: tryParseInt(items[26]),
+          nAdjParamVal3: tryParseInt(items[27]),
+          dwCircleTime: tryParseInt(items[28]),
+          dwSfxObj: tryParseInt(items[29]),
+          dwSfxObj2: tryParseInt(items[30]),
+          dwSfxObj3: tryParseInt(items[31]),
+          dwSfxObj4: tryParseInt(items[32]),
+          dwSfxObj5: tryParseInt(items[33]),
+          dwSkillReady: tryParseInt(items[34]),
+          dwWeaponType: tryParseInt(items[35]),
+          dwItemAtkOrder1: tryParseInt(items[36]),
+          dwItemAtkOrder2: tryParseInt(items[37]),
+          dwItemAtkOrder3: tryParseInt(items[38]),
+          dwItemAtkOrder4: tryParseInt(items[39]),
+          dwSkillReadyType: tryParseInt(items[40]),
+          dwReferStat1: cleanString(items[41]),
+          dwAddSkillMin: tryParseInt(items[42]),
+          dwAddSkillMax: tryParseInt(items[43]),
+          dwReqMp: tryParseInt(items[44]),
+          dwReqFp: tryParseInt(items[45]),
           bCharged: items[46] === "TRUE",
-          dwReferStat2: this.tryParseInt(items[47]),
-          dwReferTarget1: this.tryParseInt(items[48]),
-          dwReferTarget2: this.tryParseInt(items[49]),
-          dwReferValue1: this.tryParseInt(items[50]),
-          dwReferValue2: this.tryParseInt(items[51]),
-          dwFlightLimit: this.tryParseInt(items[52]),
-          dwFFuelReMax: this.tryParseInt(items[53]),
-          dwAFuelReMax: this.tryParseInt(items[54]),
-          dwLimitLevel: this.tryParseInt(items[55]),
-          dwReflect: this.tryParseInt(items[56]),
-          szIcon: this.cleanString(items[57]),
-          dwQuestID: this.tryParseInt(items[58]),
-          szTextFile: this.cleanString(items[59]),
+          dwReferStat2: tryParseInt(items[47]),
+          dwReferTarget1: tryParseInt(items[48]),
+          dwReferTarget2: tryParseInt(items[49]),
+          dwReferValue1: tryParseInt(items[50]),
+          dwReferValue2: tryParseInt(items[51]),
+          dwFlightLimit: tryParseInt(items[52]),
+          dwFFuelReMax: tryParseInt(items[53]),
+          dwAFuelReMax: tryParseInt(items[54]),
+          dwLimitLevel: tryParseInt(items[55]),
+          dwReflect: tryParseInt(items[56]),
+          szIcon: cleanString(items[57]),
+          dwQuestID: tryParseInt(items[58]),
+          szTextFile: cleanString(items[59]),
           szComment,
         };
 
@@ -221,26 +222,6 @@ export class ItemResources {
     });
 
     this.logger.main(`${lines.length} items loaded.`);
-  }
-
-  tryParseInt(value: string) {
-    try {
-      return !_.isNaN(parseInt(value)) ? parseInt(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  tryParseFloat(value: string) {
-    try {
-      return !_.isNaN(parseFloat(value)) ? parseFloat(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  cleanString(value: string) {
-    return value === "=" ? "" : value;
   }
 
   parseItemProperties(data: { [key: string]: string }): ItemProperties {

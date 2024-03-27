@@ -9,6 +9,7 @@ import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { JobProperties } from "../interfaces/resource";
 import { DefineJob } from "../common/defineJob";
+import { tryParseInt, tryParseFloat } from "../helpers/parsing";
 
 export class JobResources {
   logger: Logger;
@@ -81,7 +82,7 @@ export class JobResources {
     _.forEach(lines, async (line) => {
       if (_.trim(line).startsWith("#define")) {
         const parts = _.trim(line).split(/\s+/);
-        const id = this.tryParseInt(parts[2]);
+        const id = tryParseInt(parts[2]);
         const name = parts[1];
 
         if (!_.isNaN(id) && name !== "") {
@@ -123,50 +124,30 @@ export class JobResources {
 
   parseJobProperties(data: { [key: string]: string }): JobProperties {
     return {
-      id: this.tryParseInt(data.id),
+      id: tryParseInt(data.id),
       identifier: data.identifier,
-      attackSpeed: this.tryParseFloat(data.attackSpeed),
-      maxHpFactor: this.tryParseFloat(data.maxHpFactor),
-      maxMpFactor: this.tryParseFloat(data.maxMpFactor),
-      maxFpFactor: this.tryParseFloat(data.maxFpFactor),
-      defenseFactor: this.tryParseFloat(data.defenseFactor),
-      hpRecoveryFactor: this.tryParseFloat(data.hpRecoveryFactor),
-      mpRecoveryFactor: this.tryParseFloat(data.mpRecoveryFactor),
-      fpRecoveryFactor: this.tryParseFloat(data.fpRecoveryFactor),
-      meleeSword: this.tryParseFloat(data.meleeSword),
-      meleeAxe: this.tryParseFloat(data.meleeAxe),
-      meleeStaff: this.tryParseFloat(data.meleeStaff),
-      meleeStick: this.tryParseFloat(data.meleeStick),
-      meleeKnuckle: this.tryParseFloat(data.meleeKnuckle),
-      magicWand: this.tryParseFloat(data.magicWand),
-      blocking: this.tryParseFloat(data.blocking),
-      meleeYoyo: this.tryParseFloat(data.meleeYoyo),
-      critical: this.tryParseFloat(data.critical),
+      attackSpeed: tryParseFloat(data.attackSpeed),
+      maxHpFactor: tryParseFloat(data.maxHpFactor),
+      maxMpFactor: tryParseFloat(data.maxMpFactor),
+      maxFpFactor: tryParseFloat(data.maxFpFactor),
+      defenseFactor: tryParseFloat(data.defenseFactor),
+      hpRecoveryFactor: tryParseFloat(data.hpRecoveryFactor),
+      mpRecoveryFactor: tryParseFloat(data.mpRecoveryFactor),
+      fpRecoveryFactor: tryParseFloat(data.fpRecoveryFactor),
+      meleeSword: tryParseFloat(data.meleeSword),
+      meleeAxe: tryParseFloat(data.meleeAxe),
+      meleeStaff: tryParseFloat(data.meleeStaff),
+      meleeStick: tryParseFloat(data.meleeStick),
+      meleeKnuckle: tryParseFloat(data.meleeKnuckle),
+      magicWand: tryParseFloat(data.magicWand),
+      blocking: tryParseFloat(data.blocking),
+      meleeYoyo: tryParseFloat(data.meleeYoyo),
+      critical: tryParseFloat(data.critical),
       type: JobType[data.type],
-      parent: this.tryParseInt(data.parent),
-      minLevel: this.tryParseInt(data.minLevel),
-      maxLevel: this.tryParseInt(data.maxLevel),
+      parent: tryParseInt(data.parent),
+      minLevel: tryParseInt(data.minLevel),
+      maxLevel: tryParseInt(data.maxLevel),
     };
-  }
-
-  tryParseInt(value: string) {
-    try {
-      return !_.isNaN(parseInt(value)) ? parseInt(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  tryParseFloat(value: string) {
-    try {
-      return !_.isNaN(parseFloat(value)) ? parseFloat(value) : 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  cleanString(value: string) {
-    return value === "=" ? "" : value;
   }
 
   cleanCache() {
