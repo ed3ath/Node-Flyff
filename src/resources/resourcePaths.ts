@@ -21,4 +21,7 @@ export const ResourcePaths = {
   expCharacter: path.join(resPath, "custom", "expCharacter.yaml"),
   expDropLuck: path.join(resPath, "custom", "expDropLuck.yaml"),
   deathPenalty: path.join(resPath, "custom", "deathPenalty.yaml"),
+  worldPath: path.join(resPath, "custom", "world.yaml"),
+  world: path.join(__dirname, "maps"),
+  defineWorld: path.join(resPath, "data", "defineWorld.h")
 };

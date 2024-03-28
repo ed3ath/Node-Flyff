@@ -1,10 +1,20 @@
-import { ItemResources } from "../resources/itemResource";
-import { MonsterResources } from "../resources/monsterResource";
 import { DefineAttributes } from "../common/defineAttributes";
 import { DefineJob, JobType } from "../common/defineJob";
+import { ItemResources } from "../resources/itemResource";
+import { MonsterResources } from "../resources/monsterResource";
+import { DeathPenaltyResources } from "../resources/deathPenaltyResource";
+import { ExpTableResources } from "../resources/expTableResource";
+import { JobResources } from "../resources/jobResource";
+import { MapResources } from "../resources/mapResources";
+import { NpcResources } from "../resources/npcResource";
 export interface GameResources {
   itemResources: ItemResources;
   monsterResources: MonsterResources;
+  npcResources: NpcResources;
+  jobResources: JobResources;
+  expTableResources: ExpTableResources;
+  deathPenaltyResource: DeathPenaltyResources;
+  mapResource: MapResources;
 }
 export interface ItemProperties {
   id: number;
@@ -228,7 +238,6 @@ export interface JobProperties {
   minLevel: number;
   maxLevel: number;
 }
-
 export interface CharacterExp {
   level: number;
   exp: number;
@@ -236,19 +245,33 @@ export interface CharacterExp {
   gp: number;
   limitExp: number;
 }
-
 export interface DropLuck {
   level: number;
-  chance: number[]
+  chance: number[];
 }
-
 export interface PenaltyValue {
   level: number;
   value: number;
 }
-
 export interface DeathPenalty {
   revivalPenalty: PenaltyValue[];
   decreaseExpPenalty: PenaltyValue[];
-  levelDownPenalty: PenaltyValue[]
+  levelDownPenalty: PenaltyValue[];
 }
+
+export interface WorldPath {
+  id: string;
+  name: string;
+}
+
+export interface WorldData {
+  width: number;
+  length: number;
+  mpu: number;
+  indoor: boolean;
+  fly: boolean;
+  revivalMapId: number;
+  revivalKey: string;
+}
+
+export interface WorldProperties {}
