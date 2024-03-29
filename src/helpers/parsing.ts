@@ -17,7 +17,7 @@ export const tryParseFloat = (value: string) => {
 };
 
 export const cleanString = (value: string) => {
-  return value === "=" ? "" : value;
+  return value === "=" ? "" : value.trim();
 };
 
 export const tryJsonParse = (value: string) => {

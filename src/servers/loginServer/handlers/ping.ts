@@ -20,7 +20,7 @@ export default class Handler extends PacketHandler {
   }
 
   async execute(): Promise<void> {
-    const packet = FlyffPacket.createWithHeader(PacketType.PING);
+    const packet = new FlyffPacket(PacketType.PING);
     packet.writeInt32(this.time);
     this.send(packet);
   }

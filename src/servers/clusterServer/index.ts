@@ -27,7 +27,6 @@ export default async () => {
 
   instanceBuilder.buildConfig((builder: ConfigBuilder) => {
     builder.setBasePath(join(__dirname, "../../configs"));
-    builder.setConfigFile("cluster_server.yaml");
   });
 
   instanceBuilder.buildDatabase(async (builder: DatabaseBuilder) => {
@@ -39,16 +38,17 @@ export default async () => {
   });
 
   instanceBuilder.buildRedis((builder: RedisBuilder) => {
-    builder.setRedisOptions(instanceBuilder?.config?.redis);
+    builder.setRedisOptions(instanceBuilder?.config?.cluster_server.redis);
   });
 
   instanceBuilder.buildServer((builder: ServerBuilder) => {
     builder.setServerType(ServerType.CLUSTER_SERVER);
-    builder.addServer(new ClusterServer(instanceBuilder.config?.server));
+    builder.addServer(new ClusterServer(instanceBuilder.config?.cluster_server.server));
   });
 
   instanceBuilder.buildResource((builder: ResourceBuilder) => {
-    builder.setRedisOptions(instanceBuilder?.config?.redis)
+    builder.setRedisOptions(instanceBuilder?.config?.cluster_server.redis)
+    builder.load = false;
   });
   
   const instance = await instanceBuilder.build();
@@ -59,7 +59,7 @@ async function clusterIntercom(instance: IInstance) {
   const { config, server, publisher, subscriber, client } = instance;
   const logger = server?.logger;
   const master = buildEncryptionKeyFromString(
-    config?.security["master-password"]
+    config?.cluster_server.security["master-password"]
   ).toString("hex");
   const redisChannels = [
     RedisChannel.CORE_CHANNEL,
@@ -67,9 +67,9 @@ async function clusterIntercom(instance: IInstance) {
   ];
 
   const initCluster: ICluster = {
-    name: config?.settings.name,
-    host: config?.server.host,
-    port: config?.server.port,
+    name: config?.cluster_server.settings.name,
+    host: config?.cluster_server.server.host,
+    port: config?.cluster_server.server.port,
     enabled: true,
     channels: [],
   };

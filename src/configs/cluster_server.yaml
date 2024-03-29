@@ -18,7 +18,7 @@ settings:
     experience: 1
     drop: 1
     gold: 1
-  death-penality-enabled: true
+  death-penalty-enabled: true
   mails:
     shipping-cost: 500
   messenger:

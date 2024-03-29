@@ -28,7 +28,6 @@ export default async () => {
 
   instanceBuilder.buildConfig((builder: ConfigBuilder) => {
     builder.setBasePath(path.join(__dirname, "../../configs"));
-    builder.setConfigFile("world_server.yaml");
   });
 
   instanceBuilder.buildDatabase((builder: DatabaseBuilder) => {
@@ -40,40 +39,43 @@ export default async () => {
   });
 
   instanceBuilder.buildRedis((builder: RedisBuilder) => {
-    builder.setRedisOptions(instanceBuilder?.config?.redis);
+    builder.setRedisOptions(instanceBuilder?.config?.world_server.redis);
   });
 
   instanceBuilder.buildServer((builder: ServerBuilder) => {
     builder.setServerType(ServerType.WORLD_SERVER);
-    builder.addServer(new WorldServer(instanceBuilder.config?.server));
+    builder.addServer(new WorldServer(instanceBuilder.config?.world_server.server));
   });
 
   instanceBuilder.buildResource((builder: ResourceBuilder) => {
-    builder.setRedisOptions(instanceBuilder?.config?.redis);
+    builder.setRedisOptions(instanceBuilder?.config?.world_server.redis);
   });
 
   const instance = await instanceBuilder.build();
   worldIntercom(instance);
+
+  global.GameConfig = instanceBuilder.config
+  global.TimeStarted = new Date().getTime();
 };
 
 function worldIntercom(instance: IInstance) {
   const { config, server, publisher, subscriber } = instance;
   const logger = server?.logger;
   const master = buildEncryptionKeyFromString(
-    config?.security["master-password"]
+    config?.world_server.security["master-password"]
   ).toString("hex");
 
   let scheduler: ScheduledTask;
 
   const channel: IChannel = {
     id: randomId(),
-    name: config?.settings.name,
-    host: config?.server.host,
-    port: config?.server.port,
+    name: config?.world_server.settings.name,
+    host: config?.world_server.server.host,
+    port: config?.world_server.server.port,
     enabled: true,
     currentUsers: 0,
-    maxUsers: config?.settings["maximum-users"],
-    pkEnabled: config?.settings["pk-enabled"],
+    maxUsers: config?.world_server.settings["maximum-users"],
+    pkEnabled: config?.world_server.settings["pk-enabled"],
   };
 
   subscriber?.subscribe(RedisChannel.CLUSTER_CHANNEL, (err) => {

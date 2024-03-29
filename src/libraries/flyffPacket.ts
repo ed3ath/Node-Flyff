@@ -1,64 +1,35 @@
 import { PacketType, ToStringHex } from "../common/packetType";
 import { BinaryStream } from "./binaryStream";
 
-export interface IFlyffPacket {
-  FLYFF_HEADER_NUMBER: number;
-  PACKET_DATA_START_OFFSET: number;
-  HeaderNumber: number;
-  Header: Buffer;
-
-  createEmpty(): IFlyffPacket;
-  createWithHeader(packetHeader: Buffer): IFlyffPacket;
-  getMessageLength(buffer: Buffer, littleMedia: boolean): number;
-  getHeader(buffer: Buffer): number;
-  appendHeader(buffer: Buffer): Buffer;
-  readString(): string;
-  writeString(): void;
-}
-
 export class FlyffPacket extends BinaryStream {
-  static FLYFF_HEADER_NUMBER = 0x5e;
-  static CORE_HEADER_NUMBER = 0x4d;
-  static PACKET_DATA_START_OFFSET = 5;
+  static readonly FLYFF_HEADER_NUMBER = 0x5e;
+  static readonly PACKET_DATA_START_OFFSET = 5;
 
   HeaderNumber!: number;
   DataLength!: number;
   PacketType!: PacketType;
 
-  constructor(packetBuffer: Buffer = Buffer.alloc(0), login = false, ignoreHeaders = false) {
-    super(packetBuffer);
-
-    if (packetBuffer.length > 0 && !ignoreHeaders) {
-      this.HeaderNumber = this.readByte();
-      this.position += login ? 12 : 16;
-      this.PacketType = this.readUInt32LE();
+  constructor(
+    bufferOrHeader?: Buffer | PacketType,
+    login = false,
+    ignoreHeaders = false
+  ) {
+    super(bufferOrHeader instanceof Buffer ? bufferOrHeader : Buffer.alloc(0));
+    if (bufferOrHeader instanceof Buffer) {
+      if (!ignoreHeaders) {
+        this.HeaderNumber = this.readByte();
+        this.position += login ? 12 : 16;
+        this.PacketType = this.readUInt32LE();
+      }
+    } else if (typeof bufferOrHeader === "number") {
+      this.PacketType = bufferOrHeader;
+      this.writeByte(FlyffPacket.FLYFF_HEADER_NUMBER);
+      this.writeUInt32(0);
+      this.writeUInt32LE(bufferOrHeader);
+    } else {
+      this.writeByte(FlyffPacket.FLYFF_HEADER_NUMBER);
+      this.writeUInt32(0);
     }
-  }
-
-  static createEmpty() {
-    const packet = new FlyffPacket();
-    packet.writeByte(FlyffPacket.FLYFF_HEADER_NUMBER);
-    packet.writeUInt32(0);
-    return packet;
-  }
-
-  static createEmptyCore() {
-    const packet = new FlyffPacket();
-    packet.writeByte(FlyffPacket.CORE_HEADER_NUMBER);
-    packet.writeUInt32(0);
-    return packet;
-  }
-
-  static createWithHeader(packetHeader: PacketType) {
-    const packet = FlyffPacket.createEmpty();
-    packet.writeUInt32LE(parseInt(ToStringHex(packetHeader), 16)); // Update content length after header
-    return packet;
-  }
-
-  static createCoreHeader(packetHeader: PacketType) {
-    const packet = FlyffPacket.createEmptyCore();
-    packet.writeUInt32(parseInt(ToStringHex(packetHeader), 16)); // Update content length after header
-    return packet;
   }
 
   static getMessageLength(buffer: Buffer, littleMedia = false) {
@@ -96,5 +67,9 @@ export class FlyffPacket extends BinaryStream {
     const stringBytes = BinaryStream.STRING_ENCODER.encode(value);
     this.writeInt32LE(stringBytes.length);
     this.writeBytes(stringBytes as Buffer);
+  }
+
+  toHex() {
+    return this.buffer.toString("hex");
   }
 }

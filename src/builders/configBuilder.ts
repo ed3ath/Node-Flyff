@@ -9,10 +9,8 @@ import { IConfig } from "../interfaces/config";
 
 export class ConfigBuilder {
   private logger: Logger;
-  private config: IConfig | null = null;
+  private config: IConfig;
   private basePath: string | null = null;
-  private configFile: string | null = null;
-  private configType: ConfigType | null = null;
 
   constructor() {
     this.logger = new Logger(BuilderType.CONFIG_BUILDER);
@@ -26,46 +24,38 @@ export class ConfigBuilder {
     this.basePath = basePath;
   }
 
-  setConfigFile(filePath: string): void {
-    if (!this.basePath) {
-      this.logger.error(`Cannot find base path ${this.basePath}.`);
-      return;
-    }
-    if (!fs.existsSync(join(String(this.basePath), filePath))) {
-      this.logger.error(`Cannot find file ${filePath}.`);
-      return;
-    }
-    this.configFile = filePath;
-    this.configType =
-      filePath.endsWith(".json") || filePath.endsWith(".JSON")
-        ? ConfigType.JSON
-        : filePath.endsWith(".yaml") || filePath.endsWith(".yml")
-        ? ConfigType.YAML
-        : ConfigType.UNKNOWN;
-  }
-
   build(): IConfig | null {
-    if (
-      !this.basePath ||
-      !this.configFile ||
-      this.configType === ConfigType.UNKNOWN
-    ) {
+    if (!this.basePath) {
       return null;
     }
-    const configPath = join(this.basePath, this.configFile);
-    if (!fs.existsSync(configPath)) {
-      this.logger.error(`Cannot find ${configPath}.`);
-      return null;
-    }
-    if (this.configType === ConfigType.JSON) {
-      this.config = fs.readJSONSync(configPath);
-    } else {
-      const configFile = fs.readFileSync(configPath, "utf8");
-      this.config = yaml.load(configFile) as IConfig;
-    }
+    this.config = {};
+    const files = fs.readdirSync(this.basePath);
+
+    files.forEach((file) => {
+      const filePath = join(this.basePath as string, file);
+      if (!fs.existsSync(filePath)) {
+        this.logger.error(`Cannot find ${filePath}.`);
+        return null;
+      }
+      const configType =
+        filePath.endsWith(".json") || filePath.endsWith(".JSON")
+          ? ConfigType.JSON
+          : filePath.endsWith(".yaml") || filePath.endsWith(".yml")
+          ? ConfigType.YAML
+          : ConfigType.UNKNOWN;
+      if (configType === ConfigType.JSON) {
+        this.config[file.split(".").shift()!] = fs.readJSONSync(filePath);
+      } else {
+        const configFile = fs.readFileSync(filePath, "utf8");
+        this.config[file.split(".").shift()!] = yaml.load(
+          configFile
+        ) as IConfig;
+      }
+    });
+
     this.logger.success("Config successfully loaded");
     return this.config;
   }
 
-  getConfig = () => this.config
+  getConfig = () => this.config;
 }

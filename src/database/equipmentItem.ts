@@ -7,25 +7,25 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Item from "./item";
-import Character from "./character";
+import ItemEntity from "./item";
+import CharacterEntity from "./character";
 
-@Entity()
-export default class EquipmentItem
+@Entity("EquipmentItem")
+export default class EquipmentItemEntity
   extends BaseEntity
 {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
   
-  @ManyToOne(() => Character, (character) => character.equipments)
-  character: Character;
+  @ManyToOne(() => CharacterEntity, (character) => character.equipments)
+  character: CharacterEntity;
 
   @Column({ default: 0 })
   slot: number;
 
-  @OneToOne((type) => Item)
+  @OneToOne((type) => ItemEntity)
   @JoinColumn()
-  item: Item;
+  item: ItemEntity;
 
   @Column({ default: 1 })
   quantity: number;

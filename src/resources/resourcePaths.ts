@@ -4,13 +4,9 @@ const resPath = path.join(__dirname, "res");
 export const ResourcePaths = {
   itemsProp: path.join(resPath, "data", "propItem.txt"),
   itemsText: path.join(resPath, "data", "propItem.txt.txt"),
-  defineItem: path.join(resPath, "data", "defineItem.h"),
-  defineItemKind: path.join(resPath, "data", "defineItemKind.h"),
-  defineJob: path.join(resPath, "data", "defineJob.h"),
   moversProp: path.join(resPath, "data", "propMover.txt"),
   moversText: path.join(resPath, "data", "propMover.txt.txt"),
   moversEx: path.join(resPath, "custom", "propMoverEx.yaml"),
-  defineObject: path.join(resPath, "data", "defineObj.h"),
   character: path.join(resPath, "custom", "characters.yaml"),
   characterText: path.join(resPath, "data", "character.txt.txt"),
   characterSchool: path.join(resPath, "custom", "characterSchool.yaml"),
@@ -23,5 +19,12 @@ export const ResourcePaths = {
   deathPenalty: path.join(resPath, "custom", "deathPenalty.yaml"),
   worldPath: path.join(resPath, "custom", "world.yaml"),
   world: path.join(__dirname, "maps"),
-  defineWorld: path.join(resPath, "data", "defineWorld.h")
+  defineWorld: path.join(resPath, "data", "defineWorld.h"),
+  defineItem: path.join(resPath, "data", "defineItem.h"),
+  defineItemKind: path.join(resPath, "data", "defineItemKind.h"),
+  defineJob: path.join(resPath, "data", "defineJob.h"),
+  defineObject: path.join(resPath, "data", "defineObj.h"),
+  defineSkill: path.join(resPath, "data", "defineSkill.h"),
+  skillsProp: path.join(resPath, "data", "propSkill.txt"),
+  skillsText: path.join(resPath, "data", "propSkill.txt.txt"),
 };

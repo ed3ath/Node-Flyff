@@ -27,7 +27,6 @@ export default async () => {
 
   instanceBuilder.buildConfig((builder: ConfigBuilder) => {
     builder.setBasePath(join(__dirname, "../../configs"));
-    builder.setConfigFile("login_server.yaml");
   });
 
   instanceBuilder.buildDatabase((builder: DatabaseBuilder) => {
@@ -39,12 +38,12 @@ export default async () => {
   });
 
   instanceBuilder.buildRedis((builder: RedisBuilder) => {
-    builder.setRedisOptions(instanceBuilder?.config?.redis);
+    builder.setRedisOptions(instanceBuilder?.config?.login_server.redis);
   });
 
   instanceBuilder.buildServer((builder: ServerBuilder) => {
     builder.setServerType(ServerType.LOGIN_SERVER);
-    builder.addServer(new LoginServer(instanceBuilder.config?.server));
+    builder.addServer(new LoginServer(instanceBuilder.config?.login_server.server));
   });
   const instance = await instanceBuilder.build();
   await coreIntercom(instance);
@@ -54,7 +53,7 @@ async function coreIntercom(instance: IInstance) {
   const { config, server, publisher, subscriber, client } = instance;
   const logger = server?.logger;
   const master = buildEncryptionKeyFromString(
-    config?.security["master-password"]
+    config?.login_server.security["master-password"]
   ).toString("hex");
 
   /////////// MAIN //////////

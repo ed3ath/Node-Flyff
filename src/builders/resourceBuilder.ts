@@ -14,6 +14,7 @@ import { MapResources } from "../resources/mapResources";
 
 export class ResourceBuilder {
   private logger: Logger;
+  load = true;
   options: RedisOptions;
   itemResources: ItemResources;
   monsterResources: MonsterResources;
@@ -24,11 +25,15 @@ export class ResourceBuilder {
   mapResource: MapResources;
 
   constructor() {
-    this.logger = new Logger(BuilderType.REDIS_BUILDER);
+    this.logger = new Logger(BuilderType.RESOURCE_BUILDER);
   }
 
   setRedisOptions(options: RedisOptions) {
     this.options = options;
+  }
+
+  setLoad(load: boolean) {
+    this.load = load;
   }
 
   async build(): Promise<GameResources> {
@@ -41,32 +46,34 @@ export class ResourceBuilder {
       this.deathPenaltyResource = new DeathPenaltyResources(this.options);
       this.mapResource = new MapResources(this.options);
 
-      await this.itemResources.loadDefines();
-      await this.itemResources.loadItemsPropStrings();
-      await this.itemResources.loadItemsProp();
+      if (this.load) {
+        await this.itemResources.loadDefines();
+        await this.itemResources.loadItemsPropStrings();
+        await this.itemResources.loadItemsProp();
 
-      await this.monsterResources.loadDefines();
-      await this.monsterResources.loadMonstersPropStrings();
-      await this.monsterResources.loadMonstersProp();
+        await this.monsterResources.loadDefines();
+        await this.monsterResources.loadMonstersPropStrings();
+        await this.monsterResources.loadMonstersProp();
 
-      await this.npcResources.loadNpcDialogs();
-      await this.npcResources.loadNpcShops();
-      await this.npcResources.loadNpcPropStrings();
-      await this.npcResources.loadNpcSchoolPropStrings();
-      await this.npcResources.loadNpcProp();
+        await this.npcResources.loadNpcDialogs();
+        await this.npcResources.loadNpcShops();
+        await this.npcResources.loadNpcPropStrings();
+        await this.npcResources.loadNpcSchoolPropStrings();
+        await this.npcResources.loadNpcProp();
 
-      await this.jobResources.loadDefines();
-      await this.jobResources.loadJobsProp();
+        await this.jobResources.loadDefines();
+        await this.jobResources.loadJobsProp();
 
-      await this.expTableResources.loadExpCharacter();
-      await this.expTableResources.loadExpDropLuck();
+        await this.expTableResources.loadExpCharacter();
+        await this.expTableResources.loadExpDropLuck();
 
-      await this.deathPenaltyResource.loadDeathPenalty();
+        await this.deathPenaltyResource.loadDeathPenalty();
 
-      await this.mapResource.loadDefines();
-      await this.mapResource.loadWorldPaths();
-      await this.mapResource.loadWorldProp();
-      // console.log(await this.jobResources.get("JOB_PSYCHIKEEPER_HERO"));
+        await this.mapResource.loadDefines();
+        await this.mapResource.loadWorldPaths();
+        await this.mapResource.loadWorldProp();
+      }
+      console.log(await this.itemResources.get("II_WEA_SWO_ANCIENT"));
     }
 
     return {

@@ -257,4 +257,8 @@ export class BinaryStream {
     }
     return parseFloat(buffer.toString("hex"));
   }
+
+  merge(buffer: Buffer): void {
+    this.buffer = Buffer.concat([this.buffer, buffer]);
+  }
 }

@@ -7,17 +7,17 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Character from "./character";
-import BankItem from "./bankItem";
+import CharacterEntity from "./character";
+import BankItemEntity from "./bankItem";
 
-@Entity()
-export default class Bank extends BaseEntity {
+@Entity("Bank")
+export default class BankEntity extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
   
-  @OneToOne((type) => Character)
+  @OneToOne((type) => CharacterEntity)
   @JoinColumn()
-  character: Character;
+  character: CharacterEntity;
 
   @Column({ default: 0 })
   pin: number;
@@ -25,6 +25,6 @@ export default class Bank extends BaseEntity {
   @Column({ default: 0 })
   gold: number;
 
-  @OneToMany(() => BankItem, (bankItem) => bankItem.bank)
-  items: BankItem[];
+  @OneToMany(() => BankItemEntity, (bankItem) => bankItem.bank)
+  items: BankItemEntity[];
 }

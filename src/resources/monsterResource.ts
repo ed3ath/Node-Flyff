@@ -4,7 +4,7 @@ import _ from "lodash";
 import { Logger } from "../helpers/logger";
 import Redis, { RedisOptions } from "ioredis";
 import { ResourcePaths } from "./resourcePaths";
-import { MonsterProperties } from "../interfaces/resource";
+import { MoverProperties } from "../interfaces/resource";
 import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
 
 export class MonsterResources {
@@ -18,7 +18,7 @@ export class MonsterResources {
 
   public async get(
     monsterIdentifier: string | number
-  ): Promise<MonsterProperties | null> {
+  ): Promise<MoverProperties | null> {
     const monsterId =
       typeof monsterIdentifier === "number"
         ? monsterIdentifier
@@ -29,7 +29,7 @@ export class MonsterResources {
           if (err) {
             reject(err);
           } else {
-            resolve(data ? this.parseMonsterProperties(data) : null);
+            resolve(data ? this.parseMoverProperties(data) : null);
           }
         });
       });
@@ -38,9 +38,9 @@ export class MonsterResources {
   }
 
   public where(
-    predicate: (monster: MonsterProperties) => boolean
-  ): MonsterProperties[] {
-    const monsters: MonsterProperties[] = [];
+    predicate: (monster: MoverProperties) => boolean
+  ): MoverProperties[] {
+    const monsters: MoverProperties[] = [];
     this.redisClient.keys("monster:*", (err, keys) => {
       if (err) {
         this.logger.error("Error retrieving keys from Redis:", err);
@@ -55,7 +55,7 @@ export class MonsterResources {
                 );
               } else {
                 if (data) {
-                  const monster = this.parseMonsterProperties(data);
+                  const monster = this.parseMoverProperties(data);
                   if (predicate(monster)) {
                     monsters.push(monster);
                   }
@@ -147,7 +147,7 @@ export class MonsterResources {
       const id = await this.redisClient.hget("objectDefines", monsterData[0]);
 
       if (!_.isNil(id)) {
-        const monster: MonsterProperties = {
+        const monster: MoverProperties = {
           id: parseInt(id),
           dwID: monsterData[0],
           szName: cleanString(monsterData[1]),
@@ -246,7 +246,7 @@ export class MonsterResources {
     this.logger.main(`${lines.length} monsters loaded.`);
   }
 
-  parseMonsterProperties(data: { [key: string]: string }): MonsterProperties {
+  parseMoverProperties(data: { [key: string]: string }): MoverProperties {
     return {
       id: tryParseInt(data["id"]),
       dwID: data["dwID"],

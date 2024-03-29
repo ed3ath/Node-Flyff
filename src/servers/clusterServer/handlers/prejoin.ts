@@ -79,7 +79,7 @@ export default class Handler extends PacketHandler {
   }
 
   sendPreJoin(): void {
-    const packet = FlyffPacket.createWithHeader(PacketType.PRE_JOIN);
+    const packet = new FlyffPacket(PacketType.PRE_JOIN);
     this.send(packet);
   }
 
@@ -106,7 +106,7 @@ export default class Handler extends PacketHandler {
       numpadId = Math.floor(Math.random() * uNumPad.length);
       await this.server.redisClient.setNumpadId(this.username, numpadId);
     }
-    const packet = FlyffPacket.createWithHeader(PacketType.LOGIN_PROTECT_CERT);
+    const packet = new FlyffPacket(PacketType.LOGIN_PROTECT_CERT);
     packet.writeInt32LE(success ? 1 : 0);
     packet.writeUInt32LE(numpadId);
     this.send(packet);

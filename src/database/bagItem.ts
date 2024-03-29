@@ -8,23 +8,23 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-import Bag from "./inventory";
-import Item from "./item";
+import BagEntity from "./inventory";
+import ItemEntity from "./item";
 
-@Entity()
-export default class BagItem extends BaseEntity {
+@Entity("Bag")
+export default class BagItemEntity extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
   
-  @ManyToOne(() => Bag, (bag) => bag.items)
-  bag: Bag;
+  @ManyToOne(() => BagEntity, (bag) => bag.items)
+  bag: BagEntity;
 
   @Column({ default: 0 })
   slot: number;
 
-  @OneToOne((type) => Item)
+  @OneToOne((type) => ItemEntity)
   @JoinColumn()
-  item: Item;
+  item: ItemEntity;
 
   @Column({ default: 1 })
   quantity: number;

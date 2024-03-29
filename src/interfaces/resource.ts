@@ -39,18 +39,18 @@ export interface ItemProperties {
   dwItemLV: number;
   dwItemRare: number;
   dwAttackSpeed: number;
-  dwDestParam1: number;
-  dwDestParam2: number;
-  dwDestParam3: number;
+  dwDestParam1: string;
+  dwDestParam2: string;
+  dwDestParam3: string;
   nAdjParamVal1: number;
   nAdjParamVal2: number;
   nAdjParamVal3: number;
   dwCircleTime: number;
-  dwSfxObj: number;
-  dwSfxObj2: number;
-  dwSfxObj3: number;
-  dwSfxObj4: number;
-  dwSfxObj5: number;
+  dwSfxObj: string;
+  dwSfxObj2: string;
+  dwSfxObj3: string;
+  dwSfxObj4: string;
+  dwSfxObj5: string;
   dwSkillReady: number;
   dwWeaponType: number;
   dwItemAtkOrder1: number;
@@ -63,26 +63,22 @@ export interface ItemProperties {
   dwAddSkillMax: number;
   dwReqMp: number;
   dwReqFp: number;
-  bCharged: boolean;
-  dwReferStat2: number;
-  dwReferTarget1: number;
-  dwReferTarget2: number;
+  dwReferStat2: string;
+  dwReferTarget1: string;
+  dwReferTarget2: string;
   dwReferValue1: number;
   dwReferValue2: number;
   dwFlightLimit: number;
   dwFFuelReMax: number;
   dwAFuelReMax: number;
-  dwLimitLevel: number;
   dwReflect: number;
-  szIcon: string;
   dwQuestID: number;
-  szTextFile: string;
   szComment: string;
   readonly stackable?: boolean;
   readonly Params?: Readonly<Record<DefineAttributes, number>>;
 }
 
-export interface MonsterProperties {
+export interface MoverProperties {
   id: number;
   dwID: string;
   szName: string;
@@ -275,3 +271,74 @@ export interface WorldData {
 }
 
 export interface WorldProperties {}
+
+export interface SkillLevelProperties {
+  id: number;
+  dwID: string;
+  dwName: string;
+  dwSkillLvl: number;
+  dwAbilityMin: number;
+  dwAtkAbilityMax: number;
+  dwAbilityMinPVP: number;
+  dwAbilityMaxPVP: number;
+  dwAttackSpeed: number;
+  dwDmgShift: boolean;
+  nProbability: number;
+  nProbabilityPVP: number;
+  dwTaunt: number;
+  dwDestParam1: string;
+  nAdjParamVal1: number;
+  dwDestParam2: string;
+  nAdjParamVal2: number;
+  dwReqMp: number;
+  dwRepFp: number;
+  dwCooldown: number;
+  dwCastingTime: number;
+  dwSkillRange: number;
+  dwCircleTime: number;
+  dwPainTime: number;
+  dwSkillTime: number;
+  dwSkillCount: number;
+  dwSkillExp: number;
+  dwExp: number;
+  dwComboSkillTime: number;
+}
+
+export interface SkillProperties {
+  id: number;
+  ver: number;
+  dwID: string;
+  szName: string;
+  szNameId: string;
+  dwItemKind1: string;
+  dwItemKind2: string;
+  dwItemKind3: string;
+  dwLinkKind: string;
+  dwLinkKindBullet: string;
+  eItemType: string;
+  tmContinuousPain: number;
+  dwReqDisLV: number;
+  dwReSkill1: number;
+  dwReSkillLevel1: number;
+  dwReSkill2: number;
+  dwReSkillLevel2: number;
+  dwSkillReady: number;
+  dwSfxObj: string;
+  dwSfxObj2: string;
+  dwSfxObj3: string;
+  dwSfxObj4: string;
+  dwSfxObj5: string;
+  ExpertMax: number;
+  dwSkillType: string;
+  dwSpellRegion: string;
+  dwSpellType: string;
+  dwExeTarget: string;
+  dwReferStat1: string;
+  dwReferStat2: string;
+  dwReferTarget1: string;
+  dwReferValue1: number;
+  dwReferTarget2: string;
+  dwReferValue2: number;
+  dwHanded?: string;
+  skillLevels?: Record<number, SkillLevelProperties>;
+}

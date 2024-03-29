@@ -7,16 +7,16 @@ import {
   ManyToOne,
 } from "typeorm";
 import { GenderType } from "../common/genderType";
-import EquipmentItem from "./equipmentItem";
-import Account from "./account";
+import EquipmentItemEntity from "./equipmentItem";
+import AccountEntity from "./account";
 
-@Entity()
-export default class Character extends BaseEntity {
+@Entity("Character")
+export default class CharacterEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Account, (account) => account.characters)
-  account: Account;
+  @ManyToOne(() => AccountEntity, (account) => account.characters)
+  account: AccountEntity;
 
   @Column({ nullable: false })
   name: string;
@@ -84,8 +84,8 @@ export default class Character extends BaseEntity {
   @Column({ nullable: false, default: 0 })
   experience: number;
 
-  @OneToMany(() => EquipmentItem, (equipmentItem) => equipmentItem.character)
-  equipments: EquipmentItem[];
+  @OneToMany(() => EquipmentItemEntity, (equipmentItem) => equipmentItem.character)
+  equipments: EquipmentItemEntity[];
 
   @Column({ default: false })
   deleted: boolean;

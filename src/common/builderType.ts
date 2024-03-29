@@ -5,5 +5,6 @@ export enum BuilderType {
     SERVER_BUILDER = 'ServerBuilder',
     CLIENT_BUILDER = 'ClientBuilder',
     REDIS_BUILDER = 'RedisBuilder',
-    INSTANCE_BUILDER = 'InstanceBuilder'
+    INSTANCE_BUILDER = 'InstanceBuilder',
+    RESOURCE_BUILDER = 'ResourceBuilder'
 }

@@ -74,7 +74,7 @@ export default class Handler extends PacketHandler {
   }
 
   sendChannelIp(ip: string) {
-    const packet = FlyffPacket.createWithHeader(PacketType.CACHE_ADDR);
+    const packet = new FlyffPacket(PacketType.CACHE_ADDR);
     packet.writeStringLE(ip);
     return this.send(packet);
   }
@@ -82,7 +82,7 @@ export default class Handler extends PacketHandler {
   async sendNumPadId() {
     const numpadId = Math.floor(Math.random() * uNumPad.length);
     await this.server.redisClient.setNumpadId(this.username, numpadId);
-    const packet = FlyffPacket.createWithHeader(
+    const packet = new FlyffPacket(
       PacketType.LOGIN_PROTECT_NUMPAD
     );
     packet.writeUInt32LE(numpadId);

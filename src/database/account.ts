@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
 
 import { AuthorityType } from "../common/authorityType";
-import Character from "./character";
+import CharacterEntity from "./character";
 
 
-@Entity()
-export default class Account extends BaseEntity {
+@Entity("Account")
+export default class AccountEntity extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
 
@@ -33,6 +33,6 @@ export default class Account extends BaseEntity {
   @Column({ nullable: true, default: 0 })
   lastActivity: number;
 
-  @OneToMany(() => Character, (character) => character.account)
-  characters: Character[];
+  @OneToMany(() => CharacterEntity, (character) => character.account)
+  characters: CharacterEntity[];
 }

@@ -8,17 +8,17 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-import Character from "./character";
-import BagItem from "./bagItem";
+import CharacterEntity from "./character";
+import BagItemEntity from "./bagItem";
 
-@Entity()
-export default class Bag extends BaseEntity {
+@Entity("Bag")
+export default class BagEntity extends BaseEntity {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
   
-  @OneToOne((type) => Character)
+  @OneToOne((type) => CharacterEntity)
   @JoinColumn()
-  character: Character;
+  character: CharacterEntity;
 
   @Column({ default: false })
   extra1: boolean;
@@ -26,6 +26,6 @@ export default class Bag extends BaseEntity {
   @Column({ default: false })
   extra2: boolean;
 
-  @OneToMany(() => BagItem, (bagItem) => bagItem.bag)
-  items: BagItem[];
+  @OneToMany(() => BagItemEntity, (bagItem) => bagItem.bag)
+  items: BagItemEntity[];
 }

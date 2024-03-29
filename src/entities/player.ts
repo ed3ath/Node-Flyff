@@ -1,203 +1,338 @@
-// import { FFUserConnection } from './FFUserConnection';
-// import { Mover } from './Mover';
-// import { FlyffPacket } from './FlyffPacket';
-// import { HumanVisualAppearance } from './HumanVisualAppearance';
-// import { Inventory } from './Inventory';
-// import { BankSlot } from './BankSlot';
-// import { MailboxContainer } from './MailboxContainer';
-// import { Gold } from './Gold';
-// import { Experience } from './Experience';
-// import { SkillTree } from './SkillTree';
-// import { QuestDiary } from './QuestDiary';
-// import { Taskbar } from './Taskbar';
-// import { DefineJob } from './DefineJob';
-// import { DefineText } from './DefineText';
-// import { ChatSnapshot } from './ChatSnapshot';
-// import { MotionSnapshot } from './MotionSnapshot';
-// import { SetPositionSnapshot } from './SetPositionSnapshot';
-// import { WorldReadInfoSnapshot } from './WorldReadInfoSnapshot';
-// import { ReplaceSnapshot } from './ReplaceSnapshot';
-// import { AddObjectSnapshot } from './AddObjectSnapshot';
-// import { ClearUseSkillSnapshot } from './ClearUseSkillSnapshot';
-// import { SnoopSnapshot } from './SnoopSnapshot';
+import { MapLayer } from "../abstract/mapLayer";
+import { Vector3 } from "../abstract/vector3";
+import { WorldObject } from "../abstract/worldObject";
+import { AuthorityType } from "../common/authorityType";
+import { DefineJob } from "../common/defineJob";
+import { DefineSpecialEffects } from "../common/defineSpecialEffects";
+import { DefineText } from "../common/defineText";
+import { GenderType } from "../common/genderType";
+import { MapItemType } from "../common/mapItemType";
+import { ModeType } from "../common/modeType";
+import { ObjectMessageType } from "../common/objectMessageType";
+import { Skill } from "../common/skills";
+import { MoverProperties, JobProperties } from "../interfaces/resource";
+import { UserConnection } from "../libraries/tcpServer";
+import { CreateSfxObjectSnapshot } from "../protocol/snapshots/createSfxObject";
+import { Mover } from "./mover";
 
-class Player extends Mover {
-    private readonly _connection: FFUserConnection;
-
-    public Id: number;
-    public LoggedInAt: Date;
-    public Slot: number;
-    // public Authority: AuthorityType;
-    // public Job: JobProperties;
-    // public DeathLevel: number;
-    // public Mode: ModeType;
-    // public Appearance: HumanVisualAppearance;
-    // public Inventory: Inventory;
-    // public Bank: BankSlot;
-    // public Mailbox: MailboxContainer;
-    // public AvailablePoints: number;
-    // public SkillPoints: number;
-    // public BankPin: number;
-    // public Gold: Gold;
-    // public Experience: Experience;
-    // public Skills: SkillTree;
-    // public QuestDiary: QuestDiary;
-    // public CurrentShopName: string;
-    // public Taskbar: Taskbar;
-
-    constructor(connection: FFUserConnection, properties: MoverProperties) {
+export class Player extends Mover {
+    constructor(
+        public readonly connection: UserConnection,
+        properties: MoverProperties
+    ) {
         super(properties);
-        this._connection = connection;
-        // this.Inventory = new Inventory(this);
-        // this.Gold = new Gold(this);
-        // this.Bank = new BankSlot(this);
-        // this.Experience = new Experience(this);
-        // this.Skills = new SkillTree(this);
-        // this.QuestDiary = new QuestDiary(this);
-        // this.Taskbar = new Taskbar();
-        // this.Mailbox = new MailboxContainer(this);
+        // this.inventory = new Inventory(this);
+        // this.gold = new Gold(this);
+        // this.experience = new Experience(this);
+        // this.skills = new SkillTree(this);
+        // this.questDiary = new QuestDiary(this);
+        // this.taskbar = new Taskbar();
+        // this.mailbox = new MailboxContainer(this);
     }
 
-    // public update(): void {
-    //     if (this.isDead || !this.isSpawned) {
-    //         return;
-    //     }
+    id: number;
+    loggedInAt: Date;
+    slot: number;
+    authority: AuthorityType;
+    job: JobProperties;
+    deathLevel: number;
+    mode: ModeType[];
+    // appearance: HumanVisualAppearance;
+    // inventory: Inventory;
+    // bank: BankSlot;
+    // mailbox: MailboxContainer;
+    // availablePoints: number;
+    // skillPoints: number;
+    // bankPin: number;
+    // gold: Gold;
+    // experience: Experience;
+    // skills: SkillTree;
+    // questDiary: QuestDiary;
+    // currentShopName: string;
+    // taskbar: Taskbar;
 
-    //     if (!this.isFighting) {
-    //         this.health.idleHeal();
-    //     }
+    update(): void {
+        if (this.isDead || !this.isSpawned) {
+            return;
+        }
 
-    //     this.lookAround();
-    //     this.updateMoves();
-    // }
+        if (!this.isFighting) {
+            this.health.idleHeal();
+        }
 
-    // public lookAround(): void {
-    //     if (!this.isSpawned || !this.isVisible) {
-    //         return;
-    //     }
+        this.lookAround();
+        this.updateMoves();
+    }
 
-    //     const currentVisibleEntities: WorldObject[] = MapLayer.getVisibleObjects(this);
-    //     const appearingEntities: WorldObject[] = currentVisibleEntities.filter(entity => !this.visibleObjects.includes(entity));
-    //     const disappearingEntities: WorldObject[] = this.visibleObjects.filter(entity => !currentVisibleEntities.includes(entity));
+    lookAround(): void {
+        if (!this.isSpawned || !this.isVisible) {
+            return;
+        }
 
-    //     if (appearingEntities.length > 0 || disappearingEntities.length > 0) {
-    //         const snapshot = new FFSnapshot();
+        const currentVisibleEntities = MapLayer.getVisibleObjects(this);
+        const appearingEntities = currentVisibleEntities.filter(entity => !this.visibleObjects.includes(entity));
+        const disappearingEntities = this.visibleObjects.filter(entity => !currentVisibleEntities.includes(entity));
 
-    //         appearingEntities.forEach(appearingObject => {
-    //             snapshot.merge(new AddObjectSnapshot(appearingObject, AddObjectSnapshot.PlayerAddObjMethodType.ExcludeItems));
+        if (appearingEntities.length > 0 || disappearingEntities.length > 0) {
+            const snapshot = new FFSnapshot();
 
-    //             if (appearingObject instanceof Mover && appearingObject.isMoving) {
-    //                 snapshot.merge(new DestPositionSnapshot(appearingObject));
-    //             }
+            for (const appearingObject of appearingEntities) {
+                snapshot.merge(new AddObjectSnapshot(appearingObject, AddObjectSnapshot.PlayerAddObjMethodType.ExcludeItems));
 
-    //             this.addVisibleEntity(appearingObject);
-    //         });
+                if (appearingObject instanceof Mover && appearingObject.isMoving) {
+                    snapshot.merge(new DestPositionSnapshot(appearingObject));
+                }
 
-    //         disappearingEntities.forEach(disappearingObject => {
-    //             snapshot.merge(new DeleteObjectSnapshot(disappearingObject));
-    //             this.removeVisibleEntity(disappearingObject);
-    //         });
+                this.addVisibleEntity(appearingObject);
+            }
 
-    //         this.send(snapshot);
-    //     }
-    // }
+            for (const disappearingObject of disappearingEntities) {
+                snapshot.merge(new DeleteObjectSnapshot(disappearingObject));
+                this.removeVisibleEntity(disappearingObject);
+            }
 
-    // public getEquipedItems(): Item[] {
-    //     return this.Inventory.getRange(this.Inventory.InventorySize, this.Inventory.InventoryEquipParts).map(x => x.Item);
-    // }
+            this.send(snapshot);
+        }
+    }
 
-    // public updateStatistics(strength: number, stamina: number, dexterity: number, intelligence: number): void {
-    //     const total: number = strength + stamina + dexterity + intelligence;
+    getEquippedItems(): Item[] {
+        return this.inventory.getRange(Inventory.InventorySize, Inventory.InventoryEquipParts).map(slot => slot.item);
+    }
 
-    //     if (this.AvailablePoints <= 0 || total > this.AvailablePoints) {
-    //         throw new Error(`${this.Name} doesn't have enough statistic points.`);
-    //     }
+    updateStatistics(strength: number, stamina: number, dexterity: number, intelligence: number): void {
+        const total = strength + stamina + dexterity + intelligence;
 
-    //     if (strength > this.AvailablePoints || stamina > this.AvailablePoints ||
-    //         dexterity > this.AvailablePoints || intelligence > this.AvailablePoints || total <= 0 ||
-    //         total > ushort.MaxValue) {
-    //         throw new Error('Statistics point bad calculation. (Hack attempt)');
-    //     }
+        if (this.availablePoints <= 0 || total > this.availablePoints) {
+            throw new Error(`${this.name} doesn't have enough statistic points.`);
+        }
 
-    //     this.Statistics.Strength += strength;
-    //     this.Statistics.Stamina += stamina;
-    //     this.Statistics.Dexterity += dexterity;
-    //     this.Statistics.Intelligence += intelligence;
-    //     this.AvailablePoints -= total;
+        if (strength > this.availablePoints || stamina > this.availablePoints ||
+            dexterity > this.availablePoints || intelligence > this.availablePoints || total <= 0 ||
+            total > ushort.MaxValue) {
+            throw new Error("Statistics point bad calculation. (Hack attempt)");
+        }
 
-    //     this.Health.regenerateAll();
-    //     this.Defense.update();
+        this.statistics.strength += strength;
+        this.statistics.stamina += stamina;
+        this.statistics.dexterity += dexterity;
+        this.statistics.intelligence += intelligence;
+        this.availablePoints -= total;
 
-    //     const setStateSnapshot = new SetStatisticsStateSnapshot(this);
-    //     this.send(setStateSnapshot);
-    // }
+        this.health.regenerateAll();
+        this.defense.update();
 
-    // public resetStatistics(): void {
-    //     const defaultCharacter = this.Appearance.Gender == GenderType.Male ?
-    //         GameOptions.Current.DefaultCharacter.Man :
-    //         GameOptions.Current.DefaultCharacter.Woman;
+        const setStateSnapshot = new SetStatisticsStateSnapshot(this);
+        this.send(setStateSnapshot);
+    }
 
-    //     this.Statistics.Strength = defaultCharacter.Strength;
-    //     this.Statistics.Stamina = defaultCharacter.Stamina;
-    //     this.Statistics.Dexterity = defaultCharacter.Dexterity;
-    //     this.Statistics.Intelligence = defaultCharacter.Intelligence;
-    //     this.AvailablePoints = (this.Level - 1) * 2;
+    resetStatistics(): void {
+        const defaultCharacter = this.appearance.gender === GenderType.Male ?
+            GameOptions.Current.DefaultCharacter.Man :
+            GameOptions.Current.DefaultCharacter.Woman;
 
-    //     this.Health.regenerateAll();
-    //     this.Defense.update();
+        this.statistics.strength = defaultCharacter.strength;
+        this.statistics.stamina = defaultCharacter.stamina;
+        this.statistics.dexterity = defaultCharacter.dexterity;
+        this.statistics.intelligence = defaultCharacter.intelligence;
+        this.availablePoints = (this.level - 1) * 2;
 
-    //     const setStateSnapshot = new SetStatisticsStateSnapshot(this);
-    //     this.send(setStateSnapshot);
-    // }
+        this.health.regenerateAll();
+        this.defense.update();
 
-    // public addSkillPoints(skillPointsToAdd: number, sendToPlayer: boolean = true): void {
-    //     this.SkillPoints += skillPointsToAdd;
+        const setStateSnapshot = new SetStatisticsStateSnapshot(this);
+        this.send(setStateSnapshot);
+    }
 
-    //     if (sendToPlayer) {
-    //         const snapshot = new SetExperienceSnapshot(this);
-    //         this.send(snapshot);
-    //     }
-    // }
+    addSkillPoints(skillPointsToAdd: number, sendToPlayer = true): void {
+        this.skillPoints += skillPointsToAdd;
 
-    // public resetSkills(): void {
-    //     this.Skills.forEach(skill => {
-    //         this.SkillPoints += skill.Level * SkillTree.SkillPointUsage[skill.Properties.JobType];
-    //         skill.Level = 0;
-    //     });
-    // }
+        if (sendToPlayer) {
+            const snapshot = new SetExperienceSnapshot(this);
+            this.send(snapshot);
+        }
+    }
 
-    // public resetAvailableSkillPoints(): void {
-    //     this.SkillPoints = 0;
-    // }
+    resetSkills(): void {
+        for (const skill of this.skills) {
+            this.skillPoints += skill.level * SkillTree.SkillPointUsage[skill.properties.jobType];
+            skill.level = 0;
+        }
+    }
 
-    // public changeJob(job: DefineJob.Job): void {
-    //     if (this.Job.Id == job) {
-    //         return;
-    //     }
+    resetAvailableSkillPoints(): void {
+        this.skillPoints = 0;
+    }
 
-    //     const jobProperties = GameResources.Current.Jobs.get(job) || throw new Error(`Failed to find job '${job}'.`);
-    //     const jobSkills = GameResources.Current.Skills.getJobSkills(job);
+    changeJob(job: DefineJob.Job): void {
+        if (this.job.id === job) {
+            return;
+        }
 
-    //     if (jobSkills.length > 0) {
-    //         jobSkills.forEach(skill => {
-    //             this.Skills.setSkill(new Skill(skill, this, 0));
-    //         });
-    //     }
+        const jobProperties = GameResources.Current.Jobs.get(job);
+        if (!jobProperties) {
+            throw new Error(`Failed to find job '${job}'.`);
+        }
 
-    //     this.Job = jobProperties;
+        const jobSkills = GameResources.Current.Skills.getJobSkills(job);
+        if (jobSkills.length > 0) {
+            for (const skill of jobSkills) {
+                this.skills.setSkill(new Skill(skill, this, 0));
+            }
+        }
 
-    //     const snapshots = new FFSnapshot([
-    //         new SetJobSkill(this),
-    //         new CreateSfxObjectSnapshot(this, DefineSpecialEffects.XI_GEN_LEVEL_UP01)
-    //     ]);
+        this.job = jobProperties;
 
-    //     this.sendToVisible(snapshots, true);
-    // }
+        const snapshots = new FFSnapshot([
+            new SetJobSkill(this),
+            new CreateSfxObjectSnapshot(this, DefineSpecialEffects.XI_GEN_LEVEL_UP01)
+        ]);
 
-    // public speak(message: string): void {
-    //     const snapshot = new ChatSnapshot(this, message);
-    //     this.sendToVisible(snapshot, true);
-    // }
+        this.sendToVisible(snapshots, true);
+    }
+
+    speak(message: string): void {
+        const snapshot = new ChatSnapshot(this, message);
+        this.sendToVisible(snapshot, true);
+    }
+
+    pickupItem(mapItem: MapItemObject, sendPickupMotion = true): void {
+        if (mapItem.hasOwner && mapItem.owner !== this) {
+            this.sendDefinedText(DefineText.TID_GAME_PRIORITYITEMPER, `"${mapItem.item.name}"`);
+            return;
+        }
+
+        let itemPickedUp = false;
+
+        if (mapItem.isGold) {
+            itemPickedUp = this.gold.increase(mapItem.item.quantity);
+        } else {
+            itemPickedUp = this.inventory.createItem(mapItem.item) > 0;
+            this.sendDefinedText(DefineText.TID_GAME_REAPITEM, `"${mapItem.item.name}"`);
+        }
+
+        if (itemPickedUp) {
+            if (mapItem.itemType === MapItemType.QuestItem) {
+                mapItem.despawn();
+            } else {
+                MapLayer.removeItem(mapItem);
+            }
+        }
+
+        if (sendPickupMotion) {
+            const motionSnapshot = new MotionSnapshot(this, ObjectMessageType.OBJMSG_PICKUP);
+            this.sendToVisible(motionSnapshot, true);
+        }
+    }
+
+    teleport(mapId: number, position: Vector3, sendToPlayer = true): void {
+        const setPlayerPosition = (newPosition: Vector3): void => {
+            this.unfollow();
+            this.stopMoving();
+            this.position.copy(newPosition);
+        };
+
+        if (this.map.id === mapId) {
+            if (!this.map.isInBounds(position)) {
+                throw new Error(`Attempt to teleport '${this.name}' to an invalid position: ${position} in map: '${this.map.name}'.`);
+            }
+
+            setPlayerPosition(position);
+
+            const snapshots = new FFSnapshot([
+                new SetPositionSnapshot(this),
+                new WorldReadInfoSnapshot(this)
+            ]);
+            this.sendToVisible(snapshots, sendToPlayer);
+        } else {
+            const destinationMap = MapManager.Current.get(mapId);
+            if (!destinationMap) {
+                throw new Error(`Cannot teleport to map with id: '${mapId}'. Map not found.`);
+            }
+
+            if (!destinationMap.isInBounds(position)) {
+                throw new Error(`Attempt to teleport '${this.name}' to an invalid position: ${position} in map: '${destinationMap.name}'.`);
+            }
+
+            this.isSpawned = false;
+            MapLayer.removePlayer(this);
+
+            setPlayerPosition(position);
+
+            this.map = destinationMap;
+            this.mapLayer = destinationMap.getDefaultLayer();
+            this.mapLayer.addPlayer(this);
+
+            if (sendToPlayer) {
+                const snapshots = new FFSnapshot([
+                    new ReplaceSnapshot(this),
+                    new WorldReadInfoSnapshot(this),
+                    new AddObjectSnapshot(this)
+                ]);
+
+                this.send(snapshots);
+            }
+
+            this.isSpawned = true;
+        }
+    }
+
+    onTargetKilled(target: Mover): void {
+        if (target instanceof Player) {
+            // TODO: PK
+        } else if (target instanceof Monster) {
+            this.experience.increase(target.properties.experience * GameOptions.Current.Rates.Experience);
+            this.questDiary.onMonsterKilled(target);
+        }
+    }
+
+    onKilled(killer: Mover): void {
+        super.onKilled(killer);
+    }
+
+    dispose(): void {
+        for (const visibleObject of this.visibleObjects) {
+            if (!(visibleObject instanceof Player)) {
+                visibleObject.visibleObjects.remove(this);
+            }
+        }
+
+        MapLayer.removePlayer(this);
+    }
+
+    protected onArrived(): void {
+        if (this.isFollowing && this.followTarget instanceof MapItemObject) {
+            this.pickupItem(this.followTarget);
+            this.unfollow();
+        }
+    }
+
+    cancelSkillUsage(): void {
+        const snapshot = new ClearUseSkillSnapshot(this);
+        this.sendToVisible(snapshot, true);
+    }
+
+    sendSnoopMessage(message: string): void {
+        const snapshot = new SnoopSnapshot(message);
+        this.send(snapshot);
+    }
+
+    private addVisibleEntity(entity: WorldObject): void {
+        if (!this.visibleObjects.includes(entity)) {
+            this.visibleObjects.push(entity);
+        }
+
+        if (!(entity instanceof Player) && !entity.visibleObjects.includes(this)) {
+            entity.visibleObjects.push(this);
+        }
+    }
+
+    private removeVisibleEntity(entity: WorldObject): void {
+        if (this.visibleObjects.includes(entity)) {
+            this.visibleObjects.remove(entity);
+        }
+
+        if (entity.visibleObjects.includes(this)) {
+            entity.visibleObjects.remove(this);
+        }
+    }
 }
-
-export { Player };

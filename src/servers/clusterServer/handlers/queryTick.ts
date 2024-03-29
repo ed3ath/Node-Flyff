@@ -12,7 +12,7 @@ export default class Handler extends PacketHandler {
   }
 
   async execute(): Promise<void> {
-    const packet = FlyffPacket.createWithHeader(PacketType.QUERY_TICK_COUNT);
+    const packet = new FlyffPacket(PacketType.QUERY_TICK_COUNT);
     const elapsed = new Date().getTime() - this.server.time;
     packet.writeUInt32LE(this.time);
     packet.writeInt64LE(elapsed);

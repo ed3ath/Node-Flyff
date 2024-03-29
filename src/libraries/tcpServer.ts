@@ -86,7 +86,7 @@ export class TcpServer {
 
     if (this.serverType !== ServerType.CORE_SERVER) {
       // Send welcome packet to the client
-      const packet = FlyffPacket.createEmpty();
+      const packet = new FlyffPacket();
       packet.writeUInt32LE(PacketType.WELCOME);
       packet.writeUInt32LE(userConnection.sessionId);
       userConnection.send(packet);
@@ -209,13 +209,13 @@ export class UserConnection {
   }
 
   sendError(errorType: ErrorType): void {
-    const packet = FlyffPacket.createWithHeader(PacketType.ERROR);
+    const packet = new FlyffPacket(PacketType.ERROR);
     packet.writeUInt32LE(errorType);
     return this.send(packet);
   }
 
   sendCharacterList(characters: Character[], authKey: number): void {
-    const packet = FlyffPacket.createWithHeader(PacketType.CHARACTER_LIST);
+    const packet = new FlyffPacket(PacketType.CHARACTER_LIST);
     const filteredCharacters = _.filter(characters, { deleted: false });
 
     packet.writeInt32LE(authKey);

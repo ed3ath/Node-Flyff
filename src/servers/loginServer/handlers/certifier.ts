@@ -28,12 +28,17 @@ export default class Handler extends PacketHandler {
 
   async execute(): Promise<void> {
     if (
-      this.server?.instance?.config?.security["build-version"] !==
+      this.server?.instance?.config?.login_server.security["build-version"] !==
       this.msgVersion
     ) {
       return this.userConnection.sendError(ErrorType.ILLEGAL_VER);
     }
-    const key = buildEncryptionKeyFromString("dldhsvmflvm", 16);
+    const key = buildEncryptionKeyFromString(
+      this.server?.instance?.config?.login_server.security[
+        "password-encryption-key"
+      ],
+      16
+    );
     const password = decryptByteArray(this.passwordByte, key);
     const database = this.server?.instance?.getEntity("account");
 
@@ -65,7 +70,7 @@ export default class Handler extends PacketHandler {
   }
 
   async sendServerList() {
-    const packet = FlyffPacket.createWithHeader(PacketType.SERVER_LIST);
+    const packet = new FlyffPacket(PacketType.SERVER_LIST);
     const clusters = await this.server.redisClient.getAllClusters();
 
     packet.writeInt32LE(0); // Authentication key

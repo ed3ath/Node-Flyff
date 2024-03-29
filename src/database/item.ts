@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import { ElementType } from "../common/elementType";
 
-@Entity()
-export default class Item extends BaseEntity {
+@Entity("Item")
+export default class ItemEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   serialNumber: number;
 
