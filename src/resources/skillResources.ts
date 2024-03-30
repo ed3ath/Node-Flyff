@@ -5,7 +5,7 @@ import Redis, { RedisOptions } from "ioredis";
 
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
-import { SkillProperties } from "../interfaces/resource";
+import { SkillLevelProperties, SkillProperties } from "../interfaces/resource";
 import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
 
 export class SkillResources {
@@ -38,7 +38,9 @@ export class SkillResources {
     return null;
   }
 
-  public where(predicate: (skill: SkillProperties) => boolean): SkillProperties[] {
+  public where(
+    predicate: (skill: SkillProperties) => boolean
+  ): SkillProperties[] {
     const skills: SkillProperties[] = [];
     this.redisClient.keys("skill:*", (err, keys) => {
       if (err) {
@@ -85,6 +87,8 @@ export class SkillResources {
         const id = tryParseInt(parts[2]);
         const name = parts[1];
 
+        console.log(id, name)
+
         if (!_.isNaN(id) && name !== "") {
           await this.redisClient.hset("skillDefines", name, id);
         }
@@ -116,6 +120,72 @@ export class SkillResources {
     } catch (err) {
       this.logger.error("Error parsing skill file:", err);
     }
+  }
+
+  public async loadSkillAddProp(): Promise<void> {
+    const absolutePath = path.resolve(ResourcePaths.skillsProp);
+    if (!fs.existsSync(absolutePath)) {
+      this.logger.warn(
+        `Unable to load skill add. Reason: cannot find '${absolutePath}' file.`
+      );
+    }
+    if (!(await this.redisClient.exists("skillDefines"))) {
+      this.logger.warn(`Unable to load skill add. Reason: skill defines is empty`);
+    }
+
+    const data = fs.readFileSync(absolutePath, "utf8");
+
+    const lines = data.split("\n");
+    _.forEach(lines, async (line) => {
+      const parts = line.trim().split(",");
+
+      const id = await this.redisClient.hget("skillDefines", parts[1]);
+
+      if (!_.isNil(id)) {
+        const dwName =
+          (await this.redisClient.hget("skillNames", cleanString(parts[1]))) ||
+          "";;
+
+        const skillLevel: SkillLevelProperties = {
+          id: tryParseInt(id),
+          dwID: cleanString(parts[0]),
+          dwName,
+          dwNameId: cleanString(parts[1]),
+          dwSkillLvl: tryParseInt(parts[2]),
+          dwAbilityMin: tryParseInt(parts[3]),
+          dwAtkAbilityMax: tryParseInt(parts[4]),
+          dwAbilityMinPVP: tryParseInt(parts[5]),
+          dwAbilityMaxPVP: tryParseInt(parts[6]),
+          dwAttackSpeed: tryParseInt(parts[7]),
+          dwDmgShift: cleanString(parts[8]) === "TRUE",
+          nProbability: tryParseInt(parts[9]),
+          nProbabilityPVP: tryParseInt(parts[10]),
+          dwTaunt: tryParseInt(parts[11]),
+          dwDestParam1: cleanString(parts[12]),
+          nAdjParamVal1: tryParseInt(parts[14]),
+          dwDestParam2: cleanString(parts[13]),
+          nAdjParamVal2: tryParseInt(parts[15]),
+          dwReqMp: tryParseInt(parts[24]),
+          dwRepFp: tryParseInt(parts[25]),
+          dwCooldown: tryParseInt(parts[26]),
+          dwCastingTime: tryParseInt(parts[27]),
+          dwSkillRange: tryParseInt(parts[28]),
+          dwCircleTime: tryParseInt(parts[29]),
+          dwPainTime: tryParseInt(parts[30]),
+          dwSkillTime: tryParseInt(parts[31]),
+          dwSkillCount: tryParseInt(parts[33]),
+          dwSkillExp: tryParseInt(parts[35]),
+          dwExp: tryParseInt(parts[36]),
+          dwComboSkillTime: tryParseInt(parts[38])
+        }
+
+        if (skillLevel.id) {
+          this.redisClient.hmset(`skillLevel:${skillLevel.id}`, skillLevel);
+        }
+      }
+    });
+
+    this.logger.main(`${lines.length} skills loaded.`);
   }
 
   public async loadSkillsProp(): Promise<void> {
@@ -155,35 +225,36 @@ export class SkillResources {
           dwID: skills[1],
           szName,
           szNameId: cleanString(skills[2]),
-          dwItemKind1: "",
-          dwItemKind2: "",
-          dwItemKind3: "",
-          dwLinkKind: "",
-          dwLinkKindBullet: "",
-          eItemType: "",
-          tmContinuousPain: 0,
-          dwReqDisLV: 0,
-          dwReSkill1: 0,
-          dwReSkillLevel1: 0,
-          dwReSkill2: 0,
-          dwReSkillLevel2: 0,
-          dwSkillReady: 0,
-          dwSfxObj: "",
-          dwSfxObj2: "",
-          dwSfxObj3: "",
-          dwSfxObj4: "",
-          dwSfxObj5: "",
-          ExpertMax: 0,
-          dwSkillType: "",
-          dwSpellRegion: "",
-          dwSpellType: "",
-          dwExeTarget: "",
-          dwReferStat1: "",
-          dwReferStat2: "",
-          dwReferTarget1: "",
-          dwReferValue1: 0,
-          dwReferTarget2: "",
-          dwReferValue2: 0
+          dwItemKind1: cleanString(skills[5]),
+          dwItemKind2: cleanString(skills[6]),
+          dwItemKind3: cleanString(skills[7]),
+          dwLinkKind: cleanString(skills[29]),
+          dwLinkKindBullet: cleanString(skills[28]),
+          eItemType: cleanString(skills[32]),
+          tmContinuousPain: tryParseInt(skills[44]),
+          dwReqDisLV: tryParseInt(skills[70]),
+          dwReSkill1: tryParseInt(skills[71]),
+          dwReSkillLevel1: tryParseInt(skills[72]),
+          dwReSkill2: tryParseInt(skills[73]),
+          dwReSkillLevel2: tryParseInt(skills[74]),
+          dwSkillReady: tryParseInt(skills[75]),
+          dwSfxObj: cleanString(skills[79]),
+          dwSfxObj2: cleanString(skills[80]),
+          dwSfxObj3: cleanString(skills[81]),
+          dwSfxObj4: cleanString(skills[82]),
+          dwSfxObj5: cleanString(skills[83]),
+          ExpertMax: tryParseInt(skills[105]),
+          dwSkillType: cleanString(skills[97]),
+          dwSpellRegion: cleanString(skills[89]),
+          dwSpellType: cleanString(skills[90]),
+          dwExeTarget: cleanString(skills[87]),
+          dwReferStat1: cleanString(skills[91]),
+          dwReferStat2: cleanString(skills[92]),
+          dwReferTarget1: cleanString(skills[93]),
+          dwReferValue1: tryParseInt(skills[95]),
+          dwReferTarget2: cleanString(skills[94]),
+          dwReferValue2: tryParseInt(skills[96]),
+          szComment,
         };
 
         if (skill.id) {
@@ -198,40 +269,41 @@ export class SkillResources {
   parseSkillProperties(data: { [key: string]: string }): SkillProperties {
     // TODO skill parse properties
     return {
-      id: parseInt(data["id"]),
-      ver: parseInt(data["ver6"]),
+      id: tryParseInt(data["id"]),
+      ver: tryParseInt(data["ver6"]),
       dwID: data["dwID"],
       szName: data["szName"],
       szNameId: data["szNameId"],
-      dwItemKind1: "",
-      dwItemKind2: "",
-      dwItemKind3: "",
-      dwLinkKind: "",
-      dwLinkKindBullet: "",
-      eItemType: "",
-      tmContinuousPain: 0,
-      dwReqDisLV: 0,
-      dwReSkill1: 0,
-      dwReSkillLevel1: 0,
-      dwReSkill2: 0,
-      dwReSkillLevel2: 0,
-      dwSkillReady: 0,
-      dwSfxObj: "",
-      dwSfxObj2: "",
-      dwSfxObj3: "",
-      dwSfxObj4: "",
-      dwSfxObj5: "",
-      ExpertMax: 0,
-      dwSkillType: "",
-      dwSpellRegion: "",
-      dwSpellType: "",
-      dwExeTarget: "",
-      dwReferStat1: "",
-      dwReferStat2: "",
-      dwReferTarget1: "",
-      dwReferValue1: 0,
-      dwReferTarget2: "",
-      dwReferValue2: 0
+      dwItemKind1: data["dwItemKind1"],
+      dwItemKind2: data["dwItemKind2"],
+      dwItemKind3: data["dwItemKind3"],
+      dwLinkKind: data["dwLinkKind"],
+      dwLinkKindBullet: data["dwLinkKindBullet"],
+      eItemType: data["eItemType"],
+      tmContinuousPain: tryParseInt(data["tmContinuousPain"]),
+      dwReqDisLV: tryParseInt(data["dwReqDisLV"]),
+      dwReSkill1: tryParseInt(data["dwReSkill1"]),
+      dwReSkillLevel1: tryParseInt(data["dwReSkillLevel1"]),
+      dwReSkill2: tryParseInt(data["dwReSkill2"]),
+      dwReSkillLevel2: tryParseInt(data["dwReSkillLevel2"]),
+      dwSkillReady: tryParseInt(data["dwSkillReady"]),
+      dwSfxObj: data["dwSfxObj"],
+      dwSfxObj2: data["dwSfxObj2"],
+      dwSfxObj3: data["dwSfxObj3"],
+      dwSfxObj4: data["dwSfxObj4"],
+      dwSfxObj5: data["dwSfxObj5"],
+      ExpertMax: tryParseInt(data["ExpertMax"]),
+      dwSkillType: data["dwSkillType"],
+      dwSpellRegion: data["dwSpellRegion"],
+      dwSpellType: data["dwSpellType"],
+      dwExeTarget: data["dwExeTarget"],
+      dwReferStat1: data["dwReferStat1"],
+      dwReferStat2: data["dwReferStat2"],
+      dwReferTarget1: data["dwReferTarget1"],
+      dwReferValue1: tryParseInt(data["dwReferValue1"]),
+      dwReferTarget2: data["dwReferTarget2"],
+      dwReferValue2: tryParseInt(data["dwReferValue2"]),
+      szComment: data["szComment"],
     };
   }
 

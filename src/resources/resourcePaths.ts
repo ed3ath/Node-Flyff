@@ -26,5 +26,6 @@ export const ResourcePaths = {
   defineObject: path.join(resPath, "data", "defineObj.h"),
   defineSkill: path.join(resPath, "data", "defineSkill.h"),
   skillsProp: path.join(resPath, "data", "propSkill.txt"),
+  skillsPropAdd: path.join(resPath, "data", "propSkillAdd.csv"),
   skillsText: path.join(resPath, "data", "propSkill.txt.txt"),
 };

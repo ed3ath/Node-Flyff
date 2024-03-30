@@ -11,6 +11,7 @@ import { JobResources } from "../resources/jobResource";
 import { ExpTableResources } from "../resources/expTableResource";
 import { DeathPenaltyResources } from "../resources/deathPenaltyResource";
 import { MapResources } from "../resources/mapResources";
+import { SkillResources } from "../resources/skillResources";
 
 export class ResourceBuilder {
   private logger: Logger;
@@ -23,6 +24,7 @@ export class ResourceBuilder {
   expTableResources: ExpTableResources;
   deathPenaltyResource: DeathPenaltyResources;
   mapResource: MapResources;
+  skillResource: SkillResources
 
   constructor() {
     this.logger = new Logger(BuilderType.RESOURCE_BUILDER);
@@ -45,6 +47,7 @@ export class ResourceBuilder {
       this.expTableResources = new ExpTableResources(this.options);
       this.deathPenaltyResource = new DeathPenaltyResources(this.options);
       this.mapResource = new MapResources(this.options);
+      this.skillResource = new SkillResources(this.options);
 
       if (this.load) {
         await this.itemResources.loadDefines();
@@ -72,8 +75,12 @@ export class ResourceBuilder {
         await this.mapResource.loadDefines();
         await this.mapResource.loadWorldPaths();
         await this.mapResource.loadWorldProp();
+
+        await this.skillResource.loadDefines();
+        await this.skillResource.loadSkillsPropStrings();
+        await this.skillResource.loadSkillsProp();
       }
-      console.log(await this.itemResources.get("II_WEA_SWO_ANCIENT"));
+      // console.log(await this.skillResource.get("SI_VAG_ONE_OVERCUTTER"));
     }
 
     return {

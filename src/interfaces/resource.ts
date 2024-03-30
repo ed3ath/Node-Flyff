@@ -276,6 +276,7 @@ export interface SkillLevelProperties {
   id: number;
   dwID: string;
   dwName: string;
+  dwNameId: string;
   dwSkillLvl: number;
   dwAbilityMin: number;
   dwAtkAbilityMax: number;
@@ -341,4 +342,5 @@ export interface SkillProperties {
   dwReferValue2: number;
   dwHanded?: string;
   skillLevels?: Record<number, SkillLevelProperties>;
+  szComment: string;
 }
