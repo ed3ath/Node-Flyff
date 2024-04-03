@@ -38,6 +38,27 @@ export class SkillResources {
     return null;
   }
 
+  public async getLevel(
+    skillLevelIdentifier: string | number
+  ): Promise<SkillLevelProperties | null> {
+    const skillLevelId =
+      typeof skillLevelIdentifier === "number"
+        ? skillLevelIdentifier
+        : await this.redisClient.hget("skillDefines", skillLevelIdentifier);
+    if (!_.isUndefined(skillLevelId)) {
+      return new Promise((resolve, reject) => {
+        this.redisClient.hgetall(`skillLevel:${skillLevelId}`, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data ? this.parseSkillLevelProperties(data) : null);
+          }
+        });
+      });
+    }
+    return null;
+  }
+
   public where(
     predicate: (skill: SkillProperties) => boolean
   ): SkillProperties[] {
@@ -70,6 +91,38 @@ export class SkillResources {
     return skills;
   }
 
+  public whereLevel(
+    predicate: (skill: SkillLevelProperties) => boolean
+  ): SkillLevelProperties[] {
+    const skills: SkillLevelProperties[] = [];
+    this.redisClient.keys("skillLevel:*", (err, keys) => {
+      if (err) {
+        this.logger.error("Error retrieving keys from Redis:", err);
+      } else {
+        if (!_.isUndefined(keys)) {
+          _.forEach(keys, (key) => {
+            this.redisClient.hgetall(key, (err, data) => {
+              if (err) {
+                this.logger.error(
+                  "Error retrieving skill data from Redis:",
+                  err
+                );
+              } else {
+                if (data) {
+                  const skill = this.parseSkillLevelProperties(data);
+                  if (predicate(skill)) {
+                    skills.push(skill);
+                  }
+                }
+              }
+            });
+          });
+        }
+      }
+    });
+    return skills;
+  }
+
   public async loadDefines(): Promise<void> {
     const absolutePath = path.resolve(ResourcePaths.defineSkill);
     if (!fs.existsSync(absolutePath)) {
@@ -87,7 +140,7 @@ export class SkillResources {
         const id = tryParseInt(parts[2]);
         const name = parts[1];
 
-        console.log(id, name)
+        console.log(id, name);
 
         if (!_.isNaN(id) && name !== "") {
           await this.redisClient.hset("skillDefines", name, id);
@@ -130,7 +183,9 @@ export class SkillResources {
       );
     }
     if (!(await this.redisClient.exists("skillDefines"))) {
-      this.logger.warn(`Unable to load skill add. Reason: skill defines is empty`);
+      this.logger.warn(
+        `Unable to load skill add. Reason: skill defines is empty`
+      );
     }
 
     const data = fs.readFileSync(absolutePath, "utf8");
@@ -144,7 +199,7 @@ export class SkillResources {
       if (!_.isNil(id)) {
         const dwName =
           (await this.redisClient.hget("skillNames", cleanString(parts[1]))) ||
-          "";;
+          "";
 
         const skillLevel: SkillLevelProperties = {
           id: tryParseInt(id),
@@ -176,8 +231,8 @@ export class SkillResources {
           dwSkillCount: tryParseInt(parts[33]),
           dwSkillExp: tryParseInt(parts[35]),
           dwExp: tryParseInt(parts[36]),
-          dwComboSkillTime: tryParseInt(parts[38])
-        }
+          dwComboSkillTime: tryParseInt(parts[38]),
+        };
 
         if (skillLevel.id) {
           this.redisClient.hmset(`skillLevel:${skillLevel.id}`, skillLevel);
@@ -218,6 +273,7 @@ export class SkillResources {
             "skillDescriptions",
             cleanString(skills[123])
           )) || "";
+        const skillLevels = this.whereLevel((skill) => skill.dwName === szName);
         // TODO skill parse properties
         const skill: SkillProperties = {
           id: tryParseInt(id),
@@ -255,7 +311,16 @@ export class SkillResources {
           dwReferTarget2: cleanString(skills[94]),
           dwReferValue2: tryParseInt(skills[96]),
           szComment,
+          skillLevels,
         };
+
+        if (skill.skillLevels) {
+          for (const skillLevel of Object.values(skill.skillLevels)) {
+            if (skillLevel.dwCooldown <= 0) {
+              skillLevel.dwCooldown = skill.dwSkillReady;
+            }
+          }
+        }
 
         if (skill.id) {
           this.redisClient.hmset(`skill:${skill.id}`, skill);
@@ -304,6 +369,43 @@ export class SkillResources {
       dwReferTarget2: data["dwReferTarget2"],
       dwReferValue2: tryParseInt(data["dwReferValue2"]),
       szComment: data["szComment"],
+    };
+  }
+
+  parseSkillLevelProperties(data: {
+    [key: string]: string;
+  }): SkillLevelProperties {
+    return {
+      id: tryParseInt(data["id"]),
+      dwID: data["dwID"],
+      dwName: data["dwName"],
+      dwNameId: data["dwNameId"],
+      dwSkillLvl: tryParseInt(data["dwSkillLvl"]),
+      dwAbilityMin: tryParseInt(data["dwAbilityMin"]),
+      dwAtkAbilityMax: tryParseInt(data["dwAtkAbilityMax"]),
+      dwAbilityMinPVP: tryParseInt(data["dwAbilityMinPVP"]),
+      dwAbilityMaxPVP: tryParseInt(data["dwAbilityMaxPVP"]),
+      dwAttackSpeed: tryParseInt(data["dwAttackSpeed"]),
+      dwDmgShift: data["dwDmgShift"] === "true",
+      nProbability: tryParseInt(data["nProbability"]),
+      nProbabilityPVP: tryParseInt(data["nProbabilityPVP"]),
+      dwTaunt: tryParseInt(data["dwTaunt"]),
+      dwDestParam1: data["dwDestParam1"],
+      nAdjParamVal1: tryParseInt(data["nAdjParamVal1"]),
+      dwDestParam2: data["dwDestParam2"],
+      nAdjParamVal2: tryParseInt(data["nAdjParamVal2"]),
+      dwReqMp: tryParseInt(data["dwReqMp"]),
+      dwRepFp: tryParseInt(data["dwRepFp"]),
+      dwCooldown: tryParseInt(data["dwCooldown"]),
+      dwCastingTime: tryParseInt(data["dwCastingTime"]),
+      dwSkillRange: tryParseInt(data["dwSkillRange"]),
+      dwCircleTime: tryParseInt(data["dwCircleTime"]),
+      dwPainTime: tryParseInt(data["dwPainTime"]),
+      dwSkillTime: tryParseInt(data["dwSkillTime"]),
+      dwSkillCount: tryParseInt(data["dwSkillCount"]),
+      dwSkillExp: tryParseInt(data["dwSkillExp"]),
+      dwExp: tryParseInt(data["dwExp"]),
+      dwComboSkillTime: tryParseInt(data["dwComboSkillTime"]),
     };
   }
 
