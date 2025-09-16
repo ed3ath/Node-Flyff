@@ -1,7 +1,9 @@
 import path from "path";
 
 const resPath = path.join(__dirname, "res");
+
 export const ResourcePaths = {
+  resPath,
   itemsProp: path.join(resPath, "data", "propItem.txt"),
   itemsText: path.join(resPath, "data", "propItem.txt.txt"),
   moversProp: path.join(resPath, "data", "propMover.txt"),

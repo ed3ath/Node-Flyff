@@ -11,6 +11,9 @@ redis:
 settings:
   name: "Node-Flyff"
   login-protect: true
+  world-server:
+    host: "127.0.0.1"
+    port: 5400
   maps:
     - WI_WORLD_MADRIGAL
     - WI_DUNGEON_FL_MAS

@@ -58,11 +58,7 @@ export class ResourceBuilder {
         await this.monsterResources.loadMonstersPropStrings();
         await this.monsterResources.loadMonstersProp();
 
-        await this.npcResources.loadNpcDialogs();
-        await this.npcResources.loadNpcShops();
-        await this.npcResources.loadNpcPropStrings();
-        await this.npcResources.loadNpcSchoolPropStrings();
-        await this.npcResources.loadNpcProp();
+        await this.npcResources.load();
 
         await this.jobResources.loadDefines();
         await this.jobResources.loadJobsProp();
@@ -74,7 +70,7 @@ export class ResourceBuilder {
 
         await this.mapResource.loadDefines();
         await this.mapResource.loadWorldPaths();
-        await this.mapResource.loadWorldProp();
+        await this.mapResource.load();
 
         await this.skillResource.loadDefines();
         await this.skillResource.loadSkillsPropStrings();

@@ -10,7 +10,7 @@ Node-FlyFF is an open-source project aiming to create a Fly For Fun (FlyFF) emul
 
 ## Technical Information
 - Language: TypeScript (Node.js)
-- Node.js Version: 18 or higher
+- Node.js Version: 22 or higher
 - Application Type: Console
 - Database Type: SQLite, MySQL (SQLite for now)
 - Configuration Files Type: TBA (YAML or JSON)
@@ -19,7 +19,7 @@ Node-FlyFF is an open-source project aiming to create a Fly For Fun (FlyFF) emul
 ## Pre-requisite
 - Redis-server (Caching)
 - WSL (for windows development)
-- Node.js 18
+- Node.js 22
 
 ## Getting Started
 Please refer to our contributing guidelines if you're interested in contributing to the project.

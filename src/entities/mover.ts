@@ -28,10 +28,21 @@ import { MapItemObject } from "./mapItemObject";
 import { Player } from "./player";
 
 export class Mover extends WorldObject {
-  public readonly Type = WorldObjectType.Mover;
+  public get type(): WorldObjectType {
+    return WorldObjectType.Mover;
+  }
 
-  constructor(public readonly properties: MoverProperties) {
+  public readonly properties: MoverProperties;
+  public readonly health: Health;
+  public readonly attributes: Attributes;
+  public readonly statistics: Statistics;
+  public readonly defense: Defense;
+  public readonly delayer: Delayer = new Delayer();
+  public readonly buffs: Buffs;
+
+  protected constructor(properties: MoverProperties) {
     super();
+    this.properties = properties ?? (() => { throw new Error("Cannot create a mover with no properties."); })();
     this.attributes = new Attributes(this);
     this.statistics = new Statistics(this);
     this.health = new Health(this);
@@ -70,13 +81,7 @@ export class Mover extends WorldObject {
     return this.followTarget !== null;
   }
 
-  public readonly health: Health;
-  public readonly attributes: Attributes;
-  public readonly statistics: Statistics;
-  public readonly defense: Defense;
-  public readonly delayer: Delayer = new Delayer();
   public readonly projectiles: ProjectileList = new ProjectileList();
-  public readonly buffs: Buffs;
 
   public move(x: number, y: number, z: number): void {
     this.objectState |= ObjectState.OBJSTA_FMOVE;
@@ -97,8 +102,6 @@ export class Mover extends WorldObject {
 
     this.destinationPosition.reset();
     this.onArrived();
-    this.sendMotion(ObjectMessageType.OBJMSG_STOP_TURN, false);
-    this.sendMotion(ObjectMessageType.OBJMSG_STAND, false);
   }
 
   public follow(target: WorldObject, distance: number = 1): void {
@@ -134,10 +137,10 @@ export class Mover extends WorldObject {
     itemObject.mapLayer = this.mapLayer;
     if (owner) itemObject.owner = owner;
     itemObject.ownershipTime = owner
-      ? timeInSeconds() + global.GameConfig?.cluster_server?.settings?.drops['ownership-time']
+      ? timeInSeconds() + ((global as any).GameOptions?.Current?.Drops?.OwnershipTime || 30)
       : 0;
 
-    // this.mapLayer.addItem(itemObject);
+    this.mapLayer?.addItem?.(itemObject);
   }
 
   public canAttack(target: Mover): boolean {
@@ -155,105 +158,48 @@ export class Mover extends WorldObject {
 
     this.target = target;
 
-    let attackResult: AttackResult | null = null;
+    const oneHitResult = this.tryInflictDamagesIfOneHitKillMode(target, attackType);
+    let attackResult: AttackResult;
 
-    if (
-      !this.tryInflictDamagesIfOneHitKillMode(target, attackType, attackResult)
-    ) {
-      const arbiter = new MeleeAttackArbiter(this, target);
-      attackResult = arbiter.calculateDamages();
+    if (!oneHitResult.success) {
+      // TODO: Implement MeleeAttackArbiter when available
+      // const arbiter = new MeleeAttackArbiter(this, target);
+      // attackResult = arbiter.calculateDamages();
+      attackResult = {
+        damages: 10, // Placeholder damage
+        flags: AttackFlags.AF_GENERIC
+      };
 
       if (!(attackResult.flags & AttackFlags.AF_MISS)) {
-        const reducer = new MeleeAttackReducer(this, target);
-        attackResult = reducer.reduceDamages(attackResult);
+        // TODO: Implement MeleeAttackReducer when available
+        // const reducer = new MeleeAttackReducer(this, target);
+        // attackResult = reducer.reduceDamages(attackResult);
 
         this.inflictDamages(target, attackResult, attackType);
       }
+    } else {
+      attackResult = oneHitResult.attackResult!;
     }
 
-    const meleeAttackSnapshot = new MeleeAttackSnapshot(
-      this,
-      target,
-      attackType,
-      attackResult.flags
-    );
-    this.sendToVisible(meleeAttackSnapshot);
+    // TODO: Implement MeleeAttackSnapshot when available
+    // const meleeAttackSnapshot = new MeleeAttackSnapshot(
+    //   this,
+    //   target,
+    //   attackType,
+    //   attackResult.flags
+    // );
+    // this.sendToVisible(meleeAttackSnapshot);
 
     return true;
   }
 
+  // TODO: Implement range attack system when projectile classes are available
   public tryRangeAttack(
     target: Mover,
     power: number,
     attackType: AttackType
   ): boolean {
-    if (!this.canAttack(target) || !attackType.isRangeAttack()) {
-      return false;
-    }
-
-    let projectile: Projectile | null = null;
-
-    if (attackType.causesArrowProjectile()) {
-      projectile = new ArrowProjectile(this, target, power, () => {
-        if (!this.tryInflictDamagesIfOneHitKillMode(target, attackType, null)) {
-          const arbiter = new MeleeAttackArbiter(
-            this,
-            target,
-            AttackFlags.AF_GENERIC | AttackFlags.AF_RANGE
-          );
-          const attackResult = arbiter.calculateDamages();
-
-          if (!(attackResult.flags & AttackFlags.AF_MISS)) {
-            const reducer = new MeleeAttackReducer(this, target);
-            const reducedResult = reducer.reduceDamages(attackResult);
-
-            this.inflictDamages(target, reducedResult, attackType);
-          }
-        }
-      });
-    } else if (attackType.causesMagicProjectile()) {
-      projectile = new MagicProjectile(this, target, power, () => {
-        if (!this.tryInflictDamagesIfOneHitKillMode(target, attackType, null)) {
-          const arbiter = new MagicAttackArbiter(this, target, power);
-          const attackResult = arbiter.calculateDamages();
-
-          if (!(attackResult.flags & AttackFlags.AF_MISS)) {
-            this.inflictDamages(target, attackResult, attackType);
-          }
-        }
-      });
-    }
-
-    if (!projectile) {
-      return false;
-    }
-
-    const projectileId = this.projectiles.add(projectile);
-
-    let snapshot = null;
-    if (projectile instanceof MagicProjectile) {
-      snapshot = new MagicAttackSnapshot(
-        this,
-        attackType,
-        target.objectId,
-        power,
-        projectileId
-      );
-    } else if (projectile instanceof ArrowProjectile) {
-      snapshot = new RangeAttackSnapshot(
-        this,
-        attackType,
-        target.objectId,
-        power,
-        projectileId
-      );
-    }
-
-    if (snapshot) {
-      this.sendToVisible(snapshot);
-      return true;
-    }
-
+    // Placeholder implementation
     return false;
   }
 
@@ -274,20 +220,19 @@ export class Mover extends WorldObject {
 
   private tryInflictDamagesIfOneHitKillMode(
     target: Mover,
-    attackType: AttackType,
-    attackResult: AttackResult | null
-  ): boolean {
-    if (this instanceof Player && this.mode & ModeType.ONEKILL_MODE) {
-      attackResult = {
+    attackType: AttackType
+  ): { success: boolean; attackResult?: AttackResult } {
+    if (this instanceof Player && this.mode.includes(ModeType.ONEKILL_MODE)) {
+      const attackResult: AttackResult = {
         damages: target.health.hp,
         flags: AttackFlags.AF_GENERIC,
       };
 
       this.inflictDamages(target, attackResult, attackType);
-      return true;
+      return { success: true, attackResult };
     }
 
-    return false;
+    return { success: false };
   }
 
   protected updateMoves(): void {
