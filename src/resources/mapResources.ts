@@ -25,103 +25,165 @@ import { MapProperties } from "../abstract/mapProperties";
 import { tryParseInt } from "../helpers/parsing";
 
 export class MapResources {
-  logger: Logger;
-  redisClient: Redis;
-  worldPaths: WorldPath[] = [];
-  maps: MapProperties[] = [];
+  private logger: Logger;
+  private readonly redisClient: Redis;
+  private readonly defines: Map<string, number> = new Map();
+  private readonly mapsById: Map<number, MapProperties> = new Map();
+  private readonly mapsByIdentifier: Map<string, MapProperties> = new Map();
+  private worldPaths: Map<string, string> = new Map();
+
+  public get maps(): MapProperties[] {
+    return Array.from(this.mapsById.values());
+  }
 
   constructor(options: RedisOptions) {
-    this.logger = new Logger("World Resources");
+    this.logger = new Logger("Map Resources");
     this.redisClient = new Redis(options);
   }
 
-  public async loadDefines(): Promise<void> {
-    const absolutePath = path.resolve(ResourcePaths.defineWorld);
-    if (!fs.existsSync(absolutePath)) {
-      this.logger.error(
-        `Unable to load world defines. Reason: cannot find '${absolutePath}' file.`
-      );
+  public async get(id: number): Promise<MapProperties | null> {
+    // Try cache first
+    const cached = await new Promise<any>((resolve) => this.redisClient.hgetall(`map:${id}`, (err, data) => resolve(data)));
+    if (cached && Object.keys(cached).length > 0) {
+      return this.parseMapProperties(cached);
     }
 
-    const data = fs.readFileSync(absolutePath, "utf8");
-
-    const lines = data.split("\n");
-    _.forEach(lines, async (line) => {
-      if (_.trim(line).startsWith("#define")) {
-        const parts = _.trim(line).split(/\s+/);
-        const id = tryParseInt(parts[2]);
-        const name = parts[1];
-
-        if (!_.isNaN(id) && name !== "") {
-          await this.redisClient.hset("worldDefines", name, id);
-        }
-      }
-    });
+    // Fallback to in-memory
+    return this.mapsById.get(id) || null;
   }
 
-  public async loadWorldPaths(): Promise<void> {
+  public async getByIdentifier(identifier: string): Promise<MapProperties | null> {
+    // Try cache first
+    const cached = await new Promise<any>((resolve) => this.redisClient.hgetall(`mapById:${identifier}`, (err, data) => resolve(data)));
+    if (cached && Object.keys(cached).length > 0) {
+      return this.parseMapProperties(cached);
+    }
+
+    // Fallback to in-memory
+    return this.mapsByIdentifier.get(identifier) || null;
+  }
+
+  public async load(): Promise<void> {
+    await this.loadDefines();
+    await this.loadWorldPaths();
+    // Load all maps if no identifiers provided
+    this.loadMaps();
+  }
+
+  public loadMaps(mapIdentifiers?: string[]): void {
+    const watch = { start: Date.now() };
+
+    if (mapIdentifiers && mapIdentifiers.length > 0) {
+      const worldNames = this.loadWorldScriptFile();
+
+      for (const mapIdentifier of mapIdentifiers) {
+        if (this.mapsByIdentifier.has(mapIdentifier)) {
+          this.logger.warn(`Map '${mapIdentifier}' has already been loaded.`);
+          continue;
+        }
+
+        if (!worldNames.has(mapIdentifier)) {
+          this.logger.warn(`Failed to load map '${mapIdentifier}'. Not declared in world script.`);
+          continue;
+        }
+
+        const worldName = worldNames.get(mapIdentifier)!;
+
+        if (!this.defines.has(mapIdentifier)) {
+          this.logger.warn(`Failed to load map '${mapIdentifier}'. ID not defined.`);
+          continue;
+        }
+
+        const mapId = this.defines.get(mapIdentifier)!;
+
+        const worldInformation = this.loadWorldInformation(worldName);
+
+        const bounds = new Rectangle(0, 0,
+          worldInformation.width * worldInformation.mpu * 128,
+          worldInformation.length * worldInformation.mpu * 128);
+
+        const map = new MapProperties(
+          mapId,
+          worldName,
+          worldInformation.width,
+          worldInformation.length,
+          this.loadHeights(worldName, worldInformation.width, worldInformation.length),
+          worldInformation.revivalMapId,
+          worldInformation.mpu,
+          bounds,
+          this.loadRegions(worldName, worldInformation.revivalMapId),
+          this.loadObjects(worldName)
+        );
+
+        this.mapsById.set(mapId, map);
+        this.mapsByIdentifier.set(mapIdentifier, map);
+      }
+    }
+
+    const elapsed = Date.now() - watch.start;
+    this.logger.info(`${this.mapsById.size} maps loaded in ${elapsed}ms.`);
+  }
+
+  private loadWorldScriptFile(): Map<string, string> {
     const absolutePath = path.resolve(ResourcePaths.worldPath);
     if (!fs.existsSync(absolutePath)) {
-      this.logger.error(
-        `Unable to load worlds. Reason: cannot find '${absolutePath}' file.`
-      );
+      this.logger.warn(`World script not found: ${absolutePath}`);
+      return new Map();
     }
 
     const text = fs.readFileSync(absolutePath, "utf-8");
-    this.worldPaths = yaml.load(text) as WorldPath[];
+    const yamlData = yaml.load(text) as any[];
+
+    const worlds = new Map<string, string>();
+    for (const world of yamlData) {
+      if (world.id && world.name) {
+        worlds.set(world.id, world.name);
+      }
+    }
+    return worlds;
   }
 
-  public async loadWorldData(path: string) {
-    const worldFile = new WldFile(path);
-    return worldFile.worldData;
+  private loadWorldInformation(worldName: string): { width: number, length: number, mpu: number, revivalMapId: number } {
+    const wldPath = path.join(ResourcePaths.world, worldName, `${worldName}.wld`);
+    if (!fs.existsSync(wldPath)) {
+      this.logger.warn(`World file not found: ${wldPath}`);
+      return { width: 0, length: 0, mpu: 1, revivalMapId: 0 };
+    }
+
+    const worldFile = new WldFile(wldPath);
+    return worldFile.worldData || { width: 0, length: 0, mpu: 1, revivalMapId: 0 };
   }
 
-  public async loadRegions(
-    worldName: string,
-    revivalMapId: number
-  ): Promise<MapRegionProperties[]> {
-    const absolutePath = path.resolve(ResourcePaths.world, worldName);
-    if (!fs.existsSync(absolutePath)) {
-      this.logger.warn(
-        `Unable to load regions. Reason: cannot find '${absolutePath}' folder.`
-      );
+  private loadRegions(worldName: string, revivalMapId: number): MapRegionProperties[] {
+    const rgnPath = path.join(ResourcePaths.world, worldName, `${worldName}.rgn`);
+    if (!fs.existsSync(rgnPath)) {
+      this.logger.warn(`Regions file not found: ${rgnPath}`);
       return [];
     }
-    const worldPath = path.join(absolutePath, `${worldName}.rgn`);
-    if (!fs.existsSync(worldPath)) {
-      this.logger.warn(
-        `Unable to load regions. Reason: cannot find ${worldPath}`
-      );
-      return [];
-    }
+
     const regions: MapRegionProperties[] = [];
-    const rgnFile = new RgnFile(worldPath);
-    const respawnerRgn: MapRespawnRegionProperties[] = rgnFile
-      .getElements<RgnRespawn7>()
-      .map(
-        (region) =>
-          new MapRespawnRegionProperties(
-            region.left,
-            region.top,
-            region.width,
-            region.left,
-            region.time,
-            region.position.y,
-            region.type,
-            region.model,
-            region.count
-          )
-      );
+    const rgnFile = new RgnFile(rgnPath);
 
-    regions.push(...respawnerRgn);
+    // Respawn regions
+    const respawners = rgnFile.getElements<RgnRespawn7>().map(region => new MapRespawnRegionProperties(
+      region.left,
+      region.top,
+      region.width,
+      region.length,
+      region.time,
+      region.position.y,
+      region.type,
+      region.model,
+      region.count
+    ));
+    regions.push(...respawners);
 
-    const mapRegions: (
-      | MapRevivalRegionProperties
-      | MapTriggerRegionProperties
-      | null
-    )[] = rgnFile.getElements<RgnRegion3>().map((region) => {
+    // Other regions
+    const region3s = rgnFile.getElements<RgnRegion3>();
+    for (const region of region3s) {
+      let mapRegion: MapRegionProperties | null = null;
       if (region.index === RegionInfoType.Revival) {
-        return new MapRevivalRegionProperties(
+        mapRegion = new MapRevivalRegionProperties(
           region.left,
           region.top,
           region.width,
@@ -129,12 +191,11 @@ export class MapResources {
           revivalMapId,
           region.key,
           region.chaoKey,
-          region.targetKey,
+          false, // targetRevivalKey
           region.position
         );
-      }
-      if (region.index === RegionInfoType.Trigger) {
-        return new MapTriggerRegionProperties(
+      } else if (region.index === RegionInfoType.Trigger) {
+        mapRegion = new MapTriggerRegionProperties(
           region.left,
           region.top,
           region.width,
@@ -143,103 +204,114 @@ export class MapResources {
           region.teleportPosition
         );
       }
-      return null;
-    });
-    const filteredMapRegions = mapRegions.filter(
-      (i) => !!i
-    ) as MapRegionProperties[];
-
-    if (filteredMapRegions.length) regions.push(...filteredMapRegions);
+      if (mapRegion) regions.push(mapRegion);
+    }
 
     return regions;
   }
 
-  public async loadWorldObjects(
-    worldName: string
-  ): Promise<MapObjectProperties[]> {
-    const absolutePath = path.resolve(ResourcePaths.world, worldName);
-    if (!fs.existsSync(absolutePath)) {
-      this.logger.warn(
-        `Unable to load regions. Reason: cannot find '${absolutePath}' folder.`
-      );
-      return [];
-    }
-    const worldPath = path.join(absolutePath, `${worldName}.dyo`);
-    if (!fs.existsSync(worldPath)) {
-      this.logger.warn(
-        `Unable to load regions. Reason: cannot find ${worldPath}`
-      );
+  private loadObjects(worldName: string): MapObjectProperties[] {
+    const dyoPath = path.join(ResourcePaths.world, worldName, `${worldName}.dyo`);
+    if (!fs.existsSync(dyoPath)) {
+      this.logger.warn(`Objects file not found: ${dyoPath}`);
       return [];
     }
 
-    const elements = new DyoFile(
-      path.join(ResourcePaths.world, worldName, `${worldName}.dyo`)
-    );
-    return elements
-      .getElements<DyoNpcElement>()
-      .filter((i) => !!i)
-      .map(
-        (element) =>
-          new MapObjectProperties(
-            element.index,
-            element.position,
-            element.angle,
-            element.characterKey
-          )
-      );
+    const dyoFile = new DyoFile(dyoPath);
+    return dyoFile.getElements<DyoNpcElement>()
+      .filter(element => element !== null)
+      .map(element => new MapObjectProperties(
+        element.index,
+        element.position.clone(),
+        element.angle,
+        element.characterKey
+      ));
   }
 
-  public async loadWorldProp(): Promise<void> {
-    const absolutePath = path.resolve(ResourcePaths.world);
-    if (!fs.existsSync(absolutePath)) {
-      this.logger.warn(
-        `Unable to load world. Reason: cannot find '${absolutePath}' folder.`
-      );
-    }
+  private loadHeights(worldName: string, width: number, length: number): number[] {
+    const heights: number[] = [];
+    const landscapeSize = 128;
 
-    await Promise.all(
-      this.worldPaths.map(async (worldPath) => {
-        if (fs.existsSync(path.join(ResourcePaths.world, worldPath.name))) {
-          const id = await this.redisClient.hget("worldDefines", worldPath.id);
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < length; y++) {
+        const lndPath = path.join(ResourcePaths.world, worldName, `${worldName}${x.toString().padStart(2, '0')}-${y.toString().padStart(2, '0')}.lnd`);
+        if (fs.existsSync(lndPath)) {
+          const buffer = fs.readFileSync(lndPath);
+          const dataView = new DataView(buffer.buffer);
+          const version = dataView.getInt32(0, true);
 
-          if (id) {
-            const worldData = await this.loadWorldData(
-              path.join(
-                ResourcePaths.world,
-                worldPath.name,
-                `${worldPath.name}.wld`
-              )
-            );
-            const regions = await this.loadRegions(
-              worldPath.name,
-              worldData.revivalMapId
-            );
-            const objects = await this.loadWorldObjects(worldPath.name);
-            const bounds = new Rectangle(
-              0,
-              0,
-              worldData.width * worldData.mpu * MapProperties.regionSize,
-              worldData.length * worldData.mpu * MapProperties.regionSize
-            );
-
-            const map = new MapProperties(
-              tryParseInt(id),
-              worldPath.name,
-              worldData.width,
-              worldData.length,
-              [],
-              worldData.revivalMapId,
-              worldData.mpu,
-              bounds,
-              regions,
-              objects
-            );
-
-            this.maps.push(map);
+          if (version >= 1) {
+            const numHeights = (landscapeSize + 1) * (landscapeSize + 1);
+            for (let i = 0; i < numHeights; i++) {
+              heights.push(dataView.getFloat32(4 + i * 4, true));
+            }
           }
         }
-      })
-    );
-    this.logger.main(`${this.maps.length} maps loaded.`);
+      }
+    }
+
+    return heights;
+  }
+
+  public async loadDefines(): Promise<void> {
+    const absolutePath = path.resolve(ResourcePaths.defineWorld);
+    if (!fs.existsSync(absolutePath)) {
+      this.logger.error(`Unable to load world defines: ${absolutePath}`);
+      return;
+    }
+
+    const data = fs.readFileSync(absolutePath, "utf8");
+    const lines = data.split("\n");
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("#define")) {
+        const parts = trimmed.split(/\s+/);
+        if (parts.length >= 3) {
+          const name = parts[1];
+          const idStr = parts[2].replace(/,$/, '');
+          const id = parseInt(idStr, 10);
+          if (!isNaN(id)) {
+            this.defines.set(name, id);
+          }
+        }
+      }
+    }
+
+    this.logger.info(`${this.defines.size} world defines loaded.`);
+  }
+
+  public async loadWorldPaths(): Promise<void> {
+    const absolutePath = path.resolve(ResourcePaths.worldPath);
+    if (!fs.existsSync(absolutePath)) {
+      this.logger.error(`Unable to load world paths: ${absolutePath}`);
+      return;
+    }
+
+    const text = fs.readFileSync(absolutePath, "utf-8");
+    const yamlData = yaml.load(text) as any[];
+
+    for (const world of yamlData) {
+      if (world.id && world.name) {
+        this.worldPaths.set(world.id, world.name);
+      }
+    }
+
+    this.logger.info(`${this.worldPaths.size} world paths loaded.`);
+  }
+
+  private parseMapProperties(data: { [key: string]: string }): MapProperties {
+    return {
+      id: parseInt(data["id"]),
+      name: data["name"],
+      width: parseInt(data["width"]),
+      length: parseInt(data["length"]),
+      mpu: parseInt(data["mpu"]),
+      revivalMapId: parseInt(data["revivalMapId"]),
+      bounds: JSON.parse(data["bounds"]),
+      regions: JSON.parse(data["regions"]),
+      objects: JSON.parse(data["objects"]),
+      heights: JSON.parse(data["heights"])
+    };
   }
 }

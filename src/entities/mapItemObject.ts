@@ -9,7 +9,9 @@ import { Mover } from "./mover";
 export class MapItemObject extends WorldObject {
     private _nextRespawnTime: number;
 
-    public readonly type: WorldObjectType = WorldObjectType.Item;
+    public get type(): WorldObjectType {
+        return WorldObjectType.Item;
+    }
 
     public readonly item: Item;
     public owner: Mover;

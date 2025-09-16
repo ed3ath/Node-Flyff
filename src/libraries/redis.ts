@@ -200,4 +200,35 @@ export class RedisClient implements IRedisClient {
     const key = `numpadId:${username}`;
     await this.client.set(key, numPadId);
   }
+
+  async setCharacterSession(sessionKey: number, characterId: number, username: string, password: string, expireInSeconds: number): Promise<void> {
+    const key = `session:${sessionKey}`;
+    const sessionData = {
+      characterId: characterId.toString(),
+      username,
+      password,
+    };
+    await this.client.hmset(key, sessionData);
+    await this.client.expire(key, expireInSeconds);
+  }
+
+  async getCharacterSession(sessionKey: number): Promise<{characterId: number, username: string, password: string} | null> {
+    const key = `session:${sessionKey}`;
+    const sessionData = await this.client.hgetall(key);
+
+    if (_.isEmpty(sessionData)) {
+      return null;
+    }
+
+    return {
+      characterId: parseInt(sessionData.characterId),
+      username: sessionData.username,
+      password: sessionData.password,
+    };
+  }
+
+  async deleteCharacterSession(sessionKey: number): Promise<void> {
+    const key = `session:${sessionKey}`;
+    await this.client.del(key);
+  }
 }

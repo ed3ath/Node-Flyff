@@ -13,23 +13,26 @@ import { DefineText } from '../common/defineText';
 import { DefinedTextSnapshot } from '../protocol/snapshots/definedText';
 
 export class WorldObject {
-    public objectId: number;
-    public modelId: number;
+    public readonly objectId: number;
+    public modelId: number = 0;
     public size: number = 100;
-    public type: WorldObjectType = WorldObjectType.Object;
     public map: WorldMap | null = null;
     public mapLayer: MapLayer | null = null;
-    public position: Vector3;
+    public readonly position: Vector3;
     public rotationAngle: number = 0;
     public name: string = '';
     public isSpawned: boolean = false;
     public isVisible: boolean = true;
-    public objectState: ObjectState;
-    public objectStateFlags: StateFlags;
+    public objectState: ObjectState = ObjectState.OBJSTA_STAND;
+    public objectStateFlags: StateFlags = StateFlags.OBJSTAF_NONE;
     public stateMode: StateMode = StateMode.NONE;
-    public visibleObjects: WorldObject[] = [];
+    public readonly visibleObjects: WorldObject[] = [];
 
-    constructor() {
+    public get type(): WorldObjectType {
+        return WorldObjectType.Object;
+    }
+
+    protected constructor() {
         this.objectId = FFRandom.generateUniqueId();
         this.position = new Vector3();
     }
@@ -57,5 +60,9 @@ export class WorldObject {
         if (sendToSelf) {
             this.send(packet);
         }
+    }
+
+    public dispose(): void {
+        // Base dispose implementation - subclasses can override
     }
 }

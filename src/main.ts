@@ -1,6 +1,6 @@
-import loginServer from "./servers/loginServer/";
+import loginServer from "./servers/loginServer";
 import clusterServer from "./servers/clusterServer/";
-import worldServer from "./servers/worldServer";
+import worldServer from "./servers/worldServer/index.ts";
 
 // Parse command-line arguments
 const args = process.argv.slice(2); // Remove "node" and script filename from args
