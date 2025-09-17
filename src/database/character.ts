@@ -84,20 +84,20 @@ export default class CharacterEntity extends BaseEntity {
   @Column({ nullable: false, default: 0 })
   experience: number;
 
-  @Column({ nullable: false, default: 0 })
-  jobLevel: number;
+  // @Column({ nullable: false, default: 0 })
+  // jobLevel: number;
 
-  @Column({ nullable: false, default: 0 })
-  jobExperience: number;
+  // @Column({ nullable: false, default: 0 })
+  // jobExperience: number;
 
-  @Column({ nullable: false, default: 100 })
-  hitPoints: number;
+  // @Column({ nullable: false, default: 100 })
+  // hitPoints: number;
 
-  @Column({ nullable: false, default: 50 })
-  manaPoints: number;
+  // @Column({ nullable: false, default: 50 })
+  // manaPoints: number;
 
-  @Column({ nullable: false, default: 100 })
-  fatiguePoints: number;
+  // @Column({ nullable: false, default: 100 })
+  // fatiguePoints: number;
 
   @OneToMany(() => EquipmentItemEntity, (equipmentItem) => equipmentItem.character)
   equipments: EquipmentItemEntity[];

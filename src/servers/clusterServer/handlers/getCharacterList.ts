@@ -108,8 +108,8 @@ export default class Handler extends PacketHandler {
       this.logger.info(`Sending channel IP: ${channel.host}`);
       this.sendChannelIp(channel.host);
     }
-
-    if (this.server?.config?.settings["login-protect"]) {
+    
+    if (this.server?.config?.cluster_server.settings["login-protect"]) {
       this.logger.info("Sending numpad ID for login protection");
       await this.sendNumPadId();
     }

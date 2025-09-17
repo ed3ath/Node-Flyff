@@ -44,6 +44,7 @@ export default async () => {
   instanceBuilder.buildServer((builder: ServerBuilder) => {
     builder.setServerType(ServerType.LOGIN_SERVER);
     builder.addServer(new LoginServer(instanceBuilder.config?.login_server.server));
+    builder.setConfig(instanceBuilder.config?.login_server);
   });
   const instance = await instanceBuilder.build();
   await coreIntercom(instance);

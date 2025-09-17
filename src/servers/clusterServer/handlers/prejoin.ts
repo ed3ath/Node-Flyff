@@ -70,7 +70,7 @@ export default class Handler extends PacketHandler {
         return this.userConnection.disconnect();
       }
 
-      if (this.server?.config?.settings["login-protect"]) {
+      if (this.server?.config?.cluster_server.settings["login-protect"]) {
         const bankPin = await this.extractBankPin();
         await this.sendLoginProtect(bankPin === character.bankPin);
       }

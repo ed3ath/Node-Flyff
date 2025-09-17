@@ -3,6 +3,7 @@ import _ from "lodash";
 
 import { PacketType } from "../../../common/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
+import { FlyffSnapshot } from "../../../libraries/snapshot";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
 import Account from "../../../database/account";
@@ -13,6 +14,12 @@ import { GameResources } from "../../../interfaces/resource";
 import { Vector3 } from "../../../abstract/vector3";
 import { AuthorityType } from "../../../common/authorityType";
 import { GenderType } from "../../../common/genderType";
+import { EnvironmentAllSnapshot, SeasonType } from "../../../protocol/snapshots/environmentAll";
+import { WorldReadInfoSnapshot } from "../../../protocol/snapshots/worldReadInfo";
+import { AddObjectSnapshot } from "../../../protocol/snapshots/addObject";
+import { TaskbarSnapshot } from "../../../protocol/snapshots/taskbar";
+import { Item } from "../../../common/item";
+import { ElementType } from "../../../common/elementType";
 
 @SetPacketType(PacketType.JOIN_GAME)
 export default class Handler extends PacketHandler {
@@ -49,8 +56,10 @@ export default class Handler extends PacketHandler {
 
   async execute(): Promise<void> {
     // Validate session from Redis (sent from cluster server, equivalent to C# account/player DB check)
+    console.log(`JOIN_GAME received with authKey: ${this.authKey}, characterId: ${this.characterId}, characterName: ${this.characterName}`);
     const sessionData = await this.server?.redisClient?.getCharacterSession(this.authKey);
 
+    console.log('Session', sessionData);
     if (!sessionData) {
       this.logger.warn(
         "Unable to join game for character",
@@ -262,11 +271,11 @@ export default class Handler extends PacketHandler {
       player.statistics.dexterity = character.dexterity;
       player.statistics.intelligence = character.intelligence;
     }
-    // Set Health.Hp/Mp/Fp from DB like C#
+    // Set Health.Hp/Mp/Fp from DB like C# (use defaults since fields are commented out)
     if (player.health) {
-      player.health.hp = character.hitPoints || player.health.maxHp;
-      player.health.mp = character.manaPoints || player.health.maxMp;
-      player.health.fp = character.fatiguePoints || player.health.maxFp;
+      player.health.hp = player.health.maxHp; // character.hitPoints not available
+      player.health.mp = player.health.maxMp; // character.manaPoints not available
+      player.health.fp = player.health.maxFp; // character.fatiguePoints not available
     }
 
     // Initialize Gold from DB like C#
@@ -281,8 +290,47 @@ export default class Handler extends PacketHandler {
       (player.experience as any).currentLevel = character.level;
     }
 
-    // TODO: Load inventory from equipments relation
-    // Add to world map layer (like C# player.MapLayer.AddPlayer(player))
+    // Load inventory from equipments relation (like C# Dictionary<int, Item> playerInventoryItems)
+    if (character.equipments && character.equipments.length > 0) {
+      for (const equipment of character.equipments) {
+        if (equipment.item && equipment.slot !== undefined) {
+          const item = new Item(
+            equipment.item.itemId,
+            'Item_' + equipment.item.itemId, // Use itemId as name for now
+            equipment.quantity || 1,
+            equipment.item.refinement || 0,
+            equipment.item.element || ElementType.None,
+            equipment.item.elementRefinement || 0,
+            undefined, // creatorId
+            equipment.item.serialNumber
+          );
+
+          // Set item directly in inventory map
+          (player.inventory as any).items.set(equipment.slot, item);
+        }
+      }
+    }
+
+    // Initialize skills (like C# skills = GameResources.Current.Skills.GetJobSkills)
+    // TODO: Load skills from database and skill resources
+    // const jobSkills = gameResources.skillResources?.getJobSkills?.(player.job.id) || [];
+    // for (const skillData of jobSkills) {
+    //   if (player.skills && skillData) {
+    //     const skill = {
+    //       properties: skillData,
+    //       level: 0, // TODO: Load actual level from database
+    //       player: player
+    //     };
+    //     (player.skills as any).setSkill(skill);
+    //   }
+    // }
+
+    // Update defense like C# player.Defense.Update()
+    if (player.defense && player.defense.update) {
+      player.defense.update();
+    }
+
+    // Add to world map layer (like C# layer.AddPlayer(User.Player))
     const mapResource = gameResources.mapResource;
     if (mapResource && mapResource.maps[character.mapId]) {
       const map = mapResource.maps[character.mapId] as any;
@@ -294,15 +342,22 @@ export default class Handler extends PacketHandler {
         }
       }
     }
-    // Broadcast spawn to other players (like C# layer.AddPlayer)
-    (this.server.instance as any).broadcast(player, 'spawn', {
-      id: player.id,
-      name: player.name,
-      position: player.position,
-      level: player.level,
-      // TODO: Include more data like C#
-    });
-    // TODO: Send initial snapshot to new player (like C# SendInitialSnapshot)
+
+    // Send join complete packet with snapshots (like C# JoinCompletePacket)
+    const joinCompleteSnapshot = new FlyffSnapshot([
+      new EnvironmentAllSnapshot(player, SeasonType.None),
+      new WorldReadInfoSnapshot(player),
+      new AddObjectSnapshot(player),
+      new TaskbarSnapshot(player)
+      // TODO: Add QueryPlayerDataSnapshot
+      // TODO: Add AddFriendGameJoinSnapshot
+    ]);
+
+    player.send(joinCompleteSnapshot);
+
+    // Set player as spawned (like C# User.Player.IsSpawned = true)
+    player.isSpawned = true;
+
     this.logger.success(
       `Character ${character.name} (ID: ${character.id}) joined world server successfully as player entity.`
     );
