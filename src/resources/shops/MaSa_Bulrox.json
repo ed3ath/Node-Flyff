@@ -1,0 +1,336 @@
+{
+  "name": "MaSa_Bulrox",
+  "items": [
+    [
+      {
+        "itemId": 31,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 33,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 35,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 37,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 39,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 41,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 43,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 45,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 47,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 87,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 89,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 91,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 93,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 95,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 97,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 99,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 101,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 103,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [
+      {
+        "itemId": 183,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 185,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 187,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 189,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 191,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 193,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 195,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 197,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 199,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 333,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 335,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 337,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 339,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 341,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 343,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 345,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 347,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 349,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [
+      {
+        "itemId": 433,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 435,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 437,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 439,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 441,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 443,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 445,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 447,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 449,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 383,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 385,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 387,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 389,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 391,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 393,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 395,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 397,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 399,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    []
+  ]
+}

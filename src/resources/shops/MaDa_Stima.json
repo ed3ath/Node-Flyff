@@ -1,0 +1,109 @@
+{
+  "name": "MaDa_Stima",
+  "items": [
+    [
+      {
+        "itemId": 49,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 51,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 105,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 107,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [
+      {
+        "itemId": 201,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 203,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 351,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 353,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [
+      {
+        "itemId": 451,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 453,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 401,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 403,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [
+      {
+        "itemId": 251,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 253,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 301,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 303,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ]
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "MaFl_Is",
+  "items": [
+    [
+      {
+        "itemId": 4400,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 4403,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 20101,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [],
+    [],
+    []
+  ]
+}

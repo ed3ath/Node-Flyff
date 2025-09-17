@@ -1,0 +1,24 @@
+{
+  "name": "MaFl_Boboku",
+  "oralText": "Your weapon is looking a little dull there, friend. Thank Rhisis for you, I buy and sell weapons!",
+  "introText": [
+    "*sigh* Oh, sorry! I was daydreaming about Julia over there. She's so amazing! Hey, do you think a girl like her and a guy like me could ever be? What? How could she resist me?!"
+  ],
+  "byeText": "Thanks for stopping by! Tell Julia I said hello!",
+  "links": [
+    {
+      "id": "PRESENTATION",
+      "title": "Who are you?",
+      "texts": [
+        "Greetings from the Bobo Family, stranger! I am Boboku Bobo. I run the Weapon Shop here in Flarine. Have a look around and don't forget to visit my brother's shops!"
+      ]
+    },
+    {
+      "id": "BYE",
+      "title": "Goodbye!",
+      "texts": [
+        "Thanks for stopping by! Tell Julia I said hello!"
+      ]
+    }
+  ]
+}

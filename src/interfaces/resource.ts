@@ -1,0 +1,357 @@
+import { DefineAttributes } from "../common/defineAttributes";
+import { DefineJob, JobType } from "../common/defineJob";
+import { ItemResources } from "../resources/itemResource";
+import { MonsterResources } from "../resources/monsterResource";
+import { DeathPenaltyResources } from "../resources/deathPenaltyResource";
+import { ExpTableResources } from "../resources/expTableResource";
+import { JobResources } from "../resources/jobResource";
+import { MapResources } from "../resources/mapResources";
+import { NpcResources } from "../resources/npcResource";
+import { DropItemProperties, DropItemKindProperties } from "./dropItemProperties";
+import { QuestResourcesYaml } from "../resources/questResourcesYaml";
+export interface GameResources {
+  itemResources: ItemResources;
+  monsterResources: MonsterResources;
+  npcResources: NpcResources;
+  jobResources: JobResources;
+  expTableResources: ExpTableResources;
+  deathPenaltyResource: DeathPenaltyResources;
+  mapResource: MapResources;
+  questResources: QuestResourcesYaml;
+}
+export interface ItemProperties {
+  id: number;
+  ver6: number;
+  dwID: string;
+  szName: string;
+  szNameId: string;
+  dwPackMax: number;
+  dwItemKind1: string;
+  dwItemKind2: string;
+  dwItemKind3: string;
+  dwItemJob: string;
+  bPermanence: boolean;
+  dwUseable: boolean;
+  dwItemSex: number;
+  dwCost: number;
+  dwLimitLevel1: number;
+  dwParts: string;
+  dwAbilityMin: number;
+  dwAbilityMax: number;
+  eItemType: string;
+  dwItemLV: number;
+  dwItemRare: number;
+  dwAttackSpeed: number;
+  dwDestParam1: string;
+  dwDestParam2: string;
+  dwDestParam3: string;
+  nAdjParamVal1: number;
+  nAdjParamVal2: number;
+  nAdjParamVal3: number;
+  dwCircleTime: number;
+  dwSfxObj: string;
+  dwSfxObj2: string;
+  dwSfxObj3: string;
+  dwSfxObj4: string;
+  dwSfxObj5: string;
+  dwSkillReady: number;
+  dwWeaponType: number;
+  dwItemAtkOrder1: number;
+  dwItemAtkOrder2: number;
+  dwItemAtkOrder3: number;
+  dwItemAtkOrder4: number;
+  dwSkillReadyType: number;
+  dwReferStat1: string;
+  dwAddSkillMin: number;
+  dwAddSkillMax: number;
+  dwReqMp: number;
+  dwReqFp: number;
+  dwReferStat2: string;
+  dwReferTarget1: string;
+  dwReferTarget2: string;
+  dwReferValue1: number;
+  dwReferValue2: number;
+  dwFlightLimit: number;
+  dwFFuelReMax: number;
+  dwAFuelReMax: number;
+  dwReflect: number;
+  dwQuestID: number;
+  szComment: string;
+  readonly stackable?: boolean;
+  readonly Params?: Readonly<Record<DefineAttributes, number>>;
+}
+
+export interface MoverProperties {
+  id: number;
+  dwID: string;
+  szName: string;
+  dwAI: string;
+  dwStr: number;
+  dwSta: number;
+  dwDex: number;
+  dwInt: number;
+  dwHR: number;
+  dwER: number;
+  dwRace: string;
+  dwBelligerence: string;
+  dwGender: string;
+  dwLevel: number;
+  dwFlightLevel: number;
+  dwSize: number;
+  dwClass: number;
+  bIfPart: string;
+  dwKarma: string;
+  dwUseable: string;
+  dwActionRadius: number;
+  dwAtkMin: number;
+  dwAtkMax: number;
+  dwAtk1: number;
+  dwAtk2: number;
+  dwAtk3: number;
+  dwHorizontalRate: number;
+  dwVerticalRate: number;
+  dwDiagonalRate: number;
+  dwThrustRate: number;
+  dwChestRate: number;
+  dwHeadRate: number;
+  dwArmRate: number;
+  dwLegRate: number;
+  dwAttackSpeed: number;
+  dwReAttackDelay: number;
+  dwAddHp: number;
+  dwAddMp: number;
+  dwNaturealArmor: number;
+  nAbrasion: number;
+  nHardness: number;
+  dwAdjAtkDelay: number;
+  eElementType: string;
+  wElementAtk: number;
+  dwHideLevel: number;
+  fSpeed: number;
+  dwShelter: number;
+  bFlying: string;
+  dwJumpIng: number;
+  dwAirJump: number;
+  bTaming: string;
+  dwResisMagic: number;
+  fResistElecricity: number;
+  fResistFire: number;
+  fResistWind: number;
+  fResistWater: number;
+  fResistEarth: number;
+  dwCash: number;
+  dwSourceMaterial: number;
+  dwMaterialAmount: number;
+  dwCohesion: number;
+  dwHoldingTime: number;
+  dwCorrectionValue: number;
+  dwExpValue: number;
+  nFxpValue: number;
+  nBodyState: number;
+  dwAddAbility: number;
+  bKillable: string;
+  dwVirtItem1: string;
+  dwVirtType1: string;
+  dwVirtItem2: string;
+  dwVirtType2: string;
+  dwVirtItem3: string;
+  dwVirtType3: string;
+  dwSndAtk1: number;
+  dwSndAtk2: number;
+  dwSndDie1: number;
+  dwSndDie2: number;
+  dwSndDmg1: number;
+  dwSndDmg2: number;
+  dwSndDmg3: number;
+  dwSndIdle1: number;
+  dwSndIdle2: number;
+  szComment: string;
+  dwAreaColor: number;
+  szNpcMark: string;
+  dwMadrigalGiftPoint: number;
+  identifierName?: string;
+  name?: string;
+  level?: number;
+  dropGoldMin?: number;
+  dropGoldMax?: number;
+  maxDropItem?: number;
+  dropItems?: DropItemProperties[];
+  dropItemsKind?: DropItemKindProperties[];
+}
+
+export interface NpcProperties {
+  id: string;
+  name: string;
+  modelId?: number;
+  hairId?: number;
+  hairColor?: number;
+  faceId?: number;
+  items?: number[];
+  shop?: ShopProperties;
+  hasShop: boolean;
+  dialog?: DialogProperties;
+  hasDialog: boolean;
+  canBuff: boolean;
+}
+
+export interface ShopProperties {
+  name: string;
+  items: ShopItemProperties[];
+}
+export interface ShopItemProperties {
+  id: number;
+  refine: number;
+  element: number;
+  elementRefine: number;
+}
+
+export interface DialogProperties {
+  name: string;
+  shoutText: string;
+  introText: string;
+  byeText: string;
+  links: Set<DialogLink>;
+}
+
+export interface DialogLink {
+  id: number;
+  title: string;
+  texts: Set<string>;
+  questId?: number;
+}
+
+export interface JobProperties {
+  id: DefineJob;
+  identifier: string;
+  attackSpeed: number;
+  maxHpFactor: number;
+  maxMpFactor: number;
+  maxFpFactor: number;
+  defenseFactor: number;
+  hpRecoveryFactor: number;
+  mpRecoveryFactor: number;
+  fpRecoveryFactor: number;
+  meleeSword: number;
+  meleeAxe: number;
+  meleeStaff: number;
+  meleeStick: number;
+  meleeKnuckle: number;
+  magicWand: number;
+  blocking: number;
+  meleeYoyo: number;
+  critical: number;
+  type: JobType;
+  parent: JobType;
+  minLevel: number;
+  maxLevel: number;
+}
+export interface CharacterExp {
+  level: number;
+  exp: number;
+  pxp: number;
+  gp: number;
+  limitExp: number;
+}
+export interface DropLuck {
+  level: number;
+  chance: number[];
+}
+export interface PenaltyValue {
+  level: number;
+  value: number;
+}
+export interface DeathPenalty {
+  revivalPenalty: PenaltyValue[];
+  decreaseExpPenalty: PenaltyValue[];
+  levelDownPenalty: PenaltyValue[];
+}
+
+export interface WorldPath {
+  id: string;
+  name: string;
+}
+
+export interface WorldData {
+  width: number;
+  length: number;
+  mpu: number;
+  indoor: boolean;
+  fly: boolean;
+  revivalMapId: number;
+  revivalKey: string;
+}
+
+export interface WorldProperties {}
+
+export interface SkillLevelProperties {
+  id: number;
+  dwID: string;
+  dwName: string;
+  dwNameId: string;
+  dwSkillLvl: number;
+  dwAbilityMin: number;
+  dwAtkAbilityMax: number;
+  dwAbilityMinPVP: number;
+  dwAbilityMaxPVP: number;
+  dwAttackSpeed: number;
+  dwDmgShift: boolean;
+  nProbability: number;
+  nProbabilityPVP: number;
+  dwTaunt: number;
+  dwDestParam1: string;
+  nAdjParamVal1: number;
+  dwDestParam2: string;
+  nAdjParamVal2: number;
+  dwReqMp: number;
+  dwRepFp: number;
+  dwCooldown: number;
+  dwCastingTime: number;
+  dwSkillRange: number;
+  dwCircleTime: number;
+  dwPainTime: number;
+  dwSkillTime: number;
+  dwSkillCount: number;
+  dwSkillExp: number;
+  dwExp: number;
+  dwComboSkillTime: number;
+}
+
+export interface SkillProperties {
+  id: number;
+  ver: number;
+  dwID: string;
+  szName: string;
+  szNameId: string;
+  dwItemKind1: string;
+  dwItemKind2: string;
+  dwItemKind3: string;
+  dwLinkKind: string;
+  dwLinkKindBullet: string;
+  eItemType: string;
+  tmContinuousPain: number;
+  dwReqDisLV: number;
+  dwReSkill1: number;
+  dwReSkillLevel1: number;
+  dwReSkill2: number;
+  dwReSkillLevel2: number;
+  dwSkillReady: number;
+  dwSfxObj: string;
+  dwSfxObj2: string;
+  dwSfxObj3: string;
+  dwSfxObj4: string;
+  dwSfxObj5: string;
+  ExpertMax: number;
+  dwSkillType: string;
+  dwSpellRegion: string;
+  dwSpellType: string;
+  dwExeTarget: string;
+  dwReferStat1: string;
+  dwReferStat2: string;
+  dwReferTarget1: string;
+  dwReferValue1: number;
+  dwReferTarget2: string;
+  dwReferValue2: number;
+  dwHanded?: string;
+  skillLevels?: Record<number, SkillLevelProperties>;
+  szComment: string;
+}

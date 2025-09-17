@@ -1,0 +1,46 @@
+{
+  "name": "MaSa_Colack",
+  "items": [
+    [
+      {
+        "itemId": 2007,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 2009,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 2011,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 2013,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 2015,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 2017,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [],
+    [],
+    []
+  ]
+}

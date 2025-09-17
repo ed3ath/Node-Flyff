@@ -1,0 +1,24 @@
+{
+  "name": "MaFl_Lui",
+  "oralText": "Come one, come all! Get your supplies here! You're gonna need it!",
+  "introText": [
+    "Going somewhere? You look a little unprepared, so I'd think twice about leaving Flarine without stocking up on supplies. Good thing for you, I'm here. So, whaddya need?"
+  ],
+  "byeText": "Don't forget to shop at Handsome Lui's General Shop for your adventuring needs!",
+  "links": [
+    {
+      "id": "PRESENTATION",
+      "title": "Who are you?",
+      "texts": [
+        "Who am I? I'm Lui Keraldine, of course. My friends call me Handsome Lui. Since we're not friends, why don't you just call me Lui. If you buy something from my General Store here, I *might* let you call me Handsome."
+      ]
+    },
+    {
+      "id": "BYE",
+      "title": "Goodbye!",
+      "texts": [
+        "Don't forget to shop at Handsome Lui's General Shop for your adventuring needs!"
+      ]
+    }
+  ]
+}

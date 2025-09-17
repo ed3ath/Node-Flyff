@@ -1,0 +1,22 @@
+{
+  "name": "MaFl_COLINSE",
+  "items": [
+    [
+      {
+        "itemId": 26452,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      },
+      {
+        "itemId": 26453,
+        "refine": 0,
+        "element": 0,
+        "elementRefine": 0
+      }
+    ],
+    [],
+    [],
+    []
+  ]
+}

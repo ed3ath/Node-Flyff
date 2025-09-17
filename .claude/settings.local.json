@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(npm install)",
+      "Bash(npm run start:*)",
+      "Bash(pkill:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(npm run test:quests:*)",
+      "Bash(npm run:*)",
+      "Bash(npx ts-node:*)",
+      "WebSearch",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(find:*)",
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm start)",
+      "Bash(sqlite3:*)",
+      "Bash(tasklist)",
+      "Bash(wmic process where:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(where sqlite3)",
+      "Bash(del:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

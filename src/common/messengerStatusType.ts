@@ -1,0 +1,15 @@
+export enum MessengerStatusType {
+  Online,
+  Offline,
+  Block,
+  Absent,
+  HardPlay,
+  Eating,
+  Rest,
+  Move,
+  Die,
+  Danger,
+  OfflineBlock,
+  AutoAbsent,
+  FriendStat,
+}

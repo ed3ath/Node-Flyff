@@ -1,0 +1,4360 @@
+- id: MaSC_SCGirl1
+  name: IDS_CHARACTER_SCHOOL_INC_000001
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000000
+    output: false
+    dialog: MaSC_SCGirl1.txt"
+- id: MaSC_SCWeapon1
+  name: IDS_CHARACTER_SCHOOL_INC_000003
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000004
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000005
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000006
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000007
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000002
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor1
+  name: IDS_CHARACTER_SCHOOL_INC_000009
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000010
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000011
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000012
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000013
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000008
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl2
+  name: IDS_CHARACTER_SCHOOL_INC_000015
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000014
+    output: false
+    dialog: MaSC_SCGirl2.txt"
+- id: MaSC_SCWeapon2
+  name: IDS_CHARACTER_SCHOOL_INC_000017
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000018
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000019
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000020
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000021
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000016
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor2
+  name: IDS_CHARACTER_SCHOOL_INC_000023
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000024
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000025
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000026
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000027
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000022
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl3
+  name: IDS_CHARACTER_SCHOOL_INC_000029
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000028
+    output: false
+    dialog: MaSC_SCGirl3.txt"
+- id: MaSC_SCWeapon3
+  name: IDS_CHARACTER_SCHOOL_INC_000031
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000032
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000033
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000034
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000035
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000030
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor3
+  name: IDS_CHARACTER_SCHOOL_INC_000037
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000038
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000039
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000040
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000041
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000036
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl4
+  name: IDS_CHARACTER_SCHOOL_INC_000043
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000042
+    output: false
+    dialog: MaSC_SCGirl4.txt"
+- id: MaSC_SCWeapon4
+  name: IDS_CHARACTER_SCHOOL_INC_000045
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000046
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000047
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000048
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000049
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000044
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor4
+  name: IDS_CHARACTER_SCHOOL_INC_000051
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000052
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000053
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000054
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000055
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000050
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl5
+  name: IDS_CHARACTER_SCHOOL_INC_000057
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000056
+    output: false
+    dialog: MaSC_SCGirl5.txt"
+- id: MaSC_SCWeapon5
+  name: IDS_CHARACTER_SCHOOL_INC_000059
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000060
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000061
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000062
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000063
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000058
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor5
+  name: IDS_CHARACTER_SCHOOL_INC_000065
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000066
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000067
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000068
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000069
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000064
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl6
+  name: IDS_CHARACTER_SCHOOL_INC_000071
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000070
+    output: false
+    dialog: MaSC_SCGirl6.txt"
+- id: MaSC_SCWeapon6
+  name: IDS_CHARACTER_SCHOOL_INC_000073
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000074
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000075
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000076
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000077
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000072
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor6
+  name: IDS_CHARACTER_SCHOOL_INC_000079
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000080
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000081
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000082
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000083
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000078
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl7
+  name: IDS_CHARACTER_SCHOOL_INC_000085
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000084
+    output: false
+    dialog: MaSC_SCGirl7.txt"
+- id: MaSC_SCWeapon7
+  name: IDS_CHARACTER_SCHOOL_INC_000087
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000088
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000089
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000090
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000091
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000086
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor7
+  name: IDS_CHARACTER_SCHOOL_INC_000093
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000094
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000095
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000096
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000097
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000092
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl8
+  name: IDS_CHARACTER_SCHOOL_INC_000099
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000098
+    output: false
+    dialog: MaSC_SCGirl8.txt"
+- id: MaSC_SCWeapon8
+  name: IDS_CHARACTER_SCHOOL_INC_000101
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000102
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000103
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000104
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000105
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000100
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor8
+  name: IDS_CHARACTER_SCHOOL_INC_000107
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000108
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000109
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000110
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000111
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000106
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl9
+  name: IDS_CHARACTER_SCHOOL_INC_000113
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000112
+    output: false
+    dialog: MaSC_SCGirl9.txt"
+- id: MaSC_SCWeapon9
+  name: IDS_CHARACTER_SCHOOL_INC_000115
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000116
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000117
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000118
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000119
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000114
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor9
+  name: IDS_CHARACTER_SCHOOL_INC_000121
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000122
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000123
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000124
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000125
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000120
+    output: false
+    dialog: ''
+- id: MaSC_SCGirl10
+  name: IDS_CHARACTER_SCHOOL_INC_000127
+  vendorSlots: []
+  settings:
+    menu:
+      - MMI_DIALOG
+    vendorType: ''
+    vendorItems: []
+    vendorItems2: []
+    structure: ''
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000126
+    output: false
+    dialog: MaSC_SCGirl10.txt"
+- id: MaSC_SCWeapon10
+  name: IDS_CHARACTER_SCHOOL_INC_000129
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000130
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000131
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000132
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000133
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_SWD
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 0
+        id: IK3_AXE
+        job: 1
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_CHEERSTICK
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 1
+        id: IK3_KNUCKLEHAMMER
+        job: 3
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_WAND
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 57
+        max: 57
+        qty: 1
+      - slot: 2
+        id: IK3_STAFF
+        job: 4
+        min: 89
+        max: 89
+        qty: 1
+      - slot: 3
+        id: IK3_SWD
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_HELMET
+        job: 0
+        min: 9
+        max: 9
+        qty: 1
+      - slot: 3
+        id: IK3_SUIT
+        job: 0
+        min: 12
+        max: 12
+        qty: 1
+      - slot: 3
+        id: IK3_GAUNTLET
+        job: 0
+        min: 11
+        max: 11
+        qty: 1
+      - slot: 3
+        id: IK3_BOOTS
+        job: 0
+        min: 10
+        max: 10
+        qty: 1
+    vendorItems2: []
+    structure: SRT_WEAPON
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000128
+    output: false
+    dialog: ''
+- id: MaSC_SCArmor10
+  name: IDS_CHARACTER_SCHOOL_INC_000135
+  vendorSlots:
+    - slot: 0
+      name: IDS_CHARACTER_SCHOOL_INC_000136
+    - slot: 1
+      name: IDS_CHARACTER_SCHOOL_INC_000137
+    - slot: 2
+      name: IDS_CHARACTER_SCHOOL_INC_000138
+    - slot: 3
+      name: IDS_CHARACTER_SCHOOL_INC_000139
+  settings:
+    menu:
+      - MMI_TRADE
+    vendorType: ''
+    vendorItems:
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 0
+        id: IK3_SUIT
+        job: 1
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 0
+        id: IK3_HELMET
+        job: 1
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 0
+        id: IK3_GAUNTLET
+        job: 1
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 0
+        id: IK3_BOOTS
+        job: 1
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 1
+        id: IK3_SUIT
+        job: 3
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 1
+        id: IK3_HELMET
+        job: 3
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 1
+        id: IK3_GAUNTLET
+        job: 3
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 1
+        id: IK3_BOOTS
+        job: 3
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 46
+        max: 46
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 60
+        max: 60
+        qty: 2
+      - slot: 2
+        id: IK3_SUIT
+        job: 4
+        min: 78
+        max: 78
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 43
+        max: 43
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 2
+        id: IK3_HELMET
+        job: 4
+        min: 75
+        max: 75
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 45
+        max: 45
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 59
+        max: 59
+        qty: 2
+      - slot: 2
+        id: IK3_GAUNTLET
+        job: 4
+        min: 77
+        max: 77
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 44
+        max: 44
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 58
+        max: 58
+        qty: 2
+      - slot: 2
+        id: IK3_BOOTS
+        job: 4
+        min: 76
+        max: 76
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 57
+        max: 57
+        qty: 2
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 66
+        max: 66
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 70
+        max: 70
+        qty: 1
+      - slot: 3
+        id: IK3_SHIELD
+        job: -1
+        min: 79
+        max: 79
+        qty: 1
+    vendorItems2: []
+    structure: SRT_SHIELD
+    music: ''
+    image: IDS_CHARACTER_SCHOOL_INC_000134
+    output: false
+    dialog: ''

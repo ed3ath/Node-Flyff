@@ -1,0 +1,48 @@
+# QUEST_HEROJES_TRN5 - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.371Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_HEROJES_TRN5
+title: IDS_PROPQUEST_INC_000559
+character: MaDa_Homeit
+end_character: MaDa_Heingard
+start_requirements:
+  min_level: 60
+  max_level: 60
+  previous_quest: QUEST_HEROJES_TRN4
+  job:
+    - JOB_ACROBAT
+rewards:
+  gold: 0
+  exp: 0
+  skill_points: 0
+end_conditions:
+  items:
+    - id: II_SYS_SYS_QUE_VENHEART
+      quantity: 1
+      sex: Any
+      remove: true
+  monsters:
+    - id: MI_GUARDMON1
+      amount: 1
+drops:
+  - item_id: II_SYS_SYS_QUE_VENHEART
+    probability: "3000000000"
+    quantity: 1
+    monsters:
+      - MI_GUARDMON1
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_000560
+    - IDS_PROPQUEST_INC_000561
+    - IDS_PROPQUEST_INC_000562
+    - IDS_PROPQUEST_INC_000563
+  begin_yes:
+    - IDS_PROPQUEST_INC_000564
+  begin_no:
+    - IDS_PROPQUEST_INC_000565
+  completed:
+    - IDS_PROPQUEST_INC_000566
+    - IDS_PROPQUEST_INC_000567
+  not_finished:
+    - IDS_PROPQUEST_INC_000568

@@ -1,0 +1,80 @@
+# QUEST_RBIDENTITY - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.557Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_RBIDENTITY
+title: IDS_PROPQUEST_INC_001075
+character: MaFl_Luda
+end_character: MaFl_Luda
+start_requirements:
+  min_level: 30
+  max_level: 60
+  previous_quest: QUEST_REVENGE_RBANG
+  job:
+    - JOB_MERCENARY
+    - JOB_ACROBAT
+    - JOB_ASSIST
+    - JOB_MAGICIAN
+    - JOB_KNIGHT
+    - JOB_BLADE
+    - JOB_JESTER
+    - JOB_RANGER
+    - JOB_RINGMASTER
+    - JOB_BILLPOSTER
+    - JOB_PSYCHIKEEPER
+    - JOB_ELEMENTOR
+    - JOB_KNIGHT_MASTER
+    - JOB_BLADE_MASTER
+    - JOB_JESTER_MASTER
+    - JOB_RANGER_MASTER
+    - JOB_RINGMASTER_MASTER
+    - JOB_BILLPOSTER_MASTER
+    - JOB_PSYCHIKEEPER_MASTER
+    - JOB_ELEMENTOR_MASTER
+    - JOB_KNIGHT_HERO
+    - JOB_BLADE_HERO
+    - JOB_JESTER_HERO
+    - JOB_RANGER_HERO
+    - JOB_RINGMASTER_HERO
+    - JOB_BILLPOSTER_HERO
+    - JOB_PSYCHIKEEPER_HERO
+    - JOB_ELEMENTOR_HERO
+rewards:
+  gold: 357000
+  exp: 17446
+  skill_points: 0
+end_conditions:
+  items:
+    - id: II_SYS_SYS_QUE_RBSYMBOL
+      quantity: 7
+      sex: Any
+      remove: true
+  monsters:
+    - id: MI_RBANG1
+      amount: 5
+    - id: MI_RBANG2
+      amount: 1
+drops:
+  - item_id: II_SYS_SYS_QUE_RBSYMBOL
+    probability: "500000000"
+    quantity: 1
+    monsters:
+      - MI_RBANG1
+  - item_id: II_SYS_SYS_QUE_RBSYMBOL
+    probability: "1000000000"
+    quantity: 1
+    monsters:
+      - MI_RBANG2
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_001076
+    - IDS_PROPQUEST_INC_001077
+    - IDS_PROPQUEST_INC_001078
+  begin_yes:
+    - IDS_PROPQUEST_INC_001079
+  begin_no:
+    - IDS_PROPQUEST_INC_001080
+  completed:
+    - IDS_PROPQUEST_INC_001081
+  not_finished:
+    - IDS_PROPQUEST_INC_001082
