@@ -1,0 +1,42 @@
+# QUEST_SUMMONDARK - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.788Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_SUMMONDARK
+title: IDS_PROPQUEST_INC_001710
+character: MaFl_DrEstly
+end_character: MaFl_DrEstly
+start_requirements:
+  min_level: 20
+  max_level: 35
+  previous_quest: ""
+  job:
+    - JOB_MERCENARY
+    - JOB_ACROBAT
+    - JOB_ASSIST
+    - JOB_MAGICIAN
+rewards:
+  gold: 0
+  exp: 1031
+  skill_points: 0
+end_conditions:
+  patrols:
+    - map_id: WI_WORLD_MADRIGAL
+      left: 7609
+      top: 4283
+      right: 7625
+      bottom: 4265
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_001711
+    - IDS_PROPQUEST_INC_001712
+    - IDS_PROPQUEST_INC_001713
+    - IDS_PROPQUEST_INC_001714
+  begin_yes:
+    - IDS_PROPQUEST_INC_001715
+  begin_no:
+    - IDS_PROPQUEST_INC_001716
+  completed:
+    - IDS_PROPQUEST_INC_001717
+  not_finished:
+    - IDS_PROPQUEST_INC_001718

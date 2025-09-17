@@ -1,0 +1,37 @@
+# QUEST_ORIGIN_BONEBOWL - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.513Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_ORIGIN_BONEBOWL
+title: IDS_PROPQUEST_INC_000966
+character: MaSa_QueerCollector
+end_character: MaSa_Bowler
+start_requirements:
+  min_level: 44
+  max_level: 60
+  previous_quest: ""
+  job:
+    - JOB_MERCENARY
+    - JOB_ACROBAT
+    - JOB_ASSIST
+    - JOB_MAGICIAN
+rewards:
+  gold: 0
+  exp: 56017
+  skill_points: 0
+end_conditions: {}
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_000967
+    - IDS_PROPQUEST_INC_000968
+    - IDS_PROPQUEST_INC_000969
+    - IDS_PROPQUEST_INC_000970
+  begin_yes:
+    - IDS_PROPQUEST_INC_000971
+  begin_no:
+    - IDS_PROPQUEST_INC_000972
+  completed:
+    - IDS_PROPQUEST_INC_000973
+    - IDS_PROPQUEST_INC_000974
+  not_finished:
+    - IDS_PROPQUEST_INC_000975

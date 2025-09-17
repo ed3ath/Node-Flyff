@@ -27,7 +27,12 @@ export const ResourcePaths = {
   defineJob: path.join(resPath, "data", "defineJob.h"),
   defineObject: path.join(resPath, "data", "defineObj.h"),
   defineSkill: path.join(resPath, "data", "defineSkill.h"),
+  defineQuest: path.join(resPath, "data", "definequest.h"),
   skillsProp: path.join(resPath, "data", "propSkill.txt"),
   skillsPropAdd: path.join(resPath, "data", "propSkillAdd.csv"),
   skillsText: path.join(resPath, "data", "propSkill.txt.txt"),
+  expTablePath: path.join(resPath, "data", "expTable.inc"),
+  moversPropExPath: path.join(resPath, "data", "propMoverEx.inc"),
+  questsPath: path.join(__dirname, "quests"),
+  questsYamlPath: path.join(__dirname, "quests-yaml"),
 };

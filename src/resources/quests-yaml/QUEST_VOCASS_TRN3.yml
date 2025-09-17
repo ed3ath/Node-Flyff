@@ -1,0 +1,59 @@
+# QUEST_VOCASS_TRN3 - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.835Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_VOCASS_TRN3
+title: IDS_PROPQUEST_INC_000760
+character: MaFl_Goripeg
+end_character: MaFl_Kidmen
+start_requirements:
+  min_level: 15
+  max_level: 15
+  previous_quest: QUEST_VOCASS_TRN2
+  job:
+    - JOB_VAGRANT
+rewards:
+  gold: 0
+  exp: 0
+  skill_points: 60
+  items:
+    - id: II_SYS_SYS_SCR_RECCURENCE
+      quantity: 1
+      sex: Any
+      remove: false
+    - id: II_CHR_FOO_COO_BULLHAMS
+      quantity: 1
+      sex: Any
+      remove: false
+    - id: II_CHR_REF_REF_HOLD
+      quantity: 1
+      sex: Any
+      remove: false
+    - id: II_CHR_SYS_SCR_ACTIVITION
+      quantity: 1
+      sex: Any
+      remove: false
+end_conditions:
+  items:
+    - id: II_SYS_SYS_QUE_NTSKILL
+      quantity: 1
+      sex: Any
+      remove: true
+  monsters:
+    - id: MI_CHANER
+      amount: 1
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_000761
+    - IDS_PROPQUEST_INC_000762
+    - IDS_PROPQUEST_INC_000763
+  begin_yes:
+    - IDS_PROPQUEST_INC_000764
+  begin_no:
+    - IDS_PROPQUEST_INC_000765
+  completed:
+    - IDS_PROPQUEST_INC_000766
+    - IDS_PROPQUEST_INC_000767
+    - IDS_PROPQUEST_INC_000768
+  not_finished:
+    - IDS_PROPQUEST_INC_000769

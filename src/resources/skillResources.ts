@@ -140,8 +140,6 @@ export class SkillResources {
         const id = tryParseInt(parts[2]);
         const name = parts[1];
 
-        console.log(id, name);
-
         if (!_.isNaN(id) && name !== "") {
           await this.redisClient.hset("skillDefines", name, id);
         }

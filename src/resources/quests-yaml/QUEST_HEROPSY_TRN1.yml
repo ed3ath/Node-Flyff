@@ -1,0 +1,40 @@
+# QUEST_HEROPSY_TRN1 - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.386Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_HEROPSY_TRN1
+title: IDS_PROPQUEST_INC_001599
+character: MaDa_Cylor
+end_character: MaDa_Cylor
+start_requirements:
+  min_level: 60
+  max_level: 60
+  previous_quest: ""
+  job:
+    - JOB_MAGICIAN
+rewards:
+  gold: 0
+  exp: 0
+  skill_points: 0
+  items:
+    - id: II_SYS_SYS_QUE_MASNOMINATE
+      quantity: 1
+      sex: Any
+      remove: false
+end_conditions:
+  monsters:
+    - id: MI_DRILLER2
+      amount: 20
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_001600
+    - IDS_PROPQUEST_INC_001601
+    - IDS_PROPQUEST_INC_001602
+  begin_yes:
+    - IDS_PROPQUEST_INC_001603
+  begin_no:
+    - IDS_PROPQUEST_INC_001604
+  completed:
+    - IDS_PROPQUEST_INC_001605
+  not_finished:
+    - IDS_PROPQUEST_INC_001606

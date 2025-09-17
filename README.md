@@ -88,22 +88,22 @@ The emulator follows a distributed server architecture:
 - [x] MapItemObject for ground items
 
 #### Core Game Systems
-- [x] Visibility System
-- [x] Mobility System
-- [x] Respawn System
-- [x] Inventory System (move, equip/unequip, save, drop, usage)
-- [x] Battle System (melee attacks, PvM combat)
-- [x] Drop System (pickup gold/items)
-- [x] Shop System (buy/sell items)
-- [x] NPC Dialog System
+- [ ] Visibility System
+- [ ] Mobility System
+- [ ] Respawn System
+- [ ] Inventory System (move, equip/unequip, save, drop, usage)
+- [ ] Battle System (melee attacks, PvM combat)
+- [ ] Drop System (pickup gold/items)
+- [ ] Shop System (buy/sell items)
+- [ ] NPC Dialog System
 
 ### 🔄 In Progress
 
 #### Server Systems
-- [ ] Inter-Server communication and caching
-- [ ] Client authentication process
-- [ ] Character management (create, delete, list)
-- [ ] 2nd password verification
+- [x] Inter-Server communication and caching
+- [x] Client authentication process
+- [x] Character management (create, delete, list)
+- [x] 2nd password verification
 
 #### Game Features
 - [ ] Chat System with admin commands
@@ -142,7 +142,7 @@ The emulator follows a distributed server architecture:
 
 ```
 src/
-├── abstract/           # Base classes and interfaces
+├── abstract/          # Base classes and interfaces
 ├── common/            # Shared enums and constants
 ├── configs/           # Server configuration files
 ├── database/          # Database models and connections

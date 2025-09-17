@@ -3,18 +3,22 @@ import path from "path";
 import _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
 
-import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { ItemProperties } from "../interfaces/resource";
 import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
+import { BaseResource } from "../abstract/baseResource";
 
-export class ItemResources {
-  logger: Logger;
+export class ItemResources extends BaseResource {
   redisClient: Redis;
+  private itemCount: number = 0;
 
   constructor(options: RedisOptions) {
-    this.logger = new Logger("Item Resources");
+    super("Item");
     this.redisClient = new Redis(options);
+  }
+
+  public getItemCount(): number {
+    return this.itemCount;
   }
 
   public async get(
@@ -42,16 +46,13 @@ export class ItemResources {
     const items: ItemProperties[] = [];
     this.redisClient.keys("item:*", (err, keys) => {
       if (err) {
-        this.logger.error("Error retrieving keys from Redis:", err);
+        this.logLoadError("Error retrieving keys from Redis", err);
       } else {
         if (!_.isUndefined(keys)) {
           _.forEach(keys, (key) => {
             this.redisClient.hgetall(key, (err, data) => {
               if (err) {
-                this.logger.error(
-                  "Error retrieving item data from Redis:",
-                  err
-                );
+                this.logLoadError("Error retrieving item data from Redis", err);
               } else {
                 if (data) {
                   const item = this.parseItemProperties(data);

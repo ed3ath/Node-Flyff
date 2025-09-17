@@ -1,0 +1,48 @@
+# QUEST_HEROPSY_TRN2 - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.388Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_HEROPSY_TRN2
+title: IDS_PROPQUEST_INC_001610
+character: MaDa_Cylor
+end_character: MaFl_Cuarine
+start_requirements:
+  min_level: 60
+  max_level: 60
+  previous_quest: QUEST_HEROPSY_TRN1
+  job:
+    - JOB_MAGICIAN
+rewards:
+  gold: 0
+  exp: 0
+  skill_points: 0
+end_conditions:
+  items:
+    - id: II_SYS_SYS_QUE_UNDERSTRENGTH
+      quantity: 1
+      sex: Any
+      remove: false
+  monsters:
+    - id: MI_KYNSY
+      amount: 1
+drops:
+  - item_id: II_SYS_SYS_QUE_UNDERSTRENGTH
+    probability: "3000000000"
+    quantity: 1
+    monsters:
+      - MI_KYNSY
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_001611
+    - IDS_PROPQUEST_INC_001612
+    - IDS_PROPQUEST_INC_001613
+  begin_yes:
+    - IDS_PROPQUEST_INC_001614
+  begin_no:
+    - IDS_PROPQUEST_INC_001615
+  completed:
+    - IDS_PROPQUEST_INC_001616
+    - IDS_PROPQUEST_INC_001617
+    - IDS_PROPQUEST_INC_001618
+  not_finished:
+    - IDS_PROPQUEST_INC_001619

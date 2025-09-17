@@ -1,0 +1,39 @@
+# QUEST_VOCACR_BFTRN - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.820Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_VOCACR_BFTRN
+title: IDS_PROPQUEST_INC_000469
+character: MaDa_Hent
+end_character: MaDa_Hent
+start_requirements:
+  min_level: 15
+  max_level: 15
+  previous_quest: ""
+  job:
+    - JOB_VAGRANT
+rewards:
+  gold: 1500
+  exp: 0
+  skill_points: 0
+  items:
+    - id: II_SYS_BLI_BLI_FLARIS
+      quantity: 1
+      sex: Any
+      remove: false
+end_conditions:
+  monsters:
+    - id: MI_AIBATT1
+      amount: 10
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_000470
+    - IDS_PROPQUEST_INC_000471
+  begin_yes:
+    - IDS_PROPQUEST_INC_000472
+  begin_no:
+    - IDS_PROPQUEST_INC_000473
+  completed:
+    - IDS_PROPQUEST_INC_000474
+  not_finished:
+    - IDS_PROPQUEST_INC_000475
