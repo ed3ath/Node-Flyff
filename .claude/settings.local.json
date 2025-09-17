@@ -18,7 +18,14 @@
       "WebFetch(domain:github.com)",
       "Bash(find:*)",
       "Bash(npm install:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm start)",
+      "Bash(sqlite3:*)",
+      "Bash(tasklist)",
+      "Bash(wmic process where:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []

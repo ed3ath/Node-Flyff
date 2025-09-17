@@ -13,8 +13,7 @@ export default class Handler extends PacketHandler {
 
   async execute(): Promise<void> {
     const packet = new FlyffPacket(PacketType.QUERY_TICK_COUNT);
-    const serverStartTime = this.server.time || new Date().getTime();
-    const elapsed = new Date().getTime() - serverStartTime;
+    const elapsed = new Date().getTime() - this.server.time;
     packet.writeUInt32LE(this.time);
     packet.writeInt64LE(elapsed);
     this.send(packet);

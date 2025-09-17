@@ -2,6 +2,8 @@ import { FFRandom } from "../helpers/FFRandom";
 import { Rectangle } from "./rectangle";
 
 export class Vector3 {
+    private static readonly EPSILON = 0.01;
+
     x: number;
     y: number;
     z: number;
@@ -80,8 +82,11 @@ export class Vector3 {
         return FFRandom.getHashCode(this.x) ^ FFRandom.getHashCode(this.y) ^ FFRandom.getHashCode(this.z);
     }
 
-    equals(other: Vector3): boolean {
-        return this == other;
+    equals(other: Vector3 | null): boolean {
+        if (!other) return false;
+        return Math.abs(this.x - other.x) < Vector3.EPSILON &&
+               Math.abs(this.y - other.y) < Vector3.EPSILON &&
+               Math.abs(this.z - other.z) < Vector3.EPSILON;
     }
 
     static dotProduct(a: Vector3, b: Vector3): number {
@@ -99,7 +104,7 @@ export class Vector3 {
     static angleBetween(a: Vector3, b: Vector3): number {
         const dist = b.subtract(a);
         let angle = Math.atan2(dist.x, -dist.z);
-        angle = this.toDegree(angle);
+        angle = Vector3.toDegree(angle);
         if (angle < 0) {
             angle += 360;
         } else if (angle >= 360) {
@@ -181,7 +186,9 @@ export class Vector3 {
         return this;
     }
 
-    static equals(a: Vector3, b: Vector3): boolean {
-        return a == b;
+    static equals(a: Vector3 | null, b: Vector3 | null): boolean {
+        if (a === null && b === null) return true;
+        if (a === null || b === null) return false;
+        return a.equals(b);
     }
 }

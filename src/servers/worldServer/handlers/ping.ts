@@ -3,20 +3,25 @@ import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
 
-@SetPacketType(PacketType.QUERY_TICK_COUNT)
+@SetPacketType(PacketType.PING)
 export default class Handler extends PacketHandler {
   time: number;
+  timedOut: boolean;
+
   constructor(packet: FlyffPacket) {
     super();
-    this.time = packet.readInt32LE();
+    try {
+      this.time = packet.readInt32LE();
+      this.timedOut = false;
+    } catch {
+      this.time = 0;
+      this.timedOut = true;
+    }
   }
 
   async execute(): Promise<void> {
-    const packet = new FlyffPacket(PacketType.QUERY_TICK_COUNT);
-    const serverStartTime = this.server.time || new Date().getTime();
-    const elapsed = new Date().getTime() - serverStartTime;
-    packet.writeUInt32LE(this.time);
-    packet.writeInt64LE(elapsed);
+    const packet = new FlyffPacket(PacketType.PING);
+    packet.writeInt32(this.time);
     this.send(packet);
   }
 }

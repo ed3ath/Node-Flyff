@@ -80,11 +80,13 @@ function worldIntercom(instance: IInstance) {
 
   subscriber?.subscribe(RedisChannel.CLUSTER_CHANNEL, (err) => {
     if (!err) {
+      logger?.info("World server subscribed to CLUSTER_CHANNEL successfully");
       setTimeout(() => {
+        logger?.info("Sending ADD_CHANNEL message:", JSON.stringify(channel));
         sendMessage(MessageCommand.ADD_CHANNEL, channel);
       }, 500); // for dev: temp delay for 500ms
     } else {
-      logger?.error(err);
+      logger?.error("Failed to subscribe to CLUSTER_CHANNEL:", err);
     }
   });
   subscriber?.on("message", processChannelMessage.bind(this));
@@ -95,11 +97,14 @@ function worldIntercom(instance: IInstance) {
 
   function processChannelMessage(redisChannel: RedisChannel, message: string) {
     if (redisChannel !== RedisChannel.CLUSTER_CHANNEL) return;
-    if (!isValidEncryptionString(message, master)) return; // reject invalid messages
+    if (!isValidEncryptionString(message, master)) {
+      logger?.warn("Received invalid encrypted message");
+      return;
+    }
     const decrypted = parseMessage(decryptString(message, master));
     if (decrypted) {
       if (decrypted.sender === ServerType.WORLD_SERVER) return;
-      // console.log(decrypted);
+      logger?.info("World server received message:", JSON.stringify(decrypted));
       switch (decrypted.command) {
         case MessageCommand.CLUSTER_ONLINE: {
           sendMessage(MessageCommand.ADD_CHANNEL, channel);

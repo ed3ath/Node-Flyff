@@ -113,9 +113,12 @@ export class TcpServer {
     );
 
     const HandlerClass = this.handlers.get(packet.PacketType);
+
+
     if (HandlerClass) {
       // Execute the corresponding packet handler
       const handlerInstance = new HandlerClass(packet);
+    console.log(packet.PacketType.toString(16))
       handlerInstance.userConnection = userConnection;
       handlerInstance.server = this;
       await handlerInstance.wrappedExecute();

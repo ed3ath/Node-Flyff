@@ -45,9 +45,10 @@ export class DatabaseBuilder {
         ...this.getOptionByType(options.dataSource),
         entities: [...entities] as string[],
       });
+      this.logger.main(`Database connection configured for ${options.dataSource.type}`);
     } catch (error) {
-      console.log(error);
       this.logger.error("Error adding connection:", error);
+      throw error;
     }
   }
 
@@ -80,12 +81,16 @@ export class DatabaseBuilder {
 
   async build() {
     try {
+      if (!this.database) {
+        throw new Error("Database connection not configured");
+      }
       await this.database.initialize();
-      await this.database.synchronize();
+      // await this.database.synchronize(); // Skip synchronization to avoid table conflicts
+      this.logger.success(`Database successfully loaded`);
     } catch (e) {
-      this.logger.warn(e.message);
+      this.logger.error(`Database connection failed: ${e.message}`);
+      throw e;
     }
-    this.logger.success(`Database successfully loaded`);
     return this.database;
   }
 }
