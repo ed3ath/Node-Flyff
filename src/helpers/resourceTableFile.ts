@@ -17,7 +17,17 @@ export class ResourceTableFile {
       throw new Error(`File not found: ${filePath}`);
     }
 
-    this.content = fs.readFileSync(filePath, "utf-8");
+    try {
+      this.content = fs.readFileSync(filePath, "utf-8");
+    } catch (utf8Error) {
+      this.logger.warn(`Failed to read ${filePath} as UTF-8, trying UTF-16LE:`, utf8Error);
+      try {
+        this.content = fs.readFileSync(filePath, "utf16le");
+      } catch (utf16Error) {
+        this.logger.warn(`Failed to read ${filePath} as UTF-16LE, trying latin1:`, utf16Error);
+        this.content = fs.readFileSync(filePath, "latin1");
+      }
+    }
     this.parseContent(headerLineIndex);
   }
 
@@ -67,7 +77,21 @@ export class ResourceTableFile {
         const header = this.headers[i];
         const value = record[i];
 
-        if (header === "dwID" || header.includes("Name") || header.includes("IdentifierName")) {
+        if (header === "dwID") {
+          // For dwID field, try to look up the value in defines first
+          const cleanValue = cleanString(value);
+          const defineValue = this.defines.get(cleanValue);
+          if (defineValue !== undefined) {
+            this.logger.info(`ResourceTableFile: Found define for ${cleanValue} = ${defineValue}`);
+            obj[header] = defineValue; // Use the numeric define value
+          } else {
+            this.logger.warn(`ResourceTableFile: No define found for ${cleanValue}, defines size: ${this.defines.size}`);
+            // Debug: Show first 10 define keys
+            const defineKeys = Array.from(this.defines.keys()).slice(0, 10);
+            this.logger.info(`ResourceTableFile: Available define keys (first 10): ${defineKeys.join(', ')}`);
+            obj[header] = cleanValue; // Fallback to the string value
+          }
+        } else if (header.includes("Name") || header.includes("IdentifierName")) {
           obj[header] = cleanString(value);
         } else if (value.includes('.')) {
           obj[header] = tryParseFloat(value);

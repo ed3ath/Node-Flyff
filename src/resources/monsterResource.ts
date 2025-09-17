@@ -129,48 +129,130 @@ export class MonsterResources {
       return;
     }
 
+    this.logger.info(`Loading defines from: ${absolutePath}`);
     const data = fs.readFileSync(absolutePath, "utf8");
     const lines = data.split("\n");
+    this.logger.info(`File has ${lines.length} total lines`);
+
+    let defineCount = 0;
+    let miDefineCount = 0;
+    let oiDefineCount = 0;
+    const redisOperations: Promise<any>[] = [];
 
     for (const line of lines) {
-      const trimmedLine = line.trim();
-      if (trimmedLine.startsWith("#define")) {
-        const parts = trimmedLine.split(/\s+/);
-        if (parts.length >= 3) {
-          const name = parts[1];
-          const id = tryParseInt(parts[2]);
+      try {
+        const trimmedLine = line.trim();
+        if (trimmedLine.startsWith("#define")) {
+          const parts = trimmedLine.split(/\s+/);
+          if (parts.length >= 3) {
+            const name = parts[1];
+            const id = tryParseInt(parts[2]);
 
-          if (!isNaN(id) && name !== "") {
-            this.defines.set(name, id);
-            await this.redisClient.hset("objectDefines", name, id);
+            if (!isNaN(id) && name !== "") {
+              this.defines.set(name, id);
+
+              // Queue Redis operation without awaiting
+              redisOperations.push(
+                this.redisClient.hset("objectDefines", name, id)
+                  .catch(error => this.logger.warn(`Failed to store define ${name} in Redis: ${error.message}`))
+              );
+
+              defineCount++;
+
+              if (name.startsWith("MI_")) {
+                miDefineCount++;
+                if (miDefineCount <= 5) { // Log first 5 MI_ defines
+                  this.logger.info(`Loaded MI_ define: ${name} = ${id}`);
+                }
+              } else if (name.startsWith("OI_")) {
+                oiDefineCount++;
+                if (oiDefineCount <= 3) { // Log first 3 OI_ defines
+                  this.logger.info(`Loaded OI_ define: ${name} = ${id}`);
+                }
+              }
+            } else {
+              this.logger.warn(`Failed to parse define: "${trimmedLine}" - name: "${name}", id: ${id}`);
+            }
+          } else {
+            this.logger.warn(`Invalid #define format: "${trimmedLine}" - parts: ${parts.length}`);
           }
         }
+      } catch (error) {
+        this.logger.error(`Exception processing line: "${line}" - ${error.message}`);
       }
     }
+
+    // Wait for all Redis operations to complete
+    if (redisOperations.length > 0) {
+      await Promise.allSettled(redisOperations);
+      this.logger.info(`Stored ${redisOperations.length} defines in Redis`);
+    }
+
+    this.logger.info(`Loaded ${defineCount} total defines (${miDefineCount} MI_ defines, ${oiDefineCount} OI_ defines)`);
   }
 
   public async load(): Promise<void> {
     const startTime = Date.now();
+    this.logger.info("Starting monster resource load...");
 
+    // Check file existence with detailed logging
+    this.logger.info(`Checking for propMover.txt at: ${ResourcePaths.moversProp}`);
     if (!fs.existsSync(ResourcePaths.moversProp)) {
+      this.logger.error(`CRITICAL: propMover.txt not found at ${ResourcePaths.moversProp}`);
       throw new Error(`Unable to load mover properties. Reason: cannot find '${ResourcePaths.moversProp}' file.`);
     }
+    this.logger.info("✓ propMover.txt found");
 
+    this.logger.info(`Checking for propMoverEx.inc at: ${ResourcePaths.moversPropExPath}`);
     if (!fs.existsSync(ResourcePaths.moversPropExPath)) {
+      this.logger.error(`CRITICAL: propMoverEx.inc not found at ${ResourcePaths.moversPropExPath}`);
       throw new Error(`Unable to load extended mover properties. Reason: cannot find '${ResourcePaths.moversPropExPath}' file.`);
     }
+    this.logger.info("✓ propMoverEx.inc found");
 
+    this.logger.info("Files exist, loading defines...");
     await this.loadDefines();
+    this.logger.info(`Defines loaded: ${this.defines.size} entries`);
 
+    this.logger.info("Loading resource table from propMover.txt...");
     const resourceTable = new ResourceTableFile(ResourcePaths.moversProp, 0, this.defines);
     const movers = resourceTable.getRecords<any>();
+    this.logger.info(`Parsed ${movers.length} movers from resource table`);
+
+    let processedCount = 0;
+    let skippedCount = 0;
+    if (movers.length > 0) {
+      this.logger.info(`First mover dwID: "${movers[0].dwID}", szName: "${movers[0].szName}"`);
+    }
 
     for (const mover of movers) {
-      const moverId = this.defines.get(mover.dwID) || 0;
+      let moverId: number;
+
+      // Handle both cases: dwID might be a resolved number or still a string define name
+      if (typeof mover.dwID === 'number') {
+        // ResourceTableFile already resolved this to a numeric value
+        moverId = mover.dwID;
+        this.logger.info(`Using pre-resolved moverId: ${moverId} for ${mover.szName}`);
+      } else {
+        // dwID is still a string, look it up in defines
+        moverId = this.defines.get(mover.dwID) || 0;
+        if (moverId <= 0) {
+          this.logger.warn(`Failed to resolve moverId for dwID="${mover.dwID}" (szName="${mover.szName}")`);
+        }
+      }
 
       if (moverId <= 0) {
+        if (skippedCount < 5) { // Log first 5 skipped ones
+          this.logger.warn(`Skipping mover dwID="${mover.dwID}" (szName="${mover.szName}") - not found in defines (moverId: ${moverId})`);
+          // Also log what defines we do have
+          const defineKeys = Array.from(this.defines.keys()).slice(0, 10);
+          this.logger.info(`Available define keys (first 10): ${defineKeys.join(', ')}`);
+        }
+        skippedCount++;
         continue;
       }
+
+      processedCount++;
 
       const moverProperties: MoverProperties = {
         ...mover,
@@ -195,9 +277,13 @@ export class MonsterResources {
       }
     }
 
+    this.logger.info(`Processed ${processedCount} movers, skipped ${skippedCount} movers`);
     resourceTable.dispose();
 
+    this.logger.info("Loading extended properties from propMoverEx.inc...");
     const moversPropExFile = new IncludeFile(ResourcePaths.moversPropExPath);
+    this.logger.info(`Parsed ${moversPropExFile.Statements.length} statements from extended file`);
+
     for (const statement of moversPropExFile.Statements) {
       if (statement.type === 'block') {
         const moverId = this.defines.get(statement.name);
