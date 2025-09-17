@@ -8,7 +8,7 @@ import { MapItemType } from "../common/mapItemType";
 import { ModeType } from "../common/modeType";
 import { ObjectMessageType } from "../common/objectMessageType";
 import { MoverProperties, JobProperties } from "../interfaces/resource";
-import { UserConnection } from "../libraries/tcpServer";
+import { IUserConnection } from "../interfaces/connection";
 import { FlyffPacket } from "../libraries/flyffPacket";
 import { MotionSnapshot } from "../protocol/snapshots/motion";
 import { Item } from "../common/item";
@@ -184,7 +184,7 @@ export class Player extends Mover {
   public currentShopName: string = '';
 
   public constructor(
-    private readonly _connection: UserConnection,
+    private readonly _connection: IUserConnection,
     properties: MoverProperties,
     playerData: {
       id: number;

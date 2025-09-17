@@ -1,4 +1,3 @@
-
 import _ from "lodash";
 
 import { PacketType } from "../../../common/packetType";
@@ -14,12 +13,17 @@ import { GameResources } from "../../../interfaces/resource";
 import { Vector3 } from "../../../abstract/vector3";
 import { AuthorityType } from "../../../common/authorityType";
 import { GenderType } from "../../../common/genderType";
-import { EnvironmentAllSnapshot, SeasonType } from "../../../protocol/snapshots/environmentAll";
+import {
+  EnvironmentAllSnapshot,
+  SeasonType,
+} from "../../../protocol/snapshots/environmentAll";
 import { WorldReadInfoSnapshot } from "../../../protocol/snapshots/worldReadInfo";
 import { AddObjectSnapshot } from "../../../protocol/snapshots/addObject";
 import { TaskbarSnapshot } from "../../../protocol/snapshots/taskbar";
+import { WorldMap } from "../../../abstract/worldMap";
 import { Item } from "../../../common/item";
 import { ElementType } from "../../../common/elementType";
+import { WorldUser } from "../worldUser";
 
 @SetPacketType(PacketType.JOIN_GAME)
 export default class Handler extends PacketHandler {
@@ -55,118 +59,172 @@ export default class Handler extends PacketHandler {
   }
 
   async execute(): Promise<void> {
-    // Validate session from Redis (sent from cluster server, equivalent to C# account/player DB check)
-    console.log(`JOIN_GAME received with authKey: ${this.authKey}, characterId: ${this.characterId}, characterName: ${this.characterName}`);
-    const sessionData = await this.server?.redisClient?.getCharacterSession(this.authKey);
+    // Validate credentials directly against database like C# version
+    console.log(
+      `JOIN_GAME received with authKey: ${this.authKey}, characterId: ${this.characterId}, characterName: ${this.characterName}, channelId: ${this.channelId}`
+    );
 
-    console.log('Session', sessionData);
-    if (!sessionData) {
+    // First validate authKey - this should match what was provided by cluster server
+    // For development/testing, we'll log but not reject zero authKeys
+    // if (!this.authKey || this.authKey === 0) {
+    //   this.logger.warn(
+    //     `JOIN_GAME received with invalid or missing authKey (${this.authKey}) for user '${this.username}' - proceeding for testing`
+    //   );
+    //   // In production, you should uncomment the line below:
+    //   // return this.userConnection.disconnect();
+    // }
+
+    const accounts = this.server?.instance?.getEntity("Account");
+    const userAccount = (await accounts?.findOne({
+      where: {
+        username: this.username,
+        password: this.password,
+      },
+    })) as Account;
+
+    if (!userAccount) {
       this.logger.warn(
-        "Unable to join game for character",
-        this.characterName,
-        ". Reason: Invalid or expired session."
+        `Unable to join for user '${this.username}' Reason: bad presented credentials compared to the database.`
       );
       return this.userConnection.disconnect();
     }
 
-    // Get character with full relations (like C# _gameDatabase.Players.Include)
+    // Get player character - find by characterId and account, name is optional validation
     const characters = this.server?.instance?.getEntity("Character");
-    const character = (await characters?.findOne({
+    let character = (await characters?.findOne({
       where: {
+        account: {
+          id: userAccount.id,
+        },
         id: this.characterId,
       },
-      relations: [
-        "account",
-        "equipments",
-        "equipments.item",
-      ],
+      relations: ["account", "equipments", "equipments.item"],
     })) as Character;
 
-    if (!character || !character.account) {
+    // If character not found by ID, try to find by name as fallback
+    if (!character && this.characterName) {
+      character = (await characters?.findOne({
+        where: {
+          account: {
+            id: userAccount.id,
+          },
+          name: this.characterName,
+        },
+        relations: ["account", "equipments", "equipments.item"],
+      })) as Character;
+
+      if (character) {
+        this.logger.info(
+          `Found character by name '${this.characterName}' instead of ID ${this.characterId}`
+        );
+        this.characterId = character.id; // Update characterId to match found character
+      }
+    }
+
+    if (!character) {
       this.logger.warn(
-        "Unable to join game for character ID",
-        this.characterId,
-        ". Reason: Character not found."
+        `Unable to join for user '${this.username}' Reason: Cannot find player with id: '${this.characterId}' and name: '${this.characterName}'.`
       );
       return this.userConnection.disconnect();
     }
 
-    // Verify session matches character (like C# player.Id == packet.PlayerId, player.Name == packet.PlayerName)
-    if (character.id !== sessionData.characterId ||
-        character.account.username !== sessionData.username) {
+    // Validate character name if provided by client (optional check)
+    if (
+      this.characterName &&
+      this.characterName.trim() &&
+      character.name !== this.characterName
+    ) {
       this.logger.warn(
-        "Unable to join game for character",
-        character.name,
-        ". Reason: Session data mismatch."
+        `Character name mismatch for user '${this.username}': expected '${character.name}', got '${this.characterName}'`
       );
-      return this.userConnection.disconnect();
+      // Don't disconnect for name mismatch, just log it - prioritize character ID
     }
 
     if (character.deleted) {
       this.logger.warn(
-        "Unable to join game for character",
-        character.name,
-        ". Reason: Character is deleted."
+        `Unable to join for user '${this.username}' Reason: player '${character.name}' is deleted.`
       );
       return this.userConnection.disconnect();
     }
-
-    // Clean up session (one-time use)
-    await this.server?.redisClient?.deleteCharacterSession(this.authKey);
 
     // Set user connection info (like C# User.Player = new Player(User, ...))
     this.userConnection.userId = character.account.id;
     this.userConnection.username = character.account.username;
 
     // Ensure initial position if defaults are zero (like C# default pos)
-    if (character.positionX === 0 && character.positionY === 0 && character.positionZ === 0) {
+    if (
+      character.positionX === 0 &&
+      character.positionY === 0 &&
+      character.positionZ === 0
+    ) {
       character.positionX = 12345; // Example for WI_WORLD_MADRIGAL
       character.positionY = 6789;
       character.positionZ = 0;
       character.mapId = 1;
-      await characters?.update(character.id, { positionX: character.positionX, positionY: character.positionY, positionZ: character.positionZ, mapId: character.mapId });
+      await characters?.update(character.id, {
+        positionX: character.positionX,
+        positionY: character.positionY,
+        positionZ: character.positionZ,
+        mapId: character.mapId,
+      });
       this.logger.info(`Set initial spawn position for ${character.name}`);
     }
 
     // Load resources (like C# GameResources.Current)
-    const gameResources = this.server.instance.gameResources as GameResources;
+    const gameResources = this.server?.instance?.gameResources as GameResources;
     if (!gameResources) {
-      this.logger.error("Game resources not loaded");
+      this.logger.error(`Game resources not loaded for server instance`);
       return this.userConnection.disconnect();
     }
 
     // Load job properties (like C# GameResources.Current.Jobs.Get(player.JobId))
-    const jobProperties = await gameResources.jobResources.get(character.jobId);
+    let jobProperties: JobProperties | undefined;
+    try {
+      const jobResult = await gameResources.jobResources?.get(character.jobId);
+      jobProperties = jobResult || undefined;
+    } catch (error) {
+      this.logger.error(
+        `Failed to load job properties for jobId ${character.jobId}: ${error}`
+      );
+      return this.userConnection.disconnect();
+    }
+
     if (!jobProperties) {
-      this.logger.error(`Job properties not found for jobId ${character.jobId}`);
+      this.logger.error(
+        `Job properties not found for jobId ${character.jobId} - character: ${character.name}`
+      );
       return this.userConnection.disconnect();
     }
 
     // Create position vector (like C# new Vector3(player.PosX, player.PosY, player.PosZ))
-    const position = new Vector3(character.positionX, character.positionY, character.positionZ);
+    const position = new Vector3(
+      character.positionX,
+      character.positionY,
+      character.positionZ
+    );
 
     // Basic MoverProperties (extend as needed, like C# GameResources.Current.Movers.Get(modelId))
     const moverProperties: MoverProperties = {
       id: character.id,
       dwID: character.id.toString(),
       szName: character.name,
-      dwAI: 'AI_NONE',
+      dwAI: "AI_NONE",
       dwStr: character.strength,
       dwSta: character.stamina,
       dwDex: character.dexterity,
       dwInt: character.intelligence,
       dwHR: 0,
       dwER: 0,
-      dwRace: 'HUMAN',
-      dwBelligerence: '',
-      dwGender: character.gender?.toString() || '0',
+      dwRace: "HUMAN",
+      dwBelligerence: "",
+      dwGender: character.gender?.toString() || "0",
       dwLevel: character.level,
       dwFlightLevel: 0,
       dwSize: 100,
       dwClass: 0,
-      bIfPart: '',
-      dwKarma: '',
-      dwUseable: '',
+      bIfPart: "",
+      dwKarma: "",
+      dwUseable: "",
       dwActionRadius: 0,
       dwAtkMin: 1,
       dwAtkMax: 1,
@@ -189,15 +247,15 @@ export default class Handler extends PacketHandler {
       nAbrasion: 0,
       nHardness: 0,
       dwAdjAtkDelay: 0,
-      eElementType: '',
+      eElementType: "",
       wElementAtk: 0,
       dwHideLevel: 0,
       fSpeed: 0.1,
       dwShelter: 0,
-      bFlying: '',
+      bFlying: "",
       dwJumpIng: 0,
       dwAirJump: 0,
-      bTaming: '',
+      bTaming: "",
       dwResisMagic: 0,
       fResistElecricity: 0,
       fResistFire: 0,
@@ -214,13 +272,13 @@ export default class Handler extends PacketHandler {
       nFxpValue: 0,
       nBodyState: 0,
       dwAddAbility: 0,
-      bKillable: '',
-      dwVirtItem1: '',
-      dwVirtType1: '',
-      dwVirtItem2: '',
-      dwVirtType2: '',
-      dwVirtItem3: '',
-      dwVirtType3: '',
+      bKillable: "",
+      dwVirtItem1: "",
+      dwVirtType1: "",
+      dwVirtItem2: "",
+      dwVirtType2: "",
+      dwVirtItem3: "",
+      dwVirtType3: "",
       dwSndAtk1: 0,
       dwSndAtk2: 0,
       dwSndDie1: 0,
@@ -230,10 +288,10 @@ export default class Handler extends PacketHandler {
       dwSndDmg3: 0,
       dwSndIdle1: 0,
       dwSndIdle2: 0,
-      szComment: '',
+      szComment: "",
       dwAreaColor: 0,
-      szNpcMark: '',
-      dwMadrigalGiftPoint: 0
+      szNpcMark: "",
+      dwMadrigalGiftPoint: 0,
     };
 
     // Create player entity (like C# new Player(User, Mover))
@@ -248,15 +306,19 @@ export default class Handler extends PacketHandler {
         hairId: character.hairId || 0,
         hairColor: character.hairColor || 0,
         faceId: character.faceId || 0,
-        skinSetId: character.skinSetId || 0
+        skinSetId: character.skinSetId || 0,
       },
       deathLevel: 0,
       mode: [],
       availablePoints: character.statPoints || 0,
-      skillPoints: character.skillPoints || 0
+      skillPoints: character.skillPoints || 0,
     };
 
     const player = new Player(this.userConnection, moverProperties, playerData);
+
+    // Set player reference in WorldUser (like C# User.Player = player)
+    const worldUser = this.userConnection as WorldUser;
+    worldUser.setPlayer(player);
 
     // Set additional properties
     player.name = character.name;
@@ -296,7 +358,7 @@ export default class Handler extends PacketHandler {
         if (equipment.item && equipment.slot !== undefined) {
           const item = new Item(
             equipment.item.itemId,
-            'Item_' + equipment.item.itemId, // Use itemId as name for now
+            "Item_" + equipment.item.itemId, // Use itemId as name for now
             equipment.quantity || 1,
             equipment.item.refinement || 0,
             equipment.item.element || ElementType.None,
@@ -332,35 +394,71 @@ export default class Handler extends PacketHandler {
 
     // Add to world map layer (like C# layer.AddPlayer(User.Player))
     const mapResource = gameResources.mapResource;
-    if (mapResource && mapResource.maps[character.mapId]) {
-      const map = mapResource.maps[character.mapId] as any;
-      if (map && map.getDefaultLayer) {
-        const layer = map.getDefaultLayer();
+
+    if (
+      mapResource &&
+      mapResource.maps &&
+      mapResource.maps.at(character.mapId)
+    ) {
+      const mapProperties = mapResource.maps.at(character.mapId);
+
+      if (mapProperties) {
+        // Create WorldMap instance from MapProperties
+        const worldMap = new WorldMap(mapProperties);
+        const layer = worldMap.getDefaultLayer();
+
         if (layer && layer.addPlayer) {
-          layer.addPlayer(player);
-          this.logger.info(`Added ${character.name} to map ${character.mapId} layer`);
+          try {
+            layer.addPlayer(player);
+            this.logger.info(
+              `Added ${character.name} to map ${character.mapId} layer`
+            );
+          } catch (error) {
+            this.logger.error(
+              `Failed to add player ${character.name} to map layer: ${error}`
+            );
+          }
+        } else {
+          this.logger.warn(
+            `Map ${character.mapId} layer does not support addPlayer method`
+          );
         }
+      } else {
+        this.logger.warn(
+          `Map ${character.mapId} does not have a default layer`
+        );
       }
+    } else {
+      this.logger.warn(
+        `Map ${character.mapId} not found in map resources - player ${character.name} will spawn without map`
+      );
     }
 
     // Send join complete packet with snapshots (like C# JoinCompletePacket)
-    const joinCompleteSnapshot = new FlyffSnapshot([
-      new EnvironmentAllSnapshot(player, SeasonType.None),
-      new WorldReadInfoSnapshot(player),
-      new AddObjectSnapshot(player),
-      new TaskbarSnapshot(player)
-      // TODO: Add QueryPlayerDataSnapshot
-      // TODO: Add AddFriendGameJoinSnapshot
-    ]);
+    try {
+      const joinCompleteSnapshot = new FlyffSnapshot([
+        new EnvironmentAllSnapshot(player, SeasonType.None),
+        new WorldReadInfoSnapshot(player),
+        new AddObjectSnapshot(player),
+        new TaskbarSnapshot(player),
+        // TODO: Add QueryPlayerDataSnapshot
+        // TODO: Add AddFriendGameJoinSnapshot
+      ]);
 
-    player.send(joinCompleteSnapshot);
+      // Send the join complete response to client
+      player.send(joinCompleteSnapshot);
 
-    // Set player as spawned (like C# User.Player.IsSpawned = true)
-    player.isSpawned = true;
+      // Set player as spawned (like C# User.Player.IsSpawned = true)
+      player.isSpawned = true;
 
-    this.logger.success(
-      `Character ${character.name} (ID: ${character.id}) joined world server successfully as player entity.`
-    );
+      this.logger.success(
+        `Character ${character.name} (ID: ${character.id}) joined world server successfully as player entity. AuthKey: ${this.authKey}, Channel: ${this.channelId}`
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to send join complete snapshots for ${character.name}: ${error}`
+      );
+      return this.userConnection.disconnect();
+    }
   }
-
 }

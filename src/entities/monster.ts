@@ -9,19 +9,7 @@ import { MoverProperties } from "../interfaces/resource";
 import { FFRandom } from "../helpers/FFRandom";
 import { timeInSeconds } from "../helpers/time";
 import { Mover } from "./mover";
-
-// Interfaces for Monster-specific properties
-interface DropItemProperties {
-  itemId: number;
-  probability: number;
-  itemMaxRefine: number;
-}
-
-interface DropItemKindProperties {
-  itemKind: string;
-  uniqueMin: number;
-  uniqueMax: number;
-}
+import { DropItemProperties, DropItemKindProperties } from "../interfaces/dropItemProperties";
 
 interface MonsterProperties extends MoverProperties {
   dropGoldMin: number;

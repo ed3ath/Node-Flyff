@@ -65,26 +65,35 @@ class TestClient {
   }
 
   private handleData(data: Buffer) {
-    const packet = new FlyffPacket(data);
-    console.log(packet)
+    try {
+      const packet = new FlyffPacket(data);
+      console.log(`Received packet: ${PacketType[packet.PacketType] || 'UNKNOWN'} (0x${packet.PacketType.toString(16)})`);
 
-    console.log(`Received packet: ${PacketType[packet.PacketType]} (${packet.PacketType.toString(16)})`);
-
-    if (packet.PacketType === PacketType.WELCOME) {
-      this.sessionId = packet.readUInt32LE();
-      console.log(`Session ID: ${this.sessionId}`);
-    } else if (packet.PacketType === PacketType.SERVER_LIST && this.state === ClientState.LOGIN) {
-      console.log('Received server list');
-      // Parse server list, but for simplicity, proceed to cluster
-      this.startCluster();
-    } else if (packet.PacketType === PacketType.CHARACTER_LIST && this.state === ClientState.CLUSTER) {
-      console.log('Received character list');
-      // Assume character exists, send select
-      this.sendSelectCharacter();
-    } else if (packet.PacketType === PacketType.PLAYER_ID && this.state === ClientState.CLUSTER) {
-      this.authKey = packet.readInt32LE();
-      console.log(`Received auth key: ${this.authKey}`);
-      this.startWorld();
+      if (packet.PacketType === PacketType.WELCOME) {
+        this.sessionId = packet.readUInt32LE();
+        console.log(`Session ID: ${this.sessionId}`);
+      } else if (packet.PacketType === PacketType.SERVER_LIST && this.state === ClientState.LOGIN) {
+        console.log('Received server list');
+        // Parse server list, but for simplicity, proceed to cluster
+        this.startCluster();
+      } else if (packet.PacketType === PacketType.CHARACTER_LIST && this.state === ClientState.CLUSTER) {
+        console.log('Received character list');
+        // Assume character exists, send select
+        this.sendSelectCharacter();
+      } else if (packet.PacketType === PacketType.PLAYER_ID && this.state === ClientState.CLUSTER) {
+        this.authKey = packet.readInt32LE();
+        console.log(`Received auth key: ${this.authKey}`);
+        this.startWorld();
+      } else if (packet.PacketType === PacketType.SNAPSHOT && this.state === ClientState.WORLD) {
+        console.log('Received SNAPSHOT packet - join successful!');
+        console.log(`Successfully joined world server with character ID ${this.characterId}`);
+      } else if (packet.PacketType === PacketType.ERROR) {
+        console.error('Received ERROR packet from server');
+      } else {
+        console.log(`Unhandled packet type: ${PacketType[packet.PacketType] || 'UNKNOWN'} in state ${ClientState[this.state]}`);
+      }
+    } catch (error) {
+      console.error('Error handling packet data:', error);
     }
   }
 
@@ -128,7 +137,7 @@ class TestClient {
     packet.writeInt32LE(0); // guildWarId
     packet.writeInt32LE(0); // idOfMulti
     packet.writeByte(0); // slot
-    packet.writeString('TestChar'); // characterName
+    packet.writeString(''); // characterName - let server find by ID
     packet.writeString(this.username);
     packet.writeString(this.password);
     packet.writeInt32LE(0); // messengerState

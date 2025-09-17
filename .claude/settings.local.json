@@ -26,7 +26,8 @@
       "Bash(tasklist)",
       "Bash(wmic process where:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(where sqlite3)"
+      "Bash(where sqlite3)",
+      "Bash(del:*)"
     ],
     "deny": [],
     "ask": []

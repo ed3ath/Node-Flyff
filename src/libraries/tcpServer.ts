@@ -14,6 +14,7 @@ import { IInstance } from "../interfaces/instance";
 import { ErrorType } from "../common/errorType";
 import Character from "../database/character";
 import EquipmentItem from "../database/equipmentItem";
+import { FFUserConnection } from "./ffUserConnection";
 
 // Interface for server configuration
 export interface IServerConfig {
@@ -39,6 +40,16 @@ export class TcpServer {
     this.logger = new Logger(serverType);
     this.serverType = serverType;
     this.options = options;
+  }
+
+  /**
+   * Factory method to create the appropriate user connection based on server type
+   * Override this method in derived classes to return server-specific user connections
+   */
+  protected createUserConnection(socket: Socket): IUserConnection {
+    // Default implementation returns the base UserConnection
+    // This should be overridden in specific server implementations
+    return new UserConnection(socket);
   }
 
   // Method to start the server
@@ -77,19 +88,26 @@ export class TcpServer {
 
   // Method called when a new connection is established
   protected onConnection(socket: Socket): void {
-    const userConnection = new UserConnection(socket);
+    const userConnection = this.createUserConnection(socket);
     if (this.isUserConnected(userConnection)) return;
     this.connections.set(userConnection.sessionId, userConnection);
     this.logger.success(
       `New connection established with session ID: ${userConnection.sessionId} (${socket.remoteAddress}:${socket.remotePort})`
     );
 
-    if (this.serverType !== ServerType.CORE_SERVER) {
-      // Send welcome packet to the client
-      const packet = new FlyffPacket();
-      packet.writeUInt32LE(PacketType.WELCOME);
-      packet.writeUInt32LE(userConnection.sessionId);
-      userConnection.send(packet);
+    // For FFUserConnection instances, don't manually send welcome packet as it's handled in initialization
+    // For legacy UserConnection instances, send welcome packet manually
+    if (
+      userConnection instanceof UserConnection &&
+      !(userConnection instanceof FFUserConnection)
+    ) {
+      if (this.serverType !== ServerType.CORE_SERVER) {
+        // Send welcome packet to the client
+        const packet = new FlyffPacket();
+        packet.writeUInt32LE(PacketType.WELCOME);
+        packet.writeUInt32LE(userConnection.sessionId);
+        userConnection.send(packet);
+      }
     }
 
     // Attach event listeners for data, close, and error events
@@ -114,11 +132,10 @@ export class TcpServer {
 
     const HandlerClass = this.handlers.get(packet.PacketType);
 
-
     if (HandlerClass) {
       // Execute the corresponding packet handler
       const handlerInstance = new HandlerClass(packet);
-    console.log(packet.PacketType.toString(16))
+      console.log(this.getPacketTypeId(packet.PacketType));
       handlerInstance.userConnection = userConnection;
       handlerInstance.server = this;
       await handlerInstance.wrappedExecute();
@@ -180,8 +197,8 @@ export class TcpServer {
   isUserAccountConnected = (account: string) =>
     !_.isNil(this.getConnectionByAccount(account));
 
-  getConnectionByAccount(account: string): UserConnection | null {
-    let userConnection: UserConnection | null = null;
+  getConnectionByAccount(account: string): IUserConnection | null {
+    let userConnection: IUserConnection | null = null;
     this.connections.forEach((connection) => {
       if (connection.username === account) {
         userConnection = connection;
@@ -194,6 +211,7 @@ export class TcpServer {
 export class UserConnection {
   public userId: number | null = null;
   public username: string | null = null;
+  public player: any = null; // Will be set to Player instance in world server
   public readonly sessionId: number;
   public readonly socket: Socket;
 

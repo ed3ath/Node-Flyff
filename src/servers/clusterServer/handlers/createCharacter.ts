@@ -90,7 +90,7 @@ export default class Handler extends PacketHandler {
     }
 
     const defaultCharacter: IConfig = _.get(
-      this.server.instance.config?.settings,
+      this.server?.config?.cluster_server.settings,
       "default-character"
     );
 
