@@ -14,6 +14,7 @@ import { MotionSnapshot } from "../protocol/snapshots/motion";
 import { Item } from "../common/item";
 import { Mover } from "./mover";
 import { MapItemObject } from "./mapItemObject";
+import { QuestDiary } from "../common/questDiary";
 
 // Forward declaration to avoid circular dependency
 interface Monster extends Mover {
@@ -133,17 +134,6 @@ class SkillTree {
     return this.skills.get(id);
   }
 }
-
-class QuestDiary {
-  private quests: Map<number, any> = new Map();
-
-  constructor(private readonly owner: Player) {}
-
-  onMonsterKilled(monster: Monster): void {
-    // TODO: Update quest progress based on killed monster
-  }
-}
-
 class Taskbar {
   private shortcuts: Map<number, any> = new Map();
 

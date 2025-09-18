@@ -3,18 +3,13 @@ import path from "path";
 import yaml from "js-yaml";
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "./resourcePaths";
-import {
-  QuestProperties,
-  QuestStartRequirementsProperties,
-  QuestEndConditionProperties,
-  QuestRewardProperties,
-  QuestItemDropProperties,
-  QuestItemProperties,
-  QuestMonsterProperties,
-  QuestPatrolProperties
-} from "../interfaces/questProperties";
 import { DefineJob } from "../common/defineJob";
 import { GenderType } from "../common/genderType";
+import { QuestProperties } from "./properties/quest/quest";
+import { QuestEndConditionProperties } from "./properties/quest/questEndCondition";
+import { QuestItemDropProperties } from "./properties/quest/questItemDrop";
+import { QuestRewardProperties } from "./properties/quest/questReward";
+import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirements";
 
 interface YamlQuestData {
   quest_id: string;
