@@ -4,6 +4,7 @@ import { DefineJob } from "../common/defineJob";
 import { DefineSpecialEffects } from "../common/defineSpecialEffects";
 import { DefineText } from "../common/defineText";
 import { GenderType } from "../common/genderType";
+import { ItemPartType } from "../common/itemPartyType";
 import { MapItemType } from "../common/mapItemType";
 import { ModeType } from "../common/modeType";
 import { ObjectMessageType } from "../common/objectMessageType";
@@ -61,6 +62,11 @@ class Inventory {
     return this.getRange(Inventory.INVENTORY_SIZE, Inventory.INVENTORY_EQUIP_PARTS)
       .map(slot => slot.item)
       .filter(item => item !== null) as Item[];
+  }
+
+  getEquippedItem(partType: ItemPartType): Item | null {
+    const slotIndex = Inventory.INVENTORY_SIZE + partType;
+    return this.items.get(slotIndex) || null;
   }
 }
 
