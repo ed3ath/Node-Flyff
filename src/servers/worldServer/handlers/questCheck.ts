@@ -1,4 +1,4 @@
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { SetPacketType } from "../../../decorators/packetHandler";
 import { WorldPacketHandler } from "../worldPacketHandler";

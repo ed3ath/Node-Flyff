@@ -1,5 +1,5 @@
-import { WorldObject } from "../../abstract/worldObject";
-import { SnapshotType } from "../../common/snapshotType";
+import { WorldObject } from "../../game/world/worldObject";
+import { SnapshotType } from "../../protocol/snapshotType";
 import { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 

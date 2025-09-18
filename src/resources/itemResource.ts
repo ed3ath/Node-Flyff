@@ -6,7 +6,7 @@ import Redis, { RedisOptions } from "ioredis";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { ItemProperties } from "../interfaces/resource";
 import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
-import { BaseResource } from "../abstract/baseResource";
+import { BaseResource } from "../resources/formats/baseResource";
 
 export class ItemResources extends BaseResource {
   redisClient: Redis;

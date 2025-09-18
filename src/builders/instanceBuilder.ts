@@ -7,7 +7,7 @@ import { DatabaseBuilder } from "./databaseBuilder";
 import { HandlerBuilder } from "./handlerBuilder";
 import { ServerBuilder } from "./serverBuilder";
 import { HandlerConstructor } from "../libraries/packetHandler";
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 import { sleep } from "../helpers/sleep";
 import { IConfig } from "../interfaces/config";
 import { RedisBuilder } from "./redisBuilder";

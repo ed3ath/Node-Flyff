@@ -1,8 +1,8 @@
-import { WorldObject } from "../abstract/worldObject";
-import { WorldObjectType } from "../common/worldObjectType";
-import { DialogOptions } from "../common/dialogOptions";
-import { QuestState } from "../common/questState";
-import { Item } from "../common/item";
+import { WorldObject } from "../game/world/worldObject";
+import { WorldObjectType } from "../types/worldObjectType";
+import { DialogOptions } from "../types/dialogOptions";
+import { QuestState } from "../game/mechanics/questState";
+import { Item } from "../game/mechanics/item";
 import { NpcProperties, DialogProperties, DialogLink, ShopProperties, ShopItemProperties } from "../interfaces/resource";
 import { FFRandom } from "../helpers/FFRandom";
 import { timeInSeconds } from "../helpers/time";

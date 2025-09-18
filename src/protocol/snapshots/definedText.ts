@@ -1,6 +1,6 @@
-import { WorldObject } from "../../abstract/worldObject";
-import { DefineText } from "../../common/defineText";
-import { SnapshotType } from "../../common/snapshotType";
+import { WorldObject } from "../../game/world/worldObject";
+import { DefineText } from "../../game/definitions/defineText";
+import { SnapshotType } from "../../protocol/snapshotType";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 
 export class DefinedTextSnapshot extends FlyffSnapshot {

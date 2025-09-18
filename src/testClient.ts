@@ -1,7 +1,7 @@
 import { createConnection, Socket } from 'net';
 import { FlyffPacket } from './libraries/flyffPacket';
-import { PacketType } from './common/packetType';
-import { ErrorType } from './common/errorType';
+import { PacketType } from './protocol/packetType';
+import { ErrorType } from './types/errorType';
 import { encryptByteArray, buildEncryptionKeyFromString } from './libraries/crypto';
 
 enum ClientState {

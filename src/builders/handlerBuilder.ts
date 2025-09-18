@@ -3,9 +3,9 @@ import { join } from "path";
 import _ from "lodash";
 
 import { HandlerConstructor } from "../libraries/packetHandler";
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 import { Logger } from "../helpers/logger";
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 
 export class HandlerBuilder {
   private logger: Logger;

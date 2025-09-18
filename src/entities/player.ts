@@ -1,21 +1,21 @@
 import { Vector3 } from "../abstract/vector3";
-import { AuthorityType } from "../common/authorityType";
-import { DefineJob } from "../common/defineJob";
-import { DefineSpecialEffects } from "../common/defineSpecialEffects";
-import { DefineText } from "../common/defineText";
-import { GenderType } from "../common/genderType";
-import { ItemPartType } from "../common/itemPartyType";
-import { MapItemType } from "../common/mapItemType";
-import { ModeType } from "../common/modeType";
-import { ObjectMessageType } from "../common/objectMessageType";
+import { AuthorityType } from "../types/authorityType";
+import { DefineJob } from "../game/definitions/defineJob";
+import { DefineSpecialEffects } from "../game/definitions/defineSpecialEffects";
+import { DefineText } from "../game/definitions/defineText";
+import { GenderType } from "../types/genderType";
+import { ItemPartType } from "../types/itemPartyType";
+import { MapItemType } from "../types/mapItemType";
+import { ModeType } from "../types/modeType";
+import { ObjectMessageType } from "../types/objectMessageType";
 import { MoverProperties, JobProperties } from "../interfaces/resource";
 import { IUserConnection } from "../interfaces/connection";
 import { FlyffPacket } from "../libraries/flyffPacket";
 import { MotionSnapshot } from "../protocol/snapshots/motion";
-import { Item } from "../common/item";
+import { Item } from "../game/mechanics/item";
 import { Mover } from "./mover";
 import { MapItemObject } from "./mapItemObject";
-import { QuestDiary } from "../common/questDiary";
+import { QuestDiary } from "../game/mechanics/questDiary";
 
 // Forward declaration to avoid circular dependency
 interface Monster extends Mover {
@@ -239,7 +239,7 @@ export class Player extends Mover {
     }
 
     // TODO: Implement getVisibleObjects method in MapLayer
-    const currentVisibleEntities: import("../abstract/worldObject").WorldObject[] = [];
+    const currentVisibleEntities: import("../game/world/worldObject").WorldObject[] = [];
     const appearingEntities = currentVisibleEntities.filter(entity => !this.visibleObjects.includes(entity));
     const disappearingEntities = this.visibleObjects.filter(entity => !currentVisibleEntities.includes(entity));
 
@@ -502,7 +502,7 @@ export class Player extends Mover {
     this._connection.send(packet);
   }
   
-  private addVisibleEntity(entity: import("../abstract/worldObject").WorldObject): void {
+  private addVisibleEntity(entity: import("../game/world/worldObject").WorldObject): void {
     if (!this.visibleObjects.includes(entity)) {
       this.visibleObjects.push(entity);
     }
@@ -512,7 +512,7 @@ export class Player extends Mover {
     }
   }
 
-  private removeVisibleEntity(entity: import("../abstract/worldObject").WorldObject): void {
+  private removeVisibleEntity(entity: import("../game/world/worldObject").WorldObject): void {
     const index = this.visibleObjects.indexOf(entity);
     if (index > -1) {
       this.visibleObjects.splice(index, 1);

@@ -1,4 +1,4 @@
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 
 export function SetPacketType(key: PacketType): ClassDecorator {
   return function (target: any) {

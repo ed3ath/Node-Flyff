@@ -4,14 +4,14 @@ import _ from "lodash";
 
 import { FlyffPacket } from "./flyffPacket";
 import { HandlerConstructor } from "./packetHandler";
-import { PacketType, ToStringHex } from "../common/packetType";
+import { PacketType, ToStringHex } from "../protocol/packetType";
 import { Logger } from "../helpers/logger";
-import { ServerType } from "../common/serverType";
+import { ServerType } from "../types/serverType";
 import { IUserConnection } from "../interfaces/connection";
 import { IRedisClient } from "../interfaces/redis";
 import { IConfig } from "../interfaces/config";
 import { IInstance } from "../interfaces/instance";
-import { ErrorType } from "../common/errorType";
+import { ErrorType } from "../types/errorType";
 import Character from "../database/character";
 import EquipmentItem from "../database/equipmentItem";
 import { FFUserConnection } from "./ffUserConnection";

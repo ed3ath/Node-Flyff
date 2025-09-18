@@ -2,7 +2,7 @@ import { RedisOptions } from "ioredis";
 import _ from "lodash";
 
 import { Logger } from "../helpers/logger";
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 import { ItemResources } from "../resources/itemResource";
 import { GameResources } from "../interfaces/resource";
 import { MonsterResources } from "../resources/monsterResource";
@@ -129,7 +129,9 @@ export class ResourceBuilder {
             this.logger.warn("Failed to load with new method, falling back to Redis-based loading:", error);
             await this.monsterResources.loadDefines();
             await this.monsterResources.loadMonstersPropStrings();
-            await this.monsterResources.loadMonstersProp();
+            // Note: loadMonstersProp() method was removed as it's replaced by load()
+            this.logger.warn("Redis-based fallback is no longer available. Using load() method only.");
+            throw error; // Re-throw to indicate failure
           }
         });
 

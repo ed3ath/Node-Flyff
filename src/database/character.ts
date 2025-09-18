@@ -6,7 +6,7 @@ import {
   OneToMany,
   ManyToOne,
 } from "typeorm";
-import { GenderType } from "../common/genderType";
+import { GenderType } from "../types/genderType";
 import EquipmentItemEntity from "./equipmentItem";
 import AccountEntity from "./account";
 

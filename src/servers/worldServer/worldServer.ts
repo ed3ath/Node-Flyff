@@ -1,6 +1,6 @@
 import { Socket } from "net";
 import { IServerConfig, TcpServer } from "../../libraries/tcpServer";
-import { ServerType } from "../../common/serverType";
+import { ServerType } from "../../types/serverType";
 import { IUserConnection } from "../../interfaces/connection";
 import { WorldUser } from "./worldUser";
 

@@ -2,19 +2,17 @@ import fs from "fs-extra";
 import path from "path";
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "./resourcePaths";
-import {
-  QuestProperties,
-  QuestStartRequirementsProperties,
-  QuestEndConditionProperties,
-  QuestRewardProperties,
-  QuestItemDropProperties,
-  QuestItemProperties,
-  QuestMonsterProperties,
-  QuestPatrolProperties
-} from "../interfaces/questProperties";
+import { QuestProperties } from "./properties/quest/quest";
+import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirements";
+import { QuestEndConditionProperties } from "./properties/quest/questEndCondition";
+import { QuestRewardProperties } from "./properties/quest/questReward";
+import { QuestItemDropProperties } from "./properties/quest/questItemDrop";
+import { QuestItemProperties } from "./properties/quest/questItem";
+import { QuestMonsterProperties } from "./properties/quest/questMonster";
+import { QuestPatrolProperties } from "./properties/quest/questPatrol";
 import { LuaParser, LuaTable } from "../helpers/luaParser";
-import { DefineJob } from "../common/defineJob";
-import { GenderType } from "../common/genderType";
+import { DefineJob } from "../game/definitions/defineJob";
+import { GenderType } from "../types/genderType";
 
 export class QuestResources {
   private readonly logger: Logger;

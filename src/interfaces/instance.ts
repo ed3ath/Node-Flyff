@@ -1,5 +1,5 @@
 import { DataSource, ObjectLiteral, Repository } from "typeorm";
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 import { HandlerConstructor } from "../libraries/packetHandler";
 import { TcpServer } from "../libraries/tcpServer";
 import { IConfig } from "./config";

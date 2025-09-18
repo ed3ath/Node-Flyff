@@ -1,8 +1,8 @@
 import _ from "lodash";
 
-import { ErrorType } from "../../../common/errorType";
-import { DefineJob } from "../../../common/defineJob";
-import { PacketType } from "../../../common/packetType";
+import { ErrorType } from "../../../types/errorType";
+import { DefineJob } from "../../../game/definitions/defineJob";
+import { PacketType } from "../../../protocol/packetType";
 import { IConfig } from "../../../interfaces/config";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
@@ -11,8 +11,8 @@ import Character from "../../../database/character";
 import Account from "../../../database/account";
 import EquipmentItem from "../../../database/equipmentItem";
 import Item from "../../../database/item";
-import { GenderType } from "../../../common/genderType";
-import { ItemPartType } from "../../../common/itemPartyType";
+import { GenderType } from "../../../types/genderType";
+import { ItemPartType } from "../../../types/itemPartyType";
 
 @SetPacketType(PacketType.CREATE_CHARACTER)
 export default class Handler extends PacketHandler {

@@ -1,4 +1,4 @@
-import { ItemKind3 } from "../common/itemKind";
+import { ItemKind3 } from "../types/itemKind";
 
 export interface DropItemProperties {
   itemId: number;

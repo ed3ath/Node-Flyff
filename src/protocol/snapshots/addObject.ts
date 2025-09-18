@@ -1,4 +1,4 @@
-import { SnapshotType } from "../../common/snapshotType";
+import { SnapshotType } from "../../protocol/snapshotType";
 import { Player } from "../../entities/player";
 import { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";

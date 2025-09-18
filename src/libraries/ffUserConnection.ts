@@ -1,9 +1,9 @@
 import { Socket } from "net";
 import { Logger } from "../helpers/logger";
 import { FlyffPacket } from "./flyffPacket";
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 import { IUserConnection } from "../interfaces/connection";
-import { ErrorType } from "../common/errorType";
+import { ErrorType } from "../types/errorType";
 import Character from "../database/character";
 import EquipmentItem from "../database/equipmentItem";
 import _ from "lodash";

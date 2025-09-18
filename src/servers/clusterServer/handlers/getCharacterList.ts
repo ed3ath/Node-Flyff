@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";

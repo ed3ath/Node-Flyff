@@ -2,8 +2,8 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import Account from "./database/account";
 import Character from "./database/character";
-import { GenderType } from "./common/genderType";
-import { AuthorityType } from "./common/authorityType";
+import { GenderType } from "./types/genderType";
+import { AuthorityType } from "./types/authorityType";
 
 // Simple script to create test account and character for testing the flow
 async function setupTestData() {

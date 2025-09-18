@@ -1,5 +1,5 @@
-import { ObjectMessageType } from "../../common/objectMessageType";
-import { SnapshotType } from "../../common/snapshotType";
+import { ObjectMessageType } from "../../types/objectMessageType";
+import { SnapshotType } from "../../protocol/snapshotType";
 import { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 

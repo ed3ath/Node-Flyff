@@ -2,9 +2,9 @@ import fs from "fs-extra";
 import { join } from "path";
 import yaml from "js-yaml";
 
-import { ConfigType } from "../common/configType";
+import { ConfigType } from "../types/configType";
 import { Logger } from "../helpers/logger";
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 import { IConfig } from "../interfaces/config";
 
 export class ConfigBuilder {

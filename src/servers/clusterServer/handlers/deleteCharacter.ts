@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
@@ -9,7 +9,7 @@ import Character from "../../../database/character";
 import { FFRandom } from "../../../helpers/FFRandom";
 import EquipmentItem from "../../../database/equipmentItem";
 import { Repository, ObjectLiteral } from "typeorm";
-import { ErrorType } from "../../../common/errorType";
+import { ErrorType } from "../../../types/errorType";
 
 @SetPacketType(PacketType.DELETE_CHARACTER)
 export default class Handler extends PacketHandler {

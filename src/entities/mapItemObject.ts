@@ -1,8 +1,8 @@
-import { WorldObject } from "../abstract/worldObject";
-import { DefineItem } from "../common/defineItem";
-import { Item } from "../common/item";
-import { MapItemType } from "../common/mapItemType";
-import { WorldObjectType } from "../common/worldObjectType";
+import { WorldObject } from "../game/world/worldObject";
+import { DefineItem } from "../game/definitions/defineItem";
+import { Item } from "../game/mechanics/item";
+import { MapItemType } from "../types/mapItemType";
+import { WorldObjectType } from "../types/worldObjectType";
 import { FlyffPacket } from "../libraries/flyffPacket";
 import { Mover } from "./mover";
 

@@ -1,7 +1,7 @@
 import _ from "lodash";
 ;
 import { Logger } from "../helpers/logger";
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 import { Redis, RedisOptions } from "ioredis";
 import { IRedisClient } from "../interfaces/redis";
 import { RedisClient } from "../libraries/redis";

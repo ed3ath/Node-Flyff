@@ -2,9 +2,9 @@ import { Socket } from "net";
 import { Logger } from "../../helpers/logger";
 import { FFUserConnection } from "../../libraries/ffUserConnection";
 import { FlyffPacket } from "../../libraries/flyffPacket";
-import { PacketType } from "../../common/packetType";
-import { ErrorType } from "../../common/errorType";
-import { GenderType } from "../../common/genderType";
+import { PacketType } from "../../protocol/packetType";
+import { ErrorType } from "../../types/errorType";
+import { GenderType } from "../../types/genderType";
 import CharacterEntity from "../../database/character";
 
 /**

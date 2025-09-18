@@ -1,4 +1,4 @@
-import { DefineJob } from "../../../common/defineJob";
+import { DefineJob } from "../../../game/definitions/defineJob";
 
 export class QuestStartRequirementsProperties {
   public readonly minLevel: number;

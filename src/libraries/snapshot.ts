@@ -1,5 +1,5 @@
-import { PacketType } from "../common/packetType";
-import { SnapshotType } from "../common/snapshotType";
+import { PacketType } from "../protocol/packetType";
+import { SnapshotType } from "../protocol/snapshotType";
 import { BinaryStream } from "./binaryStream";
 import { FlyffPacket } from "./flyffPacket";
 

@@ -1,5 +1,5 @@
 import { randomInt } from "crypto";
-import { DefineJob } from "../../../common/defineJob";
+import { DefineJob } from "../../../game/definitions/defineJob";
 import { QuestItemProperties } from "./questItem";
 
 export type Range = { min: number; max: number };

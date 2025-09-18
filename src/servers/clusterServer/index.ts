@@ -7,9 +7,9 @@ import { ConfigBuilder } from "../../builders/configBuilder";
 import { DatabaseBuilder } from "../../builders/databaseBuilder";
 import { HandlerBuilder } from "../../builders/handlerBuilder";
 import { ServerBuilder } from "../../builders/serverBuilder";
-import { ServerType } from "../../common/serverType";
+import { ServerType } from "../../types/serverType";
 import { ClusterServer } from "./clusterServer";
-import { RedisChannel, MessageCommand } from "../../common/redisTypes";
+import { RedisChannel, MessageCommand } from "../../types/redisTypes";
 import { IChannel, ICluster } from "../../interfaces/cluster";
 import { IInstance } from "../../interfaces/instance";
 import {

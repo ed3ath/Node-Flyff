@@ -1,4 +1,4 @@
-import { GenderType } from "../../../common/genderType";
+import { GenderType } from "../../../types/genderType";
 
 export class QuestItemProperties {
   /**

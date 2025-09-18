@@ -7,9 +7,9 @@ import { MysqlConnectionOptions } from "typeorm/driver/mysql/MysqlConnectionOpti
 import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 import { IDataSource, IDatabaseOptions } from "../interfaces/database";
-import { DatabaseType } from "../common/databaseType";
+import { DatabaseType } from "../types/databaseType";
 
 export class DatabaseBuilder {
   private logger: Logger;

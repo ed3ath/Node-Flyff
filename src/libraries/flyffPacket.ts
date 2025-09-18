@@ -1,4 +1,4 @@
-import { PacketType, ToStringHex } from "../common/packetType";
+import { PacketType, ToStringHex } from "../protocol/packetType";
 import { BinaryStream } from "./binaryStream";
 
 export class FlyffPacket extends BinaryStream {

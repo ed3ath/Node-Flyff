@@ -1,6 +1,6 @@
-import { PacketType } from "../../../common/packetType";
-import { ObjectState } from "../../../common/objectState";
-import { StateFlags } from "../../../common/stateFlags";
+import { PacketType } from "../../../protocol/packetType";
+import { ObjectState } from "../../../types/objectState";
+import { StateFlags } from "../../../types/stateFlags";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { SetPacketType } from "../../../decorators/packetHandler";
 import { Vector3 } from "../../../abstract/vector3";

@@ -1,4 +1,4 @@
-import { JobType } from "./../common/defineJob";
+import { JobType } from "../game/definitions/defineJob";
 import fs from "fs-extra";
 import path from "path";
 import _ from "lodash";
@@ -8,7 +8,7 @@ import yaml from "js-yaml";
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { JobProperties } from "../interfaces/resource";
-import { DefineJob } from "../common/defineJob";
+import { DefineJob } from "../game/definitions/defineJob";
 import { tryParseInt, tryParseFloat } from "../helpers/parsing";
 
 export class JobResources {

@@ -1,5 +1,5 @@
-import { DefineAttributes } from "../common/defineAttributes";
-import { DefineJob, JobType } from "../common/defineJob";
+import { DefineAttributes } from "../game/definitions/defineAttributes";
+import { DefineJob, JobType } from "../game/definitions/defineJob";
 import { ItemResources } from "../resources/itemResource";
 import { MonsterResources } from "../resources/monsterResource";
 import { DeathPenaltyResources } from "../resources/deathPenaltyResource";
@@ -9,6 +9,8 @@ import { MapResources } from "../resources/mapResources";
 import { NpcResources } from "../resources/npcResource";
 import { DropItemProperties, DropItemKindProperties } from "./dropItemProperties";
 import { QuestResourcesYaml } from "../resources/questResourcesYaml";
+import { ElementType } from "../types/elementType";
+import { MoverClassType } from "../types/moverClassType";
 export interface GameResources {
   itemResources: ItemResources;
   monsterResources: MonsterResources;
@@ -81,102 +83,121 @@ export interface ItemProperties {
   readonly Params?: Readonly<Record<DefineAttributes, number>>;
 }
 
+/**
+ * Represents a Mover data structure from the propMover.txt resource file.
+ * Converted from C# Rhisis.Game.Resources.Properties.MoverProperties class.
+ */
 export interface MoverProperties {
+  /** Mover ID */
   id: number;
-  dwID: string;
-  szName: string;
-  dwAI: string;
-  dwStr: number;
-  dwSta: number;
-  dwDex: number;
-  dwInt: number;
-  dwHR: number;
-  dwER: number;
-  dwRace: string;
-  dwBelligerence: string;
-  dwGender: string;
-  dwLevel: number;
-  dwFlightLevel: number;
-  dwSize: number;
-  dwClass: number;
-  bIfPart: string;
-  dwKarma: string;
-  dwUseable: string;
-  dwActionRadius: number;
-  dwAtkMin: number;
-  dwAtkMax: number;
-  dwAtk1: number;
-  dwAtk2: number;
-  dwAtk3: number;
-  dwHorizontalRate: number;
-  dwVerticalRate: number;
-  dwDiagonalRate: number;
-  dwThrustRate: number;
-  dwChestRate: number;
-  dwHeadRate: number;
-  dwArmRate: number;
-  dwLegRate: number;
-  dwAttackSpeed: number;
-  dwReAttackDelay: number;
-  dwAddHp: number;
-  dwAddMp: number;
-  dwNaturealArmor: number;
-  nAbrasion: number;
-  nHardness: number;
-  dwAdjAtkDelay: number;
-  eElementType: string;
-  wElementAtk: number;
-  dwHideLevel: number;
-  fSpeed: number;
-  dwShelter: number;
-  bFlying: string;
-  dwJumpIng: number;
-  dwAirJump: number;
-  bTaming: string;
-  dwResisMagic: number;
-  fResistElecricity: number;
-  fResistFire: number;
-  fResistWind: number;
-  fResistWater: number;
-  fResistEarth: number;
-  dwCash: number;
-  dwSourceMaterial: number;
-  dwMaterialAmount: number;
-  dwCohesion: number;
-  dwHoldingTime: number;
-  dwCorrectionValue: number;
-  dwExpValue: number;
-  nFxpValue: number;
-  nBodyState: number;
-  dwAddAbility: number;
-  bKillable: string;
-  dwVirtItem1: string;
-  dwVirtType1: string;
-  dwVirtItem2: string;
-  dwVirtType2: string;
-  dwVirtItem3: string;
-  dwVirtType3: string;
-  dwSndAtk1: number;
-  dwSndAtk2: number;
-  dwSndDie1: number;
-  dwSndDie2: number;
-  dwSndDmg1: number;
-  dwSndDmg2: number;
-  dwSndDmg3: number;
-  dwSndIdle1: number;
-  dwSndIdle2: number;
-  szComment: string;
-  dwAreaColor: number;
-  szNpcMark: string;
-  dwMadrigalGiftPoint: number;
-  identifierName?: string;
-  name?: string;
-  level?: number;
-  dropGoldMin?: number;
-  dropGoldMax?: number;
-  maxDropItem?: number;
-  dropItems?: DropItemProperties[];
-  dropItemsKind?: DropItemKindProperties[];
+
+  /** Mover identifier name */
+  identifierName: string;
+
+  /** Mover name */
+  name: string;
+
+  /** Mover AI id */
+  AI: number;
+
+  /** Mover belligerence */
+  belligerence: number;
+
+  /** Mover speed */
+  speed: number;
+
+  /** Mover Hit Points (HP) */
+  addHp: number;
+
+  /** Mover Magic Points (MP) */
+  addMp: number;
+
+  /** Mover level */
+  level: number;
+
+  /** Mover flight level */
+  flightLevel: number;
+
+  /** Mover attack min */
+  attackMin: number;
+
+  /** Mover attack max */
+  attackMax: number;
+
+  /** Mover strength */
+  strength: number;
+
+  /** Mover stamina */
+  stamina: number;
+
+  /** Mover dexterity */
+  dexterity: number;
+
+  /** Mover intelligence */
+  intelligence: number;
+
+  /** Mover hit rate */
+  hitRating: number;
+
+  /** Mover escape rate */
+  escapeRating: number;
+
+  /** Mover class */
+  class: MoverClassType;
+
+  /** Mover natural armor */
+  naturalArmor: number;
+
+  /** Mover magic resistance */
+  magicResistance: number;
+
+  /** Mover attack delay */
+  reAttackDelay: number;
+
+  /** Mover attack speed */
+  attackSpeed: number;
+
+  /** Monster correction value */
+  correctionValue: number;
+
+  /** Amount of experience given when the mover dies */
+  experience: number;
+
+  /** Monster element type */
+  element: ElementType;
+
+  /** Mover's resistance to electricity */
+  electricityResistance: number;
+
+  /** Mover's resistance to fire */
+  fireResistance: number;
+
+  /** Mover's resistance to wind */
+  windResistance: number;
+
+  /** Mover's resistance to water */
+  waterResistance: number;
+
+  /** Mover's resistance to earth */
+  earthResistance: number;
+
+  /** Boolean value that indicates if the mover is flying or not */
+  isFlying: boolean;
+
+  /** Minimal amount of gold dropped when the mover dies */
+  dropGoldMin: number;
+
+  /** Maximal amount of gold dropped when the mover dies */
+  dropGoldMax: number;
+
+  /** Maximal amount of items dropped when the mover dies */
+  maxDropItem: number;
+
+  /** Collection of items the mover can drop */
+  dropItems: DropItemProperties[];
+
+  /** Collection of item kinds the mover can drop */
+  dropItemsKind: DropItemKindProperties[];
 }
 
 export interface NpcProperties {

@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { FlyffSnapshot } from "../../../libraries/snapshot";
 import { PacketHandler } from "../../../libraries/packetHandler";
@@ -11,8 +11,8 @@ import { Player } from "../../../entities/player";
 import { MoverProperties, JobProperties } from "../../../interfaces/resource";
 import { GameResources } from "../../../interfaces/resource";
 import { Vector3 } from "../../../abstract/vector3";
-import { AuthorityType } from "../../../common/authorityType";
-import { GenderType } from "../../../common/genderType";
+import { AuthorityType } from "../../../types/authorityType";
+import { GenderType } from "../../../types/genderType";
 import {
   EnvironmentAllSnapshot,
   SeasonType,
@@ -20,9 +20,9 @@ import {
 import { WorldReadInfoSnapshot } from "../../../protocol/snapshots/worldReadInfo";
 import { AddObjectSnapshot } from "../../../protocol/snapshots/addObject";
 import { TaskbarSnapshot } from "../../../protocol/snapshots/taskbar";
-import { WorldMap } from "../../../abstract/worldMap";
-import { Item } from "../../../common/item";
-import { ElementType } from "../../../common/elementType";
+import { WorldMap } from "../../../game/world/worldMap";
+import { Item } from "../../../game/mechanics/item";
+import { ElementType } from "../../../types/elementType";
 import { WorldUser } from "../worldUser";
 
 @SetPacketType(PacketType.JOIN)

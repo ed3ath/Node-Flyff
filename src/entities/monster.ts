@@ -1,10 +1,10 @@
 import { Vector3 } from "../abstract/vector3";
 import { Rectangle } from "../abstract/rectangle";
-import { AttackFlags } from "../common/attackFlag";
-import { AttackType } from "../common/attackType";
-import { DefineItem } from "../common/defineItem";
-import { ObjectState } from "../common/objectState";
-import { Item } from "../common/item";
+import { AttackFlags } from "../types/attackFlag";
+import { AttackType } from "../types/attackType";
+import { DefineItem } from "../game/definitions/defineItem";
+import { ObjectState } from "../types/objectState";
+import { Item } from "../game/mechanics/item";
 import { MoverProperties } from "../interfaces/resource";
 import { FFRandom } from "../helpers/FFRandom";
 import { timeInSeconds } from "../helpers/time";

@@ -1,7 +1,7 @@
 import clc from "cli-color";
 import moment from "moment";
 
-import { ServerType } from "../common/serverType";
+import { ServerType } from "../types/serverType";
 
 export class Logger {
   private readonly sender: ServerType | string = "MAIN";

@@ -1,11 +1,11 @@
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { SetPacketType } from "../../../decorators/packetHandler";
 import { WorldPacketHandler } from "../worldPacketHandler";
-import { ObjectMessageType } from "../../../common/objectMessageType";
-import { AttackType } from "../../../common/attackType";
-import { ItemPartType } from "../../../common/itemPartyType";
+import { ObjectMessageType } from "../../../types/objectMessageType";
+import { AttackType } from "../../../types/attackType";
+import { ItemPartType } from "../../../types/itemPartyType";
 import { Mover } from "../../../entities/mover";
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 
 @SetPacketType(PacketType.MELEE_ATTACK)
 export default class MeleeAttackHandler extends WorldPacketHandler {

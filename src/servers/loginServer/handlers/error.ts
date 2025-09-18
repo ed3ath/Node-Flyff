@@ -1,4 +1,4 @@
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
 

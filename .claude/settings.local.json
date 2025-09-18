@@ -28,7 +28,16 @@
       "mcp__ide__getDiagnostics",
       "Bash(where sqlite3)",
       "Bash(del:*)",
-      "Read(//c/Users/Cyan/Desktop/**)"
+      "Read(//c/Users/Cyan/Desktop/**)",
+      "Bash(for:*)",
+      "Bash(do mv \"H:\\game\\nodejs-flyff\\src\\common$file\" \"H:\\game\\nodejs-flyff\\src\\types$file\")",
+      "Bash(done)",
+      "Bash(do mv \"$file\" \"../types/$file\")",
+      "Bash(do mv \"$file\" \"../../../game/battle/arbiters/$file\")",
+      "Bash(do mv \"$file\" \"../../resources/formats/dyo/$file\")",
+      "Bash(do mv \"$file\" \"../../resources/formats/rgn/$file\")",
+      "Bash(timeout 15s npx tsc --noEmit)",
+      "Bash(timeout 10s npm start)"
     ],
     "deny": [],
     "ask": []

@@ -1,4 +1,4 @@
-import { ErrorType } from './../common/errorType';
+import { ErrorType } from '../types/errorType';
 import { Socket } from "net";
 import { FlyffPacket } from "../libraries/flyffPacket";
 import Character from "../database/character";

@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import {
   buildEncryptionKeyFromString,
   decryptByteArray,
@@ -8,7 +8,7 @@ import {
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
-import { ErrorType } from "../../../common/errorType";
+import { ErrorType } from "../../../types/errorType";
 import { IChannel, ICluster } from "../../../interfaces/cluster";
 import Account from "../../../database/account";
 

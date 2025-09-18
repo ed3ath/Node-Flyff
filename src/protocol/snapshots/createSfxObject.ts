@@ -1,6 +1,6 @@
-import { WorldObject } from "../../abstract/worldObject";
-import { DefineSpecialEffects } from "../../common/defineSpecialEffects";
-import { SnapshotType } from "../../common/snapshotType";
+import { WorldObject } from "../../game/world/worldObject";
+import { DefineSpecialEffects } from "../../game/definitions/defineSpecialEffects";
+import { SnapshotType } from "../../protocol/snapshotType";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 
 export class CreateSfxObjectSnapshot extends FlyffSnapshot {
