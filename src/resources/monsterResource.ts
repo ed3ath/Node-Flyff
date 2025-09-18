@@ -5,20 +5,53 @@ import { Logger } from "../helpers/logger";
 import Redis, { RedisOptions } from "ioredis";
 import { ResourcePaths } from "./resourcePaths";
 import { MoverProperties } from "../interfaces/resource";
+import { DropItemProperties, DropItemKindProperties } from "../interfaces/dropItemProperties";
 import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
+import { ResourceTableFile } from "../helpers/resourceTableFile";
+import { IncludeFile, Block } from "../helpers/includeFile";
+import { Instruction, Variable } from "../helpers/instructionParser";
+import { ItemKind3 } from "../common/itemKind";
 
 export class MonsterResources {
-  logger: Logger;
-  redisClient: Redis;
+  private readonly logger: Logger;
+  private readonly redisClient: Redis;
+  private readonly defines: Map<string, number> = new Map();
+  private readonly moversById: Map<number, MoverProperties> = new Map();
+  private readonly moversByIdentifierName: Map<string, MoverProperties> = new Map();
 
   constructor(options: RedisOptions) {
     this.logger = new Logger("Monster Resources");
     this.redisClient = new Redis(options);
   }
 
-  public async get(
+  public get(moverId: number): MoverProperties | null {
+    return this.moversById.get(moverId) || null;
+  }
+
+  public getByIdentifier(moverIdentifier: string): MoverProperties | null {
+    const moverId = parseInt(moverIdentifier, 10);
+    if (!isNaN(moverId)) {
+      return this.get(moverId);
+    } else {
+      return this.moversByIdentifierName.get(moverIdentifier) || null;
+    }
+  }
+
+  public getLoadedCount(): number {
+    return this.moversById.size;
+  }
+
+  public async getAsync(
     monsterIdentifier: string | number
   ): Promise<MoverProperties | null> {
+    if (this.moversById.size > 0) {
+      if (typeof monsterIdentifier === "number") {
+        return this.get(monsterIdentifier);
+      } else {
+        return this.getByIdentifier(monsterIdentifier);
+      }
+    }
+
     const monsterId =
       typeof monsterIdentifier === "number"
         ? monsterIdentifier
@@ -37,9 +70,23 @@ export class MonsterResources {
     return null;
   }
 
-  public where(
+  public where(predicate: (monster: MoverProperties) => boolean): MoverProperties[] {
+    const monsters: MoverProperties[] = [];
+    for (const monster of this.moversById.values()) {
+      if (predicate(monster)) {
+        monsters.push(monster);
+      }
+    }
+    return monsters;
+  }
+
+  public whereAsync(
     predicate: (monster: MoverProperties) => boolean
   ): MoverProperties[] {
+    if (this.moversById.size > 0) {
+      return this.where(predicate);
+    }
+
     const monsters: MoverProperties[] = [];
     this.redisClient.keys("monster:*", (err, keys) => {
       if (err) {
@@ -70,27 +117,216 @@ export class MonsterResources {
   }
 
   public async loadDefines(): Promise<void> {
+    this.loadDefinesSync();
+  }
+
+  private async loadDefinesSync(): Promise<void> {
     const absolutePath = path.resolve(ResourcePaths.defineObject);
     if (!fs.existsSync(absolutePath)) {
       this.logger.error(
-        `Unable to load monsters. Reason: cannot find '${absolutePath}' file.`
+        `Unable to load monster defines. Reason: cannot find '${absolutePath}' file.`
       );
+      return;
     }
 
     const data = fs.readFileSync(absolutePath, "utf8");
-
     const lines = data.split("\n");
-    _.forEach(lines, async (line) => {
-      if (_.trim(line).startsWith("#define")) {
-        const parts = _.trim(line).split(/\s+/);
-        const id = tryParseInt(parts[2]);
-        const name = parts[1];
 
-        if (!_.isNaN(id) && name !== "") {
-          await this.redisClient.hset("objectDefines", name, id);
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      if (trimmedLine.startsWith("#define")) {
+        const parts = trimmedLine.split(/\s+/);
+        if (parts.length >= 3) {
+          const name = parts[1];
+          const id = tryParseInt(parts[2]);
+
+          if (!isNaN(id) && name !== "") {
+            this.defines.set(name, id);
+            await this.redisClient.hset("objectDefines", name, id);
+          }
         }
       }
-    });
+    }
+  }
+
+  public async load(): Promise<void> {
+    const startTime = Date.now();
+
+    if (!fs.existsSync(ResourcePaths.moversProp)) {
+      throw new Error(`Unable to load mover properties. Reason: cannot find '${ResourcePaths.moversProp}' file.`);
+    }
+
+    if (!fs.existsSync(ResourcePaths.moversPropExPath)) {
+      throw new Error(`Unable to load extended mover properties. Reason: cannot find '${ResourcePaths.moversPropExPath}' file.`);
+    }
+
+    await this.loadDefines();
+
+    const resourceTable = new ResourceTableFile(ResourcePaths.moversProp, 0, this.defines);
+    const movers = resourceTable.getRecords<any>();
+
+    for (const mover of movers) {
+      const moverId = this.defines.get(mover.dwID) || 0;
+
+      if (moverId <= 0) {
+        continue;
+      }
+
+      const moverProperties: MoverProperties = {
+        ...mover,
+        id: moverId,
+        identifierName: mover.dwID,
+        name: mover.szName,
+        level: mover.dwLevel,
+        dropItems: [],
+        dropItemsKind: []
+      };
+
+      if (!this.moversById.has(moverProperties.id)) {
+        this.moversById.set(moverProperties.id, moverProperties);
+      } else {
+        this.logger.warn(`Failed to add mover: ${moverProperties.identifierName} (${moverProperties.name}). Mover already exists.`);
+      }
+
+      if (!this.moversByIdentifierName.has(moverProperties.identifierName!)) {
+        this.moversByIdentifierName.set(moverProperties.identifierName!, moverProperties);
+      } else {
+        this.logger.warn(`Failed to add mover: ${moverProperties.identifierName} (${moverProperties.name}). Mover already exists.`);
+      }
+    }
+
+    resourceTable.dispose();
+
+    const moversPropExFile = new IncludeFile(ResourcePaths.moversPropExPath);
+    for (const statement of moversPropExFile.Statements) {
+      if (statement.type === 'block') {
+        const moverId = this.defines.get(statement.name);
+        if (moverId && this.moversById.has(moverId)) {
+          const mover = this.moversById.get(moverId)!;
+          const block = moversPropExFile.getBlock(statement.name);
+
+          if (block) {
+            this.loadDropGold(mover, block.getInstruction("DropGold"));
+            this.loadDropItems(mover, block.getInstructions("DropItem"));
+            this.loadDropItemsKind(mover, block.getInstructions("DropKind"));
+
+            const maxDropVariable = block.getVariable("Maxitem");
+            if (maxDropVariable) {
+              mover.maxDropItem = Number(maxDropVariable.value);
+            }
+          }
+        }
+      }
+    }
+
+    moversPropExFile.dispose();
+
+    const elapsed = Date.now() - startTime;
+    this.logger.info(`${this.moversById.size} movers loaded in ${elapsed}ms.`);
+  }
+
+  private loadDropGold(mover: MoverProperties, dropGoldInstruction: Instruction | null): void {
+    if (!dropGoldInstruction) {
+      return;
+    }
+
+    if (dropGoldInstruction.parameters.length < 2) {
+      this.logger.warn(`Cannot load 'DropGold' instruction for mover ${mover.name}. Reason: Missing parameters.`);
+      return;
+    }
+
+    const minGold = parseInt(dropGoldInstruction.parameters[0], 10);
+    const maxGold = parseInt(dropGoldInstruction.parameters[1], 10);
+
+    if (isNaN(minGold)) {
+      this.logger.warn(`Cannot load min gold amount for mover ${mover.name}.`);
+    }
+
+    if (isNaN(maxGold)) {
+      this.logger.warn(`Cannot load max gold amount for mover ${mover.name}.`);
+    }
+
+    mover.dropGoldMin = minGold;
+    mover.dropGoldMax = maxGold;
+  }
+
+  private loadDropItems(mover: MoverProperties, dropItemInstructions: Instruction[]): void {
+    if (!dropItemInstructions || dropItemInstructions.length === 0) {
+      return;
+    }
+
+    for (const dropItemInstruction of dropItemInstructions) {
+      const dropItem: DropItemProperties = {
+        itemId: 0,
+        probability: 0,
+        itemMaxRefine: 0,
+        count: 0
+      };
+
+      const dropItemName = dropItemInstruction.parameters[0];
+      const itemId = this.defines.get(dropItemName);
+
+      if (itemId) {
+        dropItem.itemId = itemId;
+      } else {
+        this.logger.warn(`Cannot find drop item id: ${dropItemName} for mover ${mover.name}.`);
+        continue;
+      }
+
+      const probability = parseInt(dropItemInstruction.parameters[1], 10);
+      if (!isNaN(probability)) {
+        dropItem.probability = probability;
+      } else {
+        this.logger.warn(`Cannot read drop item probability for item ${dropItemName} and mover ${mover.name}.`);
+      }
+
+      const itemMaxRefine = parseInt(dropItemInstruction.parameters[2], 10);
+      if (!isNaN(itemMaxRefine)) {
+        dropItem.itemMaxRefine = itemMaxRefine;
+      } else {
+        this.logger.warn(`Cannot read drop item refine max for item ${dropItemName} and mover ${mover.name}.`);
+      }
+
+      const itemCount = parseInt(dropItemInstruction.parameters[3], 10);
+      if (!isNaN(itemCount)) {
+        dropItem.count = itemCount;
+      } else {
+        this.logger.warn(`Cannot read drop item count for item ${dropItemName} and mover ${mover.name}.`);
+      }
+
+      mover.dropItems!.push(dropItem);
+    }
+  }
+
+  private loadDropItemsKind(mover: MoverProperties, instructions: Instruction[]): void {
+    if (!instructions || instructions.length === 0) {
+      return;
+    }
+
+    for (const dropItemKindInstruction of instructions) {
+      if (dropItemKindInstruction.parameters.length < 1 || dropItemKindInstruction.parameters.length > 3) {
+        this.logger.warn(`Cannot load 'DropKind' instruction for mover ${mover.name}. Reason: Missing parameters.`);
+        continue;
+      }
+
+      const itemKindStr = dropItemKindInstruction.parameters[0].replace("IK3_", "");
+      let itemKind: ItemKind3;
+
+      try {
+        itemKind = ItemKind3[itemKindStr as keyof typeof ItemKind3];
+      } catch {
+        this.logger.warn(`Cannot parse ItemKind3: ${itemKindStr} for mover ${mover.name}.`);
+        continue;
+      }
+
+      const dropItemKind: DropItemKindProperties = {
+        itemKind: itemKind,
+        uniqueMin: Math.max((mover.level || 1) - 5, 1),
+        uniqueMax: Math.max((mover.level || 1) - 2, 1)
+      };
+
+      mover.dropItemsKind!.push(dropItemKind);
+    }
   }
 
   public async loadMonstersPropStrings(): Promise<void> {
@@ -136,14 +372,12 @@ export class MonsterResources {
       return;
     }
 
-    await this.cleanCache(); // clean cache
+    await this.cleanCache();
 
     const data = fs.readFileSync(absolutePath, "utf8");
-
     const lines = data.split("\n");
     _.forEach(lines, async (line) => {
       const monsterData = line.trim().split("\t");
-
       const id = await this.redisClient.hget("objectDefines", monsterData[0]);
 
       if (!_.isNil(id)) {
@@ -235,7 +469,7 @@ export class MonsterResources {
           dwAreaColor: tryParseInt(monsterData[83]),
           szNpcMark: cleanString(monsterData[84]),
           dwMadrigalGiftPoint: tryParseInt(monsterData[85]),
-      };
+        };
 
         if (monster.id) {
           this.redisClient.hmset(`monster:${monster.id}`, monster);
@@ -361,4 +595,6 @@ export class MonsterResources {
       });
     });
   }
+
+
 }

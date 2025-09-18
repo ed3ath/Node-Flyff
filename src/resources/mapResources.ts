@@ -36,6 +36,10 @@ export class MapResources {
     return Array.from(this.mapsById.values());
   }
 
+  public getLoadedCount(): number {
+    return this.mapsById.size;
+  }
+
   constructor(options: RedisOptions) {
     this.logger = new Logger("Map Resources");
     this.redisClient = new Redis(options);

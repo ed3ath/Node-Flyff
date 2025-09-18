@@ -1,0 +1,46 @@
+# QUEST_NEWBIE3_PSY - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.501Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_NEWBIE3_PSY
+title: IDS_PROPQUEST_INC_002760
+character: MaFl_Newbie
+end_character: MaFl_Newbie
+start_requirements:
+  min_level: 75
+  max_level: 129
+  previous_quest: ""
+  job:
+    - JOB_PSYCHIKEEPER
+    - JOB_PSYCHIKEEPER_MASTER
+    - JOB_PSYCHIKEEPER_HERO
+rewards:
+  gold: 0
+  exp: 0
+  skill_points: 0
+  items:
+    - id: II_SYS_SYS_EVE_BXMPSYCHIKEEPER90
+      quantity: 1
+      sex: Male
+      remove: false
+    - id: II_SYS_SYS_EVE_BXFPSYCHIKEEPER90
+      quantity: 1
+      sex: Female
+      remove: false
+end_conditions:
+  items:
+    - id: II_SYS_SYS_EVE_NEWBIE03
+      quantity: 1
+      sex: Any
+      remove: true
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_002761
+  begin_yes:
+    - IDS_PROPQUEST_INC_002762
+  begin_no:
+    - IDS_PROPQUEST_INC_002763
+  completed:
+    - IDS_PROPQUEST_INC_002764
+  not_finished:
+    - IDS_PROPQUEST_INC_002765

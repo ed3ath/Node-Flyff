@@ -1,0 +1,71 @@
+# QUEST_PREPAIDCARD - Auto-converted from Lua
+# Generated on 2025-09-17T01:29:53.547Z
+# Original quest definition converted to YAML format
+
+quest_id: QUEST_PREPAIDCARD
+title: IDS_PROPQUEST_INC_002180
+character: MaFl_PrepaidCard
+end_character: MaFl_PrepaidCard
+start_requirements:
+  min_level: 1
+  max_level: 129
+  previous_quest: ""
+  job:
+    - JOB_VAGRANT
+    - JOB_MERCENARY
+    - JOB_ACROBAT
+    - JOB_ASSIST
+    - JOB_MAGICIAN
+    - JOB_KNIGHT
+    - JOB_BLADE
+    - JOB_JESTER
+    - JOB_RANGER
+    - JOB_RINGMASTER
+    - JOB_BILLPOSTER
+    - JOB_PSYCHIKEEPER
+    - JOB_ELEMENTOR
+    - JOB_KNIGHT_MASTER
+    - JOB_BLADE_MASTER
+    - JOB_JESTER_MASTER
+    - JOB_RANGER_MASTER
+    - JOB_RINGMASTER_MASTER
+    - JOB_BILLPOSTER_MASTER
+    - JOB_PSYCHIKEEPER_MASTER
+    - JOB_ELEMENTOR_MASTER
+    - JOB_KNIGHT_HERO
+    - JOB_BLADE_HERO
+    - JOB_JESTER_HERO
+    - JOB_RANGER_HERO
+    - JOB_RINGMASTER_HERO
+    - JOB_BILLPOSTER_HERO
+    - JOB_PSYCHIKEEPER_HERO
+    - JOB_ELEMENTOR_HERO
+rewards:
+  gold: 0
+  exp: 0
+  skill_points: 0
+  items:
+    - id: II_SYS_SYS_EVE_BXLUCKY
+      quantity: 1
+      sex: Any
+      remove: false
+end_conditions:
+  items:
+    - id: II_SYS_SYS_EVE_COUPON01
+      quantity: 1
+      sex: Any
+      remove: true
+dialogs:
+  begin:
+    - IDS_PROPQUEST_INC_002181
+    - IDS_PROPQUEST_INC_002182
+    - IDS_PROPQUEST_INC_002183
+    - IDS_PROPQUEST_INC_002184
+  begin_yes:
+    - IDS_PROPQUEST_INC_002185
+  begin_no:
+    - IDS_PROPQUEST_INC_002186
+  completed:
+    - IDS_PROPQUEST_INC_002187
+  not_finished:
+    - IDS_PROPQUEST_INC_002188

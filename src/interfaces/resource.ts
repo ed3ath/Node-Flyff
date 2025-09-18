@@ -7,6 +7,8 @@ import { ExpTableResources } from "../resources/expTableResource";
 import { JobResources } from "../resources/jobResource";
 import { MapResources } from "../resources/mapResources";
 import { NpcResources } from "../resources/npcResource";
+import { DropItemProperties, DropItemKindProperties } from "./dropItemProperties";
+import { QuestResourcesYaml } from "../resources/questResourcesYaml";
 export interface GameResources {
   itemResources: ItemResources;
   monsterResources: MonsterResources;
@@ -15,6 +17,7 @@ export interface GameResources {
   expTableResources: ExpTableResources;
   deathPenaltyResource: DeathPenaltyResources;
   mapResource: MapResources;
+  questResources: QuestResourcesYaml;
 }
 export interface ItemProperties {
   id: number;
@@ -166,6 +169,14 @@ export interface MoverProperties {
   dwAreaColor: number;
   szNpcMark: string;
   dwMadrigalGiftPoint: number;
+  identifierName?: string;
+  name?: string;
+  level?: number;
+  dropGoldMin?: number;
+  dropGoldMax?: number;
+  maxDropItem?: number;
+  dropItems?: DropItemProperties[];
+  dropItemsKind?: DropItemKindProperties[];
 }
 
 export interface NpcProperties {
