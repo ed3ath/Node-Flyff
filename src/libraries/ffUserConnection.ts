@@ -27,6 +27,9 @@ export abstract class FFUserConnection implements IUserConnection {
   public userId: number | null = null;
   public username: string | null = null;
   public player: any = null; // Will be set to Player instance in world server
+  public selectedCharacterId: number | null = null; // Track selected character
+  public selectedCharacterName: string | null = null; // Track selected character name
+  public authKey: number | null = null; // Track auth key for world server
 
   /**
    * Gets the socket connection
@@ -136,10 +139,12 @@ export abstract class FFUserConnection implements IUserConnection {
   protected onConnected(): void {
     this.logger.info(`New user connected (SessionId=${this.sessionId}|Address=${this.socket.remoteAddress}:${this.socket.remotePort})`);
 
-    const packet = new FlyffPacket();
-    packet.writeUInt32LE(PacketType.WELCOME);
+    // Create WELCOME packet with proper structure
+    const packet = new FlyffPacket(PacketType.WELCOME);
     packet.writeUInt32LE(this.sessionId);
     this.send(packet);
+
+    this.logger.info(`Sent WELCOME packet with sessionId: ${this.sessionId}`);
   }
 
   /**

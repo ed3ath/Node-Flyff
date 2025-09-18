@@ -212,6 +212,9 @@ export class UserConnection {
   public userId: number | null = null;
   public username: string | null = null;
   public player: any = null; // Will be set to Player instance in world server
+  public selectedCharacterId: number | null = null; // Track selected character
+  public selectedCharacterName: string | null = null; // Track selected character name
+  public authKey: number | null = null; // Track auth key for world server
   public readonly sessionId: number;
   public readonly socket: Socket;
 

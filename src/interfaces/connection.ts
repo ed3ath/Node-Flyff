@@ -9,6 +9,9 @@ export interface IUserConnection {
   sessionId: number;
   socket: Socket;
   player: any; // Will be set to Player instance in world server
+  selectedCharacterId: number | null; // Track selected character
+  selectedCharacterName: string | null; // Track selected character name
+  authKey: number | null; // Track auth key for world server
   send(packet: FlyffPacket): void;
   sendError(errorType: ErrorType): void;
   sendCharacterList(characters: Character[], authKey: number): void;

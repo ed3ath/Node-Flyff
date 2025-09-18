@@ -25,7 +25,7 @@ import { Item } from "../../../common/item";
 import { ElementType } from "../../../common/elementType";
 import { WorldUser } from "../worldUser";
 
-@SetPacketType(PacketType.JOIN_GAME)
+@SetPacketType(PacketType.JOIN)
 export default class Handler extends PacketHandler {
   channelId: number;
   characterId: number;
@@ -59,10 +59,14 @@ export default class Handler extends PacketHandler {
   }
 
   async execute(): Promise<void> {
-    // Validate credentials directly against database like C# version
-    console.log(
-      `JOIN_GAME received with authKey: ${this.authKey}, characterId: ${this.characterId}, characterName: ${this.characterName}, channelId: ${this.channelId}`
-    );
+    this.logger.info(`JOIN received from user: ${this.username}`);
+    this.logger.info(`  Channel ID: ${this.channelId}`);
+    this.logger.info(`  Character ID: ${this.characterId}`);
+    this.logger.info(`  Character Name: ${this.characterName}`);
+    this.logger.info(`  Auth Key: ${this.authKey}`);
+    this.logger.info(`  Party ID: ${this.partyId}`);
+    this.logger.info(`  Guild ID: ${this.guildId}`);
+    this.logger.info(`  Slot: ${this.slot}`);
 
     // First validate authKey - this should match what was provided by cluster server
     // For development/testing, we'll log but not reject zero authKeys
@@ -88,6 +92,8 @@ export default class Handler extends PacketHandler {
       );
       return this.userConnection.disconnect();
     }
+
+    this.logger.info(`Account validation successful for user: ${this.username} (Account ID: ${userAccount.id})`);
 
     // Get player character - find by characterId and account, name is optional validation
     const characters = this.server?.instance?.getEntity("Character");
@@ -127,6 +133,8 @@ export default class Handler extends PacketHandler {
       );
       return this.userConnection.disconnect();
     }
+
+    this.logger.info(`Character validation successful: ${character.name} (ID: ${character.id}) for user: ${this.username}`);
 
     // Validate character name if provided by client (optional check)
     if (
@@ -324,6 +332,7 @@ export default class Handler extends PacketHandler {
     player.name = character.name;
     player.level = character.level;
     player.position.copy(position);
+    (player as any).mapId = character.mapId; // Set mapId for WorldReadInfoSnapshot
     player.isSpawned = true;
 
     // Set stats if available (like C# Statistics.Strength = player.Strength)
@@ -434,8 +443,36 @@ export default class Handler extends PacketHandler {
       );
     }
 
-    // Send join complete packet with snapshots (like C# JoinCompletePacket)
+    // Send PACKETTYPE_JOIN response first (like C++ OnJoin expects)
     try {
+      this.logger.info(`Creating JOIN response packet for character: ${character.name}`);
+
+      // Create PACKETTYPE_JOIN response packet - this is what the client expects first
+      const joinResponsePacket = new FlyffPacket(PacketType.JOIN);
+
+      // Serialize basic player data like C++ PACKETTYPE_JOIN response
+      joinResponsePacket.writeInt32LE(this.authKey || 0); // Echo back the auth key
+      joinResponsePacket.writeInt32LE(character.account.id); // Account info
+      joinResponsePacket.writeInt32LE(this.channelId || character.mapId); // World/Channel ID
+      joinResponsePacket.writeInt32LE(character.id); // Character ID
+
+      // CRITICAL: Include player's objectId so client knows which object is the player
+      joinResponsePacket.writeInt32LE(player.objectId); // Player's world object ID
+
+      // Serialize complete player data (like C++ pMover->Serialize(ar))
+      joinResponsePacket.writeString(character.name);
+      joinResponsePacket.writeInt32LE(character.level);
+      joinResponsePacket.writeInt32LE(character.jobId);
+      joinResponsePacket.writeSingleLE(character.positionX);
+      joinResponsePacket.writeSingleLE(character.positionY);
+      joinResponsePacket.writeSingleLE(character.positionZ);
+
+      this.logger.info(`Sending PACKETTYPE_JOIN response packet to client for character: ${character.name}`);
+
+      // Send the PACKETTYPE_JOIN response first
+      this.send(joinResponsePacket);
+
+      // Then send the world snapshot (like C++ OnSnapshot in OnJoin)
       const joinCompleteSnapshot = new FlyffSnapshot([
         new EnvironmentAllSnapshot(player, SeasonType.None),
         new WorldReadInfoSnapshot(player),
@@ -445,18 +482,21 @@ export default class Handler extends PacketHandler {
         // TODO: Add AddFriendGameJoinSnapshot
       ]);
 
-      // Send the join complete response to client
+      this.logger.info(`Sending world snapshot to client for character: ${character.name}`);
+
+      // Send the world snapshot after the JOIN response
       player.send(joinCompleteSnapshot);
 
       // Set player as spawned (like C# User.Player.IsSpawned = true)
       player.isSpawned = true;
 
       this.logger.success(
-        `Character ${character.name} (ID: ${character.id}) joined world server successfully as player entity. AuthKey: ${this.authKey}, Channel: ${this.channelId}`
+        `✓ Character ${character.name} (ID: ${character.id}) joined world server successfully! AuthKey: ${this.authKey}, Channel: ${this.channelId}`
       );
+      this.logger.success(`✓ Player spawned in world at position (${character.positionX}, ${character.positionY}, ${character.positionZ}) on map ${character.mapId}`);
     } catch (error) {
       this.logger.error(
-        `Failed to send join complete snapshots for ${character.name}: ${error}`
+        `Failed to send JOIN response for ${character.name}: ${error}`
       );
       return this.userConnection.disconnect();
     }
