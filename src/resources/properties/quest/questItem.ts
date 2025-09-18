@@ -1,20 +1,4 @@
-// QuestItemProperties.ts
-
-// You can define these enums similar to your C# enums
-export enum GenderType {
-  Male = "Male",
-  Female = "Female",
-  Both = "Both",
-}
-
-export enum ElementType {
-  None = "None",
-  Fire = "Fire",
-  Water = "Water",
-  Earth = "Earth",
-  Wind = "Wind",
-  Electric = "Electric",
-}
+import { GenderType } from "../../../common/genderType";
 
 export class QuestItemProperties {
   /**
@@ -40,7 +24,7 @@ export class QuestItemProperties {
   /**
    * Gets or sets the item element.
    */
-  public readonly element: ElementType;
+  public readonly element: number;
 
   /**
    * Gets or sets the item element refine.
@@ -57,17 +41,17 @@ export class QuestItemProperties {
     id: string;
     quantity: number;
     sex: GenderType;
-    refine: number;
-    element: ElementType;
-    elementRefine: number;
+    refine?: number;
+    element?: number;
+    elementRefine?: number;
     remove: boolean;
   }) {
     this.id = props.id;
     this.quantity = props.quantity;
     this.sex = props.sex;
-    this.refine = props.refine;
-    this.element = props.element;
-    this.elementRefine = props.elementRefine;
+    this.refine = props.refine ?? 0;
+    this.element = props.element ?? 0;
+    this.elementRefine = props.elementRefine ?? 0;
     this.remove = props.remove;
   }
 }

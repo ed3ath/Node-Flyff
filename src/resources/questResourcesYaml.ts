@@ -10,6 +10,9 @@ import { QuestEndConditionProperties } from "./properties/quest/questEndConditio
 import { QuestItemDropProperties } from "./properties/quest/questItemDrop";
 import { QuestRewardProperties } from "./properties/quest/questReward";
 import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirements";
+import { QuestItemProperties } from "./properties/quest/questItem";
+import { QuestMonsterProperties } from "./properties/quest/questMonster";
+import { QuestPatrolProperties } from "./properties/quest/questPatrol";
 
 interface YamlQuestData {
   quest_id: string;
@@ -204,7 +207,7 @@ export class QuestResourcesYaml {
   }
 
   private convertYamlToQuestProperties(yamlData: YamlQuestData, questId: number): QuestProperties {
-    return {
+    return new QuestProperties({
       id: questId,
       name: yamlData.quest_id,
       title: yamlData.title || "",
@@ -219,81 +222,70 @@ export class QuestResourcesYaml {
       declinedDialogs: yamlData.dialogs?.begin_no || [],
       completedDialogs: yamlData.dialogs?.completed || [],
       notFinishedDialogs: yamlData.dialogs?.not_finished || []
-    };
+    });
   }
 
   private convertStartRequirements(data?: YamlQuestData['start_requirements']): QuestStartRequirementsProperties {
     if (!data) {
-      return {
-        previousQuestId: undefined,
+      return new QuestStartRequirementsProperties({
         minLevel: 0,
-        maxLevel: 0,
-        jobs: undefined
-      };
+        maxLevel: 0
+      });
     }
 
-    return {
-      previousQuestId: data.previous_quest || undefined,
+    return new QuestStartRequirementsProperties({
+      previousQuestId: data.previous_quest,
       minLevel: data.min_level || 0,
       maxLevel: data.max_level || 0,
       jobs: data.job?.map(jobStr => {
         const jobKey = jobStr as keyof typeof DefineJob;
         return DefineJob[jobKey];
       }).filter(job => job !== undefined)
-    };
+    });
   }
 
   private convertEndConditions(data?: YamlQuestData['end_conditions']): QuestEndConditionProperties {
     if (!data) {
-      return {
-        items: undefined,
-        monsters: undefined,
-        patrols: undefined
-      };
+      return new QuestEndConditionProperties({});
     }
 
-    return {
-      items: data.items?.map(item => ({
+    return new QuestEndConditionProperties({
+      items: data.items?.map(item => new QuestItemProperties({
         id: item.id,
         quantity: item.quantity,
         sex: this.parseGenderType(item.sex),
         remove: item.remove
       })),
-      monsters: data.monsters?.map(monster => ({
+      monsters: data.monsters?.map(monster => new QuestMonsterProperties({
         id: monster.id,
         amount: monster.amount
       })),
-      patrols: data.patrols?.map(patrol => ({
+      patrols: data.patrols?.map(patrol => new QuestPatrolProperties({
         mapId: patrol.map_id,
         left: patrol.left,
         top: patrol.top,
         right: patrol.right,
         bottom: patrol.bottom
       }))
-    };
+    });
   }
 
   private convertRewards(data?: YamlQuestData['rewards']): QuestRewardProperties {
     if (!data) {
-      return {
-        exp: undefined,
-        gold: undefined,
-        skillPoints: undefined,
-        items: undefined
-      };
+      return new QuestRewardProperties({});
     }
 
-    return {
+    return new QuestRewardProperties({
       exp: data.exp,
       gold: data.gold,
       skillPoints: data.skill_points,
-      items: data.items?.map(item => ({
+      items: data.items?.map(item => new QuestItemProperties({
         id: item.id,
         quantity: item.quantity,
         sex: this.parseGenderType(item.sex),
         remove: item.remove
       }))
-    };
+    });
   }
 
   private convertDrops(data?: YamlQuestData['drops']): QuestItemDropProperties[] {

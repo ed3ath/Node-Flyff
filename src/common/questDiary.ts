@@ -1,7 +1,7 @@
 import { Quest } from "./quest";
-import { QuestProperties } from "../interfaces/questProperties";
 import { QuestState } from "./questState";
 import { GenderType } from "./genderType";
+import { QuestProperties } from "../resources/properties/quest/quest";
 
 export class QuestDiary {
   private readonly _player: any; // Player reference

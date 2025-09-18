@@ -7,6 +7,7 @@ import { NpcProperties, DialogProperties, DialogLink, ShopProperties, ShopItemPr
 import { FFRandom } from "../helpers/FFRandom";
 import { timeInSeconds } from "../helpers/time";
 import { FlyffPacket } from "../libraries/flyffPacket";
+import { QuestProperties } from "../resources/properties/quest/quest";
 
 // Forward declarations to avoid circular dependencies
 interface Player extends WorldObject {
@@ -26,14 +27,6 @@ interface QuestDiary {
   hasActiveQuest(questId: number): boolean;
 }
 
-interface QuestProperties {
-  id: number;
-  title: string;
-  startCharacter: string;
-  endCharacter: string;
-  beginDialogs: string[];
-  completedDialogs: string[];
-}
 
 // Item container for shop system
 class ItemContainer {
@@ -248,7 +241,7 @@ export class Npc extends WorldObject {
 
   public showQuestDialog(
     player: Player,
-    texts: string[],
+    texts: readonly string[],
     buttons: DialogLink[],
     questId: number
   ): void {

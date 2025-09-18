@@ -1,4 +1,4 @@
-import { QuestProperties } from "../interfaces/questProperties";
+import { QuestProperties } from "../resources/properties/quest/quest";
 import { QuestState } from "./questState";
 
 export class Quest {
