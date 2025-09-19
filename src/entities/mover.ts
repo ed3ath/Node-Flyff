@@ -25,7 +25,6 @@ import { DestPositionSnapshot } from "../protocol/snapshots/destPosition";
 import { MotionSnapshot } from "../protocol/snapshots/motion";
 import { MoverSetDestObjectSnapshot } from "../protocol/snapshots/moverSetDestObject";
 import { MapItemObject } from "./mapItemObject";
-import { Player } from "./player";
 
 export class Mover extends WorldObject {
   public get type(): WorldObjectType {
@@ -60,7 +59,7 @@ export class Mover extends WorldObject {
 
   public get speed(): number {
     return (
-      (this.properties.fSpeed +
+      ((this.properties.fSpeed || 0.1) +
         this.attributes.get(DefineAttributes.DST_SPEED) / 100) *
       this.speedFactor
     );
@@ -222,7 +221,7 @@ export class Mover extends WorldObject {
     target: Mover,
     attackType: AttackType
   ): { success: boolean; attackResult?: AttackResult } {
-    if (this instanceof Player && this.mode.includes(ModeType.ONEKILL_MODE)) {
+    if ('mode' in this && Array.isArray(this.mode) && this.mode.includes(ModeType.ONEKILL_MODE)) {
       const attackResult: AttackResult = {
         damages: target.health.hp,
         flags: AttackFlags.AF_GENERIC,

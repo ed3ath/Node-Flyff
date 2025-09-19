@@ -1,6 +1,6 @@
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
 
 import { ResourcePaths } from "../resources/resourcePaths";

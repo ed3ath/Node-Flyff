@@ -1,7 +1,5 @@
 import { DefineAttributes } from "../game/definitions/defineAttributes";
-import { Mover } from "../entities/mover";
-import { Player } from "../entities/player";
-import { Monster } from "../entities/monster";
+import type { Mover } from "../entities/mover";
 
 export class HealthFormulas {
     static getOriginalPoints(mover: Mover, attribute: DefineAttributes): number {
@@ -40,7 +38,7 @@ export class HealthFormulas {
         const level = entity.level;
         const stamina = this.getStatisticPoints(entity, DefineAttributes.DST_STA);
         const maxHp = this.getMaxHp(entity);
-        const hpRecoveryFactor = entity instanceof Player ? entity.job.hpRecoveryFactor : 1;
+        const hpRecoveryFactor = ('job' in entity && entity.job && typeof entity.job === 'object' && 'hpRecoveryFactor' in entity.job) ? (entity.job as any).hpRecoveryFactor : 1;
 
         const recoveredHp = Math.floor(level / 3 + maxHp / (500 * level) + stamina * hpRecoveryFactor);
 
@@ -51,7 +49,7 @@ export class HealthFormulas {
         const level = entity.level;
         const intelligence = this.getStatisticPoints(entity, DefineAttributes.DST_INT);
         const maxMp = this.getMaxMp(entity);
-        const mpRecoveryFactor = entity instanceof Player ? entity.job.mpRecoveryFactor : 1;
+        const mpRecoveryFactor = ('job' in entity && entity.job && typeof entity.job === 'object' && 'mpRecoveryFactor' in entity.job) ? (entity.job as any).mpRecoveryFactor : 1;
 
         const recoveredMp = Math.floor(((level * 1.5) + (maxMp / (500 * level)) + (intelligence * mpRecoveryFactor)) * 0.2);
 
@@ -62,7 +60,7 @@ export class HealthFormulas {
         const level = entity.level;
         const stamina = this.getStatisticPoints(entity, DefineAttributes.DST_STA);
         const maxFp = this.getMaxFp(entity);
-        const fpRecoveryFactor = entity instanceof Player ? entity.job.fpRecoveryFactor : 1;
+        const fpRecoveryFactor = ('job' in entity && entity.job && typeof entity.job === 'object' && 'fpRecoveryFactor' in entity.job) ? (entity.job as any).fpRecoveryFactor : 1;
 
         const recoveredFp = Math.floor(((level * 2) + (maxFp / (500 * level)) + (stamina * fpRecoveryFactor)) * 0.2);
 
@@ -94,8 +92,8 @@ export class HealthFormulas {
     }
 
     static getMaxOriginHp(entity: Mover): number {
-        if (entity instanceof Player) {
-            const maxHpFactor = entity.job.maxHpFactor;
+        if ('job' in entity && entity.job && typeof entity.job === 'object' && 'maxHpFactor' in entity.job) {
+            const maxHpFactor = (entity.job as any).maxHpFactor;
             const level = entity.level;
             const stamina = this.getStatisticPoints(entity, DefineAttributes.DST_STA);
 
@@ -103,8 +101,8 @@ export class HealthFormulas {
             const b = a * ((level + 1) / 4) * (1 + stamina / 50) + stamina * 10;
 
             return Math.floor(b + 80);
-        } else if (entity instanceof Monster) {
-            return entity.properties.addHp;
+        } else if ('properties' in entity && entity.properties && 'addHp' in entity.properties) {
+            return entity.properties.addHp || 0;
         }
 
         return 0;
@@ -114,8 +112,8 @@ export class HealthFormulas {
         const level = entity.level;
         const intelligence = this.getStatisticPoints(entity, DefineAttributes.DST_INT);
 
-        if (entity instanceof Player) {
-            const maxMpFactor = entity.job.maxMpFactor;
+        if ('job' in entity && entity.job && typeof entity.job === 'object' && 'maxMpFactor' in entity.job) {
+            const maxMpFactor = (entity.job as any).maxMpFactor;
 
             return Math.floor((((level * 2) + (intelligence * 8)) * maxMpFactor) + 22 + (intelligence * maxMpFactor));
         }
@@ -128,8 +126,8 @@ export class HealthFormulas {
         const stamina = this.getStatisticPoints(entity, DefineAttributes.DST_STA);
         const dexterity = this.getStatisticPoints(entity, DefineAttributes.DST_DEX);
 
-        if (entity instanceof Player) {
-            const maxFpFactor = entity.job.maxFpFactor;
+        if ('job' in entity && entity.job && typeof entity.job === 'object' && 'maxFpFactor' in entity.job) {
+            const maxFpFactor = (entity.job as any).maxFpFactor;
 
             return Math.floor((((level * 2) + (stamina * 6)) * maxFpFactor) + (stamina * maxFpFactor));
         }

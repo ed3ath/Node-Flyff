@@ -91,10 +91,10 @@ export class ExperienceTableResources {
         const level = Math.floor(i / 4);
         const properties: CharacterExpTableProperties = {
           level: level,
-          nextLevelExp: parseInt(values[i], 10),
-          deathExp: parseInt(values[i + 1], 10),
-          betExp: parseInt(values[i + 2], 10),
-          nextDeathExp: parseInt(values[i + 3], 10)
+          exp: parseInt(values[i], 10),
+          pxp: parseInt(values[i + 1], 10),
+          gp: parseInt(values[i + 2], 10),
+          limitExp: parseInt(values[i + 3], 10)
         };
 
         result.set(level, properties);

@@ -2,8 +2,7 @@ import { AttackFlags } from "../../types/attackFlag";
 import { AttackType } from "../../types/attackType";
 import { DefineAttributes } from "../definitions/defineAttributes";
 import { ObjectState } from "../../types/objectState";
-import { Mover } from "../../entities/mover";
-import { Player } from "../../entities/player";
+import type { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 import { HealthFormulas } from "../../abstract/healthFomula";
 
@@ -90,7 +89,7 @@ export class Health {
     public die(killer: Mover, attackType: AttackType, sendHitPoints: boolean = false): void {
         this.hp = 0;
 
-        if (this._mover instanceof Player && killer instanceof Player) {
+        if ('mode' in this._mover && 'mode' in killer) {
             // TODO: PVP & PK
         } else {
             // const moverDeathSnapshot = new FlyffSnapshot();

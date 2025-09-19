@@ -1,6 +1,6 @@
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import { Logger } from "../helpers/logger";
 import Redis, { RedisOptions } from "ioredis";
 import { ResourcePaths } from "./resourcePaths";
@@ -73,7 +73,7 @@ export class MonsterResources {
 
   public where(predicate: (monster: MoverProperties) => boolean): MoverProperties[] {
     const monsters: MoverProperties[] = [];
-    for (const monster of this.moversById.values()) {
+    for (const monster of Array.from(this.moversById.values())) {
       if (predicate(monster)) {
         monsters.push(monster);
       }
@@ -373,6 +373,9 @@ export class MonsterResources {
         this.logger.warn(`Cannot read drop item count for item ${dropItemName} and mover ${mover.name}.`);
       }
 
+      if (!mover.dropItems) {
+        mover.dropItems = [];
+      }
       mover.dropItems.push(dropItem);
     }
   }
@@ -400,10 +403,13 @@ export class MonsterResources {
 
       const dropItemKind: DropItemKindProperties = {
         itemKind: itemKind,
-        uniqueMin: Math.max(mover.level - 5, 1),
-        uniqueMax: Math.max(mover.level - 2, 1)
+        uniqueMin: Math.max((mover.level || 1) - 5, 1),
+        uniqueMax: Math.max((mover.level || 1) - 2, 1)
       };
 
+      if (!mover.dropItemsKind) {
+        mover.dropItemsKind = [];
+      }
       mover.dropItemsKind.push(dropItemKind);
     }
   }
@@ -456,11 +462,14 @@ export class MonsterResources {
   /**
    * Parses element type from string to enum
    */
-  private parseElementType(elementTypeStr: string): ElementType {
+  private parseElementType(elementTypeStr: any): ElementType {
     if (!elementTypeStr) return ElementType.None;
 
+    // Convert to string if it's not already a string
+    const strValue = String(elementTypeStr);
+
     // Handle different formats: "FIRE", "Fire", "1", etc.
-    const normalized = elementTypeStr.toUpperCase();
+    const normalized = strValue.toUpperCase();
     switch (normalized) {
       case 'FIRE':
       case '1':

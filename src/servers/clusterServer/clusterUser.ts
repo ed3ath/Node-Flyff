@@ -8,28 +8,145 @@ import { GenderType } from "../../types/genderType";
 import CharacterEntity from "../../database/character";
 
 /**
- * Interface for selectable character data sent to client
+ * Describes a character on the character selection screen.
  */
-interface SelectableCharacter {
-  id: number;
-  name: string;
-  gender: GenderType;
-  level: number;
-  slot: number;
-  mapId: number;
-  positionX: number;
-  positionY: number;
-  positionZ: number;
-  skinSetId: number;
-  hairId: number;
-  hairColor: number;
-  faceId: number;
-  jobId: number;
-  strength: number;
-  stamina: number;
-  intelligence: number;
-  dexterity: number;
-  equippedItems: number[];
+export class SelectableCharacter {
+  /// <summary>
+  /// Gets the character id.
+  /// </summary>
+  public Id: number;
+
+  /// <summary>
+  /// Gets the character name.
+  /// </summary>
+  public Name: string;
+
+  /// <summary>
+  /// Gets the character gender.
+  /// </summary>
+  public Gender: GenderType;
+
+  /// <summary>
+  /// Gets the character level.
+  /// </summary>
+  public Level: number;
+
+  /// <summary>
+  /// Gets the character slot on character selection screen.
+  /// </summary>
+  public Slot: number;
+
+  /// <summary>
+  /// Gets the character map id.
+  /// </summary>
+  public MapId: number;
+
+  /// <summary>
+  /// Gets the character X position.
+  /// </summary>
+  public PositionX: number;
+
+  /// <summary>
+  /// Gets the character Y position.
+  /// </summary>
+  public PositionY: number;
+
+  /// <summary>
+  /// Gets the character Z position.
+  /// </summary>
+  public PositionZ: number;
+
+  /// <summary>
+  /// Gets the character skin set id.
+  /// </summary>
+  public SkinSetId: number;
+
+  /// <summary>
+  /// Gets the character hair mesh id.
+  /// </summary>
+  public HairId: number;
+
+  /// <summary>
+  /// Gets the character hair color.
+  /// </summary>
+  public HairColor: number;
+
+  /// <summary>
+  /// Gets the character face mesh id.
+  /// </summary>
+  public FaceId: number;
+
+  /// <summary>
+  /// Gets the character job id.
+  /// </summary>
+  public JobId: number;
+
+  /// <summary>
+  /// Gets the character strength.
+  /// </summary>
+  public Strength: number;
+
+  /// <summary>
+  /// Gets the character stamina.
+  /// </summary>
+  public Stamina: number;
+
+  /// <summary>
+  /// Gets the character intelligence.
+  /// </summary>
+  public Intelligence: number;
+
+  /// <summary>
+  /// Gets the character dexterity.
+  /// </summary>
+  public Dexterity: number;
+
+  /// <summary>
+  /// Gets the character equipped items ids.
+  /// </summary>
+  public EquippedItems: number[];
+
+  constructor(
+    id: number,
+    name: string,
+    gender: GenderType,
+    level: number,
+    slot: number,
+    mapId: number,
+    positionX: number,
+    positionY: number,
+    positionZ: number,
+    skinSetId: number,
+    hairId: number,
+    hairColor: number,
+    faceId: number,
+    jobId: number,
+    strength: number,
+    stamina: number,
+    intelligence: number,
+    dexterity: number,
+    equippedItems: number[]
+  ) {
+    this.Id = id;
+    this.Name = name;
+    this.Gender = gender;
+    this.Level = level;
+    this.Slot = slot;
+    this.MapId = mapId;
+    this.PositionX = positionX;
+    this.PositionY = positionY;
+    this.PositionZ = positionZ;
+    this.SkinSetId = skinSetId;
+    this.HairId = hairId;
+    this.HairColor = hairColor;
+    this.FaceId = faceId;
+    this.JobId = jobId;
+    this.Strength = strength;
+    this.Stamina = stamina;
+    this.Intelligence = intelligence;
+    this.Dexterity = dexterity;
+    this.EquippedItems = equippedItems;
+  }
 }
 
 /**
@@ -77,35 +194,35 @@ export class ClusterUser extends FFUserConnection {
     packet.writeInt32LE(characters.length);
 
     for (const character of characters) {
-      packet.writeInt32LE(character.slot);
-      packet.writeInt32LE(character.id);
-      packet.writeInt32LE(character.mapId);
-      packet.writeInt32LE(0x0b + character.gender); // Model id
-      packet.writeStringLE(character.name);
-      packet.writeSingleLE(character.positionX);
-      packet.writeSingleLE(character.positionY);
-      packet.writeSingleLE(character.positionZ);
-      packet.writeInt32LE(character.id);
+      packet.writeInt32LE(character.Slot);
+      packet.writeInt32LE(character.Id);
+      packet.writeInt32LE(character.MapId);
+      packet.writeInt32LE(0x0b + character.Gender); // Model id
+      packet.writeStringLE(character.Name);
+      packet.writeSingleLE(character.PositionX);
+      packet.writeSingleLE(character.PositionY);
+      packet.writeSingleLE(character.PositionZ);
+      packet.writeInt32LE(character.Id);
       packet.writeInt32LE(0); // Party id
       packet.writeInt32LE(0); // Guild id
       packet.writeInt32LE(0); // War Id
-      packet.writeInt32LE(character.skinSetId);
-      packet.writeInt32LE(character.hairId);
-      packet.writeUInt32(character.hairColor);
-      packet.writeInt32LE(character.faceId);
-      packet.writeByte(character.gender);
-      packet.writeInt32LE(character.jobId);
-      packet.writeInt32LE(character.level);
+      packet.writeInt32LE(character.SkinSetId);
+      packet.writeInt32LE(character.HairId);
+      packet.writeUInt32(character.HairColor);
+      packet.writeInt32LE(character.FaceId);
+      packet.writeByte(character.Gender);
+      packet.writeInt32LE(character.JobId);
+      packet.writeInt32LE(character.Level);
       packet.writeInt32LE(0); // Job Level (Maybe master or hero ?)
-      packet.writeInt32LE(character.strength);
-      packet.writeInt32LE(character.stamina);
-      packet.writeInt32LE(character.dexterity);
-      packet.writeInt32LE(character.intelligence);
+      packet.writeInt32LE(character.Strength);
+      packet.writeInt32LE(character.Stamina);
+      packet.writeInt32LE(character.Dexterity);
+      packet.writeInt32LE(character.Intelligence);
       packet.writeInt32LE(0); // Mode
 
-      packet.writeInt32LE(character.equippedItems.length);
+      packet.writeInt32LE(character.EquippedItems.length);
 
-      for (const itemId of character.equippedItems) {
+      for (const itemId of character.EquippedItems) {
         packet.writeInt32LE(itemId);
       }
     }

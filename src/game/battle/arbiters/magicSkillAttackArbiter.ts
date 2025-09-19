@@ -15,7 +15,7 @@ export class MagicSkillAttackArbiter extends SkillAttackArbiterBase {
         let damages: number = this.getAttackerSkillPower();
         let skillMastryAttribute: DefineAttributes | undefined;
 
-        switch (parseInt(this.skill.properties.dwSpellType)) {
+        switch (parseInt(this.skill.Properties.dwSpellType)) {
             case SpellType.Fire:
                 skillMastryAttribute = DefineAttributes.DST_MASTRY_FIRE;
                 break;

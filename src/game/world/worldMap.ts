@@ -2,7 +2,7 @@ import { Logger } from "../../helpers/logger";
 import { sleep } from "../../helpers/sleep";
 import { MapLayer } from "./mapLayer";
 import { MapProperties } from "./mapProperties";
-import { MapRevivalRegionProperties } from "./mapRevivalRegion";
+import { MapRevivalRegion } from "../properties/mapRevivalRegionProperties";
 import { Vector3 } from "../../abstract/vector3";
 
 export class WorldMap {
@@ -77,47 +77,47 @@ export class WorldMap {
   public getNearestRevivalRegion(
     position: Vector3,
     isChaoMode: boolean
-  ): MapRevivalRegionProperties | undefined {
+  ): MapRevivalRegion | undefined {
     const definedRevivalRegion = this.properties.regions
-      .filter((x) => x instanceof MapRevivalRegionProperties)
+      .filter((x) => x instanceof MapRevivalRegion)
       .find(
-        (x: MapRevivalRegionProperties) =>
+        (x: MapRevivalRegion) =>
           x.mapId === this.id &&
           x.contains(position) &&
           x.isChaoRegion === isChaoMode &&
           x.targetRevivalKey
-      ) as MapRevivalRegionProperties | undefined;
+      ) as MapRevivalRegion | undefined;
 
     if (definedRevivalRegion) {
       return this.getRevivalRegion(definedRevivalRegion.key, isChaoMode);
     }
 
     return this.properties.regions
-      .filter((x) => x instanceof MapRevivalRegionProperties)
+      .filter((x) => x instanceof MapRevivalRegion)
       .filter(
-        (x: MapRevivalRegionProperties) =>
+        (x: MapRevivalRegion) =>
           x.isChaoRegion === isChaoMode && !x.targetRevivalKey
       )
       .sort(
-        (a: MapRevivalRegionProperties, b: MapRevivalRegionProperties) =>
+        (a: MapRevivalRegion, b: MapRevivalRegion) =>
           position.getDistance3D(a.revivalPosition) -
           position.getDistance3D(b.revivalPosition)
       )
-      .shift() as MapRevivalRegionProperties | undefined;
+      .shift() as MapRevivalRegion | undefined;
   }
 
   public getRevivalRegion(
     revivalKey: string,
     isChaoMode: boolean
-  ): MapRevivalRegionProperties | undefined {
+  ): MapRevivalRegion | undefined {
     return this.properties.regions
-      .filter((x) => x instanceof MapRevivalRegionProperties)
+      .filter((x) => x instanceof MapRevivalRegion)
       .find(
-        (x: MapRevivalRegionProperties) =>
+        (x: MapRevivalRegion) =>
           x.key.toLowerCase() === revivalKey.toLowerCase() &&
           x.isChaoRegion === isChaoMode &&
           !x.targetRevivalKey
-      ) as MapRevivalRegionProperties | undefined;
+      ) as MapRevivalRegion | undefined;
   }
 
   private async updateAsync(): Promise<void> {

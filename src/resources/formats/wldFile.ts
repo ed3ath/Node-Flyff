@@ -1,4 +1,4 @@
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 import { Vector3 } from "../../abstract/vector3";
 import { WorldData } from "../../interfaces/resource";
 

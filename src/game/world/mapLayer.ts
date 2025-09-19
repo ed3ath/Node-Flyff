@@ -86,8 +86,8 @@ export class MapLayer {
                     const initialPosition = regionRect.getRandomPosition(respawnRegion.height);
 
                     const monster = new Monster(moverProperties as any, respawnRegion.time, regionRect);
-                    monster.name = moverProperties.szName;
-                    monster.level = moverProperties.dwLevel;
+                    monster.name = moverProperties.szName || `Monster_${moverProperties.id}`;
+                    monster.level = moverProperties.dwLevel || 1;
                     monster.size = moverProperties.dwClass === MoverClassType.RANK_BOSS ? 200 : 100;
                     monster.modelId = moverProperties.id;
                     monster.position.copy(initialPosition);

@@ -1,7 +1,7 @@
-import { QuestEndConditionProperties } from "./questEndCondition";
-import { QuestItemDropProperties } from "./questItemDrop";
-import { QuestRewardProperties } from "./questReward";
-import { QuestStartRequirementsProperties } from "./questStartRequirements";
+import { QuestEndConditionProperties } from "./questEndConditionProperties";
+import { QuestItemDropProperties } from "./questItemDropProperties";
+import { QuestRewardProperties } from "./questRewardProperties";
+import { QuestStartRequirementsProperties } from "./questStartRequirementsProperties";
 
 export class QuestProperties {
   public readonly id: number;

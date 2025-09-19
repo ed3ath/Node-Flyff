@@ -1,15 +1,15 @@
-import fs from "fs-extra";
-import path from "path";
+import * as fs from "fs-extra";
+import * as path from "path";
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "./resourcePaths";
-import { QuestProperties } from "./properties/quest/quest";
-import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirements";
-import { QuestEndConditionProperties } from "./properties/quest/questEndCondition";
-import { QuestRewardProperties } from "./properties/quest/questReward";
-import { QuestItemDropProperties } from "./properties/quest/questItemDrop";
-import { QuestItemProperties } from "./properties/quest/questItem";
-import { QuestMonsterProperties } from "./properties/quest/questMonster";
-import { QuestPatrolProperties } from "./properties/quest/questPatrol";
+import { QuestProperties } from "./properties/quest/questProperties";
+import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirementsProperties";
+import { QuestEndConditionProperties } from "./properties/quest/questEndConditionProperties";
+import { QuestRewardProperties } from "./properties/quest/questRewardProperties";
+import { QuestItemDropProperties } from "./properties/quest/questItemDropProperties";
+import { QuestItemProperties } from "./properties/quest/questItemProperties";
+import { QuestMonsterProperties } from "./properties/quest/questMonsterProperties";
+import { QuestPatrolProperties } from "./properties/quest/questPatrolProperties";
 import { LuaParser, LuaTable } from "../helpers/luaParser";
 import { DefineJob } from "../game/definitions/defineJob";
 import { GenderType } from "../types/genderType";
@@ -40,7 +40,7 @@ export class QuestResources {
 
   public where(predicate: (quest: QuestProperties) => boolean): QuestProperties[] {
     const results: QuestProperties[] = [];
-    for (const quest of this.quests.values()) {
+    for (const quest of Array.from(this.quests.values())) {
       if (predicate(quest)) {
         results.push(quest);
       }
@@ -137,7 +137,7 @@ export class QuestResources {
       jobs: jobTable?.getValues<string>()?.map(jobStr => {
         const jobKey = jobStr as keyof typeof DefineJob;
         return DefineJob[jobKey];
-      }).filter(job => job !== undefined)
+      }).filter(job => job !== undefined) || []
     };
   }
 
@@ -147,23 +147,26 @@ export class QuestResources {
     const patrolsTable = questTable.getValue<LuaTable>("end_conditions.patrols");
 
     return {
-      items: itemsTable?.getValues<LuaTable>()?.map(itemTable => ({
+      items: itemsTable?.getValues<LuaTable>()?.map(itemTable => new QuestItemProperties({
         id: itemTable.getValue<string>("id") || "",
         quantity: itemTable.getValue<number>("quantity") || 0,
         sex: itemTable.getValue<GenderType>("sex") || GenderType.Any,
+        refine: itemTable.getValue<number>("refine") || 0,
+        element: itemTable.getValue<number>("element") || 0,
+        elementRefine: itemTable.getValue<number>("elementRefine") || 0,
         remove: itemTable.getValue<boolean>("remove") || false
-      })),
+      })) || [],
       monsters: monstersTable?.getValues<LuaTable>()?.map(monsterTable => ({
         id: monsterTable.getValue<string>("id") || "",
         amount: monsterTable.getValue<number>("quantity") || 0
-      })),
+      })) || [],
       patrols: patrolsTable?.getValues<LuaTable>()?.map(patrolTable => ({
         mapId: patrolTable.getValue<string>("map") || "",
         left: patrolTable.getValue<number>("left") || 0,
         top: patrolTable.getValue<number>("top") || 0,
         right: patrolTable.getValue<number>("right") || 0,
         bottom: patrolTable.getValue<number>("bottom") || 0
-      }))
+      })) || []
     };
   }
 
@@ -171,17 +174,20 @@ export class QuestResources {
     const rewardsTable = questTable.getValue<LuaTable>("rewards");
     const rewardItemsTable = rewardsTable?.getValue<LuaTable>("items");
 
-    return {
-      exp: rewardsTable?.getValue<number>("exp"),
-      gold: rewardsTable?.getValue<number>("gold"),
-      skillPoints: rewardsTable?.getValue<number>("skill_points"),
-      items: rewardItemsTable?.getValues<LuaTable>()?.map(itemTable => ({
+    return new QuestRewardProperties({
+      exp: rewardsTable?.getValue<number>("exp") || 0,
+      gold: rewardsTable?.getValue<number>("gold") || 0,
+      skillPoints: rewardsTable?.getValue<number>("skill_points") || 0,
+      items: rewardItemsTable?.getValues<LuaTable>()?.map(itemTable => new QuestItemProperties({
         id: itemTable.getValue<string>("id") || "",
         quantity: itemTable.getValue<number>("quantity") || 0,
         sex: itemTable.getValue<GenderType>("sex") || GenderType.Any,
+        refine: itemTable.getValue<number>("refine") || 0,
+        element: itemTable.getValue<number>("element") || 0,
+        elementRefine: itemTable.getValue<number>("elementRefine") || 0,
         remove: false
-      }))
-    };
+      })) || []
+    });
   }
 
   private parseDialogs(questTable: LuaTable, dialogPath: string): string[] {

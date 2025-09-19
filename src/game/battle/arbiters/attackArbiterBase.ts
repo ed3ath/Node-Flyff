@@ -77,11 +77,11 @@ export class AttackArbiterBase {
 
     getWeaponAttackPower(entity: Mover, weapon: Item): RangeHelper<number> {
         const multiplier = this.getWeaponItemMultiplier(weapon);
-        const power = weapon?.refine > 0 ? Math.pow(weapon?.refine || 0, 1.5) : 0;
+        const power = weapon?.Refine > 0 ? Math.pow(weapon?.Refine || 0, 1.5) : 0;
 
         return new RangeHelper<number>(
-            Math.round((entity.attributes.get(DefineAttributes.DST_ABILITY_MIN) + weapon?.properties.dwAbilityMin) * multiplier) + power,
-            Math.round((entity.attributes.get(DefineAttributes.DST_ABILITY_MAX) + weapon?.properties.dwAbilityMax) * multiplier) + power
+            Math.round((entity.attributes.get(DefineAttributes.DST_ABILITY_MIN) + weapon?.Properties.dwAbilityMin) * multiplier) + power,
+            Math.round((entity.attributes.get(DefineAttributes.DST_ABILITY_MAX) + weapon?.Properties.dwAbilityMax) * multiplier) + power
         );
     }
 
@@ -92,7 +92,7 @@ export class AttackArbiterBase {
 
         // TODO: check if item has expired.
         let multiplier = 1.0;
-        const refine = getWeaponKindType(weapon.properties.dwReferStat1) === WeaponKindType.Ultimate ? Item.WeaponArmorRefineMax : weapon.refine;
+        const refine = getWeaponKindType(weapon.Properties.dwReferStat1) === WeaponKindType.Ultimate ? Item.WeaponArmonRefineMax : weapon.Refine;
 
         if (refine > 0) {
             // TODO: get item exp up
@@ -110,7 +110,7 @@ export class AttackArbiterBase {
 
         let extraDamages = 0;
 
-        switch (weapon.properties.dwWeaponType) {
+        switch (weapon.Properties.dwWeaponType) {
             case WeaponType.MELEE_SWD:
                 extraDamages = entity.attributes.get(DefineAttributes.DST_SWD_DMG) + entity.attributes.get(DefineAttributes.DST_TWOHANDMASTER_DMG);
                 break;

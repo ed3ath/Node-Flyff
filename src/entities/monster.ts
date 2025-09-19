@@ -46,7 +46,7 @@ export class Monster extends Mover {
   constructor(properties: MonsterProperties, respawnTime: number = 30, region?: Rectangle) {
     super(properties);
 
-    this.name = properties.szName;
+    this.name = properties.szName || properties.name || `Monster_${properties.id}`;
     this.respawnTime = respawnTime;
     this.region = region || new Rectangle(
       this.position.x - 10,

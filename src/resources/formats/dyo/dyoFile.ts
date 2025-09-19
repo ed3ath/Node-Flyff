@@ -1,5 +1,5 @@
-import fs from "fs-extra";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as _ from "lodash";
 
 import { BinaryStream } from "../../../libraries/binaryStream";
 import { DyoElement } from "./dyoElement";

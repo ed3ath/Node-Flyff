@@ -18,21 +18,21 @@ export class SkillAttackArbiterBase extends AttackArbiterBase {
     }
 
     protected getAttackerSkillPower(): number {
-        let referStatistic1: number = this.attacker.attributes.get(parseInt(this.skill.properties.dwReferStat1));
-        let referStatistic2: number = this.attacker.attributes.get(parseInt(this.skill.properties.dwReferStat2));
+        let referStatistic1: number = this.attacker.attributes.get(parseInt(this.skill.Properties.dwReferStat1));
+        let referStatistic2: number = this.attacker.attributes.get(parseInt(this.skill.Properties.dwReferStat2));
 
-        if (parseInt(this.skill.properties.dwReferTarget1) === SkillReferTargetType.Attack && referStatistic1 !== 0) {
-            referStatistic1 = (parseInt(this.skill.properties.dwReferValue1.toString()) / 10 * referStatistic1 + this.skill.level * (referStatistic1 / 50));
+        if (parseInt(this.skill.Properties.dwReferTarget1) === SkillReferTargetType.Attack && referStatistic1 !== 0) {
+            referStatistic1 = (parseInt(this.skill.Properties.dwReferValue1.toString()) / 10 * referStatistic1 + this.skill.Level * (referStatistic1 / 50));
         }
 
-        if (parseInt(this.skill.properties.dwReferTarget2) === SkillReferTargetType.Attack && referStatistic2 !== 0) {
-            referStatistic2 = (parseInt(this.skill.properties.dwReferValue2.toString()) / 10 * referStatistic2 + this.skill.level * (referStatistic2 / 50));
+        if (parseInt(this.skill.Properties.dwReferTarget2) === SkillReferTargetType.Attack && referStatistic2 !== 0) {
+            referStatistic2 = (parseInt(this.skill.Properties.dwReferValue2.toString()) / 10 * referStatistic2 + this.skill.Level * (referStatistic2 / 50));
         }
 
         const referStatistic: number = referStatistic1 + referStatistic2;
         const attack: RangeHelper<number> = this.attacker instanceof Player && this.defender instanceof Player
-            ? new RangeHelper<number>(this.skill.levelProperties?.dwAbilityMinPVP || 0, this.skill.levelProperties?.dwAbilityMaxPVP || 0)
-            : new RangeHelper<number>(this.skill.levelProperties?.dwAbilityMin || 0, this.skill.levelProperties?.dwAtkAbilityMax || 0);
+            ? new RangeHelper<number>(this.skill.LevelProperties?.dwAbilityMinPVP || 0, this.skill.LevelProperties?.dwAbilityMaxPVP || 0)
+            : new RangeHelper<number>(this.skill.LevelProperties?.dwAbilityMin || 0, this.skill.LevelProperties?.dwAtkAbilityMax || 0);
 
         let weaponItem: Item | null = null;
 
@@ -43,11 +43,11 @@ export class SkillAttackArbiterBase extends AttackArbiterBase {
         const weaponAttackPower: RangeHelper<number> = this.getWeaponAttackPower(this.attacker, weaponItem!);
         const weaponExtraDamages: number = this.getWeaponExtraDamages(this.attacker, weaponItem!);
 
-        const attackMin = attack.minimum + (weaponItem?.properties.dwAddSkillMin ?? 0);
-        const attackMax = attack.maximum + (weaponItem?.properties.dwAddSkillMax ?? 0);
+        const attackMin = attack.minimum + (weaponItem?.Properties.dwAddSkillMin ?? 0);
+        const attackMax = attack.maximum + (weaponItem?.Properties.dwAddSkillMax ?? 0);
 
-        let powerMin: number = (weaponAttackPower.minimum + attackMin * 5 + referStatistic - 20) * (16 + this.skill.level) / 13;
-        let powerMax: number = (weaponAttackPower.maximum + attackMax * 5 + referStatistic - 20) * (16 + this.skill.level) / 13;
+        let powerMin: number = (weaponAttackPower.minimum + attackMin * 5 + referStatistic - 20) * (16 + this.skill.Level) / 13;
+        let powerMax: number = (weaponAttackPower.maximum + attackMax * 5 + referStatistic - 20) * (16 + this.skill.Level) / 13;
 
         // TODO: check CHR_DMG
         powerMin += weaponExtraDamages;

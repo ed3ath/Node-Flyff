@@ -20,8 +20,11 @@ import {
 import { WorldReadInfoSnapshot } from "../../../protocol/snapshots/worldReadInfo";
 import { AddObjectSnapshot } from "../../../protocol/snapshots/addObject";
 import { TaskbarSnapshot } from "../../../protocol/snapshots/taskbar";
+import { QueryPlayerDataSnapshot } from "../../../protocol/snapshots/queryPlayerData";
+import { AddFriendGameJoinSnapshot } from "../../../protocol/snapshots/addFriendGameJoin";
 import { WorldMap } from "../../../game/world/worldMap";
 import { Item } from "../../../game/mechanics/item";
+import { ItemProperties } from "../../../game/properties/itemProperties";
 import { ElementType } from "../../../types/elementType";
 import { WorldUser } from "../worldUser";
 
@@ -365,16 +368,65 @@ export default class Handler extends PacketHandler {
     if (character.equipments && character.equipments.length > 0) {
       for (const equipment of character.equipments) {
         if (equipment.item && equipment.slot !== undefined) {
-          const item = new Item(
+          // TODO: Load proper ItemProperties from game resources
+          // For now, create ItemProperties using constructor with defaults
+          const itemProperties = new ItemProperties(
+            1, // version
             equipment.item.itemId,
-            "Item_" + equipment.item.itemId, // Use itemId as name for now
-            equipment.quantity || 1,
-            equipment.item.refinement || 0,
-            equipment.item.element || ElementType.None,
-            equipment.item.elementRefinement || 0,
-            undefined, // creatorId
-            equipment.item.serialNumber
+            "Item_" + equipment.item.itemId,
+            "Item_" + equipment.item.itemId,
+            "Item_" + equipment.item.itemId, // nameKey
+            999, // packMax
+            0, // itemKind1
+            0, // itemKind2
+            0, // itemKind3
+            0, // itemJob
+            0, // itemSex
+            0, // cost
+            0, // limitLevel
+            0, // parts
+            0, // abilityMin
+            0, // abilityMax
+            0, // element
+            0, // level
+            0, // rare
+            0, // attackSpeed
+            "", // destParam1
+            "", // destParam2
+            "", // destParam3
+            0, // adjParamVal1
+            0, // adjParamVal2
+            0, // adjParamVal3
+            0, // circleTime
+            false, // isUseable
+            0, // sfxObject (number)
+            0, // sfxObject2 (number)
+            0, // sfxObject3 (number)
+            0, // sfxObject4 (number)
+            0, // sfxObject5 (number)
+            false, // isPermanant
+            0, // coolTime
+            0, // weaponTypeId
+            0, // itemAtkOrder1
+            0, // itemAtkOrder2
+            0, // itemAtkOrder3
+            0, // itemAtkOrder4
+            0, // skillReadyType
+            0, // weaponKind
+            0, // attackSkillMin
+            0, // attackSkillMax
+            new Map() // params
           );
+
+          const item = new Item(itemProperties);
+
+          // Set the additional properties
+          item.Quantity = equipment.quantity || 1;
+          item.Refine = equipment.item.refinement || 0;
+          item.Element = equipment.item.element || ElementType.None;
+          item.ElementRefine = equipment.item.elementRefinement || 0;
+          item.SerialNumber = equipment.item.serialNumber || 0;
+          item.CreatorId = undefined;
 
           // Set item directly in inventory map
           (player.inventory as any).items.set(equipment.slot, item);
@@ -383,18 +435,8 @@ export default class Handler extends PacketHandler {
     }
 
     // Initialize skills (like C# skills = GameResources.Current.Skills.GetJobSkills)
-    // TODO: Load skills from database and skill resources
-    // const jobSkills = gameResources.skillResources?.getJobSkills?.(player.job.id) || [];
-    // for (const skillData of jobSkills) {
-    //   if (player.skills && skillData) {
-    //     const skill = {
-    //       properties: skillData,
-    //       level: 0, // TODO: Load actual level from database
-    //       player: player
-    //     };
-    //     (player.skills as any).setSkill(skill);
-    //   }
-    // }
+    // Skip skills loading for now as it's not critical for basic world connection
+    this.logger.info(`Skipping skills loading for ${character.name} - not critical for world connection`);
 
     // Update defense like C# player.Defense.Update()
     if (player.defense && player.defense.update) {
@@ -404,42 +446,34 @@ export default class Handler extends PacketHandler {
     // Add to world map layer (like C# layer.AddPlayer(User.Player))
     const mapResource = gameResources.mapResource;
 
-    if (
-      mapResource &&
-      mapResource.maps &&
-      mapResource.maps.at(character.mapId)
-    ) {
+    if (mapResource && mapResource.maps && mapResource.maps.at(character.mapId)) {
       const mapProperties = mapResource.maps.at(character.mapId);
 
       if (mapProperties) {
-        // Create WorldMap instance from MapProperties
-        const worldMap = new WorldMap(mapProperties);
-        const layer = worldMap.getDefaultLayer();
+        try {
+          // Get or create WorldMap instance - in a full implementation, this should be
+          // managed by a map manager to ensure single instance per map
+          const worldMap = new WorldMap(mapProperties);
+          const layer = worldMap.getDefaultLayer();
 
-        if (layer && layer.addPlayer) {
-          try {
-            layer.addPlayer(player);
-            this.logger.info(
-              `Added ${character.name} to map ${character.mapId} layer`
-            );
-          } catch (error) {
-            this.logger.error(
-              `Failed to add player ${character.name} to map layer: ${error}`
-            );
-          }
-        } else {
-          this.logger.warn(
-            `Map ${character.mapId} layer does not support addPlayer method`
-          );
+          // Set player's map reference
+          player.map = worldMap;
+          player.mapLayer = layer;
+
+          // Add player to layer
+          layer.addPlayer(player);
+
+          this.logger.info(`Added ${character.name} to map ${character.mapId} layer (Layer ID: ${layer.id})`);
+        } catch (error) {
+          this.logger.error(`Failed to add player ${character.name} to map layer: ${error}`);
+          // Continue without map layer - not critical for basic connection
         }
       } else {
-        this.logger.warn(
-          `Map ${character.mapId} does not have a default layer`
-        );
+        this.logger.warn(`Map properties not found for map ${character.mapId}`);
       }
     } else {
       this.logger.warn(
-        `Map ${character.mapId} not found in map resources - player ${character.name} will spawn without map`
+        `Map ${character.mapId} not found in map resources - player ${character.name} will spawn without map layer`
       );
     }
 
@@ -473,19 +507,41 @@ export default class Handler extends PacketHandler {
       this.send(joinResponsePacket);
 
       // Then send the world snapshot (like C++ OnSnapshot in OnJoin)
+      this.logger.info(`Creating individual snapshots for ${character.name}:`);
+
+      const environmentSnapshot = new EnvironmentAllSnapshot(player, SeasonType.None);
+      this.logger.info(`✓ Created EnvironmentAllSnapshot`);
+
+      const worldReadInfoSnapshot = new WorldReadInfoSnapshot(player);
+      this.logger.info(`✓ Created WorldReadInfoSnapshot`);
+
+      const addObjectSnapshot = new AddObjectSnapshot(player);
+      this.logger.info(`✓ Created AddObjectSnapshot`);
+
+      const taskbarSnapshot = new TaskbarSnapshot(player);
+      this.logger.info(`✓ Created TaskbarSnapshot`);
+
+      const queryPlayerDataSnapshot = new QueryPlayerDataSnapshot(player);
+      this.logger.info(`✓ Created QueryPlayerDataSnapshot`);
+
+      const addFriendGameJoinSnapshot = new AddFriendGameJoinSnapshot(player);
+      this.logger.info(`✓ Created AddFriendGameJoinSnapshot`);
+
       const joinCompleteSnapshot = new FlyffSnapshot([
-        new EnvironmentAllSnapshot(player, SeasonType.None),
-        new WorldReadInfoSnapshot(player),
-        new AddObjectSnapshot(player),
-        new TaskbarSnapshot(player),
-        // TODO: Add QueryPlayerDataSnapshot
-        // TODO: Add AddFriendGameJoinSnapshot
+        environmentSnapshot,
+        worldReadInfoSnapshot,
+        addObjectSnapshot,
+        taskbarSnapshot,
+        queryPlayerDataSnapshot,
+        addFriendGameJoinSnapshot,
       ]);
 
-      this.logger.info(`Sending world snapshot to client for character: ${character.name}`);
+      this.logger.info(`Sending world snapshot to client for character: ${character.name} with ${joinCompleteSnapshot.buffer.length} bytes`);
 
       // Send the world snapshot after the JOIN response
       player.send(joinCompleteSnapshot);
+
+      this.logger.info(`✓ World snapshot sent successfully to ${character.name}`);
 
       // Set player as spawned (like C# User.Player.IsSpawned = true)
       player.isSpawned = true;

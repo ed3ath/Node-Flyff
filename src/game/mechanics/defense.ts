@@ -1,9 +1,7 @@
 import { DefineAttributes } from "../definitions/defineAttributes";
 import { ItemKind2 } from "../../types/itemKind";
 import { Item } from "./item";
-import { Mover } from "../../entities/mover";
-import { Player } from "../../entities/player";
-import { Monster } from "../../entities/monster";
+import type { Mover } from "../../entities/mover";
 import { FFRandom } from "../../helpers/FFRandom";
 
 export class Defense {
@@ -31,26 +29,26 @@ export class Defense {
     }
 
     public update(): void {
-        if (this._mover instanceof Player) {
+        if ('getEquippedItems' in this._mover && typeof this._mover.getEquippedItems === 'function') {
             let defenseMin = 0;
             let defenseMax = 0;
             const equippedItems: Item[] = this._mover.getEquippedItems();
 
             if (equippedItems.length > 0) {
                 for (const equippedItem of equippedItems) {
-                    if (!equippedItem || (equippedItem && equippedItem.id === -1)) {
+                    if (!equippedItem || (equippedItem && equippedItem.Id === -1)) {
                         continue;
                     }
 
                     if (
-                        equippedItem.properties.itemKind2 === ItemKind2.ARMOR ||
-                        equippedItem.properties.itemKind2 === ItemKind2.ARMORETC
+                        equippedItem.Properties.itemKind2 === ItemKind2.ARMOR ||
+                        equippedItem.Properties.itemKind2 === ItemKind2.ARMORETC
                     ) {
-                        const refineValue = equippedItem.refine > 0 ? Math.pow(equippedItem.refine, 1.5) : 0;
+                        const refineValue = equippedItem.Refine > 0 ? Math.pow(equippedItem.Refine, 1.5) : 0;
                         const itemMultiplier = 1; // TODO: implement GetItemMultiplier() on the Item class
 
-                        defenseMin += Math.floor(equippedItem.properties.abilityMin * itemMultiplier) + refineValue;
-                        defenseMax += Math.floor(equippedItem.properties.abilityMax * itemMultiplier) + refineValue;
+                        defenseMin += Math.floor((equippedItem.Properties.abilityMin || 0) * itemMultiplier) + refineValue;
+                        defenseMax += Math.floor((equippedItem.Properties.abilityMax || 0) * itemMultiplier) + refineValue;
                     }
                 }
             }
@@ -59,9 +57,9 @@ export class Defense {
             defenseMax += this._mover.attributes.get(DefineAttributes.DST_ABILITY_MAX);
             this.minimum = defenseMin;
             this.maximum = defenseMax;
-        } else if (this._mover instanceof Monster) {
-            this.minimum = this._mover.properties.naturalArmor;
-            this.maximum = this._mover.properties.naturalArmor;
+        } else if (this._mover.properties && 'naturalArmor' in this._mover.properties) {
+            this.minimum = this._mover.properties.naturalArmor || 0;
+            this.maximum = this._mover.properties.naturalArmor || 0;
         }
     }
 }

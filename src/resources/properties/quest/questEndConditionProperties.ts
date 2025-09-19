@@ -1,6 +1,6 @@
-import { QuestItemProperties } from "./questItem";
-import { QuestMonsterProperties } from "./questMonster";
-import { QuestPatrolProperties } from "./questPatrol";
+import { QuestItemProperties } from "./questItemProperties";
+import { QuestMonsterProperties } from "./questMonsterProperties";
+import { QuestPatrolProperties } from "./questPatrolProperties";
 
 export class QuestEndConditionProperties {
   public readonly items: ReadonlyArray<QuestItemProperties>;

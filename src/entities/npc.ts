@@ -3,11 +3,12 @@ import { WorldObjectType } from "../types/worldObjectType";
 import { DialogOptions } from "../types/dialogOptions";
 import { QuestState } from "../game/mechanics/questState";
 import { Item } from "../game/mechanics/item";
+import { ItemProperties } from "../game/properties/itemProperties";
 import { NpcProperties, DialogProperties, DialogLink, ShopProperties, ShopItemProperties } from "../interfaces/resource";
 import { FFRandom } from "../helpers/FFRandom";
 import { timeInSeconds } from "../helpers/time";
 import { FlyffPacket } from "../libraries/flyffPacket";
-import { QuestProperties } from "../resources/properties/quest/quest";
+import { QuestProperties } from "../resources/properties/quest/questProperties";
 
 // Forward declarations to avoid circular dependencies
 interface Player extends WorldObject {
@@ -143,15 +144,59 @@ export class Npc extends WorldObject {
       const items: Record<number, Item> = {};
 
       tabItems.forEach((shopItem, index) => {
-        const itemProperties = GameResources.Current.Items.get(shopItem.id);
-        items[index] = new Item(
-          shopItem.id,
-          itemProperties.name,
-          itemProperties.packMax,
-          shopItem.refine,
-          shopItem.element,
-          shopItem.elementRefine
+        const baseItemProperties = GameResources.Current.Items.get(shopItem.id);
+        // Create ItemProperties using constructor with defaults
+        const itemProperties = new ItemProperties(
+          1, // version
+          baseItemProperties.id,
+          baseItemProperties.name,
+          baseItemProperties.name,
+          baseItemProperties.name, // nameKey
+          baseItemProperties.packMax,
+          0, // itemKind1
+          0, // itemKind2
+          0, // itemKind3
+          0, // itemJob
+          0, // itemSex
+          0, // cost
+          0, // limitLevel
+          0, // parts
+          0, // abilityMin
+          0, // abilityMax
+          0, // element
+          0, // level
+          0, // rare
+          0, // attackSpeed
+          "", // destParam1
+          "", // destParam2
+          "", // destParam3
+          0, // adjParamVal1
+          0, // adjParamVal2
+          0, // adjParamVal3
+          0, // circleTime
+          false, // isUseable
+          0, // sfxObject
+          0, // sfxObject2
+          0, // sfxObject3
+          0, // sfxObject4
+          0, // sfxObject5
+          false, // isPermanant
+          0, // coolTime
+          0, // weaponTypeId
+          0, // itemAtkOrder1
+          0, // itemAtkOrder2
+          0, // itemAtkOrder3
+          0, // itemAtkOrder4
+          0, // skillReadyType
+          0, // weaponKind
+          0, // attackSkillMin
+          0, // attackSkillMax
+          new Map() // params
         );
+        items[index] = new Item(itemProperties);
+        items[index].Refine = shopItem.refine;
+        items[index].Element = shopItem.element;
+        items[index].ElementRefine = shopItem.elementRefine;
       });
 
       container.initialize(items);

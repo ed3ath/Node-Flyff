@@ -1,6 +1,5 @@
 import { DefineAttributes } from "../definitions/defineAttributes";
-import { Mover } from "../../entities/mover";
-import { Player } from "../../entities/player";
+import type { Mover } from "../../entities/mover";
 
 export class Attributes {
     private _mover: Mover;
@@ -16,7 +15,7 @@ export class Attributes {
 
     set(attribute: DefineAttributes, value: number, sendToEntity = true): void {
         this._attributes.set(attribute, value);
-        if (sendToEntity && this._mover instanceof Player) {
+        if (sendToEntity && 'mode' in this._mover) {
             this.sendAttributeValue(attribute, value);
         }
     }

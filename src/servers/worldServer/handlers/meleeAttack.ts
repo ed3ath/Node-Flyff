@@ -46,7 +46,7 @@ export default class MeleeAttackHandler extends WorldPacketHandler {
 
       if (
         weapon &&
-        weapon.properties.dwAttackSpeed !== this.weaponAttackSpeed
+        weapon.Properties.attackSpeed !== this.weaponAttackSpeed
       ) {
         throw new Error(
           `Player '${this.player.name}' has a different weapon speed that the server.`

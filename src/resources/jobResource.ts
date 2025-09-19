@@ -1,9 +1,9 @@
 import { JobType } from "../game/definitions/defineJob";
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";

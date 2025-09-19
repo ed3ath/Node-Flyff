@@ -1,8 +1,8 @@
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
@@ -15,7 +15,7 @@ import { MapRegionProperties } from "../game/world/regionProperties";
 import { RgnFile } from "../resources/formats/rgn/rgnFile";
 import { MapRespawnRegionProperties } from "../game/world/regionRespawnProperties";
 import { RegionInfoType } from "../types/regionInfoType";
-import { MapRevivalRegionProperties } from "../game/world/mapRevivalRegion";
+import { MapRevivalRegion } from "../game/properties/mapRevivalRegionProperties";
 import { MapTriggerRegionProperties } from "../game/world/mapTriggerRegionProperties";
 import { DyoFile } from "../resources/formats/dyo/dyoFile";
 import { MapObjectProperties } from "../game/world/mapObjectProperties";
@@ -130,7 +130,7 @@ export class MapResources {
       const worldNames = this.loadWorldScriptFile();
       console.log(`[DEBUG] Found ${worldNames.size} worlds in world script file`);
 
-      for (const [mapIdentifier, worldName] of worldNames) {
+      for (const [mapIdentifier, worldName] of Array.from(worldNames)) {
         console.log(`[DEBUG] Processing map: ${mapIdentifier} -> ${worldName}`);
 
         if (this.mapsByIdentifier.has(mapIdentifier)) {
@@ -236,7 +236,7 @@ export class MapResources {
     for (const region of region3s) {
       let mapRegion: MapRegionProperties | null = null;
       if (region.index === RegionInfoType.Revival) {
-        mapRegion = new MapRevivalRegionProperties(
+        mapRegion = new MapRevivalRegion(
           region.left,
           region.top,
           region.width,

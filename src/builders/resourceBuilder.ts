@@ -1,5 +1,5 @@
 import { RedisOptions } from "ioredis";
-import _ from "lodash";
+import * as _ from "lodash";
 
 import { Logger } from "../helpers/logger";
 import { BuilderType } from "../types/builderType";
@@ -208,6 +208,7 @@ export class ResourceBuilder {
       expTableResources: this.expTableResources,
       deathPenaltyResource: this.deathPenaltyResource,
       mapResource: this.mapResource,
+      skillResource: this.skillResource,
       questResources: this.questResources,
     };
   }

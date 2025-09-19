@@ -17,11 +17,6 @@ import { Mover } from "./mover";
 import { MapItemObject } from "./mapItemObject";
 import { QuestDiary } from "../game/mechanics/questDiary";
 
-// Forward declaration to avoid circular dependency
-interface Monster extends Mover {
-  properties: MoverProperties;
-}
-
 // Interfaces for Player components
 interface HumanVisualAppearance {
   gender: GenderType;
@@ -115,10 +110,14 @@ class Experience {
 
 class Skill {
   constructor(
-    public readonly properties: any,
-    public level: number = 0,
+    public readonly Properties: any,
+    public Level: number = 0,
     public readonly player: Player
   ) {}
+
+  public get LevelProperties(): any {
+    return this.Properties?.skillLevels?.[this.Level];
+  }
 }
 
 class SkillTree {
@@ -133,7 +132,7 @@ class SkillTree {
   }
 
   setSkill(skill: Skill): void {
-    this.skills.set(skill.properties.id, skill);
+    this.skills.set(skill.Properties.id, skill);
   }
 
   getSkill(id: number): Skill | undefined {
@@ -318,8 +317,8 @@ export class Player extends Mover {
 
   public resetSkills(): void {
     for (const skill of this.skills) {
-      this.skillPoints += (skill.level || 0) * (SkillTree.SkillPointUsage[skill.properties?.jobType] || 1);
-      skill.level = 0;
+      this.skillPoints += (skill.Level || 0) * (SkillTree.SkillPointUsage[skill.Properties?.jobType] || 1);
+      skill.Level = 0;
     }
   }
 
@@ -370,17 +369,17 @@ export class Player extends Mover {
   
   public pickupItem(mapItem: MapItemObject, sendPickupMotion = true): void {
     if (mapItem.owner && mapItem.owner !== this) {
-      this.sendDefinedText(DefineText.TID_GAME_PRIORITYITEMPER, `"${mapItem.item.name}"`);
+      this.sendDefinedText(DefineText.TID_GAME_PRIORITYITEMPER, `"${mapItem.item.Name}"`);
       return;
     }
 
     let itemPickedUp = false;
 
     if (mapItem.isGold) {
-      itemPickedUp = this.gold.increase(mapItem.item.quantity);
+      itemPickedUp = this.gold.increase(mapItem.item.Quantity);
     } else {
       itemPickedUp = this.inventory.createItem(mapItem.item) > -1;
-      this.sendDefinedText(DefineText.TID_GAME_REAPITEM, `"${mapItem.item.name}"`);
+      this.sendDefinedText(DefineText.TID_GAME_REAPITEM, `"${mapItem.item.Name}"`);
     }
 
     if (itemPickedUp) {
@@ -457,10 +456,9 @@ export class Player extends Mover {
       // TODO: PK
     } else {
       // Check if target has monster properties
-      const monster = target as Monster;
-      if (monster.properties?.dwExpValue) {
-        this.experience.increase(monster.properties.dwExpValue * GameOptions.Current.Rates.Experience);
-        this.questDiary.onMonsterKilled(monster);
+      if (target.properties && 'dwExpValue' in target.properties && target.properties.dwExpValue) {
+        this.experience.increase(target.properties.dwExpValue * GameOptions.Current.Rates.Experience);
+        this.questDiary.onMonsterKilled(target);
       }
     }
   }

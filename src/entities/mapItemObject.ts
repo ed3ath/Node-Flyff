@@ -25,11 +25,11 @@ export class MapItemObject extends WorldObject {
         super();
         if (!item) throw new Error("Cannot create a map object instance with an undefined item.");
         this.item = item;
-        this.modelId = item.properties.id;
-        this.isGold = item.id === DefineItem.II_GOLD_SEED1 ||
-            item.id === DefineItem.II_GOLD_SEED2 ||
-            item.id === DefineItem.II_GOLD_SEED3 ||
-            item.id === DefineItem.II_GOLD_SEED4;
+        this.modelId = item.Properties.id;
+        this.isGold = item.Id === DefineItem.II_GOLD_SEED1 ||
+            item.Id === DefineItem.II_GOLD_SEED2 ||
+            item.Id === DefineItem.II_GOLD_SEED3 ||
+            item.Id === DefineItem.II_GOLD_SEED4;
     }
 
     public update(): void {
@@ -40,7 +40,7 @@ export class MapItemObject extends WorldObject {
 
     public serialize(packet: FlyffPacket): void {
         packet.writeInt32(-1);
-        this.item.serialize(packet);
+        this.item.Serialize(packet);
     }
 
     public despawn(): void {

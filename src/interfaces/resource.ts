@@ -9,6 +9,7 @@ import { MapResources } from "../resources/mapResources";
 import { NpcResources } from "../resources/npcResource";
 import { DropItemProperties, DropItemKindProperties } from "./dropItemProperties";
 import { QuestResourcesYaml } from "../resources/questResourcesYaml";
+import { SkillResources } from "../resources/skillResources";
 import { ElementType } from "../types/elementType";
 import { MoverClassType } from "../types/moverClassType";
 export interface GameResources {
@@ -19,6 +20,7 @@ export interface GameResources {
   expTableResources: ExpTableResources;
   deathPenaltyResource: DeathPenaltyResources;
   mapResource: MapResources;
+  skillResource: SkillResources;
   questResources: QuestResourcesYaml;
 }
 export interface ItemProperties {
@@ -91,113 +93,203 @@ export interface MoverProperties {
   /** Mover ID */
   id: number;
 
+  /** Mover string identifier (legacy compatibility) */
+  dwID?: string;
+
   /** Mover identifier name */
-  identifierName: string;
+  identifierName?: string;
 
   /** Mover name */
-  name: string;
+  name?: string;
+  szName?: string;
 
   /** Mover AI id */
-  AI: number;
+  AI?: number;
+  dwAI?: string;
 
   /** Mover belligerence */
-  belligerence: number;
+  belligerence?: number;
+  dwBelligerence?: string;
 
   /** Mover speed */
-  speed: number;
+  speed?: number;
+  fSpeed?: number;
 
   /** Mover Hit Points (HP) */
-  addHp: number;
+  addHp?: number;
+  dwAddHp?: number;
 
   /** Mover Magic Points (MP) */
-  addMp: number;
+  addMp?: number;
+  dwAddMp?: number;
 
   /** Mover level */
-  level: number;
+  level?: number;
+  dwLevel?: number;
 
   /** Mover flight level */
-  flightLevel: number;
+  flightLevel?: number;
+  dwFlightLevel?: number;
 
   /** Mover attack min */
-  attackMin: number;
+  attackMin?: number;
+  dwAtkMin?: number;
 
   /** Mover attack max */
-  attackMax: number;
+  attackMax?: number;
+  dwAtkMax?: number;
 
   /** Mover strength */
-  strength: number;
+  strength?: number;
+  dwStr?: number;
 
   /** Mover stamina */
-  stamina: number;
+  stamina?: number;
+  dwSta?: number;
 
   /** Mover dexterity */
-  dexterity: number;
+  dexterity?: number;
+  dwDex?: number;
 
   /** Mover intelligence */
-  intelligence: number;
+  intelligence?: number;
+  dwInt?: number;
 
   /** Mover hit rate */
-  hitRating: number;
+  hitRating?: number;
+  dwHR?: number;
 
   /** Mover escape rate */
-  escapeRating: number;
+  escapeRating?: number;
+  dwER?: number;
 
   /** Mover class */
-  class: MoverClassType;
+  class?: MoverClassType;
+  dwClass?: number;
 
   /** Mover natural armor */
-  naturalArmor: number;
+  naturalArmor?: number;
+  dwNaturealArmor?: number;
 
   /** Mover magic resistance */
-  magicResistance: number;
+  magicResistance?: number;
+  dwResisMagic?: number;
 
   /** Mover attack delay */
-  reAttackDelay: number;
+  reAttackDelay?: number;
+  dwReAttackDelay?: number;
 
   /** Mover attack speed */
-  attackSpeed: number;
+  attackSpeed?: number;
+  dwAttackSpeed?: number;
 
   /** Monster correction value */
-  correctionValue: number;
+  correctionValue?: number;
+  dwCorrectionValue?: number;
 
   /** Amount of experience given when the mover dies */
-  experience: number;
+  experience?: number;
+  dwExpValue?: number;
 
   /** Monster element type */
-  element: ElementType;
+  element?: ElementType;
+  eElementType?: string;
 
   /** Mover's resistance to electricity */
-  electricityResistance: number;
+  electricityResistance?: number;
+  fResistElecricity?: number;
 
   /** Mover's resistance to fire */
-  fireResistance: number;
+  fireResistance?: number;
+  fResistFire?: number;
 
   /** Mover's resistance to wind */
-  windResistance: number;
+  windResistance?: number;
+  fResistWind?: number;
 
   /** Mover's resistance to water */
-  waterResistance: number;
+  waterResistance?: number;
+  fResistWater?: number;
 
   /** Mover's resistance to earth */
-  earthResistance: number;
+  earthResistance?: number;
+  fResistEarth?: number;
 
   /** Boolean value that indicates if the mover is flying or not */
-  isFlying: boolean;
+  isFlying?: boolean;
+  bFlying?: string;
 
   /** Minimal amount of gold dropped when the mover dies */
-  dropGoldMin: number;
+  dropGoldMin?: number;
 
   /** Maximal amount of gold dropped when the mover dies */
-  dropGoldMax: number;
+  dropGoldMax?: number;
 
   /** Maximal amount of items dropped when the mover dies */
-  maxDropItem: number;
+  maxDropItem?: number;
 
   /** Collection of items the mover can drop */
-  dropItems: DropItemProperties[];
+  dropItems?: DropItemProperties[];
 
   /** Collection of item kinds the mover can drop */
-  dropItemsKind: DropItemKindProperties[];
+  dropItemsKind?: DropItemKindProperties[];
+
+  // Additional legacy properties for compatibility
+  dwRace?: string;
+  dwGender?: string;
+  dwSize?: number;
+  bIfPart?: string;
+  dwKarma?: string;
+  dwUseable?: string;
+  dwActionRadius?: number;
+  dwAtk1?: number;
+  dwAtk2?: number;
+  dwAtk3?: number;
+  dwHorizontalRate?: number;
+  dwVerticalRate?: number;
+  dwDiagonalRate?: number;
+  dwThrustRate?: number;
+  dwChestRate?: number;
+  dwHeadRate?: number;
+  dwArmRate?: number;
+  dwLegRate?: number;
+  dwAdjAtkDelay?: number;
+  wElementAtk?: number;
+  dwHideLevel?: number;
+  dwShelter?: number;
+  dwJumpIng?: number;
+  dwAirJump?: number;
+  bTaming?: string;
+  dwCash?: number;
+  dwSourceMaterial?: number;
+  dwMaterialAmount?: number;
+  dwCohesion?: number;
+  dwHoldingTime?: number;
+  nFxpValue?: number;
+  nBodyState?: number;
+  dwAddAbility?: number;
+  bKillable?: string;
+  dwVirtItem1?: string;
+  dwVirtType1?: string;
+  dwVirtItem2?: string;
+  dwVirtType2?: string;
+  dwVirtItem3?: string;
+  dwVirtType3?: string;
+  dwSndAtk1?: number;
+  dwSndAtk2?: number;
+  dwSndDie1?: number;
+  dwSndDie2?: number;
+  dwSndDmg1?: number;
+  dwSndDmg2?: number;
+  dwSndDmg3?: number;
+  dwSndIdle1?: number;
+  dwSndIdle2?: number;
+  szComment?: string;
+  dwAreaColor?: number;
+  szNpcMark?: string;
+  dwMadrigalGiftPoint?: number;
+  nAbrasion?: number;
+  nHardness?: number;
 }
 
 export interface NpcProperties {

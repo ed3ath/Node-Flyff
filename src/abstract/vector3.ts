@@ -1,36 +1,99 @@
 import { FFRandom } from "../helpers/FFRandom";
 import { Rectangle } from "./rectangle";
 
+/// <summary>
+/// Represents 3D coordinates in space.
+/// </summary>
 export class Vector3 {
-    private static readonly EPSILON = 0.01;
+    static readonly EPSILON = 1e-10;
 
-    x: number;
-    y: number;
-    z: number;
+    /// <summary>
+    /// Gets or sets the X position in the world.
+    /// </summary>
+    public x: number;
 
-    constructor(x: number = 0, y: number = 0, z: number = 0) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+    /// <summary>
+    /// Gets or sets the Y position in the world.
+    /// </summary>
+    public y: number;
 
-    get length(): number {
+    /// <summary>
+    /// Gets or sets the Z position in the world.
+    /// </summary>
+    public z: number;
+
+    /// <summary>
+    /// Gets the vector length.
+    /// </summary>
+    public get length(): number {
         return Math.sqrt(this.squaredLength);
     }
 
-    get squaredLength(): number {
+    /// <summary>
+    /// Gets the vector squared length.
+    /// </summary>
+    public get squaredLength(): number {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
-    getDistance2D(otherPosition: Vector3): number {
+    /// <summary>
+    /// Creates a new Vector3 initialized to 0.
+    /// </summary>
+    public constructor();
+
+    /// <summary>
+    /// Creates a new Vector3 with specific values.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    public constructor(x: number, y: number, z: number);
+
+    /// <summary>
+    /// Creates a new Vector3 with specific string values.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    public constructor(x: string, y: string, z: string);
+
+    public constructor(x?: number | string, y?: number | string, z?: number | string) {
+        if (typeof x === "string" && typeof y === "string" && typeof z === "string") {
+            this.x = parseFloat(x);
+            this.y = parseFloat(y);
+            this.z = parseFloat(z);
+        } else {
+            this.x = typeof x === "number" ? x : 0;
+            this.y = typeof y === "number" ? y : 0;
+            this.z = typeof z === "number" ? z : 0;
+        }
+    }
+
+    /// <summary>
+    /// Gets the 2D distance between two vectors.
+    /// </summary>
+    /// <param name="otherPosition">Other position vector.</param>
+    /// <returns>Distance</returns>
+    public getDistance2D(otherPosition: Vector3): number {
         return Math.sqrt(Math.pow(otherPosition.x - this.x, 2) + Math.pow(otherPosition.z - this.z, 2));
     }
 
-    getDistance3D(otherPosition: Vector3): number {
+    /// <summary>
+    /// Gets the 3D distance between two vectors.
+    /// </summary>
+    /// <param name="otherPosition">Other position vector.</param>
+    /// <returns>Distance</returns>
+    public getDistance3D(otherPosition: Vector3): number {
         return Math.sqrt(Math.pow(otherPosition.x - this.x, 2) + Math.pow(otherPosition.y - this.y, 2) + Math.pow(otherPosition.z - this.z, 2));
     }
 
-    isInCircle(otherPosition: Vector3, circleRadius: number): boolean {
+    /// <summary>
+    /// Checks if the current position is in a circle around another position.
+    /// </summary>
+    /// <param name="otherPosition">Center of the circle.</param>
+    /// <param name="circleRadius">Circle radius.</param>
+    /// <returns>True if in circle; false otherwise.</returns>
+    public isInCircle(otherPosition: Vector3, circleRadius: number): boolean {
         return Math.pow(otherPosition.x - this.x, 2) + Math.pow(otherPosition.z - this.z, 2) < Math.pow(circleRadius, 2);
     }
 

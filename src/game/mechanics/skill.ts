@@ -1,6 +1,8 @@
 import { SkillProperties, SkillLevelProperties } from "../../interfaces/resource";
 import { SkillType } from "../../types/skillType";
 import { SkillExecuteTargetType } from "../../types/skillExecuteTargetType";
+import { FlyffPacket } from "../../libraries/flyffPacket";
+import { IPacketSerializer } from "./taskbar";
 
 export enum SkillUseType {
   Normal = 0,
@@ -8,247 +10,220 @@ export enum SkillUseType {
   Magic = 2
 }
 
-export class Skill {
-  private _level: number = 0;
-  private _nextSkillUsageTime: number = 0;
-  private _databaseId?: number;
-  private _properties: SkillProperties;
-  private _ownerId: number;
+/// <summary>
+/// This class describes the behavior of a Skill.
+/// </summary>
+export class Skill implements IPacketSerializer {
+  private _level: number;
+  private _nextSkillUsageTime: number;
 
-  constructor(skillProperties: SkillProperties, ownerId: number, level: number, databaseId?: number) {
-    if (!skillProperties) {
-      throw new Error("Cannot create a skill instance with undefined skill properties.");
-    }
-
-    this._properties = skillProperties;
-    this._ownerId = ownerId;
-    this.level = level;
-    this._databaseId = databaseId;
+  /// <summary>
+  /// Gets the skill id.
+  /// </summary>
+  public get Id(): number {
+    return this.Properties.id;
   }
 
-  /**
-   * Gets the skill id.
-   */
-  get id(): number {
-    return this._properties.id;
+  /// <summary>
+  /// Gets the skill name.
+  /// </summary>
+  public get Name(): string {
+    return this.Properties.szName;
   }
 
-  /**
-   * Gets the skill name.
-   */
-  get name(): string {
-    return this._properties.szName;
-  }
-
-  /**
-   * Gets the skill type.
-   */
-  get type(): SkillType {
-    // TODO: Map from properties to SkillType
+  /// <summary>
+  /// Gets the skill type.
+  /// </summary>
+  public get Type(): SkillType {
+    // TODO: Map from dwSkillType to SkillType enum
     return SkillType.Skill;
   }
 
-  /**
-   * Gets the skill owner id.
-   */
-  get ownerId(): number {
-    return this._ownerId;
-  }
+  /// <summary>
+  /// Gets the skill owner instance.
+  /// </summary>
+  public Owner: any; // TODO: Replace with proper Mover type
 
-  /**
-   * Gets or sets the skill database id in case of the owner is a Player.
-   */
-  get databaseId(): number | undefined {
-    return this._databaseId;
-  }
+  /// <summary>
+  /// Gets or sets the skill database id in case of the owner is a Player.
+  /// </summary>
+  public DatabaseId?: number;
 
-  set databaseId(value: number | undefined) {
-    this._databaseId = value;
-  }
-
-  /**
-   * Gets or sets the skill level.
-   */
-  get level(): number {
+  /// <summary>
+  /// Gets or sets the skill level.
+  /// </summary>
+  public get Level(): number {
     return this._level;
   }
 
-  set level(value: number) {
-    // TODO: Get max level from properties
-    const maxLevel = 20; // Default max level
-    this._level = Math.max(0, Math.min(value, maxLevel));
+  public set Level(value: number) {
+    this._level = Math.Clamp(value, 0, this.Properties.ExpertMax);
   }
 
-  /**
-   * Gets the skill properties.
-   */
-  get properties(): SkillProperties {
-    return this._properties;
+  /// <summary>
+  /// Gets the skill properties.
+  /// </summary>
+  public Properties: SkillProperties;
+
+  /// <summary>
+  /// Gets the skill level properties.
+  /// </summary>
+  public get LevelProperties(): SkillLevelProperties | undefined {
+    return this.Properties.skillLevels?.[this.Level];
   }
 
-  /**
-   * Gets the skill level properties.
-   */
-  get levelProperties(): SkillLevelProperties | undefined {
-    return this._properties.skillLevels?.[this._level];
+  public constructor(skillProperties: SkillProperties, owner: any, level: number, databaseId?: number) {
+    if (!skillProperties) {
+      throw new Error("Cannot create a skill instance with undefined skill properties.");
+    }
+    this.Properties = skillProperties;
+    this.Owner = owner;
+    this.Level = level;
+    this.DatabaseId = databaseId;
   }
 
-  /**
-   * Gets the skill casting in milliseconds.
-   * @returns Skill casting time in milliseconds.
-   */
-  getCastingTime(): number {
-    if (this.type === SkillType.Skill) {
+  /// <summary>
+  /// Gets the skill casting in seconds.
+  /// </summary>
+  /// <returns>Skill casting time in seconds.</returns>
+  public GetCastingTime(): number {
+    if (this.Properties.dwSkillType === "SKILL") {
       return 1000;
     } else {
-      // TODO: Calculate based on level properties and owner attributes
-      const levelProps = this.levelProperties;
+      const levelProps = this.LevelProperties;
       if (!levelProps) return 1000;
 
-      let castingTime = Math.floor((levelProps.tmCastingTime / 1000) * (60 / 4));
-      // TODO: Apply spell rate reduction
-      // castingTime -= castingTime * (owner.attributes.get(DefineAttributes.DST_SPELL_RATE) / 100);
+      let castingTime = (levelProps.dwCastingTime / 1000) * (60 / 4);
 
-      return Math.max(castingTime, 0);
+      // TODO: Apply spell rate reduction
+      // castingTime -= castingTime * (this.Owner.Attributes.Get(DefineAttributes.DST_SPELL_RATE) / 100);
+
+      return Math.Max(castingTime, 0);
     }
   }
 
-  /**
-   * Sets the skill cool-time.
-   * @param coolTime Skill cool time in milliseconds.
-   */
-  setCoolTime(coolTime: number): void {
+  /// <summary>
+  /// Sets the skill cool-time.
+  /// </summary>
+  /// <param name="coolTime">Skill cool time in milliseconds.</param>
+  public SetCoolTime(coolTime: number): void {
     if (coolTime > 0) {
       this._nextSkillUsageTime = Date.now() + coolTime;
     }
   }
 
-  /**
-   * Gets a boolean value that indicates if the skill cool-time is elapsed.
-   * @returns True if the cool-time is elapsed; false otherwise.
-   */
-  isCoolTimeElapsed(): boolean {
+  /// <summary>
+  /// Gets a boolean value that indicates if the skill cool-time is elapsed.
+  /// </summary>
+  /// <returns>True if the cool-time is elapsed; false otherwise.</returns>
+  public IsCoolTimeElapsed(): boolean {
     return this._nextSkillUsageTime < Date.now();
   }
 
-  /**
-   * Serialize the skill into the given packet instance.
-   * @param packet Packet to write to.
-   */
-  serialize(packet: any): void {
-    packet.writeInt32(this.id);
-    packet.writeInt32(this.level);
+  /// <summary>
+  /// Serialize the skill into the given packet instance.
+  /// </summary>
+  /// <param name="packet">Packet.</param>
+  public serialize(packet: FlyffPacket): void {
+    packet.writeInt32(this.Id);
+    packet.writeInt32(this.Level);
   }
 
-  /**
-   * Compares the current instance with another Skill instance.
-   * @param otherSkill Other skill instance.
-   * @returns True if the two skills are the same; false otherwise.
-   */
-  equals(otherSkill: Skill | null): boolean {
-    return this.id === otherSkill?.id && this.ownerId === otherSkill?.ownerId;
+  /// <summary>
+  /// Compares the current instance with another <see cref="Skill"/> instance.
+  /// </summary>
+  /// <param name="otherSkill">Other skill instance.</param>
+  /// <returns>True if the two skills are the same; false otherwise.</returns>
+  public Equals(otherSkill: Skill | null): boolean {
+    return this.Id === otherSkill?.Id && this.Owner?.ObjectId === otherSkill?.Owner?.ObjectId;
   }
 
-  /**
-   * Checks if the current owner can use the current skill on the given target.
-   * @param targetId Target entity ID.
-   * @param ownerLevel Owner's level.
-   * @param ownerMp Owner's current MP.
-   * @param ownerFp Owner's current FP.
-   * @returns True if the skill can be used; false otherwise.
-   */
-  canUse(targetId?: number, ownerLevel: number = 1, ownerMp: number = 0, ownerFp: number = 0): boolean {
-    if (this.level <= 0) {
+  /// <summary>
+  /// Checks if the current owner can use the current skill on the given target.
+  /// </summary>
+  /// <param name="target">Skill target.</param>
+  /// <returns>True if the skill can be used; false otherwise.</returns>
+  public CanUse(target: any): boolean { // TODO: Replace with proper Mover type
+    if (this.Level <= 0 || this.Level > Object.keys(this.Properties.skillLevels || {}).length) {
       return false;
     }
 
-    if (!this.isCoolTimeElapsed()) {
+    if (!this.IsCoolTimeElapsed()) {
       // TODO: Send defined text TID_GAME_SKILLWAITTIME
       return false;
     }
 
-    const levelProps = this.levelProperties;
-    if (!levelProps) {
-      return false;
-    }
+    const levelProps = this.LevelProperties;
+    if (!levelProps) return false;
 
-    if (levelProps.dwReqMP > 0 && ownerMp < levelProps.dwReqMP) {
+    if (levelProps.dwReqMp > 0 && this.Owner.Health.Mp < levelProps.dwReqMp) {
       // TODO: Send defined text TID_GAME_REQMP
       return false;
     }
 
-    if (levelProps.dwReqFP > 0 && ownerFp < levelProps.dwReqFP) {
+    if (levelProps.dwRepFp > 0 && this.Owner.Health.Fp < levelProps.dwRepFp) {
       // TODO: Send defined text TID_GAME_REQFP
       return false;
     }
 
     // TODO: Add weapon and item requirements checks
     // TODO: Add magic skill checks
-    // TODO: Add dual weapon checks
 
     return true;
   }
 
-  /**
-   * Uses the current skill on the given target.
-   * @param targetId Target entity ID.
-   * @param skillUseType Skill usage type.
-   */
-  use(targetId?: number, skillUseType: SkillUseType = SkillUseType.Normal): void {
-    // TODO: Implement skill execution based on executeTarget type
-    const executeTarget = this.getExecuteTargetType();
-
-    switch (executeTarget) {
-      case SkillExecuteTargetType.MeleeAttack:
-        this.castMeleeSkill(targetId, skillUseType);
+  /// <summary>
+  /// Uses the current skill on the given target.
+  /// </summary>
+  /// <param name="target">Target.</param>
+  /// <param name="skillUseType">Skill usage type.</param>
+  public Use(target: any, skillUseType: SkillUseType = SkillUseType.Normal): void { // TODO: Replace with proper Mover type
+    switch (this.Properties.dwExeTarget) {
+      case "MELEE_ATTACK":
+        this.CastMeleeSkill(target, skillUseType);
         break;
-      case SkillExecuteTargetType.MagicAttack:
-        this.castMagicSkill(targetId, skillUseType);
+      case "MAGIC_ATTACK":
+        this.CastMagicSkill(target, skillUseType);
         break;
-      case SkillExecuteTargetType.MagicAttackShot:
+      case "MAGIC_ATTACK_SHOT":
         // TODO: Implement magic attack shot
         break;
-      case SkillExecuteTargetType.AnotherWith:
-        this.castBuffSkill(targetId, skillUseType);
+      case "ANOTHER_WITH":
+        this.CastBuffSkill(target, skillUseType);
         break;
       default:
-        throw new Error(`Unknown execute target type for skill ${this.name}`);
+        throw new Error(`Unknown execute target type for skill ${this.Name}`);
     }
   }
 
-  private getExecuteTargetType(): SkillExecuteTargetType {
-    // TODO: Map from properties to SkillExecuteTargetType
-    return SkillExecuteTargetType.MeleeAttack;
-  }
-
-  private castMeleeSkill(targetId?: number, skillUseType: SkillUseType = SkillUseType.Normal): void {
-    const skillCastingTime = this.getCastingTime();
+  private CastMeleeSkill(target: any, skillUseType: SkillUseType = SkillUseType.Normal): void {
+    const skillCastingTime = this.GetCastingTime();
+    const levelProps = this.LevelProperties;
 
     // TODO: Handle AoE skills
-    this.castSkill(targetId, skillCastingTime, this.levelProperties?.tmComboSkillTime || 0, skillUseType, () => {
-      this.execute(targetId);
+    this.CastSkill(target, this.GetCastingTime(), levelProps?.dwComboSkillTime || 0, skillUseType, () => {
+      this.Execute(target);
     });
   }
 
-  private castMagicSkill(targetId?: number, skillUseType: SkillUseType = SkillUseType.Normal): void {
-    const skillCastingTime = this.getCastingTime();
+  private CastMagicSkill(target: any, skillUseType: SkillUseType = SkillUseType.Normal): void {
+    const skillCastingTime = this.GetCastingTime();
+    const levelProps = this.LevelProperties;
 
     // TODO: Handle AoE skills
-    this.castSkill(targetId, skillCastingTime, this.levelProperties?.tmCastingTime || 0, skillUseType, () => {
-      this.execute(targetId);
+    this.CastSkill(target, skillCastingTime, levelProps?.dwCastingTime || 0, skillUseType, () => {
+      this.Execute(target);
     });
   }
 
-  private castBuffSkill(targetId?: number, skillUseType: SkillUseType = SkillUseType.Normal): void {
-    const skillCastingTime = this.getCastingTime();
-    const levelProps = this.levelProperties;
-
-    if (!levelProps) return;
+  private CastBuffSkill(target: any, skillUseType: SkillUseType = SkillUseType.Normal): void {
+    const skillCastingTime = this.GetCastingTime();
+    const levelProps = this.LevelProperties;
 
     // TODO: Handle resurrection and heal skills
     // TODO: Handle buff application
 
-    const buffTime = levelProps.tmSkillTime || 0;
+    const buffTime = levelProps?.dwSkillTime || 0;
 
     if (buffTime > 0) {
       // TODO: Apply buff attributes after casting time
@@ -257,23 +232,23 @@ export class Skill {
       }, skillCastingTime);
     }
 
-    this.setCoolTime(levelProps.tmCooldown || 0);
-    this.sendSkillMotion(targetId, skillCastingTime, skillUseType);
+    this.SetCoolTime(levelProps?.dwCooldown || 0);
+    this.SendSkillMotion(target, skillCastingTime, skillUseType);
   }
 
-  private castSkill(targetId: number | undefined, skillCastingTime: number, skillDelayTime: number, skillUseType: SkillUseType, skillActionCallback: () => void): void {
+  private CastSkill(target: any, skillCastingTime: number, skillDelayTime: number, skillUseType: SkillUseType, skillActionCallback: () => void): void {
     if (!skillActionCallback) {
       throw new Error("Skill action callback is required");
     }
 
-    this.sendSkillMotion(targetId, skillCastingTime, skillUseType);
+    this.SendSkillMotion(target, skillCastingTime, skillUseType);
 
     setTimeout(() => {
       skillActionCallback();
     }, skillDelayTime);
   }
 
-  private execute(targetId?: number, reduceCasterPoints: boolean = true): void {
+  private Execute(target: any, reduceCasterPoints: boolean = true): void {
     // TODO: Implement skill execution logic
     // - Check if owner can attack target
     // - Calculate damage based on skill type
@@ -282,13 +257,29 @@ export class Skill {
     // - Reduce caster points (MP/FP)
   }
 
-  private sendSkillMotion(targetId: number | undefined, skillCastingTime: number, skillUseType: SkillUseType): void {
+  private SendSkillMotion(target: any, skillCastingTime: number, skillUseType: SkillUseType): void {
     // TODO: Send UseSkillSnapshot to visible players
     // using UseSkillSnapshot snapshot = new(Owner, target, this, skillCastingTime, skillUseType);
     // Owner.SendToVisible(snapshot, sendToSelf: true);
   }
 
-  toString(): string {
-    return this.name;
+  public toString(): string {
+    return this.Name;
   }
 }
+
+// Helper function for Math.Clamp
+declare global {
+  interface Math {
+    Clamp(value: number, min: number, max: number): number;
+    Max(a: number, b: number): number;
+  }
+}
+
+Math.Clamp = (value: number, min: number, max: number): number => {
+  return Math.min(Math.max(value, min), max);
+};
+
+Math.Max = (a: number, b: number): number => {
+  return Math.max(a, b);
+};

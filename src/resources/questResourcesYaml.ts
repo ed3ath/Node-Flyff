@@ -1,18 +1,18 @@
-import fs from "fs-extra";
-import path from "path";
-import yaml from "js-yaml";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as yaml from "js-yaml";
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "./resourcePaths";
 import { DefineJob } from "../game/definitions/defineJob";
 import { GenderType } from "../types/genderType";
-import { QuestProperties } from "./properties/quest/quest";
-import { QuestEndConditionProperties } from "./properties/quest/questEndCondition";
-import { QuestItemDropProperties } from "./properties/quest/questItemDrop";
-import { QuestRewardProperties } from "./properties/quest/questReward";
-import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirements";
-import { QuestItemProperties } from "./properties/quest/questItem";
-import { QuestMonsterProperties } from "./properties/quest/questMonster";
-import { QuestPatrolProperties } from "./properties/quest/questPatrol";
+import { QuestProperties } from "./properties/quest/questProperties";
+import { QuestEndConditionProperties } from "./properties/quest/questEndConditionProperties";
+import { QuestItemDropProperties } from "./properties/quest/questItemDropProperties";
+import { QuestRewardProperties } from "./properties/quest/questRewardProperties";
+import { QuestStartRequirementsProperties } from "./properties/quest/questStartRequirementsProperties";
+import { QuestItemProperties } from "./properties/quest/questItemProperties";
+import { QuestMonsterProperties } from "./properties/quest/questMonsterProperties";
+import { QuestPatrolProperties } from "./properties/quest/questPatrolProperties";
 
 interface YamlQuestData {
   quest_id: string;
@@ -129,7 +129,7 @@ export class QuestResourcesYaml {
 
   public where(predicate: (quest: QuestProperties) => boolean): QuestProperties[] {
     const results: QuestProperties[] = [];
-    for (const quest of this.quests.values()) {
+    for (const quest of Array.from(this.quests.values())) {
       if (predicate(quest)) {
         results.push(quest);
       }
