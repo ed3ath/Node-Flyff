@@ -13,10 +13,7 @@ import { GameResources } from "../../../interfaces/resource";
 import { Vector3 } from "../../../abstract/vector3";
 import { AuthorityType } from "../../../types/authorityType";
 import { GenderType } from "../../../types/genderType";
-import {
-  EnvironmentAllSnapshot,
-  SeasonType,
-} from "../../../protocol/snapshots/environmentAll";
+import { EnvironmentAllSnapshot } from "../../../protocol/snapshots/environmentAll";
 import { WorldReadInfoSnapshot } from "../../../protocol/snapshots/worldReadInfo";
 import { AddObjectSnapshot } from "../../../protocol/snapshots/addObject";
 import { TaskbarSnapshot } from "../../../protocol/snapshots/taskbar";
@@ -509,7 +506,7 @@ export default class Handler extends PacketHandler {
       // Then send the world snapshot (like C++ OnSnapshot in OnJoin)
       this.logger.info(`Creating individual snapshots for ${character.name}:`);
 
-      const environmentSnapshot = new EnvironmentAllSnapshot(player, SeasonType.None);
+      const environmentSnapshot = new EnvironmentAllSnapshot(player, false, false);
       this.logger.info(`✓ Created EnvironmentAllSnapshot`);
 
       const worldReadInfoSnapshot = new WorldReadInfoSnapshot(player);
@@ -527,14 +524,34 @@ export default class Handler extends PacketHandler {
       const addFriendGameJoinSnapshot = new AddFriendGameJoinSnapshot(player);
       this.logger.info(`✓ Created AddFriendGameJoinSnapshot`);
 
-      const joinCompleteSnapshot = new FlyffSnapshot([
+      // Create the combined snapshot to match C++ server structure exactly
+      const joinCompleteSnapshot = new FlyffSnapshot();
+
+      // Write C++ snapshot header: dpidUser + dwHdr + objid + cb
+      // Note: dpidUser corresponds to user session/connection ID
+      const dpidUser = (this.userConnection as any).sessionId || player.objectId;
+      joinCompleteSnapshot.writeInt32LE(dpidUser); // dpidUser (DPID)
+      joinCompleteSnapshot.writeInt32LE(PacketType.JOIN); // dwHdr (packet type)
+      joinCompleteSnapshot.writeInt32LE(player.objectId); // objid (player object ID)
+
+      const snapshotCount = 6;
+      joinCompleteSnapshot.writeInt16LE(snapshotCount); // cb (count)
+
+      // Write each snapshot following C++ format: objid + snapshot_type + data
+      const snapshots = [
         environmentSnapshot,
         worldReadInfoSnapshot,
         addObjectSnapshot,
         taskbarSnapshot,
         queryPlayerDataSnapshot,
         addFriendGameJoinSnapshot,
-      ]);
+      ];
+
+      for (const snapshot of snapshots) {
+        // Each snapshot already contains: objectId + snapshotType + data
+        const snapshotContent = snapshot.getContent();
+        joinCompleteSnapshot.writeBytes(snapshotContent);
+      }
 
       this.logger.info(`Sending world snapshot to client for character: ${character.name} with ${joinCompleteSnapshot.buffer.length} bytes`);
 

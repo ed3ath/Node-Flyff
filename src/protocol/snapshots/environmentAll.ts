@@ -2,17 +2,11 @@ import { SnapshotType } from "../../protocol/snapshotType";
 import { Player } from "../../entities/player";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 
-export enum SeasonType {
-  None = 0,
-  Spring = 1,
-  Summer = 2,
-  Autumn = 3,
-  Winter = 4
-}
-
 export class EnvironmentAllSnapshot extends FlyffSnapshot {
-  constructor(player: Player, season: SeasonType = SeasonType.None) {
+  constructor(player: Player, rain: boolean = false, snow: boolean = false) {
     super(SnapshotType.ENVIRONMENT_ALL, player.objectId);
-    this.writeInt32(season);
+    // Send rain and snow boolean values as expected by client OnEnvironmentAll
+    this.writeInt32(rain ? 1 : 0); // m_bRain
+    this.writeInt32(snow ? 1 : 0); // m_bSnow
   }
 }

@@ -53,7 +53,10 @@
       "Bash(timeout 10s npx tsc --noEmit src/helpers/logger.ts)",
       "Bash(timeout:*)",
       "Read(//h/**)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(dir:*)",
+      "Bash(copy:*)",
+      "Bash(do cp \"H:\\game\\L19.4\\Server\\Resource$file\" \"H:\\game\\nodejs-flyff\\src\\resources\\res\\data$file\")"
     ],
     "deny": [],
     "ask": []

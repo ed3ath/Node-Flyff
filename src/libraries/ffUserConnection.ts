@@ -7,6 +7,7 @@ import { ErrorType } from "../types/errorType";
 import Character from "../database/character";
 import EquipmentItem from "../database/equipmentItem";
 import _ from "lodash";
+import { PacketLogger } from "../helpers/packetLogger";
 
 /**
  * Represents a FlyFF user connection.
