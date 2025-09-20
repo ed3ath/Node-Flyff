@@ -69,14 +69,12 @@ export default class Handler extends PacketHandler {
     this.logger.info(`  Slot: ${this.slot}`);
 
     // First validate authKey - this should match what was provided by cluster server
-    // For development/testing, we'll log but not reject zero authKeys
-    // if (!this.authKey || this.authKey === 0) {
-    //   this.logger.warn(
-    //     `JOIN_GAME received with invalid or missing authKey (${this.authKey}) for user '${this.username}' - proceeding for testing`
-    //   );
-    //   // In production, you should uncomment the line below:
-    //   // return this.userConnection.disconnect();
-    // }
+    if (!this.authKey || this.authKey === 0) {
+      this.logger.warn(
+        `JOIN_GAME received with invalid or missing authKey (${this.authKey}) for user '${this.username}'`
+      );
+      return this.userConnection.disconnect();
+    }
 
     const accounts = this.server?.instance?.getEntity("Account");
     const userAccount = (await accounts?.findOne({

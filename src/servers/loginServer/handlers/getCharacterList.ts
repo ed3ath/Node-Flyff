@@ -35,7 +35,7 @@ export default class Handler extends PacketHandler {
       return;
     }
 
-    const clusterName = this.server?.config?.cluster_server?.settings?.name;
+    const clusterName = this.server?.config?.login_server?.settings?.name;
     this.logger.info(`Using cluster name: ${clusterName}`);
 
     const channel = await this.server.redisClient.getChannelById(
@@ -108,8 +108,8 @@ export default class Handler extends PacketHandler {
       this.logger.info(`Sending channel IP: ${channel.host}`);
       this.sendChannelIp(channel.host);
     }
-    
-    if (this.server?.config?.cluster_server.settings["login-protect"]) {
+
+    if (this.server?.config?.login_server.settings["login-protect"]) {
       this.logger.info("Sending numpad ID for login protection");
       await this.sendNumPadId();
     }

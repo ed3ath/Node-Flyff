@@ -15,6 +15,7 @@ import { ErrorType } from "../types/errorType";
 import Character from "../database/character";
 import EquipmentItem from "../database/equipmentItem";
 import { FFUserConnection } from "./ffUserConnection";
+import { PacketLogger } from "../helpers/packetLogger";
 
 // Interface for server configuration
 export interface IServerConfig {
@@ -125,27 +126,49 @@ export class TcpServer {
     data: Buffer,
     userConnection: IUserConnection
   ): Promise<void> {
-    const packet = new FlyffPacket(
-      data,
-      this.serverType === ServerType.LOGIN_SERVER
-    );
+    // Log raw data BEFORE parsing
+    const hexData = data.toString('hex').toUpperCase().match(/.{1,2}/g)?.join(' ') || '';
+    this.logger.info(`RAW DATA RECEIVED (${data.length} bytes): ${hexData}`);
+    PacketLogger.logRawData(
+        userConnection.sessionId,
+        `${userConnection.socket.remoteAddress}:${userConnection.socket.remotePort}`, data)
 
-    const HandlerClass = this.handlers.get(packet.PacketType);
-
-    if (HandlerClass) {
-      // Execute the corresponding packet handler
-      const handlerInstance = new HandlerClass(packet);
-      console.log(this.getPacketTypeId(packet.PacketType));
-      handlerInstance.userConnection = userConnection;
-      handlerInstance.server = this;
-      await handlerInstance.wrappedExecute();
-    } else {
-      // Log unimplemented packet type
-      this.logger.warn(
-        `Unimplemented packet ${this.getPacketTypeId(
-          packet.PacketType
-        )} (${ToStringHex(packet.PacketType)})`
+    try {
+      const packet = new FlyffPacket(
+        data,
+        this.serverType === ServerType.LOGIN_SERVER
       );
+
+      // Log incoming packets for all server types
+      PacketLogger.logIncomingPacket(
+        userConnection.sessionId,
+        `${userConnection.socket.remoteAddress}:${userConnection.socket.remotePort}`,
+        packet.PacketType,
+        packet.buffer,
+        data
+      );
+
+      const HandlerClass = this.handlers.get(packet.PacketType);
+
+      if (HandlerClass) {
+        // Execute the corresponding packet handler
+        const handlerInstance = new HandlerClass(packet);
+        console.log(this.getPacketTypeId(packet.PacketType));
+        handlerInstance.userConnection = userConnection;
+        handlerInstance.server = this;
+        await handlerInstance.wrappedExecute();
+      } else {
+        // Log unimplemented packet type
+        this.logger.warn(
+          `Unimplemented packet ${this.getPacketTypeId(
+            packet.PacketType
+          )} (${ToStringHex(packet.PacketType)})`
+        );
+      }
+    } catch (error) {
+      this.logger.error(`Error processing packet: ${error}`);
+      this.logger.error(`Failed packet data: ${data.toString('hex')}`);
+      // Don't disconnect on packet errors to maintain connection
     }
   }
 

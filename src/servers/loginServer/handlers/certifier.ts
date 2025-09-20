@@ -65,6 +65,19 @@ export default class Handler extends PacketHandler {
       this.userConnection.userId = account.id;
       this.userConnection.username = account.username;
 
+      // Store authentication state in Redis for cluster server validation
+      const authKey = Math.floor(Math.random() * 0x7FFFFFFF) + 1;
+      this.userConnection.authKey = authKey;
+
+      await this.server.redisClient.setUserAuthState(account.username, {
+        authenticated: true,
+        authKey: authKey,
+        timestamp: Date.now(),
+        sessionId: this.userConnection.sessionId
+      });
+
+      this.logger.info(`Stored authentication state for user: ${account.username} with authKey: ${authKey}`);
+
       // Send server list after successful authentication
       await this.sendServerList();
     }
@@ -86,6 +99,7 @@ export default class Handler extends PacketHandler {
       packet.writeInt32LE(-1); // Parent server id
       packet.writeInt32LE(clusterId); // cluster id
       packet.writeStringLE(cluster.name);
+      // Send cluster server host - client will connect to cluster server for character management
       packet.writeStringLE(cluster.host);
       packet.writeInt32LE(0); // b18 ?
       packet.writeInt32LE(0); // Connected count

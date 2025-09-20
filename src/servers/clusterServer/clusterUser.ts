@@ -174,11 +174,27 @@ export class ClusterUser extends FFUserConnection {
       const packetBufferArray = packetBuffer.slice(4);
       const packet = new FlyffPacket(packetBufferArray);
 
+      // Log the incoming packet
+      const PacketLogger = require("../../helpers/packetLogger").PacketLogger;
+      PacketLogger.logIncomingPacket(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        packet.PacketType,
+        packet.buffer,
+        packetBuffer
+      );
+
       // TODO: Implement PacketDispatcher.Execute equivalent
       // For now, we'll need to route packets manually or implement a dispatcher
 
     } catch (error) {
       this.logger.error(`An error occurred while handling a cluster packet: ${error}`);
+      const PacketLogger = require("../../helpers/packetLogger").PacketLogger;
+      PacketLogger.logPacketError(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        `Error handling packet: ${error}`
+      );
     }
   }
 

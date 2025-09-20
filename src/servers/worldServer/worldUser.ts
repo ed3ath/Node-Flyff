@@ -3,6 +3,7 @@ import { Logger } from "../../helpers/logger";
 import { Player } from "../../entities/player";
 import { FFUserConnection } from "../../libraries/ffUserConnection";
 import { FlyffPacket } from "../../libraries/flyffPacket";
+import { PacketLogger } from "../../helpers/packetLogger";
 
 /**
  * WorldUser represents a user connection in the world server
@@ -27,11 +28,25 @@ export class WorldUser extends FFUserConnection {
       const packetBufferArray = packetBuffer.slice(4);
       const packet = new FlyffPacket(packetBufferArray);
 
+      // Log the incoming packet
+      PacketLogger.logIncomingPacket(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        packet.PacketType,
+        packet.buffer,
+        packetBuffer
+      );
+
       // TODO: Implement PacketDispatcher.Execute equivalent
       // For now, we'll need to route packets manually or implement a dispatcher
 
     } catch (error) {
       this.logger.error(`An error occurred while handling a world packet: ${error}`);
+      PacketLogger.logPacketError(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        `Error handling packet: ${error}`
+      );
     }
   }
 

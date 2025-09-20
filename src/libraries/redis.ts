@@ -256,4 +256,32 @@ export class RedisClient implements IRedisClient {
     const key = `session:${sessionKey}`;
     await this.client.del(key);
   }
+
+  async setUserAuthState(username: string, authState: {authenticated: boolean, authKey: number, timestamp: number, sessionId: number}): Promise<void> {
+    const key = `auth:${username}`;
+    await this.client.hmset(key, {
+      authenticated: authState.authenticated ? 'true' : 'false',
+      authKey: authState.authKey.toString(),
+      timestamp: authState.timestamp.toString(),
+      sessionId: authState.sessionId.toString()
+    });
+    // Set expiration to 5 minutes
+    await this.client.expire(key, 300);
+  }
+
+  async getUserAuthState(username: string): Promise<{authenticated: boolean, authKey: number, timestamp: number, sessionId: number} | null> {
+    const key = `auth:${username}`;
+    const authData = await this.client.hgetall(key);
+
+    if (!authData || Object.keys(authData).length === 0) {
+      return null;
+    }
+
+    return {
+      authenticated: authData.authenticated === 'true',
+      authKey: parseInt(authData.authKey, 10),
+      timestamp: parseInt(authData.timestamp, 10),
+      sessionId: parseInt(authData.sessionId, 10)
+    };
+  }
 }

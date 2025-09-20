@@ -24,4 +24,6 @@ export interface IRedisClient {
   setCharacterSession(sessionKey: number, characterId: number, username: string, password: string, expireInSeconds: number): Promise<void>
   getCharacterSession(sessionKey: number): Promise<{characterId: number, username: string, password: string} | null>
   deleteCharacterSession(sessionKey: number): Promise<void>
+  setUserAuthState(username: string, authState: {authenticated: boolean, authKey: number, timestamp: number, sessionId: number}): Promise<void>
+  getUserAuthState(username: string): Promise<{authenticated: boolean, authKey: number, timestamp: number, sessionId: number} | null>
 }

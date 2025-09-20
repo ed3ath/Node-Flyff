@@ -56,7 +56,17 @@ export abstract class FFUserConnection implements IUserConnection {
    */
   public send(packet: FlyffPacket): void {
     if (this.socket && !this.socket.destroyed) {
-      this.socket.write(FlyffPacket.appendHeader(packet.buffer));
+      const finalBuffer = FlyffPacket.appendHeader(packet.buffer);
+
+      // Log outgoing packet
+      PacketLogger.logOutgoingPacket(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        packet.PacketType,
+        finalBuffer
+      );
+
+      this.socket.write(finalBuffer);
     }
   }
 

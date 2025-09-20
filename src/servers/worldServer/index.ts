@@ -54,6 +54,10 @@ export default async () => {
   const instance = await instanceBuilder.build();
   worldIntercom(instance);
 
+  // Initialize packet logging for world server
+  const { PacketLogger } = require("../../helpers/packetLogger");
+  PacketLogger.logCustomMessage("World server started - packet logging initialized");
+
   global.GameConfig = instanceBuilder.config
   global.TimeStarted = new Date().getTime();
 };

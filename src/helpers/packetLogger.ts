@@ -16,8 +16,12 @@ export class PacketLogger {
       fs.mkdirSync(logDir, { recursive: true });
     }
 
-    // Clear existing log file
-    fs.writeFileSync(this.logFilePath, '');
+    // Add a separator when server starts
+    if (fs.existsSync(this.logFilePath)) {
+      const timestamp = this.formatTimestamp();
+      fs.appendFileSync(this.logFilePath, `\n[${timestamp}] INFO | ====== SERVER RESTART ======\n`);
+    }
+
     this.isInitialized = true;
   }
 
@@ -55,7 +59,7 @@ export class PacketLogger {
     const hexData = this.bufferToHexString(buffer);
     const rawHexData = rawBuffer ? this.bufferToHexString(rawBuffer) : 'N/A';
 
-    const logEntry = `[${timestamp}] INCOMING | Session: ${sessionId} | Client: ${clientAddress} | Type: ${packetTypeName} (0x${packetType.toString(16).toUpperCase().padStart(8, '0')}) | Data: ${hexData} | Raw: ${rawHexData}\n`;
+    const logEntry = `[${timestamp}] INCOMING | Session: ${sessionId} | Client: ${clientAddress} | Type: ${packetTypeName} (0x${packetType.toString(16).toUpperCase().padStart(8, '0')}) | Data: ${buffer.toString('hex')} | Raw: ${rawBuffer?.toString('hex')}\n`;
 
     fs.appendFileSync(this.logFilePath, logEntry);
   }
@@ -80,7 +84,7 @@ export class PacketLogger {
       typeInfo += ` | Snapshot: ${snapshotTypeName} (0x${snapshotType.toString(16).toUpperCase().padStart(8, '0')})`;
     }
 
-    const logEntry = `[${timestamp}] OUTGOING | Session: ${sessionId} | Client: ${clientAddress} | Type: ${typeInfo} | Data: ${hexData}\n`;
+    const logEntry = `[${timestamp}] OUTGOING | Session: ${sessionId} | Client: ${clientAddress} | Type: ${typeInfo} | Data: ${buffer.toString('hex')}\n`;
 
     fs.appendFileSync(this.logFilePath, logEntry);
   }
@@ -102,7 +106,7 @@ export class PacketLogger {
     snapshots.forEach((snapshot, index) => {
       const snapshotTypeName = this.getSnapshotTypeName(snapshot.type);
       const hexData = this.bufferToHexString(snapshot.data);
-      logEntry += `  └─ [${index + 1}/${snapshotCount}] ${snapshotTypeName} (0x${snapshot.type.toString(16).toUpperCase().padStart(8, '0')}) | Data: ${hexData}\n`;
+      logEntry += `  └─ [${index + 1}/${snapshotCount}] ${snapshotTypeName} (0x${snapshot.type.toString(16).toUpperCase().padStart(8, '0')}) | Data: ${snapshot.data.toString('hex')}\n`;
     });
 
     fs.appendFileSync(this.logFilePath, logEntry);
@@ -122,6 +126,16 @@ export class PacketLogger {
 
     const timestamp = this.formatTimestamp();
     const logEntry = `[${timestamp}] INFO | ${message}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logRawData(sessionId: number, clientAddress: string, data: Buffer): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const hexData = this.bufferToHexString(data, 128); // Show more bytes for raw data
+    const logEntry = `[${timestamp}] RAW_DATA | Session: ${sessionId} | Client: ${clientAddress} | ${data.toString('hex')}\n`;
 
     fs.appendFileSync(this.logFilePath, logEntry);
   }
