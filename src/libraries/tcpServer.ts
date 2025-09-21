@@ -307,6 +307,14 @@ export class UserConnection {
     this.socket.write(buffer);
   }
 
+  // Method to send a snapshot to the client
+  sendSnapshot(snapshot: any): void {
+    if (snapshot && snapshot.buffer) {
+      const finalBuffer = FlyffPacket.appendHeader(snapshot.buffer);
+      this.socket.write(finalBuffer);
+    }
+  }
+
   sendError(errorType: ErrorType): void {
     const packet = new FlyffPacket(PacketType.ERROR);
     packet.writeUInt32LE(errorType);

@@ -88,6 +88,26 @@ export abstract class FFUserConnection implements IUserConnection {
   }
 
   /**
+   * Sends a snapshot to the client
+   */
+  public sendSnapshot(snapshot: any): void {
+    if (this.socket && !this.socket.destroyed) {
+      // Get the finalized snapshot buffer using the same method as send()
+      const finalBuffer = FlyffPacket.appendHeader(snapshot.buffer);
+
+      // Log outgoing snapshot
+      PacketLogger.logOutgoingPacket(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        PacketType.SNAPSHOT,
+        finalBuffer
+      );
+
+      this.socket.write(finalBuffer);
+    }
+  }
+
+  /**
    * Sends an error packet to the client
    */
   public sendError(errorType: ErrorType): void {

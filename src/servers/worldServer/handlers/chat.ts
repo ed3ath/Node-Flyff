@@ -3,6 +3,9 @@ import { FlyffPacket } from '../../../libraries/flyffPacket'
 import { PacketHandler } from '../../../libraries/packetHandler'
 import { SetPacketType } from '../../../decorators/packetHandler'
 import { WorldUser } from '../worldUser'
+import { PlayerDataService } from '../../../services/playerDataService'
+import { ChatChannelType } from '../../../database/chatLog'
+import { ChatType } from '../../../protocol/snapshots/chat'
 
 @SetPacketType(PacketType.CHAT)
 export default class Handler extends PacketHandler {
@@ -26,16 +29,41 @@ export default class Handler extends PacketHandler {
       return
     }
 
+    const playerDataService = PlayerDataService.getInstance()
+
     if (this.message.startsWith('/')) {
       // Handle emotes and commands
       if (Handler.isEmote(this.message)) {
-        player.speak(this.message)
+        // Log emote to database
+        await playerDataService.logChatMessage(
+          player,
+          this.message,
+          ChatChannelType.EMOTE,
+          undefined,
+          false,
+          true
+        )
+        player.speak(this.message, ChatType.NORMAL) // Emotes show as normal chat
       } else {
+        // Log command to database
+        await playerDataService.logChatMessage(
+          player,
+          this.message,
+          ChatChannelType.COMMAND,
+          undefined,
+          true,
+          false
+        )
         await this.handleCommand(this.message, player)
       }
     } else {
-      // Regular chat message
-      player.speak(this.message)
+      // Regular chat message - log to database
+      await playerDataService.logChatMessage(
+        player,
+        this.message,
+        ChatChannelType.NORMAL
+      )
+      player.speak(this.message, ChatType.NORMAL)
     }
   }
 

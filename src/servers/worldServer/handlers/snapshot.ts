@@ -24,9 +24,9 @@ export default class SnapshotHandler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
 
-    // Read snapshot count (similar to C# SnapshotPacket.Count)
+    // Read snapshot count in little-endian (similar to C# SnapshotPacket.Count)
     this.packet = {
-      count: packet.readInt16(),
+      count: packet.readInt16LE(),
       data: packet.buffer.subarray(packet.position)
     };
   }
@@ -35,14 +35,35 @@ export default class SnapshotHandler extends PacketHandler {
     let snapshotCount = this.packet.count;
     let dataOffset = 0;
 
+    // Debug: Log snapshot count and total data
+    this.logger.debug(`Snapshot packet - Count: ${snapshotCount}, Total data length: ${this.packet.data.length}`);
+
     while (snapshotCount > 0) {
       try {
         // Create binary stream from remaining snapshot data (similar to C# FFPacket)
         const remainingData = this.packet.data.subarray(dataOffset);
+
+        // Debug: Log raw buffer data to understand what we're parsing
+        this.logger.debug(`Remaining data at offset ${dataOffset}: ${remainingData.toString('hex').toUpperCase()}`);
+
+        if (remainingData.length < 2) {
+          this.logger.warn(`Insufficient data for snapshot header at offset ${dataOffset}, remaining: ${remainingData.length} bytes`);
+          break;
+        }
+
         const snapshot = new BinaryStream(remainingData);
 
-        // Read snapshot header (similar to C# snapshot.ReadInt16())
-        const snapshotHeaderNumber = snapshot.readInt16();
+        // Check if we might be looking at a specific known pattern
+        if (remainingData.length >= 16 && snapshotCount === 1) {
+          // This might be a single snapshot with specific structure
+          this.logger.debug(`Single snapshot with 16 bytes - checking for DEST_POS pattern`);
+        }
+
+        // Read snapshot header in little-endian format (FlyFF uses little-endian)
+        const snapshotHeaderNumber = snapshot.readInt16LE();
+
+        // Debug logging to understand what we're reading
+        this.logger.debug(`Snapshot header read: 0x${snapshotHeaderNumber.toString(16).toUpperCase().padStart(4, '0')} (${snapshotHeaderNumber})`);
 
         try {
           const snapshotHeader = snapshotHeaderNumber as SnapshotType;
@@ -51,6 +72,11 @@ export default class SnapshotHandler extends PacketHandler {
             await this.handleDestPosSnapshot(snapshot);
             // DEST_POS snapshot contains: int16 header + 3 floats (12 bytes) + 1 byte = 15 bytes total
             dataOffset += 2 + 12 + 1;
+          } else if (snapshotHeader === SnapshotType.GUILD_BANK_WND) {
+            await this.handleGuildBankWndSnapshot(snapshot);
+            // GUILD_BANK_WND snapshot contains: int16 header + unknown data length
+            // For now, try to advance by a safe amount or detect the actual length
+            dataOffset += 2; // Just skip the header for now
           } else {
             throw new Error("Not implemented");
           }
@@ -68,6 +94,7 @@ export default class SnapshotHandler extends PacketHandler {
               );
             }
             // Skip unknown snapshot - advance by at least the header size
+            // If we don't know the length, we might need to break or make a best guess
             dataOffset += 2;
           } else {
             this.logger.error(`An error occurred while handling a world snapshot: ${error}`);
@@ -85,11 +112,11 @@ export default class SnapshotHandler extends PacketHandler {
 
   private async handleDestPosSnapshot(snapshot: BinaryStream): Promise<void> {
     try {
-      // Read position data (similar to C# SetDestPositionPacket)
+      // Read position data in little-endian format (FlyFF uses little-endian)
       const setDestPositionPacket: SetDestPositionPacket = {
-        x: snapshot.readSingle(),
-        y: snapshot.readSingle(),
-        z: snapshot.readSingle()
+        x: snapshot.readSingleLE(),
+        y: snapshot.readSingleLE(),
+        z: snapshot.readSingleLE()
       };
 
       // Get the player from user connection (similar to C# Player.Move())
@@ -102,6 +129,31 @@ export default class SnapshotHandler extends PacketHandler {
       }
     } catch (error) {
       this.logger.error(`Error handling DESTPOS snapshot: ${error}`);
+    }
+  }
+
+  private async handleGuildBankWndSnapshot(snapshot: BinaryStream): Promise<void> {
+    try {
+      // GUILD_BANK_WND snapshot is typically sent when player interacts with guild bank
+      // For now, just log that we received it and handle basic case
+
+      this.logger.info('Received GUILD_BANK_WND snapshot - player attempting to access guild bank');
+
+      // TODO: Implement guild bank window logic
+      // This would typically:
+      // 1. Check if player has guild bank access permissions
+      // 2. Open guild bank interface
+      // 3. Send guild bank items to client
+      // 4. Handle guild bank interactions
+
+      // For now, just acknowledge receipt
+      const player = this.userConnection.player as Player;
+      if (player) {
+        this.logger.info(`Player ${player.name} accessed guild bank window`);
+      }
+
+    } catch (error) {
+      this.logger.error(`Error handling GUILD_BANK_WND snapshot: ${error}`);
     }
   }
 

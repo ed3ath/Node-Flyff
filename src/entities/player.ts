@@ -16,6 +16,7 @@ import { Item } from "../game/mechanics/item";
 import { Mover } from "./mover";
 import { MapItemObject } from "./mapItemObject";
 import { QuestDiary } from "../game/mechanics/questDiary";
+import { ChatSnapshot, ChatType } from "../protocol/snapshots/chat";
 
 // Interfaces for Player components
 interface HumanVisualAppearance {
@@ -177,6 +178,7 @@ export class Player extends Mover {
   public availablePoints: number = 0;
   public skillPoints: number = 0;
   public currentShopName: string = '';
+  public lastUpdateTime: number = Date.now();
 
   public constructor(
     private readonly _connection: IUserConnection,
@@ -213,6 +215,13 @@ export class Player extends Mover {
     this.skills = new SkillTree(this);
     this.questDiary = new QuestDiary(this);
     this.taskbar = new Taskbar();
+  }
+
+  /**
+   * Gets the user connection for this player
+   */
+  public get userConnection(): IUserConnection {
+    return this._connection;
   }
 
   update(): void {
@@ -355,10 +364,41 @@ export class Player extends Mover {
     // this.sendToVisible(snapshots, true);
   }
 
-  public speak(message: string): void {
-    // TODO: Implement proper snapshot system
-    // const snapshot = new ChatSnapshot(this, message);
-    // this.sendToVisible(snapshot, true);
+  public speak(message: string, chatType: ChatType = ChatType.NORMAL): void {
+    if (!message || message.trim() === '') {
+      return;
+    }
+
+    // Create chat snapshot with player ID, message, and chat type
+    const chatSnapshot = new ChatSnapshot(this.objectId, message, chatType);
+
+    // Get map layer to find players in range
+    if (!this.mapLayer) {
+      console.warn(`Player ${this.name} has no map layer - cannot broadcast chat`);
+      return;
+    }
+
+    // Get all players within chat range (32 units for normal chat)
+    const chatRange = 32;
+    const playersInRange = this.mapLayer.getPlayersInRange(this.position, chatRange);
+
+    // Send chat snapshot to all players in range (including nearby players)
+    let sentCount = 0;
+    for (const nearbyPlayer of playersInRange) {
+      if (nearbyPlayer.userConnection) {
+        nearbyPlayer.userConnection.sendSnapshot(chatSnapshot);
+        sentCount++;
+      }
+    }
+
+    // Send to self as well
+    if (this.userConnection) {
+      this.userConnection.sendSnapshot(chatSnapshot);
+      sentCount++;
+    }
+
+    // Log the successful chat broadcast
+    console.log(`💬 Player ${this.name} spoke: "${message}" (${ChatType[chatType]}) - sent to ${sentCount} players`);
   }
 
   public sendDefinedText(textId: DefineText, params: string): void {

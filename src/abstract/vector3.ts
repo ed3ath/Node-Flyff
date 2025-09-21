@@ -88,6 +88,15 @@ export class Vector3 {
     }
 
     /// <summary>
+    /// Alias for getDistance3D for convenience.
+    /// </summary>
+    /// <param name="otherPosition">Other position vector.</param>
+    /// <returns>Distance</returns>
+    public distanceTo(otherPosition: Vector3): number {
+        return this.getDistance3D(otherPosition);
+    }
+
+    /// <summary>
     /// Checks if the current position is in a circle around another position.
     /// </summary>
     /// <param name="otherPosition">Center of the circle.</param>

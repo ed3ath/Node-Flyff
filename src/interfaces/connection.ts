@@ -14,6 +14,7 @@ export interface IUserConnection {
   authKey: number | null; // Track auth key for world server
   send(packet: FlyffPacket): void;
   sendBuffer(buffer: Buffer, packetType?: number): void;
+  sendSnapshot(snapshot: any): void;
   sendError(errorType: ErrorType): void;
   sendCharacterList(characters: Character[], authKey: number): void;
   disconnect(): void;

@@ -22,6 +22,8 @@ import {
 import { RedisBuilder } from "../../builders/redisBuilder";
 import { FFRandom } from "../../helpers/FFRandom";
 import { ResourceBuilder } from "../../builders/resourceBuilder";
+import { PlayerDataService } from "../../services/playerDataService";
+import { ChatLogMigration } from "../../services/chatLogMigration";
 
 export default async () => {
   const instanceBuilder = new InstanceBuilder();
@@ -52,6 +54,23 @@ export default async () => {
   });
 
   const instance = await instanceBuilder.build();
+
+  // Initialize PlayerDataService with database connection
+  if (instance.database) {
+    // Ensure ChatLog table exists
+    try {
+      await ChatLogMigration.ensureChatLogTable(instance.database);
+    } catch (error) {
+      console.error("Failed to initialize ChatLog table:", error);
+    }
+
+    const playerDataService = PlayerDataService.getInstance();
+    playerDataService.setDataSource(instance.database);
+    console.log("✓ PlayerDataService initialized with database connection");
+  } else {
+    console.warn("⚠ Database not available - PlayerDataService will not function");
+  }
+
   worldIntercom(instance);
 
   // Initialize packet logging for world server

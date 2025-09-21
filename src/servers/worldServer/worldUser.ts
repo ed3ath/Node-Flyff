@@ -4,6 +4,7 @@ import { Player } from "../../entities/player";
 import { FFUserConnection } from "../../libraries/ffUserConnection";
 import { FlyffPacket } from "../../libraries/flyffPacket";
 import { PacketLogger } from "../../helpers/packetLogger";
+import { PlayerDataService } from "../../services/playerDataService";
 
 /**
  * WorldUser represents a user connection in the world server
@@ -55,17 +56,36 @@ export class WorldUser extends FFUserConnection {
    * Overrides the base implementation to handle player cleanup
    */
   protected onDisconnected(): void {
-    // TODO: save player to database
-    // TODO: notify cluster and disconnect from messenger
-
     if (this.player) {
+      // Save player data to database before disconnecting
+      this.savePlayerDataOnDisconnect();
+
       // Dispose player resources
       this.player.dispose();
       this.player = null;
     }
 
+    // TODO: notify cluster and disconnect from messenger
+
     this.logger.info(`WorldUser ${this.sessionId} disconnected`);
     super.onDisconnected();
+  }
+
+  /**
+   * Save player data to database on disconnect
+   */
+  private async savePlayerDataOnDisconnect(): Promise<void> {
+    if (!this.player) {
+      return;
+    }
+
+    try {
+      const playerDataService = PlayerDataService.getInstance();
+      await playerDataService.savePlayerData(this.player);
+      this.logger.info(`Saved player data for ${this.player.name} on disconnect`);
+    } catch (error) {
+      this.logger.error(`Failed to save player data on disconnect for ${this.player?.name}: ${error}`);
+    }
   }
 
   /**

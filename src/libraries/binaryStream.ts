@@ -240,13 +240,28 @@ export class BinaryStream {
   }
 
   readBuffer(length: number) {
+    if (this.position + length > this.buffer.length) {
+      // Return a zero-filled buffer if we don't have enough data
+      const availableBytes = Math.max(0, this.buffer.length - this.position);
+      const buffer = Buffer.alloc(length);
+      if (availableBytes > 0) {
+        this.buffer.copy(buffer, 0, this.position, this.position + availableBytes);
+      }
+      this.position = this.buffer.length;
+      return buffer;
+    }
     const buffer = this.buffer.subarray(this.position, this.position + length);
     this.position += length;
     return buffer;
   }
 
   toInt(buffer: Buffer) {
-    return parseInt(buffer.toString("hex"), 16);
+    if (buffer.length === 0) {
+      return 0;
+    }
+    const hex = buffer.toString("hex");
+    const result = parseInt(hex, 16);
+    return isNaN(result) ? 0 : result;
   }
 
   toFloat(buffer: Buffer, le = false) {

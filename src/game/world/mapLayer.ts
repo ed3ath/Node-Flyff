@@ -202,4 +202,51 @@ export class MapLayer {
         );
     }
 
+    /**
+     * Get object by ID from all object collections
+     */
+    public getObjectById(objectId: number): WorldObject | undefined {
+        // Check players
+        let obj: WorldObject | undefined = this._players.find(p => p.objectId === objectId);
+        if (obj) return obj;
+
+        // Check NPCs
+        obj = this._npcs.find(n => n.objectId === objectId);
+        if (obj) return obj;
+
+        // Check monsters
+        obj = this._monsters.find(m => m.objectId === objectId);
+        if (obj) return obj;
+
+        // Check items
+        obj = this._items.find(i => i.objectId === objectId);
+        if (obj) return obj;
+
+        return undefined;
+    }
+
+    /**
+     * Get all players within a certain range of a position
+     */
+    public getPlayersInRange(position: Vector3, range: number): Player[] {
+        return this._players.filter(player =>
+            player.isSpawned &&
+            player.position.distanceTo(position) <= range
+        );
+    }
+
+    /**
+     * Remove object from player's view list (for REMOVEOBJ handler)
+     * This is a simplified implementation - in a full system, you'd track
+     * which objects each player can see
+     */
+    public removeObjectFromPlayerView(playerId: number, objectId: number): void {
+        // In a full implementation, you would maintain view lists per player
+        // For now, this is a placeholder that acknowledges the object removal
+        const player = this._players.find(p => p.objectId === playerId);
+        if (player) {
+            // TODO: Remove from player's visible object cache if implemented
+        }
+    }
+
 }

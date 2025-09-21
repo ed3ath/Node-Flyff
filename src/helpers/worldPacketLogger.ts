@@ -127,4 +127,76 @@ export class WorldPacketLogger {
 
     fs.appendFileSync(this.logFilePath, logContent);
   }
+
+  public static logAddObjHandler(
+    playerName: string,
+    objectId: number,
+    objectName: string,
+    position: any,
+    distance: number
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] ADDOBJ_HANDLER | Player: ${playerName} | ObjectId: ${objectId} | ObjectName: ${objectName} | Position: ${JSON.stringify(position)} | Distance: ${distance.toFixed(2)}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logRemoveObjHandler(
+    playerName: string,
+    objectId: number
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] REMOVEOBJ_HANDLER | Player: ${playerName} | ObjectId: ${objectId}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logPlayerCorrectionForced(
+    playerName: string,
+    clientPosition: any,
+    serverPosition: any,
+    distance: number,
+    reason: string
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] PLAYER_CORRECTION_FORCED | Player: ${playerName} | ClientPos: ${JSON.stringify(clientPosition)} | ServerPos: ${JSON.stringify(serverPosition)} | Distance: ${distance.toFixed(2)} | Reason: ${reason}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logPlayerCorrectionAccepted(
+    playerName: string,
+    clientPosition: any,
+    distance: number
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] PLAYER_CORRECTION_ACCEPTED | Player: ${playerName} | ClientPos: ${JSON.stringify(clientPosition)} | Distance: ${distance.toFixed(2)}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logDamageHandler(
+    attackerName: string,
+    targetId: number,
+    targetName: string,
+    damage: number,
+    damageType: number,
+    remainingHp: number,
+    isDead: boolean
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] DAMAGE_HANDLER | Attacker: ${attackerName} | TargetId: ${targetId} | TargetName: ${targetName} | Damage: ${damage} | DamageType: ${damageType} | RemainingHP: ${remainingHp} | IsDead: ${isDead}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
 }
