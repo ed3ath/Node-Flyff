@@ -14,7 +14,7 @@ export class MapItemObject extends WorldObject {
     }
 
     public readonly item: Item;
-    public owner: Mover;
+    public owner: Mover | null;
     public ownershipTime: number;
     public readonly itemType: MapItemType = MapItemType.DropItem;
     public readonly isGold: boolean;

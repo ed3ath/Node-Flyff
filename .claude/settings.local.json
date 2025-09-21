@@ -60,7 +60,9 @@
       "Bash(npm start:*)",
       "Bash(cat:*)",
       "Bash(FLYFF_SERVER_TYPE=world timeout 10s npm start)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(FLYFF_SERVER_TYPE=world timeout 15s npm start)",
+      "Bash(cmd /c:*)"
     ],
     "deny": [],
     "ask": []

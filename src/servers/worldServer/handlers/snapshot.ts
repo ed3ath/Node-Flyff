@@ -24,9 +24,9 @@ export default class SnapshotHandler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
 
-    // Read snapshot count in little-endian (similar to C# SnapshotPacket.Count)
+    // Read snapshot count as BYTE (similar to C++ OnSnapshot)
     this.packet = {
-      count: packet.readInt16LE(),
+      count: packet.readByte(),
       data: packet.buffer.subarray(packet.position)
     };
   }
@@ -53,13 +53,7 @@ export default class SnapshotHandler extends PacketHandler {
 
         const snapshot = new BinaryStream(remainingData);
 
-        // Check if we might be looking at a specific known pattern
-        if (remainingData.length >= 16 && snapshotCount === 1) {
-          // This might be a single snapshot with specific structure
-          this.logger.debug(`Single snapshot with 16 bytes - checking for DEST_POS pattern`);
-        }
-
-        // Read snapshot header in little-endian format (FlyFF uses little-endian)
+        // Read snapshot header as WORD (similar to C++ OnSnapshot)
         const snapshotHeaderNumber = snapshot.readInt16LE();
 
         // Debug logging to understand what we're reading
@@ -77,6 +71,10 @@ export default class SnapshotHandler extends PacketHandler {
             // GUILD_BANK_WND snapshot contains: int16 header + unknown data length
             // For now, try to advance by a safe amount or detect the actual length
             dataOffset += 2; // Just skip the header for now
+          } else if (snapshotHeader === SnapshotType.SEALCHARGET_REQ) {
+            await this.handleSealCharGetSnapshot(snapshot);
+            // SEALCHARGET_REQ snapshot contains: int16 header only (according to C++ code)
+            dataOffset += 2; // Just the header
           } else {
             throw new Error("Not implemented");
           }
@@ -154,6 +152,26 @@ export default class SnapshotHandler extends PacketHandler {
 
     } catch (error) {
       this.logger.error(`Error handling GUILD_BANK_WND snapshot: ${error}`);
+    }
+  }
+
+  private async handleSealCharGetSnapshot(snapshot: BinaryStream): Promise<void> {
+    try {
+      // SEALCHARGET_REQ snapshot is sent by client when mouse movement occurs
+      // According to C++ code, this is related to seal character system
+      // This snapshot appears to have no data beyond the header
+
+      this.logger.debug('Received SEALCHARGET_REQ snapshot - mouse interaction from client');
+
+      // For now, just acknowledge and ignore this snapshot
+      // The client sends this during mouse movement but it's not critical for basic gameplay
+      const player = this.userConnection.player as Player;
+      if (player) {
+        this.logger.debug(`Player ${player.name} sent SEALCHARGET_REQ (mouse movement)`);
+      }
+
+    } catch (error) {
+      this.logger.error(`Error handling SEALCHARGET_REQ snapshot: ${error}`);
     }
   }
 

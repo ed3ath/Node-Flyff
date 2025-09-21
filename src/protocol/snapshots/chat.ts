@@ -1,5 +1,5 @@
 import { SnapshotType } from "../snapshotType";
-import { FlyffSnapshot } from "../../libraries/snapshot";
+import { AbstractSnapshot } from "../../libraries/abstractSnapshot";
 
 /**
  * Chat types for different message channels
@@ -19,39 +19,70 @@ export enum ChatType {
 /**
  * CHAT Snapshot (0x0001)
  * Purpose: Chat message display
- * C++ Reference: SNAPSHOTTYPE_CHAT
+ * Based on Rhisis.Game.Protocol.Packets.World.Server.Snapshots.ChatSnapshot
  *
- * C++ Format: ar << GETID(pCtrl) << SNAPSHOTTYPE_CHAT; ar.WriteString(szChat);
- * Client expects: Just the message string, nothing else!
+ * C# Reference:
+ * public class ChatSnapshot : FFSnapshot
+ * {
+ *     public ChatSnapshot(WorldObject worldObject, string text)
+ *         : base(SnapshotType.CHAT, worldObject.ObjectId)
+ *     {
+ *         WriteString(text);
+ *     }
+ * }
  */
-export class ChatSnapshot extends FlyffSnapshot {
-  constructor(playerId: number, message: string, chatType: ChatType = ChatType.NORMAL) {
-    super(SnapshotType.CHAT, playerId);
+export class ChatSnapshot extends AbstractSnapshot {
+  private message: string;
+  private chatType: ChatType;
 
-    // C++ client expects ONLY the message string - no extra data!
-    this.writeString(message);
+  /**
+   * Creates a new ChatSnapshot
+   * @param objectId Object ID of the speaker (equivalent to worldObject.ObjectId)
+   * @param message The chat message text
+   * @param chatType The type of chat (default: NORMAL)
+   */
+  constructor(objectId: number, message: string, chatType: ChatType = ChatType.NORMAL) {
+    // Call parent constructor first
+    super(SnapshotType.CHAT, objectId);
 
-    // Debug: Log the actual packet structure breakdown
-    console.log(`🔍 ChatSnapshot Debug Breakdown:`);
-    console.log(`  Player ID: ${playerId}`);
+    // Store message and chat type after calling super
+    this.message = message;
+    this.chatType = chatType;
+
+    // Now finalize the snapshot to write the data
+    this.finalizeSnapshot();
+
+    // Debug logging
+    console.log(`🔍 ChatSnapshot Created:`);
+    console.log(`  Object ID: ${objectId}`);
     console.log(`  Message: "${message}"`);
-    console.log(`  Snapshot Type: 0x${SnapshotType.CHAT.toString(16).padStart(4, '0')}`);
-    console.log(`  Buffer length: ${this.buffer.length} bytes`);
-    console.log(`  Buffer hex: ${this.buffer.toString('hex').toUpperCase()}`);
+    console.log(`  Chat Type: ${ChatType[chatType]} (${chatType})`);
+    console.log(`  Snapshot Type: CHAT (0x${SnapshotType.CHAT.toString(16).padStart(4, '0')})`);
+    console.log(`  Packet size: ${this.buffer.length} bytes`);
+    console.log(`  Packet hex: ${this.buffer.toString('hex').toUpperCase()}`);
+  }
 
-    // Breakdown the buffer structure
-    console.log(`🔍 Buffer Structure Analysis:`);
-    console.log(`  Bytes 0-3: PacketType (${this.buffer.readUInt32LE(0)})`);
-    console.log(`  Bytes 4-7: Unknown/Reserved (${this.buffer.readUInt32LE(4)})`);
-    console.log(`  Bytes 8-9: Count (${this.buffer.readUInt16LE(8)})`);
-    console.log(`  Bytes 10-13: Object ID (${this.buffer.readUInt32LE(10)})`);
-    console.log(`  Bytes 14-15: Snapshot Type (0x${this.buffer.readUInt16LE(14).toString(16).padStart(4, '0')})`);
-    console.log(`  Bytes 16+: Message data`);
-    if (this.buffer.length > 16) {
-      const messageLength = this.buffer.readUInt32LE(16);
-      console.log(`  Message length: ${messageLength}`);
-      const actualMessage = this.buffer.subarray(20, 20 + messageLength).toString('utf8');
-      console.log(`  Actual message: "${actualMessage}"`);
-    }
+  /**
+   * Write chat-specific data to the snapshot
+   * This matches the C# implementation: WriteString(text);
+   */
+  protected writeSnapshotData(): void {
+    // Write the message string (length-prefixed, little-endian)
+    // This matches C# WriteString(text) and C++ ar.WriteString(szChat)
+    this.writeStringLE(this.message);
+  }
+
+  /**
+   * Get the chat message
+   */
+  getMessage(): string {
+    return this.message;
+  }
+
+  /**
+   * Get the chat type
+   */
+  getChatType(): ChatType {
+    return this.chatType;
   }
 }

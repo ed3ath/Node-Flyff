@@ -16,8 +16,11 @@ export const tryParseFloat = (value: string) => {
   }
 };
 
-export const cleanString = (value: string) => {
-  return value === "=" || value === undefined || value === null ? "" : value.trim();
+export const cleanString = (value: string | undefined | null) => {
+  if (value === undefined || value === null || value === "=") {
+    return "";
+  }
+  return typeof value === 'string' ? value.trim() : String(value).trim();
 };
 
 export const tryJsonParse = (value: string) => {

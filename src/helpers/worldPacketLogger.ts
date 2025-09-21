@@ -199,4 +199,44 @@ export class WorldPacketLogger {
 
     fs.appendFileSync(this.logFilePath, logEntry);
   }
+
+  public static logQueryPlayerData(
+    playerName: string,
+    targetPlayerId: number,
+    targetPlayerName: string
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] QUERY_PLAYER_DATA | Player: ${playerName} | TargetId: ${targetPlayerId} | TargetName: ${targetPlayerName}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logRechargeIdStack(
+    playerName: string,
+    stackType: number,
+    stackSize: number
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] RECHARGE_ID_STACK | Player: ${playerName} | StackType: ${stackType} | StackSize: ${stackSize}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logMyReg(
+    playerName: string,
+    playerId: number,
+    registeredName: string,
+    additionalData: number
+  ): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] MY_REG | Player: ${playerName} | PlayerId: ${playerId} | RegisteredName: ${registeredName} | AdditionalData: ${additionalData}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
 }

@@ -79,12 +79,14 @@ export class WorldUser extends FFUserConnection {
       return;
     }
 
+    const playerName = this.player.name; // Capture name before potential nullification
+
     try {
       const playerDataService = PlayerDataService.getInstance();
       await playerDataService.savePlayerData(this.player);
-      this.logger.info(`Saved player data for ${this.player.name} on disconnect`);
+      this.logger.info(`Saved player data for ${playerName} on disconnect`);
     } catch (error) {
-      this.logger.error(`Failed to save player data on disconnect for ${this.player?.name}: ${error}`);
+      this.logger.error(`Failed to save player data on disconnect for ${playerName}: ${error}`);
     }
   }
 

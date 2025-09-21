@@ -17,6 +17,10 @@ import { Mover } from "./mover";
 import { MapItemObject } from "./mapItemObject";
 import { QuestDiary } from "../game/mechanics/questDiary";
 import { ChatSnapshot, ChatType } from "../protocol/snapshots/chat";
+import { PacketType } from "../protocol/packetType";
+import { SnapshotType } from "../protocol/snapshotType";
+import { PlayerDataService } from "../services/playerDataService";
+import { WorldObject } from "../game/world/worldObject";
 
 // Interfaces for Player components
 interface HumanVisualAppearance {
@@ -364,41 +368,65 @@ export class Player extends Mover {
     // this.sendToVisible(snapshots, true);
   }
 
+  /**
+   * Makes the player speak a message
+   * Based on Rhisis WorldObject.Speak() method
+   *
+   * C# Reference:
+   * public void Speak(string message)
+   * {
+   *     using ChatSnapshot snapshot = new(this, message);
+   *     SendToVisible(snapshot, sendToSelf: true);
+   * }
+   */
   public speak(message: string, chatType: ChatType = ChatType.NORMAL): void {
     if (!message || message.trim() === '') {
       return;
     }
 
-    // Create chat snapshot with player ID, message, and chat type
+    // Create ChatSnapshot using the abstract snapshot pattern
     const chatSnapshot = new ChatSnapshot(this.objectId, message, chatType);
 
+    // Send to visible players (equivalent to SendToVisible(snapshot, sendToSelf: true))
+    this.sendToVisible(chatSnapshot, true);
+
+    console.log(`💬 Player ${this.name} spoke: "${message}" (${ChatType[chatType]})`);
+
+    // Dispose the snapshot (for C# compatibility pattern)
+    chatSnapshot.dispose();
+  }
+
+  /**
+   * Override sendToVisible to use actual player connections
+   * Based on Rhisis WorldObject.SendToVisible() method but adapted for our architecture
+   */
+  public sendToVisible(packet: FlyffPacket, sendToSelf: boolean = false): void {
     // Get map layer to find players in range
     if (!this.mapLayer) {
-      console.warn(`Player ${this.name} has no map layer - cannot broadcast chat`);
+      console.warn(`Player ${this.name} has no map layer - cannot broadcast packet`);
       return;
     }
 
-    // Get all players within chat range (32 units for normal chat)
+    // Get all players within range (equivalent to VisibleObjects in C#)
     const chatRange = 32;
     const playersInRange = this.mapLayer.getPlayersInRange(this.position, chatRange);
 
-    // Send chat snapshot to all players in range (including nearby players)
+    // Send to all visible players (excluding self if sendToSelf is true to avoid duplicate)
     let sentCount = 0;
     for (const nearbyPlayer of playersInRange) {
-      if (nearbyPlayer.userConnection) {
-        nearbyPlayer.userConnection.sendSnapshot(chatSnapshot);
+      if (nearbyPlayer.userConnection && !(sendToSelf && nearbyPlayer === this)) {
+        nearbyPlayer.userConnection.send(packet);
         sentCount++;
       }
     }
 
-    // Send to self as well
-    if (this.userConnection) {
-      this.userConnection.sendSnapshot(chatSnapshot);
+    // Send to self if requested
+    if (sendToSelf && this.userConnection) {
+      this.userConnection.send(packet);
       sentCount++;
     }
 
-    // Log the successful chat broadcast
-    console.log(`💬 Player ${this.name} spoke: "${message}" (${ChatType[chatType]}) - sent to ${sentCount} players`);
+    console.log(`📤 Sent packet to ${sentCount} players (sendToSelf: ${sendToSelf})`);
   }
 
   public sendDefinedText(textId: DefineText, params: string): void {
@@ -432,7 +460,7 @@ export class Player extends Mover {
     }
 
     if (sendPickupMotion) {
-      const motionSnapshot = new MotionSnapshot(this, ObjectMessageType.OBJMSG_PICKUP);
+      const motionSnapshot = new MotionSnapshot(this as Mover, ObjectMessageType.OBJMSG_PICKUP);
       this.sendToVisible(motionSnapshot, true);
     }
   }
@@ -545,8 +573,8 @@ export class Player extends Mover {
       this.visibleObjects.push(entity);
     }
 
-    if (!(entity instanceof Player) && !entity.visibleObjects.includes(this)) {
-      entity.visibleObjects.push(this);
+    if (!(entity instanceof Player) && !entity.visibleObjects.includes(this as WorldObject)) {
+      entity.visibleObjects.push(this as WorldObject);
     }
   }
 
@@ -556,7 +584,7 @@ export class Player extends Mover {
       this.visibleObjects.splice(index, 1);
     }
 
-    const eIndex = entity.visibleObjects.indexOf(this);
+    const eIndex = entity.visibleObjects.indexOf(this as WorldObject);
     if (eIndex > -1) {
       entity.visibleObjects.splice(eIndex, 1);
     }
