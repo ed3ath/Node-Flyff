@@ -628,7 +628,7 @@ export default class Handler extends PacketHandler {
       // Snapshot 3: AddObject (Type: 0x00F0)
       const addObjectSnapshot = new ServerPacket();
       addObjectSnapshot.writeUInt32LE(player.objectId); // Object ID
-      addObjectSnapshot.writeUInt16LE(0x00F0); // ADD_OBJ snapshot type
+      addObjectSnapshot.writeUInt16LE(SnapshotType.ADD_OBJ); // ADD_OBJ snapshot type
 
       // CRITICAL FIX: Add missing ObjectType and ModelIndex that C++ client expects
       const objectType = 5; // OT_MOVER = 5 for players (from C++ defines)

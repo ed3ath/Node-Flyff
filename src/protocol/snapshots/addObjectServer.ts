@@ -30,26 +30,45 @@ export class AddObjectServerSnapshot {
       this.modelId = worldObject.properties?.id || (worldObject as any).id || worldObject.objectId;
     }
 
-    // === SIMPLIFIED C++ SERVER STRUCTURE ===
-    // Remove C# Rhisis duplications - try simpler structure
+    // === EXACT C++ SERIALIZATION STRUCTURE ===
+    // Follow the exact C++ serialization chain: CObj::Serialize -> CCtrl::Serialize -> CMover::Serialize
 
-    // Basic object serialization (CObj::Serialize equivalent)
-    // Write position (3 x SINGLE)
+    // *** CObj::Serialize (21 bytes) ***
+    // 1. Type (1 byte) - DUPLICATE of header but required by C++ client
+    packet.writeByte(this.objectType); // u_char m_dwType (DUPLICATE - C++ writes this again!)
+
+    // 2. Index (4 bytes) - DUPLICATE of header but required by C++ client
+    packet.writeUInt32LE(this.modelId); // u_int m_dwIndex (DUPLICATE - C++ writes this again!)
+
+    // 3. Scale (2 bytes) - scale * 100.0f as u_short
+    const scale = 100; // Default scale 1.0 * 100
+    packet.writeUInt16LE(scale);
+
+    // 4. Position (12 bytes) - D3DXVECTOR3 (3 x float)
     packet.writeSingleLE(worldObject.position.x);
     packet.writeSingleLE(worldObject.position.y);
     packet.writeSingleLE(worldObject.position.z);
 
-    // Write rotation angle (SHORT) - angle * 10
+    // 5. Angle (2 bytes) - angle * 10.0f as short
     const angle = (worldObject.rotationAngle || 0) * 10.0;
     packet.writeInt16LE(Math.round(angle));
 
-    // Write object ID (DWORD)
+    // *** CCtrl::Serialize (4 bytes) ***
+    // 6. Object ID (4 bytes)
     packet.writeUInt32LE(worldObject.objectId);
 
     // Log the critical object creation values
     if (worldObject instanceof Player) {
-      console.log(`[DEBUG] AddObject: ObjectType=${this.objectType}, ModelId=${this.modelId}, Gender=${worldObject.appearance?.gender}, ObjectId=${worldObject.objectId}`);
-      console.log(`[DEBUG] Position: x=${worldObject.position.x}, y=${worldObject.position.y}, z=${worldObject.position.z}`);
+      console.log(`[DEBUG] ===== FIXED C++ STRUCTURE SERIALIZATION =====`);
+      console.log(`[DEBUG] CObj::Serialize (21 bytes):`);
+      console.log(`[DEBUG]   - Type (DUPLICATE): ${this.objectType} (1 byte)`);
+      console.log(`[DEBUG]   - Index (DUPLICATE): ${this.modelId} (4 bytes)`);
+      console.log(`[DEBUG]   - Scale: ${scale} (2 bytes)`);
+      console.log(`[DEBUG]   - Position: (${worldObject.position.x}, ${worldObject.position.y}, ${worldObject.position.z}) (12 bytes)`);
+      console.log(`[DEBUG]   - Angle: ${Math.round(angle)} (2 bytes)`);
+      console.log(`[DEBUG] CCtrl::Serialize (4 bytes):`);
+      console.log(`[DEBUG]   - Object ID: ${worldObject.objectId} (4 bytes)`);
+      console.log(`[DEBUG] Total CObj+CCtrl: 25 bytes`);
       console.log(`[DEBUG] This will call CreateObj(pd3dDevice, ${this.objectType}, ${this.modelId}, ${this.objectType !== 5 ? 1 : 0})`);
     }
 
