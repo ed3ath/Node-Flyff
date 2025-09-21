@@ -5,6 +5,7 @@ import { ObjectState } from "../../types/objectState";
 import type { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 import { HealthFormulas } from "../../abstract/healthFomula";
+import { WorldPacketLogger } from "../../helpers/worldPacketLogger";
 
 export class Health {
     private _mover: Mover;
@@ -16,9 +17,22 @@ export class Health {
     public constructor(mover: Mover) {
         this._mover = mover;
         this._nextHealTime = Math.trunc(new Date().getTime() / 1000);
-        // this._hp = mover.properties.addHp;
-        // this._mp = mover.properties.addMp;
+        this._hp = mover.properties.addHp || 100; // Initialize with default if not available
+        this._mp = mover.properties.addMp || 100; // Initialize with default if not available
         this._fp = 0;
+
+        // Log health initialization
+        const characterName = (mover as any).name || 'Unknown';
+        WorldPacketLogger.logHealthInitialization(characterName, {
+            addHp: mover.properties.addHp,
+            addMp: mover.properties.addMp,
+            initialHp: this._hp,
+            initialMp: this._mp,
+            initialFp: this._fp,
+            maxHp: this.maxHp,
+            maxMp: this.maxMp,
+            maxFp: this.maxFp
+        });
     }
 
     public get hp(): number {

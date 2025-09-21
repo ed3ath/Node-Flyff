@@ -127,10 +127,10 @@ async function clusterIntercom(instance: IInstance) {
     const decrypted = parseMessage(decryptString(message, master));
     if (decrypted) {
       if (decrypted.sender === ServerType.CLUSTER_SERVER) return;
-      logger?.info(
-        "Cluster server received message:",
-        JSON.stringify(decrypted)
-      );
+      // logger?.info(
+      //   "Cluster server received message:",
+      //   JSON.stringify(decrypted)
+      // );
 
       if (redisChannel === RedisChannel.CORE_CHANNEL) {
         switch (decrypted.command) {
@@ -182,14 +182,14 @@ async function clusterIntercom(instance: IInstance) {
               decrypted.data.name
             );
 
-            logger?.info(
-              "Existing channel by ID:",
-              JSON.stringify(existingChannelById)
-            );
-            logger?.info(
-              "Existing channel by name:",
-              JSON.stringify(existingChannelByName)
-            );
+            // logger?.info(
+            //   "Existing channel by ID:",
+            //   JSON.stringify(existingChannelById)
+            // );
+            // logger?.info(
+            //   "Existing channel by name:",
+            //   JSON.stringify(existingChannelByName)
+            // );
 
             if (existingChannelById) {
               logger?.warn(
@@ -214,20 +214,20 @@ async function clusterIntercom(instance: IInstance) {
                 ...decrypted.data,
                 lastPing: new Date().getTime(),
               };
-              logger?.info(
-                "Attempting to insert channel:",
-                JSON.stringify(channel)
-              );
+              // logger?.info(
+              //   "Attempting to insert channel:",
+              //   JSON.stringify(channel)
+              // );
               await client?.insertChannel(initCluster.name, channel);
 
               // Verify insertion
               const allChannels = await client?.getAllChannels(
                 initCluster.name
               );
-              logger?.info(
-                "All channels after insertion:",
-                JSON.stringify(allChannels)
-              );
+              // logger?.info(
+              //   "All channels after insertion:",
+              //   JSON.stringify(allChannels)
+              // );
 
               sendMessage(
                 RedisChannel.CLUSTER_CHANNEL,

@@ -139,31 +139,78 @@ export class TcpServer {
         this.serverType === ServerType.LOGIN_SERVER
       );
 
-      // Log incoming packets for all server types
-      PacketLogger.logIncomingPacket(
-        userConnection.sessionId,
-        `${userConnection.socket.remoteAddress}:${userConnection.socket.remotePort}`,
-        packet.PacketType,
-        packet.buffer,
-        data
-      );
+      // Check if this is a composite packet (contains multiple commands)
+      if (packet.isCompositePacket()) {
+        this.logger.info(`Processing composite packet with ${packet.compositePackets.length} commands: ${packet.getAllPacketTypes().map(p => this.getPacketTypeId(p)).join(', ')}`);
 
-      const HandlerClass = this.handlers.get(packet.PacketType);
+        // Process each command in the composite packet
+        for (const compositePacket of packet.compositePackets) {
+          // Create a new FlyffPacket instance for each composite packet
+          const commandPacket = new FlyffPacket(compositePacket.data, false, true); // ignoreHeaders = true
+          commandPacket.PacketType = compositePacket.packetType;
+          commandPacket.HeaderNumber = packet.HeaderNumber;
+          commandPacket.DataLength = compositePacket.dataLength;
+          commandPacket.position = 0; // Start reading from beginning of the data
 
-      if (HandlerClass) {
-        // Execute the corresponding packet handler
-        const handlerInstance = new HandlerClass(packet);
-        console.log(this.getPacketTypeId(packet.PacketType));
-        handlerInstance.userConnection = userConnection;
-        handlerInstance.server = this;
-        await handlerInstance.wrappedExecute();
+          // Log incoming packet for this specific command
+          PacketLogger.logIncomingPacket(
+            userConnection.sessionId,
+            `${userConnection.socket.remoteAddress}:${userConnection.socket.remotePort}`,
+            compositePacket.packetType,
+            compositePacket.data,
+            data
+          );
+
+          console.log("Processing packet type:", compositePacket.packetType, this.getPacketTypeId(compositePacket.packetType));
+
+          const HandlerClass = this.handlers.get(compositePacket.packetType);
+
+          if (HandlerClass) {
+            // Execute the corresponding packet handler
+            const handlerInstance = new HandlerClass(commandPacket);
+            console.log(this.getPacketTypeId(compositePacket.packetType));
+            handlerInstance.userConnection = userConnection;
+            handlerInstance.server = this;
+            await handlerInstance.wrappedExecute();
+          } else {
+            // Log unimplemented packet type
+            this.logger.warn(
+              `Unimplemented packet ${this.getPacketTypeId(
+                compositePacket.packetType
+              )} (${ToStringHex(compositePacket.packetType)})`
+            );
+          }
+        }
       } else {
-        // Log unimplemented packet type
-        this.logger.warn(
-          `Unimplemented packet ${this.getPacketTypeId(
-            packet.PacketType
-          )} (${ToStringHex(packet.PacketType)})`
+        // Single packet processing (legacy behavior)
+        // Log incoming packets for all server types
+        PacketLogger.logIncomingPacket(
+          userConnection.sessionId,
+          `${userConnection.socket.remoteAddress}:${userConnection.socket.remotePort}`,
+          packet.PacketType,
+          packet.buffer,
+          data
         );
+
+        console.log("=========", packet.PacketType)
+
+        const HandlerClass = this.handlers.get(packet.PacketType);
+
+        if (HandlerClass) {
+          // Execute the corresponding packet handler
+          const handlerInstance = new HandlerClass(packet);
+          console.log(this.getPacketTypeId(packet.PacketType));
+          handlerInstance.userConnection = userConnection;
+          handlerInstance.server = this;
+          await handlerInstance.wrappedExecute();
+        } else {
+          // Log unimplemented packet type
+          this.logger.warn(
+            `Unimplemented packet ${this.getPacketTypeId(
+              packet.PacketType
+            )} (${ToStringHex(packet.PacketType)})`
+          );
+        }
       }
     } catch (error) {
       this.logger.error(`Error processing packet: ${error}`);
@@ -253,6 +300,11 @@ export class UserConnection {
   // Method to send a packet to the client
   send(packet: FlyffPacket): void {
     this.socket.write(FlyffPacket.appendHeader(packet.buffer));
+  }
+
+  // Method to send a raw buffer to the client (for ServerPacket format)
+  sendBuffer(buffer: Buffer, packetType?: number): void {
+    this.socket.write(buffer);
   }
 
   sendError(errorType: ErrorType): void {

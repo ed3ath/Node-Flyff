@@ -71,6 +71,23 @@ export abstract class FFUserConnection implements IUserConnection {
   }
 
   /**
+   * Sends a raw buffer to the client (for ServerPacket format)
+   */
+  public sendBuffer(buffer: Buffer, packetType?: number): void {
+    if (this.socket && !this.socket.destroyed) {
+      // Log outgoing packet
+      PacketLogger.logOutgoingPacket(
+        this.sessionId,
+        `${this.socket.remoteAddress}:${this.socket.remotePort}`,
+        packetType || 0,
+        buffer
+      );
+
+      this.socket.write(buffer);
+    }
+  }
+
+  /**
    * Sends an error packet to the client
    */
   public sendError(errorType: ErrorType): void {

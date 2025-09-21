@@ -61,15 +61,15 @@ export class RedisClient implements IRedisClient {
 
   async getCluster(clusterName: string): Promise<ICluster | null> {
     const key = clusterName?.includes("cluster:") ? clusterName : `cluster:${clusterName}`;
-    this.logger.info(`getCluster called for: ${clusterName}, Redis key: ${key}`);
+    // this.logger.info(`getCluster called for: ${clusterName}, Redis key: ${key}`);
     const cluster: any = await this.client.hgetall(key);
-    this.logger.info(`Raw cluster data from Redis:`, JSON.stringify(cluster));
+    // this.logger.info(`Raw cluster data from Redis:`, JSON.stringify(cluster));
 
     let channels: IChannel[] = [];
     if (cluster.channels) {
-      this.logger.info(`Parsing channels JSON: ${cluster.channels}`);
+      // this.logger.info(`Parsing channels JSON: ${cluster.channels}`);
       const channelDataArray = JSON.parse(cluster.channels);
-      this.logger.info(`Parsed channel data array:`, JSON.stringify(channelDataArray));
+      // this.logger.info(`Parsed channel data array:`, JSON.stringify(channelDataArray));
       channels = _.map(channelDataArray, (channelData: IChannel) => ({
         id: channelData.id,
         name: channelData.name,
@@ -81,7 +81,7 @@ export class RedisClient implements IRedisClient {
         lastPing: channelData.lastPing,
         pkEnabled: channelData.pkEnabled,
       }));
-      this.logger.info(`Mapped channels:`, JSON.stringify(channels));
+      // this.logger.info(`Mapped channels:`, JSON.stringify(channels));
     } else {
       this.logger.warn(`No channels found in cluster data`);
     }
@@ -100,18 +100,18 @@ export class RedisClient implements IRedisClient {
   }
 
   async getAllChannels(clusterName: string): Promise<IChannel[]> {
-    this.logger.info(`getAllChannels called for cluster: ${clusterName}`);
+    // this.logger.info(`getAllChannels called for cluster: ${clusterName}`);
     const cluster = await this.getCluster(clusterName);
-    this.logger.info(`getCluster returned:`, JSON.stringify(cluster));
+    // this.logger.info(`getCluster returned:`, JSON.stringify(cluster));
     const channels = cluster?.channels || [];
-    this.logger.info(`Returning channels:`, JSON.stringify(channels));
+    // this.logger.info(`Returning channels:`, JSON.stringify(channels));
     return channels;
   }
 
   async insertChannel(clusterName: string, channel: IChannel): Promise<void> {
-    this.logger.info(`insertChannel called: cluster=${clusterName}, channel=${JSON.stringify(channel)}`);
+    // this.logger.info(`insertChannel called: cluster=${clusterName}, channel=${JSON.stringify(channel)}`);
     const clusterData = await this.getCluster(clusterName);
-    this.logger.info(`Cluster data before insert:`, JSON.stringify(clusterData));
+    // this.logger.info(`Cluster data before insert:`, JSON.stringify(clusterData));
     const clusterKey = `cluster:${clusterName}`;
 
     if (clusterData) {
@@ -131,7 +131,7 @@ export class RedisClient implements IRedisClient {
         pkEnabled: channel.pkEnabled,
       };
       clusterData.channels.push(channelData);
-      this.logger.info(`Updated cluster data with new channel:`, JSON.stringify(clusterData));
+      // this.logger.info(`Updated cluster data with new channel:`, JSON.stringify(clusterData));
 
       const dataToStore = {
         ...clusterData,
@@ -140,7 +140,7 @@ export class RedisClient implements IRedisClient {
             ? JSON.stringify(clusterData.channels)
             : clusterData.channels,
       };
-      this.logger.info(`Storing to Redis key ${clusterKey}:`, JSON.stringify(dataToStore));
+      // this.logger.info(`Storing to Redis key ${clusterKey}:`, JSON.stringify(dataToStore));
 
       await this.client.hmset(clusterKey, dataToStore);
       this.logger.info(`Successfully stored channel to Redis`);

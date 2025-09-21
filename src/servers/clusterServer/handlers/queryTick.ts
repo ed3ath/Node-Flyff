@@ -9,6 +9,7 @@ export default class Handler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
     this.time = packet.readInt32LE();
+    console.log(packet.buffer.toString('hex'))
   }
 
   async execute(): Promise<void> {

@@ -2,6 +2,7 @@ import { SnapshotType } from "../../protocol/snapshotType";
 import { Player } from "../../entities/player";
 import { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";
+import { WorldPacketLogger } from "../../helpers/worldPacketLogger";
 
 export class AddObjectSnapshot extends FlyffSnapshot {
   constructor(worldObject: Mover, excludeItems: boolean = false) {
@@ -37,12 +38,12 @@ export class AddObjectSnapshot extends FlyffSnapshot {
 
     // Write vital stats
     this.writeInt32(worldObject.level || 1);
-    this.writeInt32(worldObject.health?.hp || 100);
-    this.writeInt32(worldObject.health?.maxHp || 100);
-    this.writeInt32(worldObject.health?.mp || 100);
-    this.writeInt32(worldObject.health?.maxMp || 100);
-    this.writeInt32(worldObject.health?.fp || 100);
-    this.writeInt32(worldObject.health?.maxFp || 100);
+    this.writeInt32(worldObject.health?.hp ?? 100);
+    this.writeInt32(worldObject.health?.maxHp ?? 100);
+    this.writeInt32(worldObject.health?.mp ?? 100);
+    this.writeInt32(worldObject.health?.maxMp ?? 100);
+    this.writeInt32(worldObject.health?.fp ?? 100);
+    this.writeInt32(worldObject.health?.maxFp ?? 100);
 
     if (worldObject instanceof Player) {
       // Write player-specific data
@@ -101,7 +102,7 @@ export class AddObjectSnapshot extends FlyffSnapshot {
       this.writeByte(0); // Number of buffs
 
       // Write additional player flags
-      this.writeByte(1); // Is alive
+      this.writeByte(worldObject.isDead ? 0 : 1); // Is alive (1 if not dead, 0 if dead)
       this.writeByte(0); // Is flying
       this.writeByte(0); // Is in duel
       this.writeByte(0); // Is in PK mode
@@ -124,5 +125,29 @@ export class AddObjectSnapshot extends FlyffSnapshot {
     this.writeSingleLE(worldObject.position.x); // Dest X (same as current for stationary)
     this.writeSingleLE(worldObject.position.y); // Dest Y
     this.writeSingleLE(worldObject.position.z); // Dest Z
+
+    // Log AddObjectSnapshot details for debugging
+    if (worldObject instanceof Player) {
+      const healthValues = {
+        hp: worldObject.health?.hp,
+        maxHp: worldObject.health?.maxHp,
+        mp: worldObject.health?.mp,
+        maxMp: worldObject.health?.maxMp,
+        fp: worldObject.health?.fp,
+        maxFp: worldObject.health?.maxFp
+      };
+
+      WorldPacketLogger.logAddObjectSnapshot(
+        worldObject.name,
+        worldObject.objectId,
+        worldObject.position,
+        healthValues,
+        !worldObject.isDead,
+        worldObject.level
+      );
+
+      // Log the raw snapshot hex data
+      WorldPacketLogger.logSnapshotHex('AddObjectSnapshot', this.buffer);
+    }
   }
 }
