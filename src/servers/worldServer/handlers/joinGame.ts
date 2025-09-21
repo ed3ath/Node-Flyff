@@ -26,7 +26,7 @@ import { ItemProperties } from "../../../game/properties/itemProperties";
 import { ElementType } from "../../../types/elementType";
 import { WorldPacketLogger } from "../../../helpers/worldPacketLogger";
 import { ServerPacket } from "../../../libraries/serverPacket";
-import { ServerSnapshot } from "../../../libraries/serverSnapshot";
+import { JoinCompletePacket } from "../../../libraries/joinCompletePacket";
 import { AddObjectServerSnapshot } from "../../../protocol/snapshots/addObjectServer";
 import { WorldUser } from "../worldUser";
 
@@ -61,6 +61,83 @@ export default class Handler extends PacketHandler {
     this.password = packet.readString();
     this.messengerState = packet.readInt32LE();
     this.messengerCount = packet.readInt32LE();
+  }
+
+  /**
+   * Convert resource ItemProperties interface to game ItemProperties class
+   * Similar to how C# Rhisis converts between resource data and game objects
+   */
+  private createItemPropertiesFromResource(resourceProps: import("../../../interfaces/resource").ItemProperties): ItemProperties {
+    // Convert string/number values to proper types based on resource data
+    const itemKind1 = this.parseItemKind1(resourceProps.dwItemKind1);
+    const itemKind2 = this.parseItemKind2(resourceProps.dwItemKind2);
+    const itemKind3 = this.parseItemKind3(resourceProps.dwItemKind3);
+    const itemJob = this.parseJobType(resourceProps.dwItemJob);
+    const parts = this.parseItemPartType(resourceProps.dwParts);
+    const element = this.parseElementType(resourceProps.eItemType);
+    const weaponKind = this.parseWeaponKind(resourceProps.dwWeaponType);
+
+    return new ItemProperties(
+      resourceProps.ver6 || 1, // version
+      resourceProps.id, // id
+      resourceProps.dwID || `ITEM_${resourceProps.id}`, // identifierName
+      resourceProps.szName || `Item ${resourceProps.id}`, // name
+      resourceProps.szNameId || resourceProps.szName || `Item ${resourceProps.id}`, // nameKey
+      resourceProps.dwPackMax || 1, // packMax
+      itemKind1, // itemKind1
+      itemKind2, // itemKind2
+      itemKind3, // itemKind3
+      itemJob, // itemJob
+      resourceProps.dwItemSex || 0, // itemSex
+      resourceProps.dwCost || 0, // cost
+      resourceProps.dwLimitLevel1 || 0, // limitLevel
+      parts, // parts
+      resourceProps.dwAbilityMin || 0, // abilityMin
+      resourceProps.dwAbilityMax || 0, // abilityMax
+      element, // element
+      resourceProps.dwItemLV || 0, // level
+      resourceProps.dwItemRare || 0, // rare
+      resourceProps.dwAttackSpeed || 0, // attackSpeed
+      resourceProps.dwDestParam1 || "", // destParam1
+      resourceProps.dwDestParam2 || "", // destParam2
+      resourceProps.dwDestParam3 || "", // destParam3
+      resourceProps.nAdjParamVal1 || 0, // adjustParam1
+      resourceProps.nAdjParamVal2 || 0, // adjustParam2
+      resourceProps.nAdjParamVal3 || 0, // adjustParam3
+      resourceProps.dwCircleTime || 0, // circleTime
+      resourceProps.dwUseable || false, // isUseable
+      this.parseSfxNumber(resourceProps.dwSfxObj), // sfxObject
+      this.parseSfxNumber(resourceProps.dwSfxObj2), // sfxObject2
+      this.parseSfxNumber(resourceProps.dwSfxObj3), // sfxObject3
+      this.parseSfxNumber(resourceProps.dwSfxObj4), // sfxObject4
+      this.parseSfxNumber(resourceProps.dwSfxObj5), // sfxObject5
+      resourceProps.bPermanence || false, // isPermanant
+      0, // coolTime (not in resource props)
+      resourceProps.dwWeaponType || 0, // weaponTypeId
+      resourceProps.dwItemAtkOrder1 || 0, // itemAtkOrder1
+      resourceProps.dwItemAtkOrder2 || 0, // itemAtkOrder2
+      resourceProps.dwItemAtkOrder3 || 0, // itemAtkOrder3
+      resourceProps.dwItemAtkOrder4 || 0, // itemAtkOrder4
+      resourceProps.dwSkillReadyType || 0, // skillReadyType
+      weaponKind, // weaponKind
+      resourceProps.dwAddSkillMin || 0, // attackSkillMin
+      resourceProps.dwAddSkillMax || 0, // attackSkillMax
+      new Map() // params - TODO: implement parameter parsing if needed
+    );
+  }
+
+  // Helper methods to parse string values to enum types
+  private parseItemKind1(value?: string): number { return 0; } // TODO: implement proper parsing
+  private parseItemKind2(value?: string): number { return 0; } // TODO: implement proper parsing
+  private parseItemKind3(value?: string): number { return 0; } // TODO: implement proper parsing
+  private parseJobType(value?: string): number { return 0; } // TODO: implement proper parsing
+  private parseItemPartType(value?: string): number { return 0; } // TODO: implement proper parsing
+  private parseElementType(value?: string): ElementType { return ElementType.None; } // TODO: implement proper parsing
+  private parseWeaponKind(value?: number): number { return value || 0; }
+  private parseSfxNumber(value?: string): number {
+    if (!value || value === "" || value === "NULL") return 0;
+    const parsed = parseInt(value);
+    return isNaN(parsed) ? 0 : parsed;
   }
 
   async execute(): Promise<void> {
@@ -305,6 +382,8 @@ export default class Handler extends PacketHandler {
     // Create player entity (like C# new Player(User, Mover))
     const playerData = {
       id: character.id,
+      name: character.name, // CRITICAL: Add player name
+      level: character.level || 1, // CRITICAL: Add player level
       loggedInAt: new Date(),
       slot: character.slot,
       authority: AuthorityType.Player, // Default authority
@@ -387,68 +466,35 @@ export default class Handler extends PacketHandler {
     if (character.equipments && character.equipments.length > 0) {
       for (const equipment of character.equipments) {
         if (equipment.item && equipment.slot !== undefined) {
-          // TODO: Load proper ItemProperties from game resources
-          // For now, create ItemProperties using constructor with defaults
-          const itemProperties = new ItemProperties(
-            1, // version
-            equipment.item.itemId,
-            "Item_" + equipment.item.itemId,
-            "Item_" + equipment.item.itemId,
-            "Item_" + equipment.item.itemId, // nameKey
-            999, // packMax
-            0, // itemKind1
-            0, // itemKind2
-            0, // itemKind3
-            0, // itemJob
-            0, // itemSex
-            0, // cost
-            0, // limitLevel
-            0, // parts
-            0, // abilityMin
-            0, // abilityMax
-            0, // element
-            0, // level
-            0, // rare
-            0, // attackSpeed
-            "", // destParam1
-            "", // destParam2
-            "", // destParam3
-            0, // adjParamVal1
-            0, // adjParamVal2
-            0, // adjParamVal3
-            0, // circleTime
-            false, // isUseable
-            0, // sfxObject (number)
-            0, // sfxObject2 (number)
-            0, // sfxObject3 (number)
-            0, // sfxObject4 (number)
-            0, // sfxObject5 (number)
-            false, // isPermanant
-            0, // coolTime
-            0, // weaponTypeId
-            0, // itemAtkOrder1
-            0, // itemAtkOrder2
-            0, // itemAtkOrder3
-            0, // itemAtkOrder4
-            0, // skillReadyType
-            0, // weaponKind
-            0, // attackSkillMin
-            0, // attackSkillMax
-            new Map() // params
-          );
+          try {
+            // Load proper ItemProperties from game resources (like C# GameResources.Current.Items.Get(itemId))
+            const resourceItemProperties = await gameResources.itemResources?.get(equipment.item.itemId);
 
-          const item = new Item(itemProperties);
+            if (!resourceItemProperties) {
+              this.logger.warn(`Item properties not found for item ID ${equipment.item.itemId} - skipping equipment slot ${equipment.slot}`);
+              continue;
+            }
 
-          // Set the additional properties
-          item.Quantity = equipment.quantity || 1;
-          item.Refine = equipment.item.refinement || 0;
-          item.Element = equipment.item.element || ElementType.None;
-          item.ElementRefine = equipment.item.elementRefinement || 0;
-          item.SerialNumber = equipment.item.serialNumber || 0;
-          item.CreatorId = undefined;
+            // Convert resource ItemProperties to game ItemProperties class (like C# constructor)
+            const itemProperties = this.createItemPropertiesFromResource(resourceItemProperties);
+            const item = new Item(itemProperties);
 
-          // Set item directly in inventory map
-          (player.inventory as any).items.set(equipment.slot, item);
+            // Set the additional properties from database (like C# Item constructor)
+            item.Quantity = equipment.quantity || 1;
+            item.Refine = equipment.item.refinement || 0;
+            item.Element = equipment.item.element || ElementType.None;
+            item.ElementRefine = equipment.item.elementRefinement || 0;
+            item.SerialNumber = equipment.item.serialNumber || 0;
+            item.CreatorId = undefined;
+
+            // Set item directly in inventory map (like C# player.Inventory.CreateItem)
+            (player.inventory as any).items.set(equipment.slot, item);
+
+            this.logger.info(`Loaded item: ${resourceItemProperties.szName} (ID: ${equipment.item.itemId}) in slot ${equipment.slot}`);
+          } catch (error) {
+            this.logger.error(`Failed to load item ${equipment.item.itemId} for player ${character.name}: ${error}`);
+            // Continue without this item rather than failing the entire login
+          }
         }
       }
     }
@@ -510,54 +556,181 @@ export default class Handler extends PacketHandler {
         position: player.position
       });
 
-      // Create PACKETTYPE_JOIN response packet using proper server format
-      const joinResponsePacket = new ServerPacket();
+      // Send JOIN packet with embedded snapshots like C# Rhisis (replaces separate JOIN response)
+      this.logger.info(`Creating JOIN packet with embedded snapshots for ${character.name}:`);
 
-      // Write packet type
-      joinResponsePacket.writeUInt32LE(PacketType.JOIN);
+      // === COMPREHENSIVE PACKET DATA LOGGING ===
+      this.logger.info(`[PACKET DATA] ========== JOIN PACKET DATA BREAKDOWN ==========`);
+      this.logger.info(`[PACKET DATA] Player Information:`);
+      this.logger.info(`[PACKET DATA]   - Character Name: "${character.name}"`);
+      this.logger.info(`[PACKET DATA]   - Character ID: ${character.id}`);
+      this.logger.info(`[PACKET DATA]   - Account ID: ${character.account.id}`);
+      this.logger.info(`[PACKET DATA]   - Username: "${character.account.username}"`);
+      this.logger.info(`[PACKET DATA]   - Player Object ID: ${player.objectId}`);
+      this.logger.info(`[PACKET DATA]   - Level: ${character.level}`);
+      this.logger.info(`[PACKET DATA]   - Job ID: ${character.jobId}`);
+      this.logger.info(`[PACKET DATA]   - Gender: ${character.gender} (0=Male, 1=Female)`);
+      this.logger.info(`[PACKET DATA]   - Map ID: ${character.mapId}`);
+      this.logger.info(`[PACKET DATA]   - Position: (${character.positionX}, ${character.positionY}, ${character.positionZ})`);
+      this.logger.info(`[PACKET DATA]   - Health: ${player.health?.hp}/${player.health?.maxHp} HP`);
+      this.logger.info(`[PACKET DATA]   - Mana: ${player.health?.mp}/${player.health?.maxMp} MP`);
+      this.logger.info(`[PACKET DATA]   - Stats: STR=${character.strength}, STA=${character.stamina}, DEX=${character.dexterity}, INT=${character.intelligence}`);
+      this.logger.info(`[PACKET DATA]   - Gold: ${character.gold || 0}`);
+      this.logger.info(`[PACKET DATA]   - Experience: ${character.experience || 0}`);
+      this.logger.info(`[PACKET DATA] ================================================`);
 
-      // Serialize basic player data like C++ PACKETTYPE_JOIN response
-      joinResponsePacket.writeUInt32LE(this.authKey || 0); // Echo back the auth key
-      joinResponsePacket.writeUInt32LE(character.account.id); // Account info
-      joinResponsePacket.writeUInt32LE(this.channelId || character.mapId); // World/Channel ID
-      joinResponsePacket.writeUInt32LE(character.id); // Character ID
+      // FIXED: Create JOIN packet directly with ServerPacket to avoid inheritance issues
+      const joinPacket = new ServerPacket();
+      joinPacket.writeUInt32LE(PacketType.JOIN);
+      joinPacket.writeUInt32LE(0); // Not used (C# line 18)
 
-      // CRITICAL: Include player's objectId so client knows which object is the player
-      joinResponsePacket.writeUInt32LE(player.objectId); // Player's world object ID
+      this.logger.info(`[PACKET DATA] JOIN Packet Header:`);
+      this.logger.info(`[PACKET DATA]   - Packet Type: ${PacketType.JOIN} (0x${PacketType.JOIN.toString(16).toUpperCase()})`);
+      this.logger.info(`[PACKET DATA]   - Unused Field: 0`);
 
-      // Serialize complete player data (like C++ pMover->Serialize(ar))
-      joinResponsePacket.writeString(character.name);
-      joinResponsePacket.writeUInt32LE(character.level);
-      joinResponsePacket.writeUInt32LE(character.jobId);
-      joinResponsePacket.writeSingleLE(character.positionX);
-      joinResponsePacket.writeSingleLE(character.positionY);
-      joinResponsePacket.writeSingleLE(character.positionZ);
+      // Prepare snapshot data with proper headers (ObjectId + SnapshotType + Data)
+      const snapshots: Buffer[] = [];
 
-      this.logger.info(`Sending PACKETTYPE_JOIN response packet to client for character: ${character.name}`);
+      // Snapshot 1: EnvironmentAll (Type: 0x0063)
+      const envSnapshot = new ServerPacket();
+      envSnapshot.writeUInt32LE(player.objectId); // Object ID
+      envSnapshot.writeUInt16LE(SnapshotType.ENVIRONMENT_ALL); // ENVIRONMENTALL snapshot type
+      const season = 0; // Season (0 = none/normal)
+      envSnapshot.writeInt32LE(season);
+      snapshots.push(envSnapshot.getBuffer().subarray(5)); // Remove packet header
 
-      // Send the PACKETTYPE_JOIN response first
-      const finalizedJoinPacket = joinResponsePacket.finalize();
+      this.logger.info(`[PACKET DATA] Snapshot 1 - EnvironmentAll:`);
+      this.logger.info(`[PACKET DATA]   - Object ID: ${player.objectId}`);
+      this.logger.info(`[PACKET DATA]   - Snapshot Type: ${SnapshotType.ENVIRONMENT_ALL} (0x${SnapshotType.ENVIRONMENT_ALL.toString(16).toUpperCase()})`);
+      this.logger.info(`[PACKET DATA]   - Season: ${season} (0=Normal, 1=Spring, 2=Summer, 3=Fall, 4=Winter)`);
+      this.logger.info(`[PACKET DATA]   - Data Size: ${envSnapshot.getBuffer().subarray(5).length} bytes`);
+
+      // Snapshot 2: WorldReadInfo (Type: 0x9910)
+      const worldInfoSnapshot = new ServerPacket();
+      worldInfoSnapshot.writeUInt32LE(player.objectId); // Object ID
+      worldInfoSnapshot.writeUInt16LE(SnapshotType.WORLD_READINFO); // WORLD_READINFO snapshot type
+      const mapId = character.mapId || 1;
+      worldInfoSnapshot.writeInt32LE(mapId); // Map ID
+      worldInfoSnapshot.writeSingleLE(character.positionX); // Position X
+      worldInfoSnapshot.writeSingleLE(character.positionY); // Position Y
+      worldInfoSnapshot.writeSingleLE(character.positionZ); // Position Z
+      snapshots.push(worldInfoSnapshot.getBuffer().subarray(5)); // Remove packet header
+
+      this.logger.info(`[PACKET DATA] Snapshot 2 - WorldReadInfo:`);
+      this.logger.info(`[PACKET DATA]   - Object ID: ${player.objectId}`);
+      this.logger.info(`[PACKET DATA]   - Snapshot Type: ${SnapshotType.WORLD_READINFO} (0x${SnapshotType.WORLD_READINFO.toString(16).toUpperCase()})`);
+      this.logger.info(`[PACKET DATA]   - Map ID: ${mapId}`);
+      this.logger.info(`[PACKET DATA]   - Position X: ${character.positionX} (float)`);
+      this.logger.info(`[PACKET DATA]   - Position Y: ${character.positionY} (float)`);
+      this.logger.info(`[PACKET DATA]   - Position Z: ${character.positionZ} (float)`);
+      this.logger.info(`[PACKET DATA]   - Data Size: ${worldInfoSnapshot.getBuffer().subarray(5).length} bytes`);
+
+      // Snapshot 3: AddObject (Type: 0x00F0)
+      const addObjectSnapshot = new ServerPacket();
+      addObjectSnapshot.writeUInt32LE(player.objectId); // Object ID
+      addObjectSnapshot.writeUInt16LE(0x00F0); // ADD_OBJ snapshot type
+
+      // CRITICAL FIX: Add missing ObjectType and ModelIndex that C++ client expects
+      const objectType = 5; // OT_MOVER = 5 for players (from C++ defines)
+      const modelIndex = player.appearance?.gender === 1 ? 12 : 11; // MI_FEMALE = 12, MI_MALE = 11
+      addObjectSnapshot.writeByte(objectType); // (BYTE)pCtrl->GetType()
+      addObjectSnapshot.writeUInt32LE(modelIndex); // pCtrl->GetIndex()
+
+      // Add the actual AddObject serialized data
+      const addObjectData = new AddObjectServerSnapshot(player).getData();
+      addObjectSnapshot.writeBytes(addObjectData);
+      snapshots.push(addObjectSnapshot.getBuffer().subarray(5)); // Remove packet header
+
+      this.logger.info(`[PACKET DATA] Snapshot 3 - AddObject:`);
+      this.logger.info(`[PACKET DATA]   - Object ID: ${player.objectId}`);
+      this.logger.info(`[PACKET DATA]   - Snapshot Type: 0x00F0 (ADD_OBJ)`);
+      this.logger.info(`[PACKET DATA]   - Object Type: ${objectType} (OT_MOVER for players)`);
+      this.logger.info(`[PACKET DATA]   - Model Index: ${modelIndex} (${player.appearance?.gender === 1 ? 'MI_FEMALE' : 'MI_MALE'})`);
+      this.logger.info(`[PACKET DATA]   - Player Gender: ${player.appearance?.gender} (${player.appearance?.gender === 1 ? 'Female' : 'Male'})`);
+      this.logger.info(`[PACKET DATA]   - Serialized Data Size: ${addObjectData.length} bytes`);
+      this.logger.info(`[PACKET DATA]   - Total AddObject Size: ${addObjectSnapshot.getBuffer().subarray(5).length} bytes`);
+
+      // Snapshot 4: Taskbar (Type: 0x0097) - Add basic taskbar
+      const taskbarSnapshot = new ServerPacket();
+      taskbarSnapshot.writeUInt32LE(player.objectId); // Object ID
+      taskbarSnapshot.writeUInt16LE(SnapshotType.TASKBAR); // TASKBAR snapshot type
+      // Basic empty taskbar data (player starts with empty taskbar)
+      const taskbarSlots = 20;
+      for (let i = 0; i < taskbarSlots; i++) { // 20 taskbar slots
+        taskbarSnapshot.writeUInt32LE(0); // Empty slot
+        taskbarSnapshot.writeUInt32LE(0); // Empty slot type
+      }
+      snapshots.push(taskbarSnapshot.getBuffer().subarray(5)); // Remove packet header
+
+      this.logger.info(`[PACKET DATA] Snapshot 4 - Taskbar:`);
+      this.logger.info(`[PACKET DATA]   - Object ID: ${player.objectId}`);
+      this.logger.info(`[PACKET DATA]   - Snapshot Type: ${SnapshotType.TASKBAR} (0x${SnapshotType.TASKBAR.toString(16).toUpperCase()})`);
+      this.logger.info(`[PACKET DATA]   - Taskbar Slots: ${taskbarSlots} (all empty)`);
+      this.logger.info(`[PACKET DATA]   - Data per Slot: 8 bytes (4 bytes slot ID + 4 bytes slot type)`);
+      this.logger.info(`[PACKET DATA]   - Total Taskbar Data: ${taskbarSlots * 8} bytes`);
+      this.logger.info(`[PACKET DATA]   - Data Size: ${taskbarSnapshot.getBuffer().subarray(5).length} bytes`);
+
+      this.logger.info(`✓ Created ${snapshots.length} snapshots: EnvironmentAll, WorldReadInfo, AddObject (Fixed: ObjectType=${objectType}, ModelIndex=${modelIndex}), Taskbar`);
+
+      // Write snapshot count and all snapshot data
+      joinPacket.writeUInt16LE(snapshots.length); // Snapshot count (C# line 19)
+
+      this.logger.info(`[PACKET DATA] Snapshot Assembly:`);
+      this.logger.info(`[PACKET DATA]   - Total Snapshots: ${snapshots.length}`);
+
+      // Write all snapshot data (C# lines 21-28)
+      let totalSnapshotBytes = 0;
+      for (let i = 0; i < snapshots.length; i++) {
+        const snapshotData = snapshots[i];
+        joinPacket.writeBytes(snapshotData);
+        totalSnapshotBytes += snapshotData.length;
+        this.logger.info(`[PACKET DATA]   - Snapshot ${i + 1} Size: ${snapshotData.length} bytes`);
+      }
+
+      this.logger.info(`[PACKET DATA]   - Total Snapshot Data: ${totalSnapshotBytes} bytes`);
+      this.logger.info(`✓ Added all ${snapshots.length} snapshots to JOIN packet`);
+
+      // Finalize the JOIN packet
+      const finalizedJoinPacket = joinPacket.finalize();
+
+      // === COMPREHENSIVE FINAL PACKET LOGGING ===
+      this.logger.info(`[PACKET DATA] ========== FINAL JOIN PACKET SUMMARY ==========`);
+      this.logger.info(`[PACKET DATA] Final Packet Information:`);
+      this.logger.info(`[PACKET DATA]   - Total Packet Size: ${finalizedJoinPacket.length} bytes`);
+      this.logger.info(`[PACKET DATA]   - Packet Header: 0x5E (FlyFF packet header)`);
+      this.logger.info(`[PACKET DATA]   - Length Field: ${finalizedJoinPacket.readUInt32LE(1)} bytes (data after length field)`);
+      const packetTypeValue = finalizedJoinPacket.readUInt32LE(5);
+      this.logger.info(`[PACKET DATA]   - Packet Type: ${packetTypeValue} (PacketType.JOIN = ${PacketType.JOIN})`);
+      this.logger.info(`[PACKET DATA]   - Unused Field: ${finalizedJoinPacket.readUInt32LE(9)}`);
+      this.logger.info(`[PACKET DATA]   - Snapshot Count: ${finalizedJoinPacket.readUInt16LE(13)}`);
+      this.logger.info(`[PACKET DATA]   - Total Snapshot Data: ${totalSnapshotBytes} bytes`);
+      this.logger.info(`[PACKET DATA] ================================================`);
+
+      this.logger.info(`Sending FIXED JOIN packet with embedded snapshots to client for character: ${character.name} with ${finalizedJoinPacket.length} bytes`);
+
+      // === RAW PACKET LOGGING FOR C++ CLIENT COMPARISON ===
+      this.logger.info(`[RAW PACKET DEBUG] FIXED JOIN packet structure:`);
+      this.logger.info(`[RAW PACKET DEBUG] Packet Length: ${finalizedJoinPacket.length} bytes`);
+      this.logger.info(`[RAW PACKET DEBUG] Full Hex Dump: ${finalizedJoinPacket.toString('hex').toUpperCase()}`);
+
+      // Break down the packet structure for easier debugging
+      this.logger.info(`[RAW PACKET DEBUG] FIXED Packet Structure Breakdown:`);
+      this.logger.info(`[RAW PACKET DEBUG] Header (1 byte): 0x${finalizedJoinPacket.subarray(0, 1).toString('hex').toUpperCase()}`);
+      this.logger.info(`[RAW PACKET DEBUG] Length Field (4 bytes): 0x${finalizedJoinPacket.subarray(1, 5).toString('hex').toUpperCase()} = ${finalizedJoinPacket.readUInt32LE(1)} bytes`);
+      this.logger.info(`[RAW PACKET DEBUG] Packet Type (4 bytes): 0x${finalizedJoinPacket.subarray(5, 9).toString('hex').toUpperCase()} = ${packetTypeValue} (PacketType.JOIN = ${PacketType.JOIN})`);
+      this.logger.info(`[RAW PACKET DEBUG] Unused Field (4 bytes): 0x${finalizedJoinPacket.subarray(9, 13).toString('hex').toUpperCase()}`);
+      this.logger.info(`[RAW PACKET DEBUG] Snapshot Count (2 bytes): 0x${finalizedJoinPacket.subarray(13, 15).toString('hex').toUpperCase()} = ${finalizedJoinPacket.readUInt16LE(13)}`);
+      this.logger.info(`[RAW PACKET DEBUG] Snapshot Data (${totalSnapshotBytes} bytes): 0x${finalizedJoinPacket.subarray(15).toString('hex').toUpperCase()}`);
+
+      // Verify no double header
+      this.logger.info(`[RAW PACKET DEBUG] First 20 bytes: ${finalizedJoinPacket.subarray(0, 20).toString('hex').toUpperCase()}`);
+
+      // === SAVE RAW PACKET DATA TO world_packets.log FOR LATER ANALYSIS ===
+      WorldPacketLogger.logRawJoinPacket(character.name, finalizedJoinPacket, packetTypeValue, PacketType.JOIN);
+      this.logger.info(`[RAW PACKET DEBUG] FIXED packet data logged to world_packets.log for C++ comparison`);
+
+      // Send the FIXED JOIN packet with embedded snapshots
       this.userConnection.sendBuffer(finalizedJoinPacket, PacketType.JOIN);
-
-      // Then send the world snapshot using proper server format
-      this.logger.info(`Creating world snapshot for ${character.name} using ServerSnapshot:`);
-
-      const worldSnapshot = new ServerSnapshot();
-      const dpidUser = (this.userConnection as any).sessionId || player.objectId;
-
-      // Create AddObject snapshot with proper structure
-      const addObjectSnapshot = new AddObjectServerSnapshot(player);
-      worldSnapshot.addSnapshot(SnapshotType.ADD_OBJ, player.objectId, addObjectSnapshot.getData());
-      this.logger.info(`✓ Created AddObjectServerSnapshot`);
-
-      // For now, just send the essential AddObject snapshot
-      // TODO: Add other snapshots (EnvironmentAll, WorldReadInfo, etc.) with proper ServerSnapshot format
-
-      const finalizedSnapshot = worldSnapshot.finalize(dpidUser);
-      this.logger.info(`Sending world snapshot to client for character: ${character.name} with ${finalizedSnapshot.length} bytes`);
-
-      // Send the world snapshot after the JOIN response
-      this.userConnection.sendBuffer(finalizedSnapshot, PacketType.SNAPSHOT);
 
       this.logger.info(`✓ World snapshot sent successfully to ${character.name}`);
 

@@ -83,4 +83,48 @@ export class WorldPacketLogger {
 
     fs.appendFileSync(this.logFilePath, logEntry);
   }
+
+  public static logRawJoinPacket(characterName: string, packetBuffer: Buffer, packetTypeValue: number, packetTypeConstant: number): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+
+    const logContent = [
+      ``,
+      `================================================================================`,
+      `[${timestamp}] RAW_JOIN_PACKET | === C++ CLIENT DEBUGGING DATA ===`,
+      `Character: ${characterName}`,
+      `Total Packet Length: ${packetBuffer.length} bytes`,
+      ``,
+      `=== FULL HEX DUMP ===`,
+      packetBuffer.toString('hex').toUpperCase(),
+      ``,
+      `=== PACKET STRUCTURE BREAKDOWN ===`,
+      `Header (0x5E): ${packetBuffer.subarray(0, 1).toString('hex').toUpperCase()}`,
+      `Length Field: ${packetBuffer.subarray(1, 5).toString('hex').toUpperCase()} = ${packetBuffer.readUInt32LE(1)} bytes`,
+      `Packet Type: ${packetBuffer.subarray(5, 9).toString('hex').toUpperCase()} = ${packetTypeValue} (PacketType.JOIN = ${packetTypeConstant})`,
+      ``,
+      `=== JOIN PACKET DATA ===`,
+      packetBuffer.length >= 13 ? `Unused Field: ${packetBuffer.subarray(9, 13).toString('hex').toUpperCase()} = ${packetBuffer.readUInt32LE(9)}` : 'Packet too short',
+      packetBuffer.length >= 15 ? `Snapshot Count: ${packetBuffer.subarray(13, 15).toString('hex').toUpperCase()} = ${packetBuffer.readUInt16LE(13)}` : 'No snapshot count',
+      ``,
+      `=== SNAPSHOT DATA (for C++ ar reading) ===`,
+      packetBuffer.length > 15 ? packetBuffer.subarray(15).toString('hex').toUpperCase() : 'No snapshot data',
+      ``,
+      `=== INSTRUCTIONS FOR C++ DEBUGGING ===`,
+      `1. Set breakpoint in CDPClient::OnJoin( CAr & ar ) starting line 887 of DPClient.cpp`,
+      `2. The 'ar' parameter should contain the snapshot data portion above (starting from offset 15)`,
+      `3. Compare what C++ ar.Read*() functions extract vs the hex data above`,
+      `4. Player object creation should happen after reading this snapshot data`,
+      ``,
+      `=== EXPECTED C++ ar CONTENT ===`,
+      packetBuffer.length > 15 ?
+        `C++ ar should start with these bytes: ${packetBuffer.subarray(15, Math.min(47, packetBuffer.length)).toString('hex').toUpperCase()}`
+        : 'No snapshot data to read',
+      `================================================================================`,
+      ``
+    ].join('\n');
+
+    fs.appendFileSync(this.logFilePath, logContent);
+  }
 }

@@ -58,7 +58,8 @@
       "Bash(copy:*)",
       "Bash(do cp \"H:\\game\\L19.4\\Server\\Resource$file\" \"H:\\game\\nodejs-flyff\\src\\resources\\res\\data$file\")",
       "Bash(npm start:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(FLYFF_SERVER_TYPE=world timeout 10s npm start)"
     ],
     "deny": [],
     "ask": []

@@ -65,7 +65,7 @@ export default class Handler extends PacketHandler {
     if (channel?.host) {
       this.sendChannelIp(channel.host);
     }
-    if (this.server?.config?.login_server.settings["login-protect"]) {
+    if (this.server?.config?.cluster_server.settings["login-protect"]) {
       await this.sendNumPadId();
     }
   }

@@ -24,17 +24,24 @@ export class ServerSnapshot extends ServerPacket {
   }
 
   /**
-   * Add a snapshot to this packet
+   * Add a snapshot to this packet following C++ format exactly:
+   * ObjectID << SnapshotType << ObjectType << ObjectIndex << SerializedData
    */
-  addSnapshot(snapshotType: SnapshotType, objectId: number, data: Buffer): void {
-    // Write object ID
+  addSnapshot(snapshotType: SnapshotType, objectId: number, objectType: number, objectIndex: number, serializedData: Buffer): void {
+    // Write object ID (DWORD)
     this.writeUInt32LE(objectId);
 
-    // Write snapshot type
+    // Write snapshot type (USHORT)
     this.writeUInt16LE(snapshotType);
 
-    // Write snapshot data
-    this.writeBytes(data);
+    // Write object type (BYTE)
+    this.writeByte(objectType);
+
+    // Write object index (DWORD)
+    this.writeUInt32LE(objectIndex);
+
+    // Write serialized object data
+    this.writeBytes(serializedData);
 
     // Increment snapshot count
     this.snapshotCount++;

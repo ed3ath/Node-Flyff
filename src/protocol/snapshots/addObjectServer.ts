@@ -10,130 +10,104 @@ import { WorldPacketLogger } from "../../helpers/worldPacketLogger";
  */
 export class AddObjectServerSnapshot {
   private data: Buffer;
+  public objectType: number;
+  public modelId: number;
 
   constructor(worldObject: Mover, excludeItems: boolean = false) {
     const packet = new ServerPacket();
 
-    // === CObj::Serialize data (21 bytes) ===
-    // Write object type as BYTE (5 = OT_MOVER for player)
-    const objectType = worldObject instanceof Player ? 5 : 3;  // OT_MOVER = 5
-    packet.writeByte(objectType);
+    // Store object type and model ID for use by ServerSnapshot
+    this.objectType = worldObject instanceof Player ? 5 : 3;  // OT_MOVER = 5
 
-    // Write mover/model ID as DWORD - try different common FlyFF model IDs
-    let modelId = worldObject.properties?.id || (worldObject as any).id || worldObject.objectId;
+    // Determine model ID based on object type and gender
     if (worldObject instanceof Player) {
-      // Try common FlyFF player model IDs in sequence
-      const testModelIds = [11, 12, 1, 2, 10, 15, 20, 100, 101, 102, 200, 300];
-      // Use objectId to cycle through different model IDs for testing
-      const testIndex = worldObject.objectId % testModelIds.length;
-      modelId = testModelIds[testIndex];
-      console.log(`[DEBUG] Testing model ID ${modelId} (index ${testIndex}) for player ${worldObject.name} (gender: ${worldObject.appearance?.gender})`);
+      // Use correct FlyFF model IDs: MI_MALE = 11, MI_FEMALE = 12
+      const gender = worldObject.appearance?.gender || 0;
+      this.modelId = gender === 0 ? 11 : 12; // 0 = male, 1 = female
+      console.log(`[DEBUG] Using model ID ${this.modelId} for player ${worldObject.name} (gender: ${gender})`);
+    } else {
+      // For non-players, use the properties ID or fallback
+      this.modelId = worldObject.properties?.id || (worldObject as any).id || worldObject.objectId;
     }
-    packet.writeUInt32LE(modelId);
 
-    // Write scale (u_short: scale.x * 100.0f)
-    packet.writeUInt16LE(100); // Default scale 1.0 * 100
+    // === SIMPLIFIED C++ SERVER STRUCTURE ===
+    // Remove C# Rhisis duplications - try simpler structure
 
-    // Write position (D3DXVECTOR3: x, y, z as floats)
+    // Basic object serialization (CObj::Serialize equivalent)
+    // Write position (3 x SINGLE)
     packet.writeSingleLE(worldObject.position.x);
     packet.writeSingleLE(worldObject.position.y);
     packet.writeSingleLE(worldObject.position.z);
 
-    // Write angle (short: angle * 10.0f)
+    // Write rotation angle (SHORT) - angle * 10
     const angle = (worldObject.rotationAngle || 0) * 10.0;
     packet.writeInt16LE(Math.round(angle));
 
-    // === CCtrl::Serialize data (4 bytes) ===
     // Write object ID (DWORD)
     packet.writeUInt32LE(worldObject.objectId);
 
     // Log the critical object creation values
     if (worldObject instanceof Player) {
-      console.log(`[DEBUG] AddObject: ObjectType=${objectType}, ModelId=${modelId}, Gender=${worldObject.appearance?.gender}, ObjectId=${worldObject.objectId}`);
+      console.log(`[DEBUG] AddObject: ObjectType=${this.objectType}, ModelId=${this.modelId}, Gender=${worldObject.appearance?.gender}, ObjectId=${worldObject.objectId}`);
       console.log(`[DEBUG] Position: x=${worldObject.position.x}, y=${worldObject.position.y}, z=${worldObject.position.z}`);
-      console.log(`[DEBUG] This will call CreateObj(pd3dDevice, ${objectType}, ${modelId}, ${objectType !== 5 ? 1 : 0})`);
+      console.log(`[DEBUG] This will call CreateObj(pd3dDevice, ${this.objectType}, ${this.modelId}, ${this.objectType !== 5 ? 1 : 0})`);
     }
 
-    // === CMover::Serialize data ===
+    // === MINIMAL C++ PLAYER SERIALIZATION ===
+    // Start with absolute basics to get the client working
     if (worldObject instanceof Player) {
-      // Write motion (u_short)
-      packet.writeUInt16LE(0); // Standing motion
+      // Essential CMover fields
+      packet.writeInt16LE(0); // Motion
+      packet.writeByte(1); // m_bPlayer (1 = player, 0 = NPC)
 
-      // Write player flag (u_char) - 1 for player, 0 for NPC
-      packet.writeByte(1);
-
-      // Write hit points (int)
       const hp = worldObject.health?.hp ?? 100;
-      packet.writeInt32LE(hp);
+      packet.writeInt32LE(hp); // Hit points
+      console.log(`[DEBUG] Writing HP: ${hp}`);
 
-      // Write actor state (DWORD)
-      packet.writeUInt32LE(0); // No special state
+      packet.writeInt32LE(0); // Object state
+      packet.writeInt32LE(0); // Object state flags
+      packet.writeByte(1); // Belligerence
 
-      // Write actor state flags (DWORD)
-      packet.writeUInt32LE(0); // No state flags
+      packet.writeInt32LE(-1); // Mover SFX ID
 
-      // Write belligerence (u_char)
-      packet.writeByte(0); // Peaceful
+      // Player basic info
+      const playerName = worldObject.name || "TestPlayer";
+      packet.writeString(playerName);
+      console.log(`[DEBUG] Writing player name: "${playerName}"`);
 
-      // Write mover SFX ID (DWORD) - for version 15+
-      packet.writeUInt32LE(0); // No SFX
+      const gender = worldObject.appearance?.gender || 0;
+      packet.writeByte(gender);
+      console.log(`[DEBUG] Writing gender: ${gender}`);
 
-      // === Player-specific data following C++ CMover::Serialize ===
-
-      // Write player name (string)
-      packet.writeString(worldObject.name);
-
-      // Write gender (DWORD) - GetSex()
-      packet.writeUInt32LE(worldObject.appearance?.gender || 0);
-
-      // Write skin set (u_char)
       packet.writeByte(worldObject.appearance?.skinSetId || 0);
-
-      // Write hair mesh (u_char)
       packet.writeByte(worldObject.appearance?.hairId || 0);
-
-      // Write hair color (DWORD)
-      packet.writeUInt32LE(worldObject.appearance?.hairColor || 0);
-
-      // Write head mesh (u_char)
+      packet.writeInt32LE(worldObject.appearance?.hairColor || 0);
       packet.writeByte(worldObject.appearance?.faceId || 0);
 
-      // Write player ID (DWORD)
-      packet.writeUInt32LE(worldObject.id);
+      packet.writeInt32LE(worldObject.id); // Player ID
 
-      // Write job (u_char)
-      packet.writeByte(worldObject.job?.id || 0);
+      const jobId = worldObject.job?.id ?? 0;
+      packet.writeByte(jobId);
+      console.log(`[DEBUG] Writing job ID: ${jobId}`);
 
-      // Write stats (all u_short)
-      packet.writeUInt16LE(worldObject.statistics?.strength || 15);
-      packet.writeUInt16LE(worldObject.statistics?.stamina || 15);
-      packet.writeUInt16LE(worldObject.statistics?.dexterity || 15);
-      packet.writeUInt16LE(worldObject.statistics?.intelligence || 15);
+      // Stats
+      packet.writeInt16LE(worldObject.statistics?.strength || 15);
+      packet.writeInt16LE(worldObject.statistics?.stamina || 15);
+      packet.writeInt16LE(worldObject.statistics?.dexterity || 15);
+      packet.writeInt16LE(worldObject.statistics?.intelligence || 15);
 
-      // Write level (u_short)
-      packet.writeUInt16LE(worldObject.level || 1);
+      const level = worldObject.level || 1;
+      packet.writeInt16LE(level);
+      console.log(`[DEBUG] Writing level: ${level}`);
 
-      // Write fuel (int)
-      packet.writeInt32LE(0); // No fuel
+      // Minimal additional required fields
+      packet.writeInt32LE(-1); // Fuel
+      packet.writeInt32LE(0); // Fuel time
+      packet.writeByte(0); // Guild
+      packet.writeInt32LE(0); // Guild cloak
+      packet.writeByte(0); // Party
 
-      // Write fuel time (DWORD)
-      packet.writeUInt32LE(0); // No fuel time
-
-      // Write guild info
-      packet.writeByte(0); // No guild
-
-      // Write guild cloak ID (DWORD)
-      packet.writeUInt32LE(0);
-
-      // Write party info
-      packet.writeByte(0); // No party
-
-      // === Minimal equipment data to complete CMover serialization ===
-      // For now, write no equipment to keep packet simple
-      packet.writeByte(0); // No equipped items
-
-      // Continue with CMover serialization - this is a minimal version
-      // The key is to provide enough data so GetProp() works correctly
+      // Stop here for now - test minimal structure first
 
     } else {
       // For non-player objects, write minimal NPC data
