@@ -17,7 +17,7 @@ export default class QueryPlayerDataHandler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.playerId = packet.readInt32LE();
+    this.playerId = packet.readInt32();
   }
 
   async execute(): Promise<void> {

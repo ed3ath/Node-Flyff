@@ -54,7 +54,7 @@ export default class SnapshotHandler extends PacketHandler {
         const snapshot = new BinaryStream(remainingData);
 
         // Read snapshot header as WORD (similar to C++ OnSnapshot)
-        const snapshotHeaderNumber = snapshot.readInt16LE();
+        const snapshotHeaderNumber = snapshot.readInt16();
 
         // Debug logging to understand what we're reading
         this.logger.debug(`Snapshot header read: 0x${snapshotHeaderNumber.toString(16).toUpperCase().padStart(4, '0')} (${snapshotHeaderNumber})`);
@@ -112,9 +112,9 @@ export default class SnapshotHandler extends PacketHandler {
     try {
       // Read position data in little-endian format (FlyFF uses little-endian)
       const setDestPositionPacket: SetDestPositionPacket = {
-        x: snapshot.readSingleLE(),
-        y: snapshot.readSingleLE(),
-        z: snapshot.readSingleLE()
+        x: snapshot.readSingle(),
+        y: snapshot.readSingle(),
+        z: snapshot.readSingle()
       };
 
       // Get the player from user connection (similar to C# Player.Move())

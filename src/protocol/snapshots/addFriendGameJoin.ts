@@ -23,7 +23,7 @@ export class AddFriendGameJoinSnapshot extends FlyffSnapshot {
     this.writeInt32(player.job?.id || 0);
 
     // Write gender for display
-    this.writeByte(player.appearance?.gender || 0);
+    this.writeByte(player.appearence?.gender || 0);
 
     // Write timestamp of login
     this.writeInt32(Math.floor(Date.now() / 1000)); // Current timestamp

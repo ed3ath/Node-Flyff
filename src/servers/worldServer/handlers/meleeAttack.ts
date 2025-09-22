@@ -17,17 +17,17 @@ export default class MeleeAttackHandler extends WorldPacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.attackMessage = packet.readInt32LE();
-    this.objectId = packet.readInt32LE();
-    this.unknownParameter = packet.readInt32LE();
-    this.attackFlags = packet.readInt32LE() & 0xffff;
-    this.weaponAttackSpeed = packet.readSingleLE();
+    this.attackMessage = packet.readInt32();
+    this.objectId = packet.readInt32();
+    this.unknownParameter = packet.readInt32();
+    this.attackFlags = packet.readInt32() & 0xffff;
+    this.weaponAttackSpeed = packet.readSingle();
   }
 
   async execute(): Promise<void> {
     if (!this.player) {
       this.logger.warn(
-        "MELEE_ATTACK packet received but player is not available"
+        "MEE_ATTACK packet received but player is not available"
       );
       return;
     }
@@ -76,7 +76,7 @@ export default class MeleeAttackHandler extends WorldPacketHandler {
       this.player.tryMeleeAttack(target, attackType);
     } catch (error) {
       this.logger.error(
-        `Failed to process MELEE_ATTACK for player ${this.player.name}: ${error}`
+        `Failed to process MEE_ATTACK for player ${this.player.name}: ${error}`
       );
     }
   }

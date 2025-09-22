@@ -47,11 +47,11 @@ export class QueryPlayerDataSnapshot extends FlyffSnapshot {
     this.writeInt32((player as any).mapId || player.map?.id || 1);
 
     // Write appearance
-    this.writeByte(player.appearance?.gender || 0);
-    this.writeInt32(player.appearance?.skinSetId || 0);
-    this.writeInt32(player.appearance?.hairId || 0);
-    this.writeInt32(player.appearance?.hairColor || 0);
-    this.writeInt32(player.appearance?.faceId || 0);
+    this.writeByte(player.appearence?.gender || 0);
+    this.writeInt32(player.appearence?.skinSetId || 0);
+    this.writeInt32(player.appearence?.hairId || 0);
+    this.writeInt32(player.appearence?.hairColor || 0);
+    this.writeInt32(player.appearence?.faceId || 0);
 
     // Write guild/party info (default to none for now)
     this.writeInt32(0); // Guild ID

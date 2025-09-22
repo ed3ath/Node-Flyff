@@ -6,6 +6,7 @@ import type { Mover } from "../../entities/mover";
 import { FlyffSnapshot } from "../../libraries/snapshot";
 import { HealthFormulas } from "../../abstract/healthFomula";
 import { WorldPacketLogger } from "../../helpers/worldPacketLogger";
+import { UpdateParamPointSnapshot } from "../../protocol/snapshots/updateParamPoint";
 
 export class Health {
     private _mover: Mover;
@@ -46,8 +47,9 @@ export class Health {
 
         this._hp = Math.min(Math.max(value, 0), this.maxHp);
 
-        // const healthSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_HP, this._hp);
-        // this._mover.sendToVisible(healthSnapshot, true);
+        // Send HP update snapshot to visible players (like C# implementation)
+        const healthSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_HP, this._hp);
+        this._mover.sendToVisible(healthSnapshot, true);
     }
 
     public get mp(): number {
@@ -61,8 +63,9 @@ export class Health {
 
         this._mp = Math.min(Math.max(value, 0), this.maxMp);
 
-        // const healthSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_MP, this._mp);
-        // this._mover.sendToVisible(healthSnapshot, true);
+        // Send MP update snapshot to visible players (like C# implementation)
+        const healthSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_MP, this._mp);
+        this._mover.sendToVisible(healthSnapshot, true);
     }
 
     public get fp(): number {
@@ -74,10 +77,11 @@ export class Health {
             return;
         }
 
-        this._fp = Math.min(Math.max(value, 0), this.maxFp)
+        this._fp = Math.min(Math.max(value, 0), this.maxFp);
 
-        // const healthSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_FP, this._fp);
-        // this._mover.sendToVisible(healthSnapshot, true);
+        // Send FP update snapshot to visible players (like C# implementation)
+        const healthSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_FP, this._fp);
+        this._mover.sendToVisible(healthSnapshot, true);
     }
 
     public get maxHp(): number {
@@ -196,10 +200,10 @@ export class Health {
                 break;
         }
 
-        // if (send) {
-        //     const healthSnapshot = new UpdateParamPointSnapshot(this._mover, attribute, this.getCurrent(attribute));
-        //     this._mover.sendToVisible(healthSnapshot, true);
-        // }
+        if (send) {
+            const healthSnapshot = new UpdateParamPointSnapshot(this._mover, attribute, this.getCurrent(attribute));
+            this._mover.sendToVisible(healthSnapshot, true);
+        }
     }
 
     getMaximum(attribute: DefineAttributes): number {
@@ -216,11 +220,14 @@ export class Health {
     }
 
     private sendHealth(): void {
-        // const healthSnapshot = new FFSnapshot();
-        // healthSnapshot.merge(new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_HP, this.hp));
-        // healthSnapshot.merge(new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_MP, this.mp));
-        // healthSnapshot.merge(new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_FP, this.fp));
+        // Send all health parameters together (like C# merged snapshots)
+        const hpSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_HP, this.hp);
+        const mpSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_MP, this.mp);
+        const fpSnapshot = new UpdateParamPointSnapshot(this._mover, DefineAttributes.DST_FP, this.fp);
 
-        // this._mover.sendToVisible(healthSnapshot, true);
+        // TODO: Implement snapshot merging for combined health updates
+        this._mover.sendToVisible(hpSnapshot, true);
+        this._mover.sendToVisible(mpSnapshot, true);
+        this._mover.sendToVisible(fpSnapshot, true);
     }
 }

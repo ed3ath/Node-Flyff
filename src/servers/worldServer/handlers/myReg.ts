@@ -22,13 +22,13 @@ export default class MyRegHandler extends PacketHandler {
     const remainingBytes = packet.buffer.length - packet.position;
 
     if (remainingBytes >= 4) {
-      this.playerId = packet.readInt32LE();
+      this.playerId = packet.readInt32();
     } else {
       this.playerId = 0;
     }
 
     if (remainingBytes >= 8) {
-      this.additionalData = packet.readInt32LE();
+      this.additionalData = packet.readInt32();
     } else {
       this.additionalData = 0;
     }
@@ -51,8 +51,8 @@ export default class MyRegHandler extends PacketHandler {
 
       // Send simple acknowledgment back to client
       const response = new FlyffPacket(PacketType.MY_REG);
-      response.writeInt32LE(player.objectId); // Send back actual player ID
-      response.writeInt32LE(this.additionalData); // Echo back additional data
+      response.writeInt32(player.objectId); // Send back actual player ID
+      response.writeInt32(this.additionalData); // Echo back additional data
 
       this.userConnection.send(response);
 

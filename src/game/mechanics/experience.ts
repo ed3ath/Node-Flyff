@@ -1,4 +1,8 @@
 import { JobType, JobMax } from "../definitions/defineJob";
+import { SetExperienceSnapshot } from "../../protocol/snapshots/setExperience";
+import { SetLevelSnapshot } from "../../protocol/snapshots/setLevel";
+import { SetGrowthLearningPointSnapshot } from "../../protocol/snapshots/setGrowthLearningPoint";
+import type { Player } from "../../entities/player";
 
 export class Experience {
   private static readonly _experienceLevelLimits: Map<JobType, number> =
@@ -11,10 +15,10 @@ export class Experience {
     ]);
 
   private _amount: number = 0;
-  private _playerId: number;
+  private _player: Player;
 
-  constructor(playerId: number) {
-    this._playerId = playerId;
+  constructor(player: Player) {
+    this._player = player;
   }
 
   get amount(): number {
@@ -172,19 +176,22 @@ export class Experience {
   }
 
   private sendExperiencePacket(sendLearningPoints: boolean): void {
-    // TODO: Implement SetExperienceSnapshot
-    // using SetExperienceSnapshot playerSnapshots = new(_player);
-    //
-    // if (sendLearningPoints) {
-    //   playerSnapshots.Merge(new SetGrowthLearningPointSnapshot(_player));
-    // }
-    //
-    // _player.Send(playerSnapshots);
+    // Send experience update snapshot to player (like C# implementation)
+    const playerSnapshots = new SetExperienceSnapshot(this._player);
+
+    if (sendLearningPoints) {
+      // Create combined snapshot with learning points
+      const learningPointsSnapshot = new SetGrowthLearningPointSnapshot(this._player);
+      // TODO: Implement snapshot merging for multiple snapshots
+      this._player.send(learningPointsSnapshot);
+    }
+
+    this._player.send(playerSnapshots);
   }
 
   private sendLevelUpPackets(): void {
-    // TODO: Implement SetLevelSnapshot
-    // using SetLevelSnapshot levelSnapshot = new(_player, _player.Level);
-    // _player.SendToVisible(levelSnapshot);
+    // Send level up snapshot to visible players (like C# implementation)
+    const levelSnapshot = new SetLevelSnapshot(this._player, this._player.level);
+    this._player.sendToVisible(levelSnapshot);
   }
 }

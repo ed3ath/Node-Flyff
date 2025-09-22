@@ -12,7 +12,7 @@ export default class Handler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
     // Read as Int32 and cast to ObjectMessageType enum like C# implementation
-    this.motionEnum = packet.readInt32LE() as ObjectMessageType;
+    this.motionEnum = packet.readInt32() as ObjectMessageType;
   }
 
   async execute(): Promise<void> {

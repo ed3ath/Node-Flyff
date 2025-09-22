@@ -12,7 +12,7 @@ export default class Handler extends WorldPacketHandler {
     super();
 
     // Read packet data matching C# QuestCheckPacket structure
-    this.questId = packet.readInt32LE();
+    this.questId = packet.readInt32();
     this.checked = packet.readBoolean();
   }
 

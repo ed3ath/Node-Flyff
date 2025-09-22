@@ -24,11 +24,11 @@ export default class PlayerCorrHandler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.positionX = packet.readSingleLE();
-    this.positionY = packet.readSingleLE();
-    this.positionZ = packet.readSingleLE();
-    this.angle = packet.readSingleLE();
-    this.frame = packet.readInt32LE();
+    this.positionX = packet.readSingle();
+    this.positionY = packet.readSingle();
+    this.positionZ = packet.readSingle();
+    this.angle = packet.readSingle();
+    this.frame = packet.readInt32();
   }
 
   async execute(): Promise<void> {
@@ -63,10 +63,10 @@ export default class PlayerCorrHandler extends PacketHandler {
       // Send position correction back to client (force them to server position)
       try {
         const correctionSnapshot = new FlyffSnapshot(SnapshotType.MOVERCORR, player.objectId);
-        correctionSnapshot.writeSingleLE(serverPosition.x);
-        correctionSnapshot.writeSingleLE(serverPosition.y);
-        correctionSnapshot.writeSingleLE(serverPosition.z);
-        correctionSnapshot.writeSingleLE(player.rotationAngle || 0);
+        correctionSnapshot.writeSingle(serverPosition.x);
+        correctionSnapshot.writeSingle(serverPosition.y);
+        correctionSnapshot.writeSingle(serverPosition.z);
+        correctionSnapshot.writeSingle(player.rotationAngle || 0);
         correctionSnapshot.writeInt32(this.frame);
 
         this.userConnection.sendSnapshot(correctionSnapshot);
@@ -92,10 +92,10 @@ export default class PlayerCorrHandler extends PacketHandler {
       // Send position correction back to client
       try {
         const correctionSnapshot = new FlyffSnapshot(SnapshotType.MOVERCORR, player.objectId);
-        correctionSnapshot.writeSingleLE(serverPosition.x);
-        correctionSnapshot.writeSingleLE(serverPosition.y);
-        correctionSnapshot.writeSingleLE(serverPosition.z);
-        correctionSnapshot.writeSingleLE(player.rotationAngle || 0);
+        correctionSnapshot.writeSingle(serverPosition.x);
+        correctionSnapshot.writeSingle(serverPosition.y);
+        correctionSnapshot.writeSingle(serverPosition.z);
+        correctionSnapshot.writeSingle(player.rotationAngle || 0);
         correctionSnapshot.writeInt32(this.frame);
 
         this.userConnection.sendSnapshot(correctionSnapshot);

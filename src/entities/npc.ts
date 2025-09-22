@@ -100,6 +100,12 @@ export class Npc extends WorldObject {
   public readonly shop: ItemContainer[] | null = null;
   public readonly quests: QuestProperties[] = [];
 
+  // Appearance properties like C# NpcProperties
+  public readonly hairId: number;
+  public readonly hairColor: number;
+  public readonly faceId: number;
+  public readonly canBuff: boolean;
+
   public get type(): WorldObjectType {
     return WorldObjectType.Mover;
   }
@@ -120,8 +126,14 @@ export class Npc extends WorldObject {
     super();
 
     this.properties = properties;
-    this.name = properties.id;
+    this.name = properties.name || properties.id;
     this.modelId = properties.modelId || 0;
+
+    // Set appearance properties (like C# NpcProperties)
+    this.hairId = properties.hairId || 0;
+    this.hairColor = properties.hairColor || 0;
+    this.faceId = properties.faceId || 0;
+    this.canBuff = properties.canBuff || false;
 
     // Initialize shop if NPC has one
     if (properties.hasShop && properties.shop) {
@@ -137,62 +149,25 @@ export class Npc extends WorldObject {
       return;
     }
 
-    // Create shop containers - assuming shop can have multiple tabs
+    // Create shop containers like C# NPC.Shop[] - multi-tab system
     const shopTabs = this.groupShopItemsByTab(shopProperties.items);
     (this as any).shop = shopTabs.map(tabItems => {
-      const container = new ItemContainer(100);
+      const container = new ItemContainer(100); // Standard shop container size
       const items: Record<number, Item> = {};
 
       tabItems.forEach((shopItem, index) => {
         const baseItemProperties = GameResources.Current.Items.get(shopItem.id);
-        // Create ItemProperties using constructor with defaults
-        const itemProperties = new ItemProperties(
-          1, // version
-          baseItemProperties.id,
-          baseItemProperties.name,
-          baseItemProperties.name,
-          baseItemProperties.name, // nameKey
-          baseItemProperties.packMax,
-          0, // itemKind1
-          0, // itemKind2
-          0, // itemKind3
-          0, // itemJob
-          0, // itemSex
-          0, // cost
-          0, // limitLevel
-          0, // parts
-          0, // abilityMin
-          0, // abilityMax
-          0, // element
-          0, // level
-          0, // rare
-          0, // attackSpeed
-          "", // destParam1
-          "", // destParam2
-          "", // destParam3
-          0, // adjParamVal1
-          0, // adjParamVal2
-          0, // adjParamVal3
-          0, // circleTime
-          false, // isUseable
-          0, // sfxObject
-          0, // sfxObject2
-          0, // sfxObject3
-          0, // sfxObject4
-          0, // sfxObject5
-          false, // isPermanant
-          0, // coolTime
-          0, // weaponTypeId
-          0, // itemAtkOrder1
-          0, // itemAtkOrder2
-          0, // itemAtkOrder3
-          0, // itemAtkOrder4
-          0, // skillReadyType
-          0, // weaponKind
-          0, // attackSkillMin
-          0, // attackSkillMax
-          new Map() // params
-        );
+        // Create ItemProperties using updated constructor pattern
+        const itemProperties = new ItemProperties({
+          id: baseItemProperties.id,
+          name: baseItemProperties.name,
+          identifierName: baseItemProperties.name,
+          parts: 0,
+          packMax: baseItemProperties.packMax,
+          isStackable: baseItemProperties.packMax > 1
+        });
+
+        // Create item like C# shop initialization
         items[index] = new Item(itemProperties);
         items[index].Refine = shopItem.refine;
         items[index].Element = shopItem.element;
@@ -211,7 +186,7 @@ export class Npc extends WorldObject {
   }
 
   private loadQuests(): void {
-    // Load quests that start with this NPC
+    // Load quests that start with this NPC (like C# NPC constructor)
     const npcQuests = GameResources.Current.Quests.filter(quest =>
       quest.startCharacter &&
       quest.startCharacter.toLowerCase() === this.name.toLowerCase()
@@ -262,8 +237,10 @@ export class Npc extends WorldObject {
     buttons?: DialogLink[],
     questId: number = 0
   ): void {
-    // TODO: Implement proper snapshot system
-    // For now, just log the dialog interaction
+    // TODO: Implement ScriptDialogSnapshot when available
+    // const packet = new ScriptDialogSnapshot(this, texts, links, buttons, questId);
+    // targetPlayer.send(packet);
+
     console.log(`${this.name} showing dialog to player`);
 
     if (texts && texts.length > 0) {
@@ -278,7 +255,7 @@ export class Npc extends WorldObject {
       console.log(`Dialog buttons: ${buttons.map(b => b.title).join(', ')}`);
     }
 
-    // Add quest-related dialog options
+    // Add quest-related dialog options (like C# NPC)
     if (this.hasQuests) {
       this.addQuestDialogOptions(targetPlayer, questId);
     }
@@ -303,6 +280,7 @@ export class Npc extends WorldObject {
   }
 
   public suggestAvailableQuest(player: Player): boolean {
+    // Like C# NPC.SuggestAvailableQuest - filter quests player can start
     const availableQuests = this.quests.filter(quest =>
       player.questDiary.canStartQuest(quest)
     );
@@ -317,6 +295,7 @@ export class Npc extends WorldObject {
   }
 
   public suggestFinalizeQuest(player: Player): boolean {
+    // Like C# NPC.SuggestFinalizeQuest - find quests player can complete with this NPC
     const playerQuestsToFinalize = player.questDiary.activeQuests.filter(quest =>
       quest.canFinish() &&
       quest.properties.endCharacter.toLowerCase() === this.name.toLowerCase()

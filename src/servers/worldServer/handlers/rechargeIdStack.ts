@@ -18,8 +18,8 @@ export default class RechargeIdStackHandler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
     // Read stack parameters from packet
-    this.stackType = packet.readInt32LE();
-    this.stackSize = packet.readInt32LE();
+    this.stackType = packet.readInt32();
+    this.stackSize = packet.readInt32();
   }
 
   async execute(): Promise<void> {
@@ -70,8 +70,8 @@ export default class RechargeIdStackHandler extends PacketHandler {
 
       // Send acknowledgment back to client (packet with same command)
       const response = new FlyffPacket(PacketType.RECHARGE_ID_STACK);
-      response.writeInt32LE(this.stackType);
-      response.writeInt32LE(this.stackSize);
+      response.writeInt32(this.stackType);
+      response.writeInt32(this.stackSize);
 
       this.userConnection.send(response);
 

@@ -14,10 +14,10 @@ export default class Handler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
     // Read as Int32 but cast to ushort (0-65535) like C# implementation
-    this.strength = packet.readInt32LE();
-    this.stamina = packet.readInt32LE();
-    this.dexterity = packet.readInt32LE();
-    this.intelligence = packet.readInt32LE();
+    this.strength = packet.readInt32();
+    this.stamina = packet.readInt32();
+    this.dexterity = packet.readInt32();
+    this.intelligence = packet.readInt32();
   }
 
   async execute(): Promise<void> {

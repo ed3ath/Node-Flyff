@@ -34,13 +34,13 @@ export default class Handler extends WorldPacketHandler {
       packet.readSingle()
     );
     this.angle = packet.readSingle();
-    this.state = packet.readUInt32LE();
-    this.stateFlag = packet.readInt32LE();
-    this.motion = packet.readInt32LE();
-    this.motionEx = packet.readInt32LE();
-    this.loop = packet.readInt32LE();
-    this.motionOption = packet.readInt32LE();
-    this.tickCount = packet.readUInt64LE();
+    this.state = packet.readUInt32();
+    this.stateFlag = packet.readInt32();
+    this.motion = packet.readInt32();
+    this.motionEx = packet.readInt32();
+    this.loop = packet.readInt32();
+    this.motionOption = packet.readInt32();
+    this.tickCount = packet.readUInt64();
   }
 
   async execute(): Promise<void> {

@@ -1,9 +1,13 @@
+import { UpdateParamPointSnapshot } from "../../protocol/snapshots/updateParamPoint";
+import { DefineAttributes } from "../definitions/defineAttributes";
+import type { Player } from "../../entities/player";
+
 export class Gold {
   private _amount: number = 0;
-  private _playerId: number;
+  private _player: Player;
 
-  constructor(playerId: number) {
-    this._playerId = playerId;
+  constructor(player: Player) {
+    this._player = player;
   }
 
   /**
@@ -56,8 +60,8 @@ export class Gold {
   }
 
   private sendUpdatedGold(): void {
-    // TODO: Implement UpdateParamPointSnapshot
-    // using UpdateParamPointSnapshot goldUpdateSnapshot = new(_player, DefineAttributes.DST_GOLD, Amount);
-    // _player.Send(goldUpdateSnapshot);
+    // Send gold update snapshot to player (like C# implementation)
+    const goldUpdateSnapshot = new UpdateParamPointSnapshot(this._player, DefineAttributes.DST_GOLD, this._amount);
+    this._player.send(goldUpdateSnapshot);
   }
 }

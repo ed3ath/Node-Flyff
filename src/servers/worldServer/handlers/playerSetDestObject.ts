@@ -12,7 +12,7 @@ export default class Handler extends WorldPacketHandler {
     super();
 
     // Read packet data matching C# PlayerDestObjectPacket structure
-    this.targetObjectId = packet.readUInt32LE();
+    this.targetObjectId = packet.readUInt32();
     this.distance = packet.readSingle();
   }
 

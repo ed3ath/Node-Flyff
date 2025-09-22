@@ -23,6 +23,8 @@ export default class Handler extends PacketHandler {
     this.msgVersion = packet.readString();
     this.username = packet.readString();
     this.passwordByte = packet.readBytes(16 * 42);
+
+    console.log(this.msgVersion, this.username, this.passwordByte)
   }
 
   async execute(): Promise<void> {
