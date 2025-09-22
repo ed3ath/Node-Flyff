@@ -62,7 +62,12 @@
       "Bash(FLYFF_SERVER_TYPE=world timeout 10s npm start)",
       "Bash(grep:*)",
       "Bash(FLYFF_SERVER_TYPE=world timeout 15s npm start)",
-      "Bash(cmd /c:*)"
+      "Bash(cmd /c:*)",
+      "Bash(findstr:*)",
+      "Read(//h//**)",
+      "Bash(FLYFF_SERVER_TYPE=world timeout 10s npx ts-node src/main.ts world)",
+      "Bash(awk:*)",
+      "WebFetch(domain:gist.github.com)"
     ],
     "deny": [],
     "ask": []

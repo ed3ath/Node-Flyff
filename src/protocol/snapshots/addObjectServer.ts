@@ -125,8 +125,59 @@ export class AddObjectServerSnapshot {
       packet.writeByte(0); // Guild
       packet.writeInt32LE(0); // Guild cloak
       packet.writeByte(0); // Party
+      packet.writeByte(0); // Authority
+      packet.writeUInt32LE(0); // Mode
+      packet.writeInt32LE(0); // StateMode
+      packet.writeInt32LE(0); // ItemUsed
+      packet.writeInt32LE(0); // LastPkTime
+      packet.writeInt32LE(0); // Karma
+      packet.writeInt32LE(0); // PkPropensity
+      packet.writeInt32LE(0); // PkExp
+      packet.writeInt32LE(0); // Fame
+      packet.writeByte(0); // Duel
+      packet.writeInt32LE(-1); // Titles
 
-      // Stop here for now - test minimal structure first
+      // === EQUIPMENT REFINES (First Pass) ===
+      // Write equipment refines (31 slots) - this comes first!
+      console.log(`[EQUIPMENT DEBUG] Writing equipment refines for player ${worldObject.name}`);
+      const maxParts = 31;
+      const equipmentSlotData: Array<{ slot: number; itemId: number; itemName: string }> = [];
+
+      for (let partSlot = 0; partSlot < maxParts; partSlot++) {
+        const equippedItem = worldObject.inventory?.getEquippedItem(partSlot);
+        const refineLevel = equippedItem?.Refine || 0;
+        packet.writeInt32LE(refineLevel);
+
+        if (equippedItem) {
+          const itemId = equippedItem.Properties?.id || -1;
+          equipmentSlotData.push({ slot: partSlot, itemId, itemName: equippedItem.Properties?.name || 'Unknown' });
+          console.log(`[EQUIPMENT DEBUG] Equipment slot ${partSlot}: Refine ${refineLevel}, Item ID ${itemId}`);
+        } else {
+          equipmentSlotData.push({ slot: partSlot, itemId: -1, itemName: 'Empty' });
+        }
+      }
+
+      // Guild War State
+      packet.writeInt32LE(0); // GuildWarState
+
+      // Padding (26 × int32 = 104 bytes)
+      for (let i = 0; i < 26; i++) {
+        packet.writeInt32LE(0);
+      }
+
+      // === EQUIPMENT ITEM IDs (Second Pass) ===
+      // Write equipment item IDs (31 slots) - this comes after padding!
+      console.log(`[EQUIPMENT DEBUG] Writing equipment item IDs for player ${worldObject.name}`);
+      for (let partSlot = 0; partSlot < maxParts; partSlot++) {
+        const equippedItem = worldObject.inventory?.getEquippedItem(partSlot);
+        const itemId = equippedItem?.Properties?.id || -1;
+        packet.writeInt32LE(itemId);
+      }
+
+      // Log comprehensive equipment snapshot to file
+      const equippedCount = equipmentSlotData.filter(slot => slot.itemId !== -1).length;
+      WorldPacketLogger.logEquipmentSnapshot(worldObject.name, equippedCount, {}, equipmentSlotData);
+      console.log(`[DEBUG] Wrote equipment refines and item IDs for ${worldObject.name}`);
 
     } else {
       // For non-player objects, write minimal NPC data

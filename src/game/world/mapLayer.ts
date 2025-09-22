@@ -6,36 +6,12 @@ import { Player } from "../../entities/player";
 import { Npc } from "../../entities/npc";
 import { Monster } from "../../entities/monster";
 import { MapItemObject } from "../../entities/mapItemObject";
-import { MoverProperties, NpcProperties } from "../../interfaces/resource";
+import { MoverProperties, NpcProperties, GameResources } from "../../interfaces/resource";
 import { WorldObjectType } from "../../types/worldObjectType";
 import { ObjectState } from "../../types/objectState";
 import { MoverClassType } from "../../types/moverClassType";
 import { FFRandom } from "../../helpers/FFRandom";
 import { MapRespawnRegionProperties } from "./regionRespawnProperties";
-
-// Forward declaration to avoid circular dependency
-interface GameResources {
-    Current: {
-        Npcs: {
-            get(name: string): NpcProperties | null;
-        };
-        Movers: {
-            get(modelId: number): MoverProperties | null;
-        };
-    };
-}
-
-// Mock GameResources for now - TODO: Replace with actual implementation
-const GameResources: GameResources = {
-    Current: {
-        Npcs: {
-            get: (name: string) => null
-        },
-        Movers: {
-            get: (modelId: number) => null
-        }
-    }
-};
 
 export class MapLayer {
     private static readonly VISIBILITY_RANGE = 75;
@@ -45,21 +21,45 @@ export class MapLayer {
     private readonly _npcs: Npc[] = [];
     private readonly _monsters: Monster[] = [];
     private readonly _items: MapItemObject[] = [];
+    private readonly _gameResources: GameResources | null;
 
     public readonly id: number;
 
-    constructor(parentMap: WorldMap, layerId: number) {
+    constructor(parentMap: WorldMap, layerId: number, gameResources?: GameResources) {
         this._parentMap = parentMap;
         this.id = layerId;
+        this._gameResources = gameResources || null;
 
-        // Initialize NPCs
-        const npcs = parentMap.properties.objects
-            .map(obj => {
-                const npcProperties = GameResources.Current.Npcs.get(obj.name);
-                if (!npcProperties) return null;
+        // DISABLED: Initialize NPCs and monsters only if game resources are available
+        // if (this._gameResources) {
+        //     this.initializeMapObjects();
+        // }
+        console.log(`[MapLayer] NPC and monster spawning disabled for layer ${this.id}`);
+    }
 
+    /**
+     * Initialize NPCs and monsters from map data using game resources
+     */
+    private async initializeMapObjects(): Promise<void> {
+        if (!this._gameResources) {
+            console.warn(`[MapLayer] No game resources available for layer ${this.id}`);
+            return;
+        }
+
+        // Initialize NPCs from .dyo objects
+        console.log(`[MapLayer] Loading NPCs for layer ${this.id}...`);
+        const npcPromises = this._parentMap.properties.objects.map(async obj => {
+            try {
+                // Look up NPC by character key (obj.name contains the character identifier like "MaPu_Aibatt1")
+                const npcProperties = await this._gameResources!.npcResources.get(obj.name);
+                if (!npcProperties) {
+                    console.warn(`[MapLayer] NPC properties not found for: ${obj.name}`);
+                    return null;
+                }
+
+                console.log(`[MapLayer] Creating NPC: ${obj.name} at position (${obj.position.x}, ${obj.position.y}, ${obj.position.z})`);
                 const npc = new Npc(npcProperties);
-                npc.map = parentMap;
+                npc.map = this._parentMap;
                 npc.mapLayer = this;
                 npc.position.copy(obj.position);
                 npc.rotationAngle = obj.angle;
@@ -68,41 +68,59 @@ export class MapLayer {
                 npc.objectState = ObjectState.OBJSTA_STAND;
 
                 return npc;
-            })
-            .filter(npc => npc !== null) as Npc[];
+            } catch (error) {
+                console.error(`[MapLayer] Failed to create NPC ${obj.name}:`, error);
+                return null;
+            }
+        });
 
-        // Initialize Monsters
-        const monsters = parentMap.properties.regions
+        const npcs = (await Promise.all(npcPromises)).filter(npc => npc !== null) as Npc[];
+        this._npcs.push(...npcs);
+        console.log(`[MapLayer] Created ${npcs.length} NPCs for layer ${this.id}`);
+
+        // Initialize Monsters from respawn regions
+        console.log(`[MapLayer] Loading monsters for layer ${this.id}...`);
+        const monsterPromises = this._parentMap.properties.regions
             .filter((region): region is MapRespawnRegionProperties =>
                 region instanceof MapRespawnRegionProperties &&
                 region.objectType === WorldObjectType.Mover)
             .flatMap(respawnRegion => {
-                const regionRect = new Rectangle(respawnRegion.x, respawnRegion.z, respawnRegion.width, respawnRegion.length);
-                const moverProperties = GameResources.Current.Movers.get(respawnRegion.modelId);
+                return Array.from({ length: respawnRegion.count }, async () => {
+                    try {
+                        const regionRect = new Rectangle(respawnRegion.x, respawnRegion.z, respawnRegion.width, respawnRegion.length);
+                        const moverProperties = await this._gameResources!.monsterResources.get(respawnRegion.modelId);
 
-                if (!moverProperties) return [];
+                        if (!moverProperties) {
+                            console.warn(`[MapLayer] Monster properties not found for model ID: ${respawnRegion.modelId}`);
+                            return null;
+                        }
 
-                return Array.from({ length: respawnRegion.count }, () => {
-                    const initialPosition = regionRect.getRandomPosition(respawnRegion.height);
+                        const initialPosition = regionRect.getRandomPosition(respawnRegion.height);
 
-                    const monster = new Monster(moverProperties as any, respawnRegion.time, regionRect);
-                    monster.name = moverProperties.szName || `Monster_${moverProperties.id}`;
-                    monster.level = moverProperties.dwLevel || 1;
-                    monster.size = moverProperties.dwClass === MoverClassType.RANK_BOSS ? 200 : 100;
-                    monster.modelId = moverProperties.id;
-                    monster.position.copy(initialPosition);
-                    monster.rotationAngle = FFRandom.floatRandomBetween(0, 360);
-                    monster.isSpawned = true;
-                    monster.objectState = ObjectState.OBJSTA_STAND;
-                    monster.map = parentMap;
-                    monster.mapLayer = this;
+                        console.log(`[MapLayer] Creating monster: ${moverProperties.szName} (${respawnRegion.modelId}) at (${initialPosition.x}, ${initialPosition.y}, ${initialPosition.z})`);
+                        const monster = new Monster(moverProperties as any, respawnRegion.time, regionRect);
+                        monster.name = moverProperties.szName || `Monster_${moverProperties.id}`;
+                        monster.level = moverProperties.dwLevel || 1;
+                        monster.size = moverProperties.dwClass === MoverClassType.RANK_BOSS ? 200 : 100;
+                        monster.modelId = moverProperties.id;
+                        monster.position.copy(initialPosition);
+                        monster.rotationAngle = FFRandom.floatRandomBetween(0, 360);
+                        monster.isSpawned = true;
+                        monster.objectState = ObjectState.OBJSTA_STAND;
+                        monster.map = this._parentMap;
+                        monster.mapLayer = this;
 
-                    return monster;
+                        return monster;
+                    } catch (error) {
+                        console.error(`[MapLayer] Failed to create monster with model ID ${respawnRegion.modelId}:`, error);
+                        return null;
+                    }
                 });
             });
 
-        this._npcs.push(...npcs);
+        const monsters = (await Promise.all(monsterPromises)).filter(monster => monster !== null) as Monster[];
         this._monsters.push(...monsters);
+        console.log(`[MapLayer] Created ${monsters.length} monsters for layer ${this.id}`);
     }
 
     public addPlayer(player: Player): void {

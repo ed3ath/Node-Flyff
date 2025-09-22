@@ -28,6 +28,7 @@ import { WorldPacketLogger } from "../../../helpers/worldPacketLogger";
 import { ServerPacket } from "../../../libraries/serverPacket";
 import { JoinCompletePacket } from "../../../libraries/joinCompletePacket";
 import { AddObjectServerSnapshot } from "../../../protocol/snapshots/addObjectServer";
+import { DoEquipSnapshot } from "../../../protocol/snapshots/doEquip";
 import { WorldUser } from "../worldUser";
 
 @SetPacketType(PacketType.JOIN)
@@ -131,7 +132,49 @@ export default class Handler extends PacketHandler {
   private parseItemKind2(value?: string): number { return 0; } // TODO: implement proper parsing
   private parseItemKind3(value?: string): number { return 0; } // TODO: implement proper parsing
   private parseJobType(value?: string): number { return 0; } // TODO: implement proper parsing
-  private parseItemPartType(value?: string): number { return 0; } // TODO: implement proper parsing
+  /**
+   * Parse item part type string to numeric value
+   * Critical for equipment visual rendering - maps dwParts to ItemPartType enum
+   */
+  private parseItemPartType(value?: string): number {
+    if (!value) return 0;
+
+    // Map dwParts strings to ItemPartType numeric values (0-30)
+    const partTypeMap: Record<string, number> = {
+      'PARTS_HEAD': 0,        // Helmet/Hat
+      'PARTS_HAIR': 1,        // Hair accessory
+      'PARTS_UPPER_BODY': 2,  // Shirt/Armor top
+      'PARTS_LOWER_BODY': 3,  // Pants/Armor bottom
+      'PARTS_HAND': 4,        // Gloves
+      'PARTS_FOOT': 5,        // Boots/Shoes
+      'PARTS_CAP': 6,         // Cap
+      'PARTS_ROBE': 7,        // Full body robe
+      'PARTS_CLOAK': 8,       // Cloak/Cape
+      'PARTS_LWEAPON': 9,     // Left hand weapon
+      'PARTS_RWEAPON': 10,    // Right hand weapon
+      'PARTS_SHIELD': 11,     // Shield
+      'PARTS_KNUCKLE': 12,    // Knuckles
+      'PARTS_EAR': 13,        // Earrings
+      'PARTS_NECKLACE': 14,   // Necklace
+      'PARTS_RING1': 15,      // Ring 1
+      'PARTS_RING2': 16,      // Ring 2
+      'PARTS_BULLET': 17,     // Bullets/Arrows
+      'PARTS_CLOTH': 18,      // Special cloth
+      'PARTS_MASK': 19,       // Face mask
+      'PARTS_CLOTH_2': 20,    // Secondary cloth
+      'PARTS_RIDE': 21,       // Riding equipment
+      'PARTS_PET': 22,        // Pet equipment
+    };
+
+    const partType = partTypeMap[value];
+    if (partType !== undefined) {
+      this.logger.info(`[EQUIPMENT] Mapped dwParts '${value}' to part type ${partType}`);
+      return partType;
+    }
+
+    this.logger.warn(`[EQUIPMENT] Unknown dwParts value: '${value}', defaulting to 0`);
+    return 0;
+  }
   private parseElementType(value?: string): ElementType { return ElementType.None; } // TODO: implement proper parsing
   private parseWeaponKind(value?: number): number { return value || 0; }
   private parseSfxNumber(value?: string): number {
@@ -462,8 +505,14 @@ export default class Handler extends PacketHandler {
       (player.experience as any).currentLevel = character.level;
     }
 
-    // Load inventory from equipments relation (like C# Dictionary<int, Item> playerInventoryItems)
+    // Load equipment from database (no mock data - real database only)
+    this.logger.info(`[EQUIPMENT DEBUG] Loading equipment for player ${character.name}...`);
+    WorldPacketLogger.logEquipmentDebug(character.name, "Loading equipment from database");
+    WorldPacketLogger.logEquipmentDebug(character.name, "Character equipments relation", character.equipments);
+
     if (character.equipments && character.equipments.length > 0) {
+      this.logger.info(`[EQUIPMENT DEBUG] Found ${character.equipments.length} equipment items in database for ${character.name}`);
+      WorldPacketLogger.logEquipmentLoading(character.name, character.equipments.length, character.equipments);
       for (const equipment of character.equipments) {
         if (equipment.item && equipment.slot !== undefined) {
           try {
@@ -487,16 +536,25 @@ export default class Handler extends PacketHandler {
             item.SerialNumber = equipment.item.serialNumber || 0;
             item.CreatorId = undefined;
 
-            // Set item directly in inventory map (like C# player.Inventory.CreateItem)
-            (player.inventory as any).items.set(equipment.slot, item);
+            // Set item directly in inventory map with proper slot mapping
+            // Equipment slots start after inventory slots (42 + partType)
+            const inventorySlot = 42 + equipment.slot; // equipment.slot is ItemPartType (0-30)
+            (player.inventory as any).items.set(inventorySlot, item);
 
-            this.logger.info(`Loaded item: ${resourceItemProperties.szName} (ID: ${equipment.item.itemId}) in slot ${equipment.slot}`);
+            this.logger.success(`✓ Loaded equipment from DB: ${resourceItemProperties.szName} (ID: ${equipment.item.itemId}) in part slot ${equipment.slot} (inventory slot ${inventorySlot})`);
+            WorldPacketLogger.logEquipmentItem(character.name, resourceItemProperties.szName, equipment.item.itemId, equipment.slot, inventorySlot);
           } catch (error) {
             this.logger.error(`Failed to load item ${equipment.item.itemId} for player ${character.name}: ${error}`);
             // Continue without this item rather than failing the entire login
           }
         }
       }
+    } else {
+      this.logger.warn(`[EQUIPMENT DEBUG] ⚠ No equipment data found in database for player ${character.name}`);
+      WorldPacketLogger.logEquipmentDebug(character.name, "⚠ No equipment data found in database");
+      WorldPacketLogger.logEquipmentDebug(character.name, "Character object equipments property", character.equipments);
+      WorldPacketLogger.logEquipmentDebug(character.name, "This suggests either: 1. Character was created without default equipment, 2. Database query relations are not working, 3. Equipment exists but in wrong format");
+      WorldPacketLogger.logEquipmentDebug(character.name, "Character will appear naked until equipment is resolved");
     }
 
     // Initialize skills (like C# skills = GameResources.Current.Skills.GetJobSkills)
@@ -518,7 +576,7 @@ export default class Handler extends PacketHandler {
         try {
           // Get or create WorldMap instance - in a full implementation, this should be
           // managed by a map manager to ensure single instance per map
-          const worldMap = new WorldMap(mapProperties);
+          const worldMap = new WorldMap(mapProperties, gameResources);
           const layer = worldMap.getDefaultLayer();
 
           // Set player's map reference
@@ -737,6 +795,36 @@ export default class Handler extends PacketHandler {
       // Set player as spawned (like C# User.Player.IsSpawned = true)
       player.isSpawned = true;
 
+      // === CRITICAL INSIGHT: Equipment should be visible immediately from AddObject ===
+      // Test hypothesis: Don't send DoEquip packets, equipment should render from AddObject data
+      this.logger.info(`[EQUIPMENT TEST] Skipping DoEquip packets - testing AddObject-only equipment rendering...`);
+
+      // Log current equipment state for debugging
+      this.logger.info(`[EQUIPMENT TEST] Equipment in AddObject should be visible:`);
+      if (player.inventory) {
+        for (let slot = 0; slot < 31; slot++) {
+          const item = player.inventory.getEquippedItem(slot);
+          if (item) {
+            const itemName = item.Properties?.name || 'Unknown';
+            const itemId = item.Properties?.id || item.Id;
+            this.logger.info(`[EQUIPMENT TEST] Slot ${slot}: ${itemName} (ID: ${itemId}) should be visible`);
+          }
+        }
+      }
+
+      // DISABLED: Send visible NPCs and monsters to the player
+      // if (player.mapLayer) {
+      //   try {
+      //     this.logger.info(`Sending visible objects to ${character.name}...`);
+      //     const visibleObjects = player.mapLayer.getVisibleObjects(player);
+      //     this.logger.info(`Found ${visibleObjects.length} visible objects for ${character.name}`);
+      //     // ... rest of object sending code ...
+      //   } catch (error) {
+      //     this.logger.error(`Failed to send visible objects to ${character.name}: ${error}`);
+      //   }
+      // }
+      this.logger.info(`[DISABLED] Skipping NPC/monster spawning for ${character.name} - focusing on character equipment`);
+
       this.logger.success(
         `✓ Character ${character.name} (ID: ${character.id}) joined world server successfully! AuthKey: ${this.authKey}, Channel: ${this.channelId}`
       );
@@ -746,6 +834,94 @@ export default class Handler extends PacketHandler {
         `Failed to send JOIN response for ${character.name}: ${error}`
       );
       return this.userConnection.disconnect();
+    }
+  }
+
+  /**
+   * Send DoEquip snapshots for all equipped items to make them visually render
+   * Critical: C++ client requires DoEquip snapshots to actually show equipment
+   * FIXED: Send as individual SNAPSHOT packets, not embedded in JOIN
+   */
+  private sendEquipmentSnapshots(player: Player): void {
+    try {
+      if (!player.inventory) {
+        this.logger.warn(`[EQUIPMENT] Player ${player.name} has no inventory - skipping equipment snapshots`);
+        return;
+      }
+
+      let equipmentCount = 0;
+      const maxParts = 31; // ItemPartType 0-30
+
+      // CRITICAL FIX: Send individual DoEquip packets for each equipped item
+      for (let partSlot = 0; partSlot < maxParts; partSlot++) {
+        const equippedItem = player.inventory.getEquippedItem(partSlot);
+        if (equippedItem) {
+          try {
+            // Create standalone DoEquip packet (not snapshot)
+            const itemName = equippedItem.Properties?.name || 'Unknown';
+            const itemId = equippedItem.Properties?.id || equippedItem.Id;
+            const refineLevel = equippedItem.Refine || 0;
+
+            // Build DoEquip packet with correct structure
+            const doEquipPacket = new ServerPacket();
+
+            // Write packet type for SNAPSHOT
+            doEquipPacket.writeUInt32LE(PacketType.SNAPSHOT);
+
+            // Write DPID (player connection ID)
+            doEquipPacket.writeUInt32LE(0);
+
+            // Write snapshot count (1 snapshot)
+            doEquipPacket.writeUInt16LE(1);
+
+            // Write snapshot header: ObjectID + SnapshotType + ObjectType + ObjectIndex
+            doEquipPacket.writeUInt32LE(player.objectId);  // Object ID
+            doEquipPacket.writeUInt16LE(SnapshotType.DO_EQUIP); // Snapshot type (0x0006)
+            doEquipPacket.writeByte(5);  // Object type (OT_MOVER = 5)
+            doEquipPacket.writeUInt32LE(player.objectId);  // Object index
+
+            // Write DoEquip data
+            doEquipPacket.writeByte(partSlot);                    // Equipment slot (ItemPartType 0-30)
+            doEquipPacket.writeUInt32LE(0);                       // Guild id
+            doEquipPacket.writeByte(1);                           // Equipped state (1 = equipped)
+            doEquipPacket.writeUInt32LE(itemId);                  // Item ID
+            doEquipPacket.writeUInt32LE(refineLevel);             // Refine level
+            doEquipPacket.writeUInt32LE(0);                       // Item flags
+            doEquipPacket.writeUInt32LE(partSlot);                // Part type (same as slot)
+
+            // Send the individual DoEquip packet
+            const finalizedPacket = doEquipPacket.finalize();
+            this.userConnection.sendBuffer(finalizedPacket, PacketType.SNAPSHOT);
+
+            equipmentCount++;
+            this.logger.info(`[EQUIPMENT FIXED] ✓ Sent DoEquip packet for ${itemName} (ID: ${itemId}) in slot ${partSlot}`);
+
+            // Log to file for debugging
+            WorldPacketLogger.logEquipmentDebug(
+              player.name,
+              `DoEquip FIXED packet sent for slot ${partSlot}`,
+              {
+                itemName,
+                itemId,
+                slot: partSlot,
+                refineLevel,
+                packetSize: finalizedPacket.length
+              }
+            );
+          } catch (error) {
+            this.logger.error(`[EQUIPMENT] Failed to send DoEquip packet for slot ${partSlot}: ${error}`);
+          }
+        }
+      }
+
+      this.logger.success(`[EQUIPMENT FIXED] ✓ Sent ${equipmentCount} individual DoEquip packets to ${player.name} for visual equipment rendering`);
+
+      if (equipmentCount === 0) {
+        this.logger.warn(`[EQUIPMENT] No equipped items found for ${player.name} - character will appear naked`);
+      }
+
+    } catch (error) {
+      this.logger.error(`[EQUIPMENT] Failed to send equipment packets to ${player.name}: ${error}`);
     }
   }
 }

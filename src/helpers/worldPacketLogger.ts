@@ -239,4 +239,47 @@ export class WorldPacketLogger {
 
     fs.appendFileSync(this.logFilePath, logEntry);
   }
+
+  // === EQUIPMENT DEBUG LOGGING ===
+
+  public static logEquipmentDebug(characterName: string, message: string, data?: any): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    let logEntry = `[${timestamp}] EQUIPMENT_DEBUG | ${characterName} | ${message}`;
+
+    if (data !== undefined) {
+      logEntry += ` | Data: ${JSON.stringify(data, null, 2)}`;
+    }
+
+    logEntry += '\n';
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logEquipmentLoading(characterName: string, equipmentCount: number, equipmentData: any[]): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] EQUIPMENT_LOADING | ${characterName} | Found ${equipmentCount} equipment items | Data: ${JSON.stringify(equipmentData, null, 2)}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logEquipmentItem(characterName: string, itemName: string, itemId: number, slot: number, inventorySlot: number): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] EQUIPMENT_ITEM | ${characterName} | ${itemName} (ID: ${itemId}) | Part Slot: ${slot} | Inventory Slot: ${inventorySlot}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
+
+  public static logEquipmentSnapshot(characterName: string, equippedItemsCount: number, inventoryItemsMap: any, equipmentSlotData: any[]): void {
+    this.initialize();
+
+    const timestamp = this.formatTimestamp();
+    const logEntry = `[${timestamp}] EQUIPMENT_SNAPSHOT | ${characterName} | Equipped Items Count: ${equippedItemsCount} | Inventory Items Map: ${JSON.stringify(inventoryItemsMap)} | Equipment Slot Data (0-30): ${JSON.stringify(equipmentSlotData)}\n`;
+
+    fs.appendFileSync(this.logFilePath, logEntry);
+  }
 }

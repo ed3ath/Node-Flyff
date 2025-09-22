@@ -4,6 +4,7 @@ import { MapLayer } from "./mapLayer";
 import { MapProperties } from "./mapProperties";
 import { MapRevivalRegion } from "../properties/mapRevivalRegionProperties";
 import { Vector3 } from "../../abstract/vector3";
+import { GameResources } from "../../interfaces/resource";
 
 export class WorldMap {
   private static readonly FrameRate: number = 67;
@@ -14,6 +15,7 @@ export class WorldMap {
   private _defaultMapLayer: MapLayer;
   private _mapLayerIdGenerator: number = 1;
   private _cancelled = false;
+  private _gameResources: GameResources | null = null;
 
   public properties: MapProperties;
 
@@ -33,10 +35,11 @@ export class WorldMap {
     this._cancelled = value;
   }
 
-  public constructor(properties: MapProperties) {
+  public constructor(properties: MapProperties, gameResources?: GameResources) {
     this._logger = new Logger("World Map");
     this.properties = properties;
-    this._defaultMapLayer = new MapLayer(this, this._mapLayerIdGenerator++);
+    this._gameResources = gameResources || null;
+    this._defaultMapLayer = new MapLayer(this, this._mapLayerIdGenerator++, this._gameResources || undefined);
 
     this._layers.push(this._defaultMapLayer);
 
