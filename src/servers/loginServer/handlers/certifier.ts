@@ -89,32 +89,32 @@ export default class Handler extends PacketHandler {
 
     this.logger.info(`Sending server list to ${this.username} with ${clusters.length} clusters`);
 
-    packet.writeInt32LE(0); // Authentication key
+    packet.writeInt32(0); // Authentication key
     packet.writeByte(1);
-    packet.writeStringLE(this.username);
-    packet.writeInt32LE(_.sumBy(clusters, "channels.length") + clusters.length);
+    packet.writeString(this.username);
+    packet.writeInt32(_.sumBy(clusters, "channels.length") + clusters.length);
 
     _.forEach(clusters, (cluster: ICluster, i: number) => {
       const clusterId = i + 1;
-      packet.writeInt32LE(-1); // Parent server id
-      packet.writeInt32LE(clusterId); // cluster id
-      packet.writeStringLE(cluster.name);
+      packet.writeInt32(-1); // Parent server id
+      packet.writeInt32(clusterId); // cluster id
+      packet.writeString(cluster.name);
       // Send cluster server host - client will connect to cluster server for character management
-      packet.writeStringLE(cluster.host);
-      packet.writeInt32LE(0); // b18 ?
-      packet.writeInt32LE(0); // Connected count
-      packet.writeInt32LE(cluster.enabled ? 1 : 0);
-      packet.writeInt32LE(0); // Maximum users
+      packet.writeString(cluster.host);
+      packet.writeInt32(0); // b18 ?
+      packet.writeInt32(0); // Connected count
+      packet.writeInt32(cluster.enabled ? 1 : 0);
+      packet.writeInt32(0); // Maximum users
 
       _.forEach(cluster.channels, (channel: IChannel, j) => {
-        packet.writeInt32LE(clusterId); // cluster id
-        packet.writeInt32LE(channel.id as number); // channel id
-        packet.writeStringLE(channel.name);
-        packet.writeStringLE(channel.host);
-        packet.writeInt32LE(0); // b18 ?
-        packet.writeInt32LE(channel.currentUsers);
-        packet.writeInt32LE(channel.enabled ? 1 : 0);
-        packet.writeInt32LE(channel.maxUsers);
+        packet.writeInt32(clusterId); // cluster id
+        packet.writeInt32(channel.id as number); // channel id
+        packet.writeString(channel.name);
+        packet.writeString(channel.host);
+        packet.writeInt32(0); // b18 ?
+        packet.writeInt32(channel.currentUsers);
+        packet.writeInt32(channel.enabled ? 1 : 0);
+        packet.writeInt32(channel.maxUsers);
       });
     });
     return this.send(packet);

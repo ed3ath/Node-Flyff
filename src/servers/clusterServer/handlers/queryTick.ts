@@ -8,7 +8,7 @@ export default class Handler extends PacketHandler {
   time: number;
   constructor(packet: FlyffPacket) {
     super();
-    this.time = packet.readInt32LE();
+    this.time = packet.readInt32();
     console.log(packet.buffer.toString('hex'))
   }
 
@@ -16,8 +16,8 @@ export default class Handler extends PacketHandler {
     const packet = new FlyffPacket(PacketType.QUERY_TICK_COUNT);
     const serverStartTime = this.server.time || new Date().getTime();
     const elapsed = new Date().getTime() - serverStartTime;
-    packet.writeUInt32LE(this.time);
-    packet.writeInt64LE(elapsed);
+    packet.writeUInt32(this.time);
+    packet.writeInt64(elapsed);
     this.send(packet);
   }
 }

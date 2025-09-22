@@ -18,7 +18,7 @@ export default class AddObjHandler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.objectId = packet.readInt32LE();
+    this.objectId = packet.readInt32();
   }
 
   async execute(): Promise<void> {

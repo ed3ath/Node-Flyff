@@ -45,8 +45,8 @@ export default class Handler extends PacketHandler {
     this.gender = packet.readByte();
     this.job = packet.readByte();
     this.headMesh = packet.readByte();
-    this.bankPin = packet.readInt32LE();
-    this.authKey = packet.readInt32LE();
+    this.bankPin = packet.readInt32();
+    this.authKey = packet.readInt32();
   }
 
   async execute(): Promise<void> {

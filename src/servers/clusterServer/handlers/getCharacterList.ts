@@ -18,11 +18,11 @@ export default class Handler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.msgVer = packet.readStringLE();
-    this.authKey = packet.readInt32LE();
-    this.username = packet.readStringLE();
-    this.password = packet.readStringLE();
-    this.channelId = packet.readInt32LE();
+    this.msgVer = packet.readString();
+    this.authKey = packet.readInt32();
+    this.username = packet.readString();
+    this.password = packet.readString();
+    this.channelId = packet.readInt32();
   }
 
   async execute(): Promise<void> {
@@ -72,7 +72,7 @@ export default class Handler extends PacketHandler {
 
   sendChannelIp(ip: string) {
     const packet = new FlyffPacket(PacketType.CACHE_ADDR);
-    packet.writeStringLE(ip);
+    packet.writeString(ip);
     return this.send(packet);
   }
 
@@ -80,7 +80,7 @@ export default class Handler extends PacketHandler {
     const numpadId = Math.floor(Math.random() * uNumPad.length);
     await this.server.redisClient.setNumpadId(this.username, numpadId);
     const packet = new FlyffPacket(PacketType.LOGIN_PROTECT_NUMPAD);
-    packet.writeUInt32LE(numpadId);
+    packet.writeUInt32(numpadId);
     this.send(packet);
   }
 }

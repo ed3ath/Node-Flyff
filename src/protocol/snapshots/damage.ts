@@ -30,8 +30,8 @@ export class DamageSnapshot extends FlyffSnapshot {
     this.writeInt32(0);            // Attacker ID (0 if environmental damage)
 
     // Write damage position offset for floating text
-    this.writeSingleLE(0);         // X offset
-    this.writeSingleLE(0);         // Y offset
-    this.writeSingleLE(0);         // Z offset
+    this.writeSingle(0);         // X offset
+    this.writeSingle(0);         // Y offset
+    this.writeSingle(0);         // Z offset
   }
 }

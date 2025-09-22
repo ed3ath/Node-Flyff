@@ -38,10 +38,10 @@ export class QueryPlayerDataSnapshot extends FlyffSnapshot {
     this.writeInt32((player.gold as any)?.amount || 0);
 
     // Write position info
-    this.writeSingleLE(player.position.x);
-    this.writeSingleLE(player.position.y);
-    this.writeSingleLE(player.position.z);
-    this.writeSingleLE(player.rotationAngle || 0);
+    this.writeSingle(player.position.x);
+    this.writeSingle(player.position.y);
+    this.writeSingle(player.position.z);
+    this.writeSingle(player.rotationAngle || 0);
 
     // Write map ID
     this.writeInt32((player as any).mapId || player.map?.id || 1);

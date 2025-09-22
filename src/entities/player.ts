@@ -21,6 +21,11 @@ import { PacketType } from "../protocol/packetType";
 import { SnapshotType } from "../protocol/snapshotType";
 import { PlayerDataService } from "../services/playerDataService";
 import { WorldObject } from "../game/world/worldObject";
+import { ItemContainer, ItemContainerSlot, ItemCreationResult } from "../game/mechanics/itemContainer";
+import { UpdateItemType } from "../types/updateItemType";
+import { Inventory } from "../game/mechanics/inventory";
+import { UpdateParamPointSnapshot } from "../protocol/snapshots/updateParamPoint";
+import { DefineAttributes } from "../game/definitions/defineAttributes";
 
 // Interfaces for Player components
 interface HumanVisualAppearance {
@@ -31,64 +36,51 @@ interface HumanVisualAppearance {
   skinSetId?: number;
 }
 
-class Inventory {
-  static readonly INVENTORY_SIZE = 42;
-  static readonly INVENTORY_EQUIP_PARTS = 31;
-
-  private items: Map<number, Item> = new Map();
-
-  constructor(private readonly owner: Player) {}
-
-  getRange(start: number, count: number): Array<{ item: Item | null }> {
-    const result: Array<{ item: Item | null }> = [];
-    for (let i = start; i < start + count; i++) {
-      result.push({ item: this.items.get(i) || null });
-    }
-    return result;
-  }
-
-  createItem(item: Item): number {
-    // Find first available slot
-    for (let i = 0; i < Inventory.INVENTORY_SIZE; i++) {
-      if (!this.items.has(i)) {
-        this.items.set(i, item);
-        return i;
-      }
-    }
-    return -1; // No space available
-  }
-
-  getEquippedItems(): Item[] {
-    return this.getRange(Inventory.INVENTORY_SIZE, Inventory.INVENTORY_EQUIP_PARTS)
-      .map(slot => slot.item)
-      .filter(item => item !== null) as Item[];
-  }
-
-  getEquippedItem(partType: ItemPartType): Item | null {
-    const slotIndex = Inventory.INVENTORY_SIZE + partType;
-    return this.items.get(slotIndex) || null;
-  }
-}
 
 class Gold {
-  private amount: number = 0;
+  private _amount: number = 0;
 
-  constructor(private readonly owner: Player) {}
+  constructor(private readonly _player: Player) {}
 
-  get value(): number {
-    return this.amount;
+  get amount(): number {
+    return this._amount;
+  }
+
+  initialize(initialGoldAmount: number): void {
+    this._amount = initialGoldAmount;
   }
 
   increase(amount: number): boolean {
     if (amount <= 0) return false;
-    this.amount += amount;
+
+    // Check for overflow - cast to long equivalent (use bigint for large numbers)
+    const gold = BigInt(this._amount) + BigInt(amount);
+    const maxValue = BigInt(2147483647); // int.MaxValue
+
+    if (gold > maxValue || gold < 0) {
+      this._player.sendDefinedText(DefineText.TID_GAME_TOOMANYMONEY_USE_PERIN, "");
+      return false;
+    }
+
+    this._amount = Number(gold);
+    this.sendUpdatedGold();
+    this._player.sendDefinedText(DefineText.TID_GAME_REAPMONEY,
+      `${amount.toLocaleString()},${this._amount.toLocaleString()}`);
+
     return true;
   }
 
   decrease(amount: number): boolean {
-    if (amount <= 0 || this.amount < amount) return false;
-    this.amount -= amount;
+    if (amount <= 0) return false;
+
+    this._amount = Math.max(this._amount - amount, 0);
+    this.sendUpdatedGold();
     return true;
+  }
+
+  private sendUpdatedGold(): void {
+    const goldUpdateSnapshot = new UpdateParamPointSnapshot(this._player, DefineAttributes.DST_GOLD, this._amount);
+    this._player.send(goldUpdateSnapshot);
   }
 }
 
@@ -168,7 +160,7 @@ export class Player extends Mover {
   public readonly loggedInAt: Date;
   public readonly slot: number;
   public readonly authority: AuthorityType;
-  public readonly appearance: HumanVisualAppearance;
+  public readonly appearence: HumanVisualAppearance;
   public readonly inventory: Inventory;
   public readonly gold: Gold;
   public readonly experience: Experience;
@@ -178,7 +170,7 @@ export class Player extends Mover {
 
   public job: JobProperties;
   public deathLevel: number = 0;
-  public mode: ModeType[] = [];
+  public mode: ModeType = ModeType.NONE;
   public availablePoints: number = 0;
   public skillPoints: number = 0;
   public currentShopName: string = '';
@@ -193,9 +185,9 @@ export class Player extends Mover {
       slot: number;
       authority: AuthorityType;
       job: JobProperties;
-      appearance: HumanVisualAppearance;
+      appearence: HumanVisualAppearance;
       deathLevel?: number;
-      mode?: ModeType[];
+      mode?: ModeType;
       availablePoints?: number;
       skillPoints?: number;
     }
@@ -207,9 +199,9 @@ export class Player extends Mover {
     this.slot = playerData.slot;
     this.authority = playerData.authority;
     this.job = playerData.job;
-    this.appearance = playerData.appearance;
+    this.appearence = playerData.appearence;
     this.deathLevel = playerData.deathLevel || 0;
-    this.mode = playerData.mode || [];
+    this.mode = playerData.mode || ModeType.NONE;
     this.availablePoints = playerData.availablePoints || 0;
     this.skillPoints = playerData.skillPoints || 0;
 
@@ -300,7 +292,7 @@ export class Player extends Mover {
   }
 
   public resetStatistics(): void {
-    const defaultCharacter = this.appearance.gender === GenderType.Male ?
+    const defaultCharacter = this.appearence.gender === GenderType.Male ?
       GameOptions.Current.DefaultCharacter.Man :
       GameOptions.Current.DefaultCharacter.Woman;
 
@@ -391,9 +383,6 @@ export class Player extends Mover {
     this.sendToVisible(chatSnapshot, true);
 
     console.log(`💬 Player ${this.name} spoke: "${message}" (${ChatType[chatType]})`);
-
-    // Dispose the snapshot (for C# compatibility pattern)
-    chatSnapshot.dispose();
   }
 
   /**
@@ -434,6 +423,11 @@ export class Player extends Mover {
     // const snapshot = new DefinedTextSnapshot(this, textId, params);
     // this.send(snapshot);
   }
+
+  public motion(motionEnum: ObjectMessageType): void {
+    const motionSnapshot = new MotionSnapshot(this as Mover, motionEnum);
+    this.sendToVisible(motionSnapshot, true);
+  }
   
   public pickupItem(mapItem: MapItemObject, sendPickupMotion = true): void {
     if (mapItem.owner && mapItem.owner !== this) {
@@ -446,7 +440,7 @@ export class Player extends Mover {
     if (mapItem.isGold) {
       itemPickedUp = this.gold.increase(mapItem.item.Quantity);
     } else {
-      itemPickedUp = this.inventory.createItem(mapItem.item) > -1;
+      itemPickedUp = this.inventory.createItemWithNotification(mapItem.item) > 0;
       this.sendDefinedText(DefineText.TID_GAME_REAPITEM, `"${mapItem.item.Name}"`);
     }
 

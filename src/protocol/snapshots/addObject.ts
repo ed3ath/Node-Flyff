@@ -19,17 +19,17 @@ export class AddObjectSnapshot extends FlyffSnapshot {
     let modelId = worldObject.properties?.id || (worldObject as any).id || worldObject.objectId;
     if (worldObject instanceof Player) {
       // Use gender-based model ID like C# (11 for male, 12 for female)
-      modelId = worldObject.appearance?.gender === 1 ? 12 : 11;
+      modelId = worldObject.appearence?.gender === 1 ? 12 : 11;
     }
     this.writeInt32(modelId);
 
     // Write position
-    this.writeSingleLE(worldObject.position.x);
-    this.writeSingleLE(worldObject.position.y);
-    this.writeSingleLE(worldObject.position.z);
+    this.writeSingle(worldObject.position.x);
+    this.writeSingle(worldObject.position.y);
+    this.writeSingle(worldObject.position.z);
 
     // Write rotation angle
-    this.writeSingleLE(worldObject.rotationAngle || 0);
+    this.writeSingle(worldObject.rotationAngle || 0);
 
     // Write movement state and mode
     this.writeByte(0); // Motion (0 = standing)
@@ -48,11 +48,11 @@ export class AddObjectSnapshot extends FlyffSnapshot {
     if (worldObject instanceof Player) {
       // Write player-specific data
       this.writeString(worldObject.name);
-      this.writeByte(worldObject.appearance?.gender || 0);
-      this.writeInt32(worldObject.appearance?.skinSetId || 0);
-      this.writeInt32(worldObject.appearance?.hairId || 0);
-      this.writeInt32(worldObject.appearance?.hairColor || 0);
-      this.writeInt32(worldObject.appearance?.faceId || 0);
+      this.writeByte(worldObject.appearence?.gender || 0);
+      this.writeInt32(worldObject.appearence?.skinSetId || 0);
+      this.writeInt32(worldObject.appearence?.hairId || 0);
+      this.writeInt32(worldObject.appearence?.hairColor || 0);
+      this.writeInt32(worldObject.appearence?.faceId || 0);
       this.writeInt32(worldObject.job?.id || 0);
 
       // Write player stats
@@ -117,14 +117,14 @@ export class AddObjectSnapshot extends FlyffSnapshot {
     }
 
     // Write velocity/movement data
-    this.writeSingleLE(0); // Velocity X
-    this.writeSingleLE(0); // Velocity Y
-    this.writeSingleLE(0); // Velocity Z
+    this.writeSingle(0); // Velocity X
+    this.writeSingle(0); // Velocity Y
+    this.writeSingle(0); // Velocity Z
 
     // Write destination if moving
-    this.writeSingleLE(worldObject.position.x); // Dest X (same as current for stationary)
-    this.writeSingleLE(worldObject.position.y); // Dest Y
-    this.writeSingleLE(worldObject.position.z); // Dest Z
+    this.writeSingle(worldObject.position.x); // Dest X (same as current for stationary)
+    this.writeSingle(worldObject.position.y); // Dest Y
+    this.writeSingle(worldObject.position.z); // Dest Z
 
     // Log AddObjectSnapshot details for debugging
     if (worldObject instanceof Player) {

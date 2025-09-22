@@ -28,10 +28,10 @@ export abstract class AbstractSnapshot extends FlyffPacket {
 
     // Write snapshot packet structure:
     // Reserved (4 bytes) + Count (2 bytes) + ObjectId (4 bytes) + SnapshotType (2 bytes)
-    this.writeInt32LE(0); // Reserved
-    this.writeInt16LE(1); // Count (always 1 for single snapshot)
-    this.writeUInt32LE(objectId); // Object ID
-    this.writeInt16LE(snapshotType); // Snapshot Type
+    this.writeInt32(0); // Reserved
+    this.writeInt16(1); // Count (always 1 for single snapshot)
+    this.writeUInt32(objectId); // Object ID
+    this.writeInt16(snapshotType); // Snapshot Type
 
     // Note: writeSnapshotData() will be called manually by subclasses after super()
   }

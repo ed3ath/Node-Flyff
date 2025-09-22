@@ -17,15 +17,15 @@ export default class Handler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.worldId = packet.readInt32LE();
-    this.playerId = packet.readInt32LE();
-    this.authKey = packet.readInt32LE();
-    this.partyId = packet.readInt32LE();
-    this.guildId = packet.readInt32LE();
-    this.warId = packet.readInt32LE();
-    this.multiId = packet.readInt32LE();
-    this.slot = packet.readInt32LE();
-    this.playerName = packet.readStringLE();
+    this.worldId = packet.readInt32();
+    this.playerId = packet.readInt32();
+    this.authKey = packet.readInt32();
+    this.partyId = packet.readInt32();
+    this.guildId = packet.readInt32();
+    this.warId = packet.readInt32();
+    this.multiId = packet.readInt32();
+    this.slot = packet.readInt32();
+    this.playerName = packet.readString();
   }
 
   async execute(): Promise<void> {

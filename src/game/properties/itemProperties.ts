@@ -53,98 +53,99 @@ export class ItemProperties {
   public attackSkillMax: number;
   public params: ReadonlyMap<DefineAttributes, number>;
 
-  constructor(
-    version: number,
-    id: number,
-    identifierName: string,
-    name: string,
-    nameKey: string,
-    packMax: number,
-    itemKind1: ItemKind1,
-    itemKind2: ItemKind2,
-    itemKind3: ItemKind3,
-    itemJob: DefineJob,
-    itemSex: number,
-    cost: number,
-    limitLevel: number,
-    parts: ItemPartType,
-    abilityMin: number,
-    abilityMax: number,
-    element: ElementType,
-    level: number,
-    rare: number,
-    attackSpeed: number,
-    destParam1: string,
-    destParam2: string,
-    destParam3: string,
-    adjustParam1: number,
-    adjustParam2: number,
-    adjustParam3: number,
-    circleTime: number,
-    isUseable: boolean,
-    sfxObject: number,
-    sfxObject2: number,
-    sfxObject3: number,
-    sfxObject4: number,
-    sfxObject5: number,
-    isPermanant: boolean,
-    coolTime: number,
-    weaponTypeId: number,
-    itemAtkOrder1: number,
-    itemAtkOrder2: number,
-    itemAtkOrder3: number,
-    itemAtkOrder4: number,
-    skillReadyType: number,
-    weaponKind: WeaponKindType,
-    attackSkillMin: number,
-    attackSkillMax: number,
-    params: ReadonlyMap<DefineAttributes, number>
-  ) {
-    this.version = version;
-    this.id = id;
-    this.identifierName = identifierName;
-    this.name = name;
-    this.nameKey = nameKey;
-    this.packMax = packMax;
-    this.itemKind1 = itemKind1;
-    this.itemKind2 = itemKind2;
-    this.itemKind3 = itemKind3;
-    this.itemJob = itemJob;
-    this.itemSex = itemSex;
-    this.cost = cost;
-    this.limitLevel = limitLevel;
-    this.parts = parts;
-    this.abilityMin = abilityMin;
-    this.abilityMax = abilityMax;
-    this.element = element;
-    this.level = level;
-    this.rare = rare;
-    this.attackSpeed = attackSpeed;
-    this.destParam1 = destParam1;
-    this.destParam2 = destParam2;
-    this.destParam3 = destParam3;
-    this.adjustParam1 = adjustParam1;
-    this.adjustParam2 = adjustParam2;
-    this.adjustParam3 = adjustParam3;
-    this.circleTime = circleTime;
-    this.isUseable = isUseable;
-    this.sfxObject = sfxObject;
-    this.sfxObject2 = sfxObject2;
-    this.sfxObject3 = sfxObject3;
-    this.sfxObject4 = sfxObject4;
-    this.sfxObject5 = sfxObject5;
-    this.isPermanant = isPermanant;
-    this.coolTime = coolTime;
-    this.weaponTypeId = weaponTypeId;
-    this.itemAtkOrder1 = itemAtkOrder1;
-    this.itemAtkOrder2 = itemAtkOrder2;
-    this.itemAtkOrder3 = itemAtkOrder3;
-    this.itemAtkOrder4 = itemAtkOrder4;
-    this.skillReadyType = skillReadyType;
-    this.weaponKind = weaponKind;
-    this.attackSkillMin = attackSkillMin;
-    this.attackSkillMax = attackSkillMax;
-    this.params = params;
+  constructor(config: {
+    id: number;
+    name: string;
+    identifierName: string;
+    parts: ItemPartType;
+    isStackable?: boolean;
+    packMax?: number;
+    limitLevel?: number;
+    itemSex?: number;
+    itemJob?: DefineJob;
+    itemKind2?: ItemKind2;
+    itemKind3?: ItemKind3;
+    isUseable?: boolean;
+    coolTime?: number;
+    version?: number;
+    nameKey?: string;
+    itemKind1?: ItemKind1;
+    cost?: number;
+    abilityMin?: number;
+    abilityMax?: number;
+    element?: ElementType;
+    level?: number;
+    rare?: number;
+    attackSpeed?: number;
+    destParam1?: string;
+    destParam2?: string;
+    destParam3?: string;
+    adjustParam1?: number;
+    adjustParam2?: number;
+    adjustParam3?: number;
+    circleTime?: number;
+    sfxObject?: number;
+    sfxObject2?: number;
+    sfxObject3?: number;
+    sfxObject4?: number;
+    sfxObject5?: number;
+    isPermanant?: boolean;
+    weaponTypeId?: number;
+    itemAtkOrder1?: number;
+    itemAtkOrder2?: number;
+    itemAtkOrder3?: number;
+    itemAtkOrder4?: number;
+    skillReadyType?: number;
+    weaponKind?: WeaponKindType;
+    attackSkillMin?: number;
+    attackSkillMax?: number;
+    params?: ReadonlyMap<DefineAttributes, number>;
+  }) {
+    this.version = config.version || 0;
+    this.id = config.id;
+    this.identifierName = config.identifierName;
+    this.name = config.name;
+    this.nameKey = config.nameKey || '';
+    this.packMax = config.packMax || (config.isStackable ? 999 : 1);
+    this.itemKind1 = config.itemKind1 || ItemKind1.GENERAL;
+    this.itemKind2 = config.itemKind2 || ItemKind2.GENERAL;
+    this.itemKind3 = config.itemKind3 || ItemKind3.GENERAL;
+    this.itemJob = config.itemJob || DefineJob.JOB_VAGRANT;
+    this.itemSex = config.itemSex || -1;
+    this.cost = config.cost || 0;
+    this.limitLevel = config.limitLevel || 0;
+    this.parts = config.parts;
+    this.abilityMin = config.abilityMin || 0;
+    this.abilityMax = config.abilityMax || 0;
+    this.element = config.element || ElementType.None;
+    this.level = config.level || 0;
+    this.rare = config.rare || 0;
+    this.attackSpeed = config.attackSpeed || 0;
+    this.destParam1 = config.destParam1 || '';
+    this.destParam2 = config.destParam2 || '';
+    this.destParam3 = config.destParam3 || '';
+    this.adjustParam1 = config.adjustParam1 || 0;
+    this.adjustParam2 = config.adjustParam2 || 0;
+    this.adjustParam3 = config.adjustParam3 || 0;
+    this.circleTime = config.circleTime || 0;
+    this.isUseable = config.isUseable || false;
+    this.sfxObject = config.sfxObject || 0;
+    this.sfxObject2 = config.sfxObject2 || 0;
+    this.sfxObject3 = config.sfxObject3 || 0;
+    this.sfxObject4 = config.sfxObject4 || 0;
+    this.sfxObject5 = config.sfxObject5 || 0;
+    this.isPermanant = config.isPermanant || false;
+    this.coolTime = config.coolTime || 0;
+    this.weaponTypeId = config.weaponTypeId || 0;
+    this.itemAtkOrder1 = config.itemAtkOrder1 || 0;
+    this.itemAtkOrder2 = config.itemAtkOrder2 || 0;
+    this.itemAtkOrder3 = config.itemAtkOrder3 || 0;
+    this.itemAtkOrder4 = config.itemAtkOrder4 || 0;
+    this.skillReadyType = config.skillReadyType || 0;
+    this.weaponKind = config.weaponKind || WeaponKindType.General;
+    this.attackSkillMin = config.attackSkillMin || 0;
+    this.attackSkillMax = config.attackSkillMax || 0;
+    this.params = config.params || new Map();
   }
 
   public get weaponType(): WeaponType {

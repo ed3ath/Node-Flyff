@@ -21,11 +21,11 @@ export default class Handler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.username = packet.readStringLE();
-    this.password = packet.readStringLE();
-    this.passwordConfirm = packet.readStringLE();
-    this.characterId = packet.readInt32LE();
-    this.authKey = packet.readInt32LE();
+    this.username = packet.readString();
+    this.password = packet.readString();
+    this.passwordConfirm = packet.readString();
+    this.characterId = packet.readInt32();
+    this.authKey = packet.readInt32();
   }
 
   async execute(): Promise<void> {

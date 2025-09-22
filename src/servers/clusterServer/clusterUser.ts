@@ -206,44 +206,44 @@ export class ClusterUser extends FFUserConnection {
     const characters = this.getCharacterList();
 
     const packet = new FlyffPacket(PacketType.CHARACTER_LIST);
-    packet.writeInt32LE(authenticationKey);
-    packet.writeInt32LE(characters.length);
+    packet.writeInt32(authenticationKey);
+    packet.writeInt32(characters.length);
 
     for (const character of characters) {
-      packet.writeInt32LE(character.Slot);
-      packet.writeInt32LE(character.Id);
-      packet.writeInt32LE(character.MapId);
-      packet.writeInt32LE(0x0b + character.Gender); // Model id
-      packet.writeStringLE(character.Name);
-      packet.writeSingleLE(character.PositionX);
-      packet.writeSingleLE(character.PositionY);
-      packet.writeSingleLE(character.PositionZ);
-      packet.writeInt32LE(character.Id);
-      packet.writeInt32LE(0); // Party id
-      packet.writeInt32LE(0); // Guild id
-      packet.writeInt32LE(0); // War Id
-      packet.writeInt32LE(character.SkinSetId);
-      packet.writeInt32LE(character.HairId);
+      packet.writeInt32(character.Slot);
+      packet.writeInt32(character.Id);
+      packet.writeInt32(character.MapId);
+      packet.writeInt32(0x0b + character.Gender); // Model id
+      packet.writeString(character.Name);
+      packet.writeSingle(character.PositionX);
+      packet.writeSingle(character.PositionY);
+      packet.writeSingle(character.PositionZ);
+      packet.writeInt32(character.Id);
+      packet.writeInt32(0); // Party id
+      packet.writeInt32(0); // Guild id
+      packet.writeInt32(0); // War Id
+      packet.writeInt32(character.SkinSetId);
+      packet.writeInt32(character.HairId);
       packet.writeUInt32(character.HairColor);
-      packet.writeInt32LE(character.FaceId);
+      packet.writeInt32(character.FaceId);
       packet.writeByte(character.Gender);
-      packet.writeInt32LE(character.JobId);
-      packet.writeInt32LE(character.Level);
-      packet.writeInt32LE(0); // Job Level (Maybe master or hero ?)
-      packet.writeInt32LE(character.Strength);
-      packet.writeInt32LE(character.Stamina);
-      packet.writeInt32LE(character.Dexterity);
-      packet.writeInt32LE(character.Intelligence);
-      packet.writeInt32LE(0); // Mode
+      packet.writeInt32(character.JobId);
+      packet.writeInt32(character.Level);
+      packet.writeInt32(0); // Job Level (Maybe master or hero ?)
+      packet.writeInt32(character.Strength);
+      packet.writeInt32(character.Stamina);
+      packet.writeInt32(character.Dexterity);
+      packet.writeInt32(character.Intelligence);
+      packet.writeInt32(0); // Mode
 
-      packet.writeInt32LE(character.EquippedItems.length);
+      packet.writeInt32(character.EquippedItems.length);
 
       for (const itemId of character.EquippedItems) {
-        packet.writeInt32LE(itemId);
+        packet.writeInt32(itemId);
       }
     }
 
-    packet.writeInt32LE(0);
+    packet.writeInt32(0);
     this.send(packet);
   }
 
@@ -252,7 +252,7 @@ export class ClusterUser extends FFUserConnection {
    */
   public sendChannelIpAddress(channelIp: string): void {
     const packet = new FlyffPacket(PacketType.CACHE_ADDR);
-    packet.writeStringLE(channelIp);
+    packet.writeString(channelIp);
     this.send(packet);
   }
 
@@ -261,7 +261,7 @@ export class ClusterUser extends FFUserConnection {
    */
   public sendLoginProtect(): void {
     const packet = new FlyffPacket(PacketType.LOGIN_PROTECT_NUMPAD);
-    packet.writeInt32LE(this._loginProtectValue);
+    packet.writeInt32(this._loginProtectValue);
     this.send(packet);
   }
 
@@ -272,7 +272,7 @@ export class ClusterUser extends FFUserConnection {
     this._loginProtectValue = Math.floor(Math.random() * 1000);
 
     const packet = new FlyffPacket(PacketType.LOGIN_PROTECT_CERT);
-    packet.writeInt32LE(this._loginProtectValue);
+    packet.writeInt32(this._loginProtectValue);
     this.send(packet);
   }
 
@@ -281,7 +281,7 @@ export class ClusterUser extends FFUserConnection {
    */
   public sendPong(time: number): void {
     const packet = new FlyffPacket(PacketType.PING);
-    packet.writeInt32LE(time);
+    packet.writeInt32(time);
     this.send(packet);
   }
 
@@ -290,8 +290,8 @@ export class ClusterUser extends FFUserConnection {
    */
   public sendQueryTickCount(time: number): void {
     const packet = new FlyffPacket(PacketType.QUERY_TICK_COUNT);
-    packet.writeUInt32LE(time);
-    packet.writeUInt32LE(Date.now()); // Current elapsed time
+    packet.writeUInt32(time);
+    packet.writeUInt32(Date.now()); // Current elapsed time
     this.send(packet);
   }
 

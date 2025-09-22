@@ -9,7 +9,7 @@ export default class Handler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.characterId = packet.readInt32LE();
+    this.characterId = packet.readInt32();
   }
 
   async execute(): Promise<void> {

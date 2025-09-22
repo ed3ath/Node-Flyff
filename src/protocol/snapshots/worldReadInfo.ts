@@ -8,9 +8,9 @@ export class WorldReadInfoSnapshot extends FlyffSnapshot {
 
     // Write world ID and position (client expects: DWORD dwWorldId + D3DXVECTOR3 vPos)
     this.writeInt32((player as any).mapId || player.map?.id || 1); // World/Map ID
-    this.writeSingleLE(player.position.x);
-    this.writeSingleLE(player.position.y);
-    this.writeSingleLE(player.position.z);
+    this.writeSingle(player.position.x);
+    this.writeSingle(player.position.y);
+    this.writeSingle(player.position.z);
     // Note: Client only expects worldId + position(x,y,z), no rotation angle here
   }
 }

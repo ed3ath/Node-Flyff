@@ -6,7 +6,6 @@ import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
 import Account from "../../../database/account";
 import Character from "../../../database/character";
-import { FFRandom } from "../../../helpers/FFRandom";
 import { uNumPad } from "../../../helpers/numPad";
 
 @SetPacketType(PacketType.PRE_JOIN)
@@ -19,10 +18,10 @@ export default class Handler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
     console.log(packet.buffer.toString("hex"));
-    this.username = packet.readStringLE();
-    this.characterId = packet.readInt32LE();
-    this.characterName = packet.readStringLE();
-    this.secretNum = packet.readInt32LE();
+    this.username = packet.readString();
+    this.characterId = packet.readInt32();
+    this.characterName = packet.readString();
+    this.secretNum = packet.readInt32();
   }
 
   async execute(): Promise<void> {
@@ -141,7 +140,7 @@ export default class Handler extends PacketHandler {
     this.logger.info(`Sending PLAYER_ID with authKey: ${authKey} for character ID: ${characterId}`);
 
     const packet = new FlyffPacket(PacketType.PLAYER_ID);
-    packet.writeInt32LE(authKey);
+    packet.writeInt32(authKey);
     this.send(packet);
 
     this.logger.success(`Sent PLAYER_ID with authKey: ${authKey} - client should now connect to world server`);
@@ -186,8 +185,8 @@ export default class Handler extends PacketHandler {
     }
 
     const packet = new FlyffPacket(PacketType.LOGIN_PROTECT_CERT);
-    packet.writeInt32LE(success ? 1 : 0);
-    packet.writeUInt32LE(numpadId);
+    packet.writeInt32(success ? 1 : 0);
+    packet.writeUInt32(numpadId);
     this.send(packet);
 
     this.logger.info(`Sent LOGIN_PROTECT_CERT packet with success=${success ? 1 : 0}, numpadId=${numpadId}`);

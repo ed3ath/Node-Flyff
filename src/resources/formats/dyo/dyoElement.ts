@@ -31,10 +31,10 @@ export class DyoElement {
     this.scale.x = streamReader.readSingle();
     this.scale.y = streamReader.readSingle();
     this.scale.z = streamReader.readSingle();
-    this.type = streamReader.readInt32LE();
-    this.index = streamReader.readInt32LE();
-    this.motion = streamReader.readInt32LE();
-    this.iaInterface = streamReader.readInt32LE();
-    this.ia2 = streamReader.readInt32LE();
+    this.type = streamReader.readInt32();
+    this.index = streamReader.readInt32();
+    this.motion = streamReader.readInt32();
+    this.iaInterface = streamReader.readInt32();
+    this.ia2 = streamReader.readInt32();
   }
 }

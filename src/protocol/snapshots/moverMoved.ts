@@ -13,16 +13,16 @@ export class MoverMovedSnapshot extends FlyffSnapshot {
     super(SnapshotType.MOVERMOVED, mover.objectId);
 
     // Write movement data for other players
-    this.writeSingleLE(position.x); // New position X
-    this.writeSingleLE(position.y); // New position Y
-    this.writeSingleLE(position.z); // New position Z
-    this.writeSingleLE(angle);      // New rotation angle
+    this.writeSingle(position.x); // New position X
+    this.writeSingle(position.y); // New position Y
+    this.writeSingle(position.z); // New position Z
+    this.writeSingle(angle);      // New rotation angle
 
     // Write movement flags
     this.writeByte(0); // Motion type (0 = walking, 1 = running, 2 = flying)
     this.writeByte(0); // Movement state flags
 
     // Write turn angle (for smooth client interpolation)
-    this.writeSingleLE(angle);
+    this.writeSingle(angle);
   }
 }

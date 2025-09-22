@@ -17,7 +17,7 @@ export class DyoFile {
 
     while (streamReader.position < streamReader.buffer.length) {
       let rgnElement: DyoElement | null = null;
-      const type = streamReader.readUInt32LE();
+      const type = streamReader.readUInt32();
 
       switch (type) {
         case WorldObjectType.Control:

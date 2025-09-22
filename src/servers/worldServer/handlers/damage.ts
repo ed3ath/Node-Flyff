@@ -20,10 +20,10 @@ export default class DamageHandler extends PacketHandler {
 
   constructor(packet: FlyffPacket) {
     super();
-    this.targetId = packet.readInt32LE();
-    this.damage = packet.readInt32LE();
+    this.targetId = packet.readInt32();
+    this.damage = packet.readInt32();
     this.damageType = packet.readByte();
-    this.attackerId = packet.readInt32LE();
+    this.attackerId = packet.readInt32();
   }
 
   async execute(): Promise<void> {

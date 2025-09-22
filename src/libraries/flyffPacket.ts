@@ -33,26 +33,26 @@ export class FlyffPacket extends BinaryStream {
           // Form #1 - Login server packets:
           // [5E] [int] Length hash [int] Packet length [int] Data hash [int] Command
           this.position += 4; // Skip length hash
-          this.DataLength = this.readUInt32LE(); // Read packet length
+          this.DataLength = this.readUInt32(); // Read packet length
           this.position += 4; // Skip data hash
-          this.PacketType = this.readUInt32LE(); // Read command
+          this.PacketType = this.readUInt32(); // Read command
         } else {
           // Form #2 - Cluster/World server packets:
           // [5E] [int] Length hash [int] Packet length [int] Data hash [int] -1 (0xFFFFFFFF) [int] Command
           this.position += 4; // Skip length hash
-          this.DataLength = this.readUInt32LE(); // Read packet length
+          this.DataLength = this.readUInt32(); // Read packet length
           this.position += 4; // Skip data hash
 
           // Check for the -1 (0xFFFFFFFF) marker
-          const marker = this.readUInt32LE();
+          const marker = this.readUInt32();
           if (marker === 0xffffffff) {
             // This is a Form #2 packet, read the command
-            this.PacketType = this.readUInt32LE();
+            this.PacketType = this.readUInt32();
           } else {
             // This might be a different packet format or the marker is the command
             // Step back and treat this value as the command
             this.position -= 4;
-            this.PacketType = this.readUInt32LE();
+            this.PacketType = this.readUInt32();
           }
           // After parsing the first packet, check if there are more commands in the remaining data
           this.parseCompositePackets(login);
@@ -62,7 +62,7 @@ export class FlyffPacket extends BinaryStream {
       this.PacketType = bufferOrHeader;
       this.writeByte(FlyffPacket.FLYFF_HEADER_NUMBER);
       this.writeUInt32(0);
-      this.writeUInt32LE(bufferOrHeader);
+      this.writeUInt32(bufferOrHeader);
     } else {
       this.writeByte(FlyffPacket.FLYFF_HEADER_NUMBER);
       this.writeUInt32(0);
@@ -89,7 +89,7 @@ export class FlyffPacket extends BinaryStream {
   }
 
   readString() {
-    const stringLength = this.readInt32LE();
+    const stringLength = this.readInt32();
     const stringBytes = this.readBytes(Number(stringLength));
     return BinaryStream.STRING_DECODER.decode(stringBytes);
   }
@@ -97,12 +97,6 @@ export class FlyffPacket extends BinaryStream {
   writeString(value: string = "") {
     const stringBytes = BinaryStream.STRING_ENCODER.encode(value);
     this.writeInt32(stringBytes.length);
-    this.writeBytes(stringBytes as Buffer);
-  }
-
-  writeStringLE(value: string = "") {
-    const stringBytes = BinaryStream.STRING_ENCODER.encode(value);
-    this.writeInt32LE(stringBytes.length);
     this.writeBytes(stringBytes as Buffer);
   }
 
@@ -230,3 +224,4 @@ export class FlyffPacket extends BinaryStream {
     return this.compositePackets.length > 1;
   }
 }
+
