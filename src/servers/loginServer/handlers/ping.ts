@@ -1,4 +1,4 @@
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
@@ -11,7 +11,7 @@ export default class Handler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
     try {
-      this.time = packet.readInt32LE();
+      this.time = packet.readInt32();
       this.timedOut = false;
     } catch {
       this.time = 0;

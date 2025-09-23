@@ -1,7 +1,7 @@
 import clc from "cli-color";
 import moment from "moment";
 
-import { ServerType } from "../common/serverType";
+import { ServerType } from "../types/serverType";
 
 export class Logger {
   private readonly sender: ServerType | string = "MAIN";
@@ -12,6 +12,7 @@ export class Logger {
     error: clc.red,
     success: clc.green,
     main: clc.magenta,
+    debug: clc.blue,
   };
 
   constructor(sender: ServerType | string) {
@@ -36,6 +37,10 @@ export class Logger {
 
   public main(...message: any[]): void {
     this.log("main", ...message);
+  }
+
+  public debug(...message: any[]): void {
+    this.log("debug", ...message);
   }
 
   private log(level: string = "main", ...message: any[]) {

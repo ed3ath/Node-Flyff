@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import { ElementType } from "../common/elementType";
+import { ElementType } from "../types/elementType";
 
 @Entity("Item")
 export default class ItemEntity extends BaseEntity {

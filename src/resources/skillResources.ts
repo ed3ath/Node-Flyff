@@ -1,6 +1,6 @@
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
 
 import { Logger } from "../helpers/logger";
@@ -125,26 +125,41 @@ export class SkillResources {
 
   public async loadDefines(): Promise<void> {
     const absolutePath = path.resolve(ResourcePaths.defineSkill);
+    this.logger.info(`Loading skill defines from: ${absolutePath}`);
+
     if (!fs.existsSync(absolutePath)) {
       this.logger.error(
         `Unable to load skills. Reason: cannot find '${absolutePath}' file.`
       );
+      return;
     }
 
+    this.logger.info(`Found skill defines file, reading contents...`);
     const data = fs.readFileSync(absolutePath, "utf8");
-
     const lines = data.split("\n");
+    this.logger.info(`Processing ${lines.length} lines from skill defines file`);
+
+    let defineCount = 0;
     _.forEach(lines, async (line) => {
       if (_.trim(line).startsWith("#define")) {
         const parts = _.trim(line).split(/\s+/);
         const id = tryParseInt(parts[2]);
         const name = parts[1];
 
+        this.logger.info(`Processing define: ${line.trim()}`);
+        this.logger.info(`Parts: [${parts.join(', ')}], id: ${id}, name: ${name}`);
+
         if (!_.isNaN(id) && name !== "") {
           await this.redisClient.hset("skillDefines", name, id);
+          defineCount++;
+          this.logger.info(`Added define: ${name} = ${id}`);
+        } else {
+          this.logger.warn(`Skipped invalid define: id=${id}, name='${name}'`);
         }
       }
     });
+
+    this.logger.main(`Loaded ${defineCount} skill defines into Redis`);
   }
 
   public async loadSkillsPropStrings(): Promise<void> {
@@ -240,94 +255,121 @@ export class SkillResources {
 
     this.logger.main(`${lines.length} skills loaded.`);
   }
+public async loadSkillsProp(): Promise<void> {
+  const absolutePath = path.resolve(ResourcePaths.skillsProp);
+  this.logger.info(`Loading skills from: ${absolutePath}`);
 
-  public async loadSkillsProp(): Promise<void> {
-    const absolutePath = path.resolve(ResourcePaths.skillsProp);
-    if (!fs.existsSync(absolutePath)) {
-      this.logger.warn(
-        `Unable to load skills. Reason: cannot find '${absolutePath}' file.`
-      );
+  if (!fs.existsSync(absolutePath)) {
+    this.logger.warn(
+      `Unable to load skills. Reason: cannot find '${absolutePath}' file.`
+    );
+    return;
+  }
+
+  if (!(await this.redisClient.exists("skillDefines"))) {
+    this.logger.warn(`Unable to load skills. Reason: skill defines is empty`);
+    return;
+  }
+
+  await this.cleanCache(); // clean cache
+  this.logger.info("Cache cleaned, loading skill data...");
+
+  const data = fs.readFileSync(absolutePath, "utf16le");
+  const lines = data.split("\n");
+  this.logger.info(`Processing ${lines.length} lines from skills file`);
+
+  let loadedCount = 0;
+  for (const line of lines) {
+    if (!line.trim()) continue; // Skip empty lines
+
+    const skills = line.trim().split("\t");
+    this.logger.info(`Processing line with ${skills.length} columns`);
+
+    if (skills.length < 2) {
+      this.logger.warn(`Skipping invalid line: insufficient columns`);
+      continue;
     }
-    if (!(await this.redisClient.exists("skillDefines"))) {
-      this.logger.warn(`Unable to load skills. Reason: skill defines is empty`);
-    }
 
-    await this.cleanCache(); // clean cache
+    const id = await this.redisClient.hget("skillDefines", skills[1]);
+    this.logger.info(`Looking up skill ID for '${skills[1]}': ${id}`);
 
-    const data = fs.readFileSync(absolutePath, "utf8");
+    if (!_.isNil(id)) {
+      const szName =
+        (await this.redisClient.hget("skillNames", cleanString(skills[2]))) ||
+        "";
+      this.logger.info(`Skill name: '${szName}'`);
 
-    const lines = data.split("\n");
-    _.forEach(lines, async (line) => {
-      const skills = line.trim().split("\t");
+      const szComment =
+        (await this.redisClient.hget(
+          "skillDescriptions",
+          cleanString(skills[123])
+        )) || "";
 
-      const id = await this.redisClient.hget("skillDefines", skills[1]);
+      const skillLevels = this.whereLevel((skill) => skill.dwName === szName);
+      this.logger.info(`Found ${skillLevels.length} skill levels for '${szName}'`);
 
-      if (!_.isNil(id)) {
-        const szName =
-          (await this.redisClient.hget("skillNames", cleanString(skills[2]))) ||
-          "";
-        const szComment =
-          (await this.redisClient.hget(
-            "skillDescriptions",
-            cleanString(skills[123])
-          )) || "";
-        const skillLevels = this.whereLevel((skill) => skill.dwName === szName);
-        // TODO skill parse properties
-        const skill: SkillProperties = {
-          id: tryParseInt(id),
-          ver: tryParseInt(skills[0]),
-          dwID: skills[1],
-          szName,
-          szNameId: cleanString(skills[2]),
-          dwItemKind1: cleanString(skills[5]),
-          dwItemKind2: cleanString(skills[6]),
-          dwItemKind3: cleanString(skills[7]),
-          dwLinkKind: cleanString(skills[29]),
-          dwLinkKindBullet: cleanString(skills[28]),
-          eItemType: cleanString(skills[32]),
-          tmContinuousPain: tryParseInt(skills[44]),
-          dwReqDisLV: tryParseInt(skills[70]),
-          dwReSkill1: tryParseInt(skills[71]),
-          dwReSkillLevel1: tryParseInt(skills[72]),
-          dwReSkill2: tryParseInt(skills[73]),
-          dwReSkillLevel2: tryParseInt(skills[74]),
-          dwSkillReady: tryParseInt(skills[75]),
-          dwSfxObj: cleanString(skills[79]),
-          dwSfxObj2: cleanString(skills[80]),
-          dwSfxObj3: cleanString(skills[81]),
-          dwSfxObj4: cleanString(skills[82]),
-          dwSfxObj5: cleanString(skills[83]),
-          ExpertMax: tryParseInt(skills[105]),
-          dwSkillType: cleanString(skills[97]),
-          dwSpellRegion: cleanString(skills[89]),
-          dwSpellType: cleanString(skills[90]),
-          dwExeTarget: cleanString(skills[87]),
-          dwReferStat1: cleanString(skills[91]),
-          dwReferStat2: cleanString(skills[92]),
-          dwReferTarget1: cleanString(skills[93]),
-          dwReferValue1: tryParseInt(skills[95]),
-          dwReferTarget2: cleanString(skills[94]),
-          dwReferValue2: tryParseInt(skills[96]),
-          szComment,
-          skillLevels,
-        };
+      // TODO skill parse properties
+      const skill: SkillProperties = {
+        id: tryParseInt(id),
+        ver: tryParseInt(skills[0]),
+        dwID: skills[1],
+        szName,
+        szNameId: cleanString(skills[2]),
+        dwItemKind1: cleanString(skills[5]),
+        dwItemKind2: cleanString(skills[6]),
+        dwItemKind3: cleanString(skills[7]),
+        dwLinkKind: cleanString(skills[29]),
+        dwLinkKindBullet: cleanString(skills[28]),
+        eItemType: cleanString(skills[32]),
+        tmContinuousPain: tryParseInt(skills[44]),
+        dwReqDisLV: tryParseInt(skills[70]),
+        dwReSkill1: tryParseInt(skills[71]),
+        dwReSkillLevel1: tryParseInt(skills[72]),
+        dwReSkill2: tryParseInt(skills[73]),
+        dwReSkillLevel2: tryParseInt(skills[74]),
+        dwSkillReady: tryParseInt(skills[75]),
+        dwSfxObj: cleanString(skills[79]),
+        dwSfxObj2: cleanString(skills[80]),
+        dwSfxObj3: cleanString(skills[81]),
+        dwSfxObj4: cleanString(skills[82]),
+        dwSfxObj5: cleanString(skills[83]),
+        ExpertMax: tryParseInt(skills[105]),
+        dwSkillType: cleanString(skills[97]),
+        dwSpellRegion: cleanString(skills[89]),
+        dwSpellType: cleanString(skills[90]),
+        dwExeTarget: cleanString(skills[87]),
+        dwReferStat1: cleanString(skills[91]),
+        dwReferStat2: cleanString(skills[92]),
+        dwReferTarget1: cleanString(skills[93]),
+        dwReferValue1: tryParseInt(skills[95]),
+        dwReferTarget2: cleanString(skills[94]),
+        dwReferValue2: tryParseInt(skills[96]),
+        szComment,
+        skillLevels,
+      };
 
-        if (skill.skillLevels) {
-          for (const skillLevel of Object.values(skill.skillLevels)) {
-            if (skillLevel.dwCooldown <= 0) {
-              skillLevel.dwCooldown = skill.dwSkillReady;
-            }
+      if (skill.skillLevels) {
+        for (const skillLevel of Object.values(skill.skillLevels)) {
+          if (skillLevel.dwCooldown <= 0) {
+            skillLevel.dwCooldown = skill.dwSkillReady;
           }
         }
-
-        if (skill.id) {
-          this.redisClient.hmset(`skill:${skill.id}`, skill);
-        }
       }
-    });
 
-    this.logger.main(`${lines.length} skills loaded.`);
+      if (skill.id) {
+        this.logger.info(`Storing skill ${skill.id} (${skill.szName}) in Redis`);
+        await this.redisClient.hmset(`skill:${skill.id}`, skill);
+        loadedCount++;
+      } else {
+        this.logger.warn(`Skipping skill with invalid ID: ${skill.id}`);
+      }
+    } else {
+      this.logger.warn(`No define found for skill: '${skills[1]}'`);
+    }
   }
+
+  this.logger.main(`${loadedCount} skills loaded successfully.`);
+}
 
   parseSkillProperties(data: { [key: string]: string }): SkillProperties {
     // TODO skill parse properties

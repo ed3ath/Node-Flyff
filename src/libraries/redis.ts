@@ -60,12 +60,16 @@ export class RedisClient implements IRedisClient {
   }
 
   async getCluster(clusterName: string): Promise<ICluster | null> {
-    const cluster: any = await this.client.hgetall(
-      clusterName?.includes("cluster:") ? clusterName : `cluster:${clusterName}`
-    );
+    const key = clusterName?.includes("cluster:") ? clusterName : `cluster:${clusterName}`;
+    // this.logger.info(`getCluster called for: ${clusterName}, Redis key: ${key}`);
+    const cluster: any = await this.client.hgetall(key);
+    // this.logger.info(`Raw cluster data from Redis:`, JSON.stringify(cluster));
+
     let channels: IChannel[] = [];
     if (cluster.channels) {
+      // this.logger.info(`Parsing channels JSON: ${cluster.channels}`);
       const channelDataArray = JSON.parse(cluster.channels);
+      // this.logger.info(`Parsed channel data array:`, JSON.stringify(channelDataArray));
       channels = _.map(channelDataArray, (channelData: IChannel) => ({
         id: channelData.id,
         name: channelData.name,
@@ -74,8 +78,12 @@ export class RedisClient implements IRedisClient {
         maxUsers: channelData.maxUsers,
         currentUsers: channelData.currentUsers,
         enabled: channelData.enabled,
+        lastPing: channelData.lastPing,
         pkEnabled: channelData.pkEnabled,
       }));
+      // this.logger.info(`Mapped channels:`, JSON.stringify(channels));
+    } else {
+      this.logger.warn(`No channels found in cluster data`);
     }
 
     if (!_.isNil(cluster) && !_.isEmpty(cluster)) {
@@ -92,16 +100,25 @@ export class RedisClient implements IRedisClient {
   }
 
   async getAllChannels(clusterName: string): Promise<IChannel[]> {
+    // this.logger.info(`getAllChannels called for cluster: ${clusterName}`);
     const cluster = await this.getCluster(clusterName);
-    return cluster?.channels || [];
+    // this.logger.info(`getCluster returned:`, JSON.stringify(cluster));
+    const channels = cluster?.channels || [];
+    // this.logger.info(`Returning channels:`, JSON.stringify(channels));
+    return channels;
   }
 
   async insertChannel(clusterName: string, channel: IChannel): Promise<void> {
+    // this.logger.info(`insertChannel called: cluster=${clusterName}, channel=${JSON.stringify(channel)}`);
     const clusterData = await this.getCluster(clusterName);
+    // this.logger.info(`Cluster data before insert:`, JSON.stringify(clusterData));
     const clusterKey = `cluster:${clusterName}`;
 
     if (clusterData) {
-      if (_.some(clusterData.channels, (i) => i.name === channel.name)) return;
+      if (_.some(clusterData.channels, (i) => i.name === channel.name)) {
+        this.logger.warn(`Channel ${channel.name} already exists in cluster ${clusterName}, skipping insert`);
+        return;
+      }
       const channelData = {
         id: channel.id,
         name: channel.name,
@@ -114,13 +131,21 @@ export class RedisClient implements IRedisClient {
         pkEnabled: channel.pkEnabled,
       };
       clusterData.channels.push(channelData);
-      await this.client.hmset(clusterKey, {
+      // this.logger.info(`Updated cluster data with new channel:`, JSON.stringify(clusterData));
+
+      const dataToStore = {
         ...clusterData,
         channels:
           typeof clusterData.channels === "object"
             ? JSON.stringify(clusterData.channels)
             : clusterData.channels,
-      });
+      };
+      // this.logger.info(`Storing to Redis key ${clusterKey}:`, JSON.stringify(dataToStore));
+
+      await this.client.hmset(clusterKey, dataToStore);
+      this.logger.info(`Successfully stored channel to Redis`);
+    } else {
+      this.logger.error(`Cluster ${clusterName} not found, cannot insert channel`);
     }
   }
 
@@ -230,5 +255,33 @@ export class RedisClient implements IRedisClient {
   async deleteCharacterSession(sessionKey: number): Promise<void> {
     const key = `session:${sessionKey}`;
     await this.client.del(key);
+  }
+
+  async setUserAuthState(username: string, authState: {authenticated: boolean, authKey: number, timestamp: number, sessionId: number}): Promise<void> {
+    const key = `auth:${username}`;
+    await this.client.hmset(key, {
+      authenticated: authState.authenticated ? 'true' : 'false',
+      authKey: authState.authKey.toString(),
+      timestamp: authState.timestamp.toString(),
+      sessionId: authState.sessionId.toString()
+    });
+    // Set expiration to 5 minutes
+    await this.client.expire(key, 300);
+  }
+
+  async getUserAuthState(username: string): Promise<{authenticated: boolean, authKey: number, timestamp: number, sessionId: number} | null> {
+    const key = `auth:${username}`;
+    const authData = await this.client.hgetall(key);
+
+    if (!authData || Object.keys(authData).length === 0) {
+      return null;
+    }
+
+    return {
+      authenticated: authData.authenticated === 'true',
+      authKey: parseInt(authData.authKey, 10),
+      timestamp: parseInt(authData.timestamp, 10),
+      sessionId: parseInt(authData.sessionId, 10)
+    };
   }
 }

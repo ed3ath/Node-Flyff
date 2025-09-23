@@ -1,6 +1,6 @@
-import { AttackType } from "../common/attackType";
-import { ObjectMessageType } from "../common/objectMessageType";
-import { SkillType } from "../common/skillType";
+import { AttackType } from "../types/attackType";
+import { ObjectMessageType } from "../types/objectMessageType";
+import { SkillType } from "../types/skillType";
 
 export function toObjectMessageType(attackType: AttackType): ObjectMessageType {
   switch (attackType) {

@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import {
   buildEncryptionKeyFromString,
   decryptByteArray,
@@ -8,10 +8,9 @@ import {
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
-import { ErrorType } from "../../../common/errorType";
+import { ErrorType } from "../../../types/errorType";
 import { IChannel, ICluster } from "../../../interfaces/cluster";
 import Account from "../../../database/account";
-import { uNumPad } from "../../../helpers/numPad";
 
 @SetPacketType(PacketType.CERTIFY)
 export default class Handler extends PacketHandler {
@@ -24,6 +23,8 @@ export default class Handler extends PacketHandler {
     this.msgVersion = packet.readString();
     this.username = packet.readString();
     this.passwordByte = packet.readBytes(16 * 42);
+
+    console.log(this.msgVersion, this.username, this.passwordByte)
   }
 
   async execute(): Promise<void> {
@@ -40,7 +41,7 @@ export default class Handler extends PacketHandler {
       16
     );
     const password = decryptByteArray(this.passwordByte, key);
-    const database = this.server?.instance?.getEntity("account");
+    const database = this.server?.instance?.getEntity("Account");
 
     const account = (await database?.findOne({
       where: {
@@ -65,6 +66,21 @@ export default class Handler extends PacketHandler {
       await account.save();
       this.userConnection.userId = account.id;
       this.userConnection.username = account.username;
+
+      // Store authentication state in Redis for cluster server validation
+      const authKey = Math.floor(Math.random() * 0x7FFFFFFF) + 1;
+      this.userConnection.authKey = authKey;
+
+      await this.server.redisClient.setUserAuthState(account.username, {
+        authenticated: true,
+        authKey: authKey,
+        timestamp: Date.now(),
+        sessionId: this.userConnection.sessionId
+      });
+
+      this.logger.info(`Stored authentication state for user: ${account.username} with authKey: ${authKey}`);
+
+      // Send server list after successful authentication
       await this.sendServerList();
     }
   }
@@ -73,34 +89,37 @@ export default class Handler extends PacketHandler {
     const packet = new FlyffPacket(PacketType.SERVER_LIST);
     const clusters = await this.server.redisClient.getAllClusters();
 
-    packet.writeInt32LE(0); // Authentication key
+    this.logger.info(`Sending server list to ${this.username} with ${clusters.length} clusters`);
+
+    packet.writeInt32(0); // Authentication key
     packet.writeByte(1);
-    packet.writeStringLE(this.username);
-    packet.writeInt32LE(_.sumBy(clusters, "channels.length") + clusters.length);
+    packet.writeString(this.username);
+    packet.writeInt32(_.sumBy(clusters, "channels.length") + clusters.length);
 
     _.forEach(clusters, (cluster: ICluster, i: number) => {
-      // cluster.channels = []
       const clusterId = i + 1;
-      packet.writeInt32LE(-1); // Parent server id
-      packet.writeInt32LE(clusterId); // cluster id
-      packet.writeStringLE(cluster.name);
-      packet.writeStringLE(cluster.host);
-      packet.writeInt32LE(0); // b18 ?
-      packet.writeInt32LE(0); // Connected count
-      packet.writeInt32LE(cluster.enabled ? 1 : 0);
-      packet.writeInt32LE(0); // Maximum users
+      packet.writeInt32(-1); // Parent server id
+      packet.writeInt32(clusterId); // cluster id
+      packet.writeString(cluster.name);
+      // Send cluster server host - client will connect to cluster server for character management
+      packet.writeString(cluster.host);
+      packet.writeInt32(0); // b18 ?
+      packet.writeInt32(0); // Connected count
+      packet.writeInt32(cluster.enabled ? 1 : 0);
+      packet.writeInt32(0); // Maximum users
 
       _.forEach(cluster.channels, (channel: IChannel, j) => {
-        packet.writeInt32LE(clusterId); // cluster id
-        packet.writeInt32LE(channel.id as number); // channel id
-        packet.writeStringLE(channel.name);
-        packet.writeStringLE(channel.host);
-        packet.writeInt32LE(0); // b18 ?
-        packet.writeInt32LE(channel.currentUsers);
-        packet.writeInt32LE(channel.enabled ? 1 : 0);
-        packet.writeInt32LE(channel.maxUsers);
+        packet.writeInt32(clusterId); // cluster id
+        packet.writeInt32(channel.id as number); // channel id
+        packet.writeString(channel.name);
+        packet.writeString(channel.host);
+        packet.writeInt32(0); // b18 ?
+        packet.writeInt32(channel.currentUsers);
+        packet.writeInt32(channel.enabled ? 1 : 0);
+        packet.writeInt32(channel.maxUsers);
       });
     });
     return this.send(packet);
   }
+
 }

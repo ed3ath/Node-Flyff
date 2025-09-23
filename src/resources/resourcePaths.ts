@@ -1,4 +1,4 @@
-import path from "path";
+import * as path from "path";
 
 const resPath = path.join(__dirname, "res");
 

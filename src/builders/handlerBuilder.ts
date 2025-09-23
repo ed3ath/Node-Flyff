@@ -3,9 +3,9 @@ import { join } from "path";
 import _ from "lodash";
 
 import { HandlerConstructor } from "../libraries/packetHandler";
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 import { Logger } from "../helpers/logger";
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 
 export class HandlerBuilder {
   private logger: Logger;
@@ -50,7 +50,7 @@ export class HandlerBuilder {
     );
   }
 
-  build(): Map<PacketType, HandlerConstructor> {    
+  build(): Map<PacketType, HandlerConstructor> {
     this.logger.main(this.handlers.size, "handlers loaded");
     return this.handlers;
   }

@@ -1,9 +1,9 @@
-import { PacketType } from "../common/packetType";
-import { ServerType } from "../common/serverType";
+import { PacketType } from "../protocol/packetType";
+import { ServerType } from "../types/serverType";
 import { TcpServer } from "../libraries/tcpServer";
 import { HandlerConstructor } from "../libraries/packetHandler";
 import { Logger } from "../helpers/logger";
-import { BuilderType } from "../common/builderType";
+import { BuilderType } from "../types/builderType";
 import { Redis, RedisOptions } from "ioredis";
 import { IRedisClient } from "../interfaces/redis";
 import { IConfig } from "../interfaces/config";

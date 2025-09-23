@@ -1,23 +1,23 @@
-import { Attributes } from "../abstract/attributes";
-import { AttackResult } from "../abstract/battle/attackResult";
-import { Buffs } from "../abstract/buffs";
-import { Defense } from "../abstract/defense";
+import { Attributes } from "../game/mechanics/attributes";
+import { AttackResult } from "../game/battle/attackResult";
+import { Buffs } from "../game/mechanics/buffs";
+import { Defense } from "../game/mechanics/defense";
 import { Delayer } from "../abstract/delayer";
-import { Health } from "../abstract/health";
-import { Projectile } from "../abstract/projectile";
-import { ProjectileList } from "../abstract/projectileList";
-import { Statistics } from "../abstract/statistics";
+import { Health } from "../game/mechanics/health";
+import { Projectile } from "../game/mechanics/projectile";
+import { ProjectileList } from "../game/mechanics/projectileList";
+import { Statistics } from "../game/mechanics/statistics";
 import { Vector3 } from "../abstract/vector3";
-import { WorldObject } from "../abstract/worldObject";
-import { AttackFlags } from "../common/attackFlag";
-import { AttackType } from "../common/attackType";
-import { DefineAttributes } from "../common/defineAttributes";
-import { Item } from "../common/item";
-import { ModeType } from "../common/modeType";
-import { ObjectMessageType } from "../common/objectMessageType";
-import { ObjectState } from "../common/objectState";
-import { StateFlags } from "../common/stateFlags";
-import { WorldObjectType } from "../common/worldObjectType";
+import { WorldObject } from "../game/world/worldObject";
+import { AttackFlags } from "../types/attackFlag";
+import { AttackType } from "../types/attackType";
+import { DefineAttributes } from "../game/definitions/defineAttributes";
+import { Item } from "../game/mechanics/item";
+import { ModeType } from "../types/modeType";
+import { ObjectMessageType } from "../types/objectMessageType";
+import { ObjectState } from "../types/objectState";
+import { StateFlags } from "../types/stateFlags";
+import { WorldObjectType } from "../types/worldObjectType";
 import { isMeleeAttack } from "../helpers/rangeAttack";
 import { timeInSeconds } from "../helpers/time";
 import { MoverProperties } from "../interfaces/resource";
@@ -25,7 +25,6 @@ import { DestPositionSnapshot } from "../protocol/snapshots/destPosition";
 import { MotionSnapshot } from "../protocol/snapshots/motion";
 import { MoverSetDestObjectSnapshot } from "../protocol/snapshots/moverSetDestObject";
 import { MapItemObject } from "./mapItemObject";
-import { Player } from "./player";
 
 export class Mover extends WorldObject {
   public get type(): WorldObjectType {
@@ -60,7 +59,7 @@ export class Mover extends WorldObject {
 
   public get speed(): number {
     return (
-      (this.properties.fSpeed +
+      ((this.properties.fSpeed || 0.1) +
         this.attributes.get(DefineAttributes.DST_SPEED) / 100) *
       this.speedFactor
     );
@@ -222,7 +221,7 @@ export class Mover extends WorldObject {
     target: Mover,
     attackType: AttackType
   ): { success: boolean; attackResult?: AttackResult } {
-    if (this instanceof Player && this.mode.includes(ModeType.ONEKILL_MODE)) {
+    if ('mode' in this && Array.isArray(this.mode) && this.mode.includes(ModeType.ONEKILL_MODE)) {
       const attackResult: AttackResult = {
         damages: target.health.hp,
         flags: AttackFlags.AF_GENERIC,

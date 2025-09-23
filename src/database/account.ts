@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
 
-import { AuthorityType } from "../common/authorityType";
+import { AuthorityType } from "../types/authorityType";
 import CharacterEntity from "./character";
 
 

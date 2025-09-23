@@ -1,4 +1,4 @@
-import { DatabaseType } from "../common/databaseType";
+import { DatabaseType } from "../types/databaseType";
 
 export interface IDataSource {
     type: DatabaseType;

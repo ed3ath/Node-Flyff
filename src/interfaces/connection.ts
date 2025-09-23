@@ -1,14 +1,21 @@
-import { ErrorType } from './../common/errorType';
+import { ErrorType } from '../types/errorType';
 import { Socket } from "net";
 import { FlyffPacket } from "../libraries/flyffPacket";
-import { UserConnection } from "../libraries/tcpServer";
+import Character from "../database/character";
 
-export interface IUserConnection extends UserConnection {
+export interface IUserConnection {
   username: string | null;
   userId: number | null;
   sessionId: number;
   socket: Socket;
+  player: any; // Will be set to Player instance in world server
+  selectedCharacterId: number | null; // Track selected character
+  selectedCharacterName: string | null; // Track selected character name
+  authKey: number | null; // Track auth key for world server
   send(packet: FlyffPacket): void;
+  sendBuffer(buffer: Buffer, packetType?: number): void;
+  sendSnapshot(snapshot: any): void;
   sendError(errorType: ErrorType): void;
+  sendCharacterList(characters: Character[], authKey: number): void;
   disconnect(): void;
 }

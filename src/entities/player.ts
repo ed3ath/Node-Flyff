@@ -1,24 +1,31 @@
 import { Vector3 } from "../abstract/vector3";
-import { AuthorityType } from "../common/authorityType";
-import { DefineJob } from "../common/defineJob";
-import { DefineSpecialEffects } from "../common/defineSpecialEffects";
-import { DefineText } from "../common/defineText";
-import { GenderType } from "../common/genderType";
-import { MapItemType } from "../common/mapItemType";
-import { ModeType } from "../common/modeType";
-import { ObjectMessageType } from "../common/objectMessageType";
+import { AuthorityType } from "../types/authorityType";
+import { DefineJob } from "../game/definitions/defineJob";
+import { DefineSpecialEffects } from "../game/definitions/defineSpecialEffects";
+import { DefineText } from "../game/definitions/defineText";
+import { GenderType } from "../types/genderType";
+import { ItemPartType } from "../types/itemPartyType";
+import { MapItemType } from "../types/mapItemType";
+import { ModeType } from "../types/modeType";
+import { ObjectMessageType } from "../types/objectMessageType";
 import { MoverProperties, JobProperties } from "../interfaces/resource";
-import { UserConnection } from "../libraries/tcpServer";
+import { IUserConnection } from "../interfaces/connection";
 import { FlyffPacket } from "../libraries/flyffPacket";
 import { MotionSnapshot } from "../protocol/snapshots/motion";
-import { Item } from "../common/item";
+import { Item } from "../game/mechanics/item";
 import { Mover } from "./mover";
 import { MapItemObject } from "./mapItemObject";
-
-// Forward declaration to avoid circular dependency
-interface Monster extends Mover {
-  properties: MoverProperties;
-}
+import { QuestDiary } from "../game/mechanics/questDiary";
+import { ChatSnapshot, ChatType } from "../protocol/snapshots/chat";
+import { PacketType } from "../protocol/packetType";
+import { SnapshotType } from "../protocol/snapshotType";
+import { PlayerDataService } from "../services/playerDataService";
+import { WorldObject } from "../game/world/worldObject";
+import { ItemContainer, ItemContainerSlot, ItemCreationResult } from "../game/mechanics/itemContainer";
+import { UpdateItemType } from "../types/updateItemType";
+import { Inventory } from "../game/mechanics/inventory";
+import { UpdateParamPointSnapshot } from "../protocol/snapshots/updateParamPoint";
+import { DefineAttributes } from "../game/definitions/defineAttributes";
 
 // Interfaces for Player components
 interface HumanVisualAppearance {
@@ -29,59 +36,51 @@ interface HumanVisualAppearance {
   skinSetId?: number;
 }
 
-class Inventory {
-  static readonly INVENTORY_SIZE = 42;
-  static readonly INVENTORY_EQUIP_PARTS = 31;
-
-  private items: Map<number, Item> = new Map();
-
-  constructor(private readonly owner: Player) {}
-
-  getRange(start: number, count: number): Array<{ item: Item | null }> {
-    const result: Array<{ item: Item | null }> = [];
-    for (let i = start; i < start + count; i++) {
-      result.push({ item: this.items.get(i) || null });
-    }
-    return result;
-  }
-
-  createItem(item: Item): number {
-    // Find first available slot
-    for (let i = 0; i < Inventory.INVENTORY_SIZE; i++) {
-      if (!this.items.has(i)) {
-        this.items.set(i, item);
-        return i;
-      }
-    }
-    return -1; // No space available
-  }
-
-  getEquippedItems(): Item[] {
-    return this.getRange(Inventory.INVENTORY_SIZE, Inventory.INVENTORY_EQUIP_PARTS)
-      .map(slot => slot.item)
-      .filter(item => item !== null) as Item[];
-  }
-}
 
 class Gold {
-  private amount: number = 0;
+  private _amount: number = 0;
 
-  constructor(private readonly owner: Player) {}
+  constructor(private readonly _player: Player) {}
 
-  get value(): number {
-    return this.amount;
+  get amount(): number {
+    return this._amount;
+  }
+
+  initialize(initialGoldAmount: number): void {
+    this._amount = initialGoldAmount;
   }
 
   increase(amount: number): boolean {
     if (amount <= 0) return false;
-    this.amount += amount;
+
+    // Check for overflow - cast to long equivalent (use bigint for large numbers)
+    const gold = BigInt(this._amount) + BigInt(amount);
+    const maxValue = BigInt(2147483647); // int.MaxValue
+
+    if (gold > maxValue || gold < 0) {
+      this._player.sendDefinedText(DefineText.TID_GAME_TOOMANYMONEY_USE_PERIN, "");
+      return false;
+    }
+
+    this._amount = Number(gold);
+    this.sendUpdatedGold();
+    this._player.sendDefinedText(DefineText.TID_GAME_REAPMONEY,
+      `${amount.toLocaleString()},${this._amount.toLocaleString()}`);
+
     return true;
   }
 
   decrease(amount: number): boolean {
-    if (amount <= 0 || this.amount < amount) return false;
-    this.amount -= amount;
+    if (amount <= 0) return false;
+
+    this._amount = Math.max(this._amount - amount, 0);
+    this.sendUpdatedGold();
     return true;
+  }
+
+  private sendUpdatedGold(): void {
+    const goldUpdateSnapshot = new UpdateParamPointSnapshot(this._player, DefineAttributes.DST_GOLD, this._amount);
+    this._player.send(goldUpdateSnapshot);
   }
 }
 
@@ -108,10 +107,14 @@ class Experience {
 
 class Skill {
   constructor(
-    public readonly properties: any,
-    public level: number = 0,
+    public readonly Properties: any,
+    public Level: number = 0,
     public readonly player: Player
   ) {}
+
+  public get LevelProperties(): any {
+    return this.Properties?.skillLevels?.[this.Level];
+  }
 }
 
 class SkillTree {
@@ -126,24 +129,13 @@ class SkillTree {
   }
 
   setSkill(skill: Skill): void {
-    this.skills.set(skill.properties.id, skill);
+    this.skills.set(skill.Properties.id, skill);
   }
 
   getSkill(id: number): Skill | undefined {
     return this.skills.get(id);
   }
 }
-
-class QuestDiary {
-  private quests: Map<number, any> = new Map();
-
-  constructor(private readonly owner: Player) {}
-
-  onMonsterKilled(monster: Monster): void {
-    // TODO: Update quest progress based on killed monster
-  }
-}
-
 class Taskbar {
   private shortcuts: Map<number, any> = new Map();
 
@@ -168,7 +160,7 @@ export class Player extends Mover {
   public readonly loggedInAt: Date;
   public readonly slot: number;
   public readonly authority: AuthorityType;
-  public readonly appearance: HumanVisualAppearance;
+  public readonly appearence: HumanVisualAppearance;
   public readonly inventory: Inventory;
   public readonly gold: Gold;
   public readonly experience: Experience;
@@ -178,13 +170,14 @@ export class Player extends Mover {
 
   public job: JobProperties;
   public deathLevel: number = 0;
-  public mode: ModeType[] = [];
+  public mode: ModeType = ModeType.NONE;
   public availablePoints: number = 0;
   public skillPoints: number = 0;
   public currentShopName: string = '';
+  public lastUpdateTime: number = Date.now();
 
   public constructor(
-    private readonly _connection: UserConnection,
+    private readonly _connection: IUserConnection,
     properties: MoverProperties,
     playerData: {
       id: number;
@@ -192,9 +185,9 @@ export class Player extends Mover {
       slot: number;
       authority: AuthorityType;
       job: JobProperties;
-      appearance: HumanVisualAppearance;
+      appearence: HumanVisualAppearance;
       deathLevel?: number;
-      mode?: ModeType[];
+      mode?: ModeType;
       availablePoints?: number;
       skillPoints?: number;
     }
@@ -206,9 +199,9 @@ export class Player extends Mover {
     this.slot = playerData.slot;
     this.authority = playerData.authority;
     this.job = playerData.job;
-    this.appearance = playerData.appearance;
+    this.appearence = playerData.appearence;
     this.deathLevel = playerData.deathLevel || 0;
-    this.mode = playerData.mode || [];
+    this.mode = playerData.mode || ModeType.NONE;
     this.availablePoints = playerData.availablePoints || 0;
     this.skillPoints = playerData.skillPoints || 0;
 
@@ -218,6 +211,13 @@ export class Player extends Mover {
     this.skills = new SkillTree(this);
     this.questDiary = new QuestDiary(this);
     this.taskbar = new Taskbar();
+  }
+
+  /**
+   * Gets the user connection for this player
+   */
+  public get userConnection(): IUserConnection {
+    return this._connection;
   }
 
   update(): void {
@@ -243,7 +243,7 @@ export class Player extends Mover {
     }
 
     // TODO: Implement getVisibleObjects method in MapLayer
-    const currentVisibleEntities: import("../abstract/worldObject").WorldObject[] = [];
+    const currentVisibleEntities: import("../game/world/worldObject").WorldObject[] = [];
     const appearingEntities = currentVisibleEntities.filter(entity => !this.visibleObjects.includes(entity));
     const disappearingEntities = this.visibleObjects.filter(entity => !currentVisibleEntities.includes(entity));
 
@@ -292,7 +292,7 @@ export class Player extends Mover {
   }
 
   public resetStatistics(): void {
-    const defaultCharacter = this.appearance.gender === GenderType.Male ?
+    const defaultCharacter = this.appearence.gender === GenderType.Male ?
       GameOptions.Current.DefaultCharacter.Man :
       GameOptions.Current.DefaultCharacter.Woman;
 
@@ -322,8 +322,8 @@ export class Player extends Mover {
 
   public resetSkills(): void {
     for (const skill of this.skills) {
-      this.skillPoints += (skill.level || 0) * (SkillTree.SkillPointUsage[skill.properties?.jobType] || 1);
-      skill.level = 0;
+      this.skillPoints += (skill.Level || 0) * (SkillTree.SkillPointUsage[skill.Properties?.jobType] || 1);
+      skill.Level = 0;
     }
   }
 
@@ -360,10 +360,62 @@ export class Player extends Mover {
     // this.sendToVisible(snapshots, true);
   }
 
-  public speak(message: string): void {
-    // TODO: Implement proper snapshot system
-    // const snapshot = new ChatSnapshot(this, message);
-    // this.sendToVisible(snapshot, true);
+  /**
+   * Makes the player speak a message
+   * Based on Rhisis WorldObject.Speak() method
+   *
+   * C# Reference:
+   * public void Speak(string message)
+   * {
+   *     using ChatSnapshot snapshot = new(this, message);
+   *     SendToVisible(snapshot, sendToSelf: true);
+   * }
+   */
+  public speak(message: string, chatType: ChatType = ChatType.NORMAL): void {
+    if (!message || message.trim() === '') {
+      return;
+    }
+
+    // Create ChatSnapshot using the abstract snapshot pattern
+    const chatSnapshot = new ChatSnapshot(this.objectId, message, chatType);
+
+    // Send to visible players (equivalent to SendToVisible(snapshot, sendToSelf: true))
+    this.sendToVisible(chatSnapshot, true);
+
+    console.log(`💬 Player ${this.name} spoke: "${message}" (${ChatType[chatType]})`);
+  }
+
+  /**
+   * Override sendToVisible to use actual player connections
+   * Based on Rhisis WorldObject.SendToVisible() method but adapted for our architecture
+   */
+  public sendToVisible(packet: FlyffPacket, sendToSelf: boolean = false): void {
+    // Get map layer to find players in range
+    if (!this.mapLayer) {
+      console.warn(`Player ${this.name} has no map layer - cannot broadcast packet`);
+      return;
+    }
+
+    // Get all players within range (equivalent to VisibleObjects in C#)
+    const chatRange = 32;
+    const playersInRange = this.mapLayer.getPlayersInRange(this.position, chatRange);
+
+    // Send to all visible players (excluding self if sendToSelf is true to avoid duplicate)
+    let sentCount = 0;
+    for (const nearbyPlayer of playersInRange) {
+      if (nearbyPlayer.userConnection && !(sendToSelf && nearbyPlayer === this)) {
+        nearbyPlayer.userConnection.send(packet);
+        sentCount++;
+      }
+    }
+
+    // Send to self if requested
+    if (sendToSelf && this.userConnection) {
+      this.userConnection.send(packet);
+      sentCount++;
+    }
+
+    console.log(`📤 Sent packet to ${sentCount} players (sendToSelf: ${sendToSelf})`);
   }
 
   public sendDefinedText(textId: DefineText, params: string): void {
@@ -371,20 +423,25 @@ export class Player extends Mover {
     // const snapshot = new DefinedTextSnapshot(this, textId, params);
     // this.send(snapshot);
   }
+
+  public motion(motionEnum: ObjectMessageType): void {
+    const motionSnapshot = new MotionSnapshot(this as Mover, motionEnum);
+    this.sendToVisible(motionSnapshot, true);
+  }
   
   public pickupItem(mapItem: MapItemObject, sendPickupMotion = true): void {
     if (mapItem.owner && mapItem.owner !== this) {
-      this.sendDefinedText(DefineText.TID_GAME_PRIORITYITEMPER, `"${mapItem.item.name}"`);
+      this.sendDefinedText(DefineText.TID_GAME_PRIORITYITEMPER, `"${mapItem.item.Name}"`);
       return;
     }
 
     let itemPickedUp = false;
 
     if (mapItem.isGold) {
-      itemPickedUp = this.gold.increase(mapItem.item.quantity);
+      itemPickedUp = this.gold.increase(mapItem.item.Quantity);
     } else {
-      itemPickedUp = this.inventory.createItem(mapItem.item) > -1;
-      this.sendDefinedText(DefineText.TID_GAME_REAPITEM, `"${mapItem.item.name}"`);
+      itemPickedUp = this.inventory.createItemWithNotification(mapItem.item) > 0;
+      this.sendDefinedText(DefineText.TID_GAME_REAPITEM, `"${mapItem.item.Name}"`);
     }
 
     if (itemPickedUp) {
@@ -397,7 +454,7 @@ export class Player extends Mover {
     }
 
     if (sendPickupMotion) {
-      const motionSnapshot = new MotionSnapshot(this, ObjectMessageType.OBJMSG_PICKUP);
+      const motionSnapshot = new MotionSnapshot(this as Mover, ObjectMessageType.OBJMSG_PICKUP);
       this.sendToVisible(motionSnapshot, true);
     }
   }
@@ -461,10 +518,9 @@ export class Player extends Mover {
       // TODO: PK
     } else {
       // Check if target has monster properties
-      const monster = target as Monster;
-      if (monster.properties?.dwExpValue) {
-        this.experience.increase(monster.properties.dwExpValue * GameOptions.Current.Rates.Experience);
-        this.questDiary.onMonsterKilled(monster);
+      if (target.properties && 'dwExpValue' in target.properties && target.properties.dwExpValue) {
+        this.experience.increase(target.properties.dwExpValue * GameOptions.Current.Rates.Experience);
+        this.questDiary.onMonsterKilled(target);
       }
     }
   }
@@ -506,23 +562,23 @@ export class Player extends Mover {
     this._connection.send(packet);
   }
   
-  private addVisibleEntity(entity: import("../abstract/worldObject").WorldObject): void {
+  private addVisibleEntity(entity: import("../game/world/worldObject").WorldObject): void {
     if (!this.visibleObjects.includes(entity)) {
       this.visibleObjects.push(entity);
     }
 
-    if (!(entity instanceof Player) && !entity.visibleObjects.includes(this)) {
-      entity.visibleObjects.push(this);
+    if (!(entity instanceof Player) && !entity.visibleObjects.includes(this as WorldObject)) {
+      entity.visibleObjects.push(this as WorldObject);
     }
   }
 
-  private removeVisibleEntity(entity: import("../abstract/worldObject").WorldObject): void {
+  private removeVisibleEntity(entity: import("../game/world/worldObject").WorldObject): void {
     const index = this.visibleObjects.indexOf(entity);
     if (index > -1) {
       this.visibleObjects.splice(index, 1);
     }
 
-    const eIndex = entity.visibleObjects.indexOf(this);
+    const eIndex = entity.visibleObjects.indexOf(this as WorldObject);
     if (eIndex > -1) {
       entity.visibleObjects.splice(eIndex, 1);
     }

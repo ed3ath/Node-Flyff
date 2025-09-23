@@ -1,6 +1,6 @@
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import { Logger } from "../helpers/logger";
 import Redis, { RedisOptions } from "ioredis";
 import { ResourcePaths } from "./resourcePaths";
@@ -10,7 +10,8 @@ import { tryParseInt, cleanString, tryParseFloat } from "../helpers/parsing";
 import { ResourceTableFile } from "../helpers/resourceTableFile";
 import { IncludeFile, Block } from "../helpers/includeFile";
 import { Instruction, Variable } from "../helpers/instructionParser";
-import { ItemKind3 } from "../common/itemKind";
+import { ItemKind3 } from "../types/itemKind";
+import { ElementType } from "../types/elementType";
 
 export class MonsterResources {
   private readonly logger: Logger;
@@ -62,7 +63,7 @@ export class MonsterResources {
           if (err) {
             reject(err);
           } else {
-            resolve(data ? this.parseMoverProperties(data) : null);
+            resolve(data ? this.convertRedisDataToMoverProperties(data) : null);
           }
         });
       });
@@ -72,7 +73,7 @@ export class MonsterResources {
 
   public where(predicate: (monster: MoverProperties) => boolean): MoverProperties[] {
     const monsters: MoverProperties[] = [];
-    for (const monster of this.moversById.values()) {
+    for (const monster of Array.from(this.moversById.values())) {
       if (predicate(monster)) {
         monsters.push(monster);
       }
@@ -102,7 +103,7 @@ export class MonsterResources {
                 );
               } else {
                 if (data) {
-                  const monster = this.parseMoverProperties(data);
+                  const monster = this.convertRedisDataToMoverProperties(data);
                   if (predicate(monster)) {
                     monsters.push(monster);
                   }
@@ -129,58 +130,132 @@ export class MonsterResources {
       return;
     }
 
+    this.logger.info(`Loading defines from: ${absolutePath}`);
     const data = fs.readFileSync(absolutePath, "utf8");
     const lines = data.split("\n");
+    this.logger.info(`File has ${lines.length} total lines`);
+
+    let defineCount = 0;
+    let miDefineCount = 0;
+    let oiDefineCount = 0;
+    const redisOperations: Promise<any>[] = [];
 
     for (const line of lines) {
-      const trimmedLine = line.trim();
-      if (trimmedLine.startsWith("#define")) {
-        const parts = trimmedLine.split(/\s+/);
-        if (parts.length >= 3) {
-          const name = parts[1];
-          const id = tryParseInt(parts[2]);
+      try {
+        const trimmedLine = line.trim();
+        if (trimmedLine.startsWith("#define")) {
+          const parts = trimmedLine.split(/\s+/);
+          if (parts.length >= 3) {
+            const name = parts[1];
+            const id = tryParseInt(parts[2]);
 
-          if (!isNaN(id) && name !== "") {
-            this.defines.set(name, id);
-            await this.redisClient.hset("objectDefines", name, id);
+            if (!isNaN(id) && name !== "") {
+              this.defines.set(name, id);
+
+              // Queue Redis operation without awaiting
+              redisOperations.push(
+                this.redisClient.hset("objectDefines", name, id)
+                  .catch(error => this.logger.warn(`Failed to store define ${name} in Redis: ${error.message}`))
+              );
+
+              defineCount++;
+
+              if (name.startsWith("MI_")) {
+                miDefineCount++;
+                if (miDefineCount <= 5) { // Log first 5 MI_ defines
+                  this.logger.info(`Loaded MI_ define: ${name} = ${id}`);
+                }
+              } else if (name.startsWith("OI_")) {
+                oiDefineCount++;
+                if (oiDefineCount <= 3) { // Log first 3 OI_ defines
+                  this.logger.info(`Loaded OI_ define: ${name} = ${id}`);
+                }
+              }
+            } else {
+              this.logger.warn(`Failed to parse define: "${trimmedLine}" - name: "${name}", id: ${id}`);
+            }
+          } else {
+            this.logger.warn(`Invalid #define format: "${trimmedLine}" - parts: ${parts.length}`);
           }
         }
+      } catch (error) {
+        this.logger.error(`Exception processing line: "${line}" - ${error.message}`);
       }
     }
+
+    // Wait for all Redis operations to complete
+    if (redisOperations.length > 0) {
+      await Promise.allSettled(redisOperations);
+      this.logger.info(`Stored ${redisOperations.length} defines in Redis`);
+    }
+
+    this.logger.info(`Loaded ${defineCount} total defines (${miDefineCount} MI_ defines, ${oiDefineCount} OI_ defines)`);
   }
 
   public async load(): Promise<void> {
     const startTime = Date.now();
+    this.logger.info("Starting monster resource load...");
 
+    // Check file existence with detailed logging
+    this.logger.info(`Checking for propMover.txt at: ${ResourcePaths.moversProp}`);
     if (!fs.existsSync(ResourcePaths.moversProp)) {
+      this.logger.error(`CRITICAL: propMover.txt not found at ${ResourcePaths.moversProp}`);
       throw new Error(`Unable to load mover properties. Reason: cannot find '${ResourcePaths.moversProp}' file.`);
     }
+    this.logger.info("✓ propMover.txt found");
 
+    this.logger.info(`Checking for propMoverEx.inc at: ${ResourcePaths.moversPropExPath}`);
     if (!fs.existsSync(ResourcePaths.moversPropExPath)) {
+      this.logger.error(`CRITICAL: propMoverEx.inc not found at ${ResourcePaths.moversPropExPath}`);
       throw new Error(`Unable to load extended mover properties. Reason: cannot find '${ResourcePaths.moversPropExPath}' file.`);
     }
+    this.logger.info("✓ propMoverEx.inc found");
 
+    this.logger.info("Files exist, loading defines...");
     await this.loadDefines();
+    this.logger.info(`Defines loaded: ${this.defines.size} entries`);
 
+    this.logger.info("Loading resource table from propMover.txt...");
     const resourceTable = new ResourceTableFile(ResourcePaths.moversProp, 0, this.defines);
     const movers = resourceTable.getRecords<any>();
+    this.logger.info(`Parsed ${movers.length} movers from resource table`);
+
+    let processedCount = 0;
+    let skippedCount = 0;
+    if (movers.length > 0) {
+      this.logger.info(`First mover dwID: "${movers[0].dwID}", szName: "${movers[0].szName}"`);
+    }
 
     for (const mover of movers) {
-      const moverId = this.defines.get(mover.dwID) || 0;
+      let moverId: number;
+
+      // Handle both cases: dwID might be a resolved number or still a string define name
+      if (typeof mover.dwID === 'number') {
+        // ResourceTableFile already resolved this to a numeric value
+        moverId = mover.dwID;
+        this.logger.info(`Using pre-resolved moverId: ${moverId} for ${mover.szName}`);
+      } else {
+        // dwID is still a string, look it up in defines
+        moverId = this.defines.get(mover.dwID) || 0;
+        if (moverId <= 0) {
+          this.logger.warn(`Failed to resolve moverId for dwID="${mover.dwID}" (szName="${mover.szName}")`);
+        }
+      }
 
       if (moverId <= 0) {
+        if (skippedCount < 5) { // Log first 5 skipped ones
+          this.logger.warn(`Skipping mover dwID="${mover.dwID}" (szName="${mover.szName}") - not found in defines (moverId: ${moverId})`);
+          // Also log what defines we do have
+          const defineKeys = Array.from(this.defines.keys()).slice(0, 10);
+          this.logger.info(`Available define keys (first 10): ${defineKeys.join(', ')}`);
+        }
+        skippedCount++;
         continue;
       }
 
-      const moverProperties: MoverProperties = {
-        ...mover,
-        id: moverId,
-        identifierName: mover.dwID,
-        name: mover.szName,
-        level: mover.dwLevel,
-        dropItems: [],
-        dropItemsKind: []
-      };
+      processedCount++;
+
+      const moverProperties: MoverProperties = this.convertToNewMoverProperties(mover, moverId);
 
       if (!this.moversById.has(moverProperties.id)) {
         this.moversById.set(moverProperties.id, moverProperties);
@@ -195,9 +270,13 @@ export class MonsterResources {
       }
     }
 
+    this.logger.info(`Processed ${processedCount} movers, skipped ${skippedCount} movers`);
     resourceTable.dispose();
 
+    this.logger.info("Loading extended properties from propMoverEx.inc...");
     const moversPropExFile = new IncludeFile(ResourcePaths.moversPropExPath);
+    this.logger.info(`Parsed ${moversPropExFile.Statements.length} statements from extended file`);
+
     for (const statement of moversPropExFile.Statements) {
       if (statement.type === 'block') {
         const moverId = this.defines.get(statement.name);
@@ -294,7 +373,10 @@ export class MonsterResources {
         this.logger.warn(`Cannot read drop item count for item ${dropItemName} and mover ${mover.name}.`);
       }
 
-      mover.dropItems!.push(dropItem);
+      if (!mover.dropItems) {
+        mover.dropItems = [];
+      }
+      mover.dropItems.push(dropItem);
     }
   }
 
@@ -325,8 +407,134 @@ export class MonsterResources {
         uniqueMax: Math.max((mover.level || 1) - 2, 1)
       };
 
-      mover.dropItemsKind!.push(dropItemKind);
+      if (!mover.dropItemsKind) {
+        mover.dropItemsKind = [];
+      }
+      mover.dropItemsKind.push(dropItemKind);
     }
+  }
+
+  /**
+   * Converts legacy dwXXX properties to new MoverProperties interface
+   */
+  private convertToNewMoverProperties(legacyMover: any, moverId: number): MoverProperties {
+    return {
+      id: moverId,
+      identifierName: legacyMover.dwID || '',
+      name: legacyMover.szName || '',
+      AI: tryParseInt(legacyMover.dwAI) || 0,
+      belligerence: tryParseInt(legacyMover.dwBelligerence) || 0,
+      speed: tryParseFloat(legacyMover.fSpeed) || 0,
+      addHp: tryParseInt(legacyMover.dwAddHp) || 0,
+      addMp: tryParseInt(legacyMover.dwAddMp) || 0,
+      level: tryParseInt(legacyMover.dwLevel) || 1,
+      flightLevel: tryParseInt(legacyMover.dwFlightLevel) || 0,
+      attackMin: tryParseInt(legacyMover.dwAtkMin) || 0,
+      attackMax: tryParseInt(legacyMover.dwAtkMax) || 0,
+      strength: tryParseInt(legacyMover.dwStr) || 0,
+      stamina: tryParseInt(legacyMover.dwSta) || 0,
+      dexterity: tryParseInt(legacyMover.dwDex) || 0,
+      intelligence: tryParseInt(legacyMover.dwInt) || 0,
+      hitRating: tryParseInt(legacyMover.dwHR) || 0,
+      escapeRating: tryParseInt(legacyMover.dwER) || 0,
+      class: tryParseInt(legacyMover.dwClass) || 0,
+      naturalArmor: tryParseInt(legacyMover.dwNaturealArmor) || 0,
+      magicResistance: tryParseInt(legacyMover.dwResisMagic) || 0,
+      reAttackDelay: tryParseInt(legacyMover.dwReAttackDelay) || 0,
+      attackSpeed: tryParseInt(legacyMover.dwAttackSpeed) || 0,
+      correctionValue: tryParseInt(legacyMover.dwCorrectionValue) || 0,
+      experience: tryParseInt(legacyMover.dwExpValue) || 0,
+      element: this.parseElementType(legacyMover.eElementType),
+      electricityResistance: tryParseFloat(legacyMover.fResistElecricity) || 0,
+      fireResistance: tryParseFloat(legacyMover.fResistFire) || 0,
+      windResistance: tryParseFloat(legacyMover.fResistWind) || 0,
+      waterResistance: tryParseFloat(legacyMover.fResistWater) || 0,
+      earthResistance: tryParseFloat(legacyMover.fResistEarth) || 0,
+      isFlying: legacyMover.bFlying === 'TRUE' || legacyMover.bFlying === '1',
+      dropGoldMin: 0,
+      dropGoldMax: 0,
+      maxDropItem: 0,
+      dropItems: [],
+      dropItemsKind: []
+    };
+  }
+
+  /**
+   * Parses element type from string to enum
+   */
+  private parseElementType(elementTypeStr: any): ElementType {
+    if (!elementTypeStr) return ElementType.None;
+
+    // Convert to string if it's not already a string
+    const strValue = String(elementTypeStr);
+
+    // Handle different formats: "FIRE", "Fire", "1", etc.
+    const normalized = strValue.toUpperCase();
+    switch (normalized) {
+      case 'FIRE':
+      case '1':
+        return ElementType.Fire;
+      case 'WATER':
+      case '2':
+        return ElementType.Water;
+      case 'ELECTRICITY':
+      case 'ELECTRIC':
+      case '3':
+        return ElementType.Electricity;
+      case 'WIND':
+      case '4':
+        return ElementType.Wind;
+      case 'EARTH':
+      case '5':
+        return ElementType.Earth;
+      default:
+        return ElementType.None;
+    }
+  }
+
+  /**
+   * Converts Redis data to new MoverProperties interface
+   */
+  private convertRedisDataToMoverProperties(data: { [key: string]: string }): MoverProperties {
+    return {
+      id: tryParseInt(data.id) || 0,
+      identifierName: data.identifierName || '',
+      name: data.name || '',
+      AI: tryParseInt(data.AI) || 0,
+      belligerence: tryParseInt(data.belligerence) || 0,
+      speed: tryParseFloat(data.speed) || 0,
+      addHp: tryParseInt(data.addHp) || 0,
+      addMp: tryParseInt(data.addMp) || 0,
+      level: tryParseInt(data.level) || 1,
+      flightLevel: tryParseInt(data.flightLevel) || 0,
+      attackMin: tryParseInt(data.attackMin) || 0,
+      attackMax: tryParseInt(data.attackMax) || 0,
+      strength: tryParseInt(data.strength) || 0,
+      stamina: tryParseInt(data.stamina) || 0,
+      dexterity: tryParseInt(data.dexterity) || 0,
+      intelligence: tryParseInt(data.intelligence) || 0,
+      hitRating: tryParseInt(data.hitRating) || 0,
+      escapeRating: tryParseInt(data.escapeRating) || 0,
+      class: tryParseInt(data.class) || 0,
+      naturalArmor: tryParseInt(data.naturalArmor) || 0,
+      magicResistance: tryParseInt(data.magicResistance) || 0,
+      reAttackDelay: tryParseInt(data.reAttackDelay) || 0,
+      attackSpeed: tryParseInt(data.attackSpeed) || 0,
+      correctionValue: tryParseInt(data.correctionValue) || 0,
+      experience: tryParseInt(data.experience) || 0,
+      element: this.parseElementType(data.element),
+      electricityResistance: tryParseFloat(data.electricityResistance) || 0,
+      fireResistance: tryParseFloat(data.fireResistance) || 0,
+      windResistance: tryParseFloat(data.windResistance) || 0,
+      waterResistance: tryParseFloat(data.waterResistance) || 0,
+      earthResistance: tryParseFloat(data.earthResistance) || 0,
+      isFlying: data.isFlying === 'true',
+      dropGoldMin: tryParseInt(data.dropGoldMin) || 0,
+      dropGoldMax: tryParseInt(data.dropGoldMax) || 0,
+      maxDropItem: tryParseInt(data.maxDropItem) || 0,
+      dropItems: [],
+      dropItemsKind: []
+    };
   }
 
   public async loadMonstersPropStrings(): Promise<void> {
@@ -357,220 +565,6 @@ export class MonsterResources {
     }
   }
 
-  public async loadMonstersProp(): Promise<void> {
-    const absolutePath = path.resolve(ResourcePaths.moversProp);
-    if (!fs.existsSync(absolutePath)) {
-      this.logger.warn(
-        `Unable to load monsters. Reason: cannot find '${absolutePath}' file.`
-      );
-      return;
-    }
-    if (!(await this.redisClient.exists("objectDefines"))) {
-      this.logger.warn(
-        `Unable to load monsters. Reason: monster defines is empty`
-      );
-      return;
-    }
-
-    await this.cleanCache();
-
-    const data = fs.readFileSync(absolutePath, "utf8");
-    const lines = data.split("\n");
-    _.forEach(lines, async (line) => {
-      const monsterData = line.trim().split("\t");
-      const id = await this.redisClient.hget("objectDefines", monsterData[0]);
-
-      if (!_.isNil(id)) {
-        const monster: MoverProperties = {
-          id: parseInt(id),
-          dwID: monsterData[0],
-          szName: cleanString(monsterData[1]),
-          dwAI: cleanString(monsterData[2]),
-          dwStr: tryParseInt(monsterData[3]),
-          dwSta: tryParseInt(monsterData[4]),
-          dwDex: tryParseInt(monsterData[5]),
-          dwInt: tryParseInt(monsterData[6]),
-          dwHR: tryParseInt(monsterData[7]),
-          dwER: tryParseInt(monsterData[8]),
-          dwRace: cleanString(monsterData[9]),
-          dwBelligerence: cleanString(monsterData[10]),
-          dwGender: cleanString(monsterData[11]),
-          dwLevel: tryParseInt(monsterData[12]),
-          dwFlightLevel: tryParseInt(monsterData[13]),
-          dwSize: tryParseInt(monsterData[14]),
-          dwClass: tryParseInt(monsterData[15]),
-          bIfPart: cleanString(monsterData[16]),
-          dwKarma: cleanString(monsterData[17]),
-          dwUseable: cleanString(monsterData[18]),
-          dwActionRadius: tryParseInt(monsterData[19]),
-          dwAtkMin: tryParseInt(monsterData[20]),
-          dwAtkMax: tryParseInt(monsterData[21]),
-          dwAtk1: tryParseInt(monsterData[22]),
-          dwAtk2: tryParseInt(monsterData[23]),
-          dwAtk3: tryParseInt(monsterData[24]),
-          dwHorizontalRate: tryParseInt(monsterData[25]),
-          dwVerticalRate: tryParseInt(monsterData[26]),
-          dwDiagonalRate: tryParseInt(monsterData[27]),
-          dwThrustRate: tryParseInt(monsterData[28]),
-          dwChestRate: tryParseInt(monsterData[29]),
-          dwHeadRate: tryParseInt(monsterData[30]),
-          dwArmRate: tryParseInt(monsterData[31]),
-          dwLegRate: tryParseInt(monsterData[32]),
-          dwAttackSpeed: tryParseInt(monsterData[33]),
-          dwReAttackDelay: tryParseInt(monsterData[34]),
-          dwAddHp: tryParseInt(monsterData[35]),
-          dwAddMp: tryParseInt(monsterData[36]),
-          dwNaturealArmor: tryParseInt(monsterData[37]),
-          nAbrasion: tryParseInt(monsterData[38]),
-          nHardness: tryParseInt(monsterData[39]),
-          dwAdjAtkDelay: tryParseInt(monsterData[40]),
-          eElementType: cleanString(monsterData[41]),
-          wElementAtk: tryParseInt(monsterData[42]),
-          dwHideLevel: tryParseInt(monsterData[43]),
-          fSpeed: tryParseFloat(monsterData[44]),
-          dwShelter: tryParseInt(monsterData[45]),
-          bFlying: cleanString(monsterData[46]),
-          dwJumpIng: tryParseInt(monsterData[47]),
-          dwAirJump: tryParseInt(monsterData[48]),
-          bTaming: cleanString(monsterData[49]),
-          dwResisMagic: tryParseInt(monsterData[50]),
-          fResistElecricity: tryParseFloat(monsterData[51]),
-          fResistFire: tryParseFloat(monsterData[52]),
-          fResistWind: tryParseFloat(monsterData[53]),
-          fResistWater: tryParseFloat(monsterData[54]),
-          fResistEarth: tryParseFloat(monsterData[55]),
-          dwCash: tryParseInt(monsterData[56]),
-          dwSourceMaterial: tryParseInt(monsterData[57]),
-          dwMaterialAmount: tryParseInt(monsterData[58]),
-          dwCohesion: tryParseInt(monsterData[59]),
-          dwHoldingTime: tryParseInt(monsterData[60]),
-          dwCorrectionValue: tryParseInt(monsterData[61]),
-          dwExpValue: tryParseInt(monsterData[62]),
-          nFxpValue: tryParseInt(monsterData[63]),
-          nBodyState: tryParseInt(monsterData[64]),
-          dwAddAbility: tryParseInt(monsterData[65]),
-          bKillable: cleanString(monsterData[66]),
-          dwVirtItem1: cleanString(monsterData[67]),
-          dwVirtType1: cleanString(monsterData[68]),
-          dwVirtItem2: cleanString(monsterData[69]),
-          dwVirtType2: cleanString(monsterData[70]),
-          dwVirtItem3: cleanString(monsterData[71]),
-          dwVirtType3: cleanString(monsterData[72]),
-          dwSndAtk1: tryParseInt(monsterData[73]),
-          dwSndAtk2: tryParseInt(monsterData[74]),
-          dwSndDie1: tryParseInt(monsterData[75]),
-          dwSndDie2: tryParseInt(monsterData[76]),
-          dwSndDmg1: tryParseInt(monsterData[77]),
-          dwSndDmg2: tryParseInt(monsterData[78]),
-          dwSndDmg3: tryParseInt(monsterData[79]),
-          dwSndIdle1: tryParseInt(monsterData[80]),
-          dwSndIdle2: tryParseInt(monsterData[81]),
-          szComment: cleanString(monsterData[82]),
-          dwAreaColor: tryParseInt(monsterData[83]),
-          szNpcMark: cleanString(monsterData[84]),
-          dwMadrigalGiftPoint: tryParseInt(monsterData[85]),
-        };
-
-        if (monster.id) {
-          this.redisClient.hmset(`monster:${monster.id}`, monster);
-        }
-      }
-    });
-
-    this.logger.main(`${lines.length} monsters loaded.`);
-  }
-
-  parseMoverProperties(data: { [key: string]: string }): MoverProperties {
-    return {
-      id: tryParseInt(data["id"]),
-      dwID: data["dwID"],
-      szName: data["szName"],
-      dwAI: data["dwAI"],
-      dwStr: tryParseInt(data["dwStr"]),
-      dwSta: tryParseInt(data["dwSta"]),
-      dwDex: tryParseInt(data["dwDex"]),
-      dwInt: tryParseInt(data["dwInt"]),
-      dwHR: tryParseInt(data["dwHR"]),
-      dwER: tryParseInt(data["dwER"]),
-      dwRace: data["dwRace"],
-      dwBelligerence: data["dwBelligerence"],
-      dwGender: data["dwGender"],
-      dwLevel: tryParseInt(data["dwLevel"]),
-      dwFlightLevel: tryParseInt(data["dwFlightLevel"]),
-      dwSize: tryParseInt(data["dwSize"]),
-      dwClass: tryParseInt(data["dwClass"]),
-      bIfPart: cleanString(data["bIfPart"]),
-      dwKarma: cleanString(data["dwKarma"]),
-      dwUseable: cleanString(data["dwUseable"]),
-      dwActionRadius: tryParseInt(data["dwActionRadius"]),
-      dwAtkMin: tryParseInt(data["dwAtkMin"]),
-      dwAtkMax: tryParseInt(data["dwAtkMax"]),
-      dwAtk1: tryParseInt(data["dwAtk1"]),
-      dwAtk2: tryParseInt(data["dwAtk2"]),
-      dwAtk3: tryParseInt(data["dwAtk3"]),
-      dwHorizontalRate: tryParseInt(data["dwHorizontalRate"]),
-      dwVerticalRate: tryParseInt(data["dwVerticalRate"]),
-      dwDiagonalRate: tryParseInt(data["dwDiagonalRate"]),
-      dwThrustRate: tryParseInt(data["dwThrustRate"]),
-      dwChestRate: tryParseInt(data["dwChestRate"]),
-      dwHeadRate: tryParseInt(data["dwHeadRate"]),
-      dwArmRate: tryParseInt(data["dwArmRate"]),
-      dwLegRate: tryParseInt(data["dwLegRate"]),
-      dwAttackSpeed: tryParseFloat(data["dwAttackSpeed"]),
-      dwReAttackDelay: tryParseInt(data["dwReAttackDelay"]),
-      dwAddHp: tryParseInt(data["dwAddHp"]),
-      dwAddMp: tryParseInt(data["dwAddMp"]),
-      dwNaturealArmor: tryParseInt(data["dwNaturealArmor"]),
-      nAbrasion: tryParseInt(data["nAbrasion"]),
-      nHardness: tryParseInt(data["nHardness"]),
-      dwAdjAtkDelay: tryParseInt(data["dwAdjAtkDelay"]),
-      eElementType: data["eElementType"],
-      wElementAtk: tryParseInt(data["wElementAtk"]),
-      dwHideLevel: tryParseInt(data["dwHideLevel"]),
-      fSpeed: tryParseFloat(data["fSpeed"]),
-      dwShelter: tryParseInt(data["dwShelter"]),
-      bFlying: cleanString(data["bFlying"]),
-      dwJumpIng: tryParseInt(data["dwJumpIng"]),
-      dwAirJump: tryParseInt(data["dwAirJump"]),
-      bTaming: cleanString(data["bTaming"]),
-      dwResisMagic: tryParseFloat(data["dwResisMagic"]),
-      fResistElecricity: tryParseFloat(data["fResistElecricity"]),
-      fResistFire: tryParseFloat(data["fResistFire"]),
-      fResistWind: tryParseFloat(data["fResistWind"]),
-      fResistWater: tryParseFloat(data["fResistWater"]),
-      fResistEarth: tryParseFloat(data["fResistEarth"]),
-      dwCash: tryParseInt(data["dwCash"]),
-      dwSourceMaterial: tryParseInt(data["dwSourceMaterial"]),
-      dwMaterialAmount: tryParseInt(data["dwMaterialAmount"]),
-      dwCohesion: tryParseInt(data["dwCohesion"]),
-      dwHoldingTime: tryParseInt(data["dwHoldingTime"]),
-      dwCorrectionValue: tryParseInt(data["dwCorrectionValue"]),
-      dwExpValue: tryParseInt(data["dwExpValue"]),
-      nFxpValue: tryParseInt(data["nFxpValue"]),
-      nBodyState: tryParseInt(data["nBodyState"]),
-      dwAddAbility: tryParseInt(data["dwAddAbility"]),
-      bKillable: cleanString(data["bKillable"]),
-      dwVirtItem1: cleanString(data["dwVirtItem1"]),
-      dwVirtType1: cleanString(data["dwVirtType1"]),
-      dwVirtItem2: cleanString(data["dwVirtItem2"]),
-      dwVirtType2: cleanString(data["dwVirtType2"]),
-      dwVirtItem3: cleanString(data["dwVirtItem3"]),
-      dwVirtType3: cleanString(data["dwVirtType3"]),
-      dwSndAtk1: tryParseInt(data["dwSndAtk1"]),
-      dwSndAtk2: tryParseInt(data["dwSndAtk2"]),
-      dwSndDie1: tryParseInt(data["dwSndDie1"]),
-      dwSndDie2: tryParseInt(data["dwSndDie2"]),
-      dwSndDmg1: tryParseInt(data["dwSndDmg1"]),
-      dwSndDmg2: tryParseInt(data["dwSndDmg2"]),
-      dwSndDmg3: tryParseInt(data["dwSndDmg3"]),
-      dwSndIdle1: tryParseInt(data["dwSndIdle1"]),
-      dwSndIdle2: tryParseInt(data["dwSndIdle2"]),
-      szComment: data["szComment"],
-      dwAreaColor: tryParseInt(data["dwAreaColor"]),
-      szNpcMark: data["szNpcMark"],
-      dwMadrigalGiftPoint: tryParseInt(data["dwMadrigalGiftPoint"]),
-    };
-  }
 
   cleanCache() {
     return new Promise<void>((resolve, reject) => {

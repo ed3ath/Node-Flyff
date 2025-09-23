@@ -1,27 +1,27 @@
-import fs from "fs-extra";
-import path from "path";
-import _ from "lodash";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as _ from "lodash";
 import Redis, { RedisOptions } from "ioredis";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import { Logger } from "../helpers/logger";
 import { ResourcePaths } from "../resources/resourcePaths";
 import { WorldPath } from "../interfaces/resource";
-import { RgnRespawn7 } from "../abstract/rgn/rgnRespawn7";
-import { RgnRegion3 } from "../abstract/rgn/rgnRegion3";
-import { RgnElement } from "../abstract/rgn/rgnElement";
-import { WldFile } from "../abstract/wldFile";
-import { MapRegionProperties } from "../abstract/regionProperties";
-import { RgnFile } from "../abstract/rgn/rgnFile";
-import { MapRespawnRegionProperties } from "../abstract/regionRespawnProperties";
-import { RegionInfoType } from "../common/regionInfoType";
-import { MapRevivalRegionProperties } from "../abstract/mapRevivalRegion";
-import { MapTriggerRegionProperties } from "../abstract/mapTriggerRegionProperties";
-import { DyoFile } from "../abstract/dyo/dyoFile";
-import { MapObjectProperties } from "../abstract/mapObjectProperties";
-import { DyoNpcElement } from "../abstract/dyo/dyoNpcElement";
+import { RgnRespawn7 } from "../resources/formats/rgn/rgnRespawn7";
+import { RgnRegion3 } from "../resources/formats/rgn/rgnRegion3";
+import { RgnElement } from "../resources/formats/rgn/rgnElement";
+import { WldFile } from "../resources/formats/wldFile";
+import { MapRegionProperties } from "../game/world/regionProperties";
+import { RgnFile } from "../resources/formats/rgn/rgnFile";
+import { MapRespawnRegionProperties } from "../game/world/regionRespawnProperties";
+import { RegionInfoType } from "../types/regionInfoType";
+import { MapRevivalRegion } from "../game/properties/mapRevivalRegionProperties";
+import { MapTriggerRegionProperties } from "../game/world/mapTriggerRegionProperties";
+import { DyoFile } from "../resources/formats/dyo/dyoFile";
+import { MapObjectProperties } from "../game/world/mapObjectProperties";
+import { DyoNpcElement } from "../resources/formats/dyo/dyoNpcElement";
 import { Rectangle } from "../abstract/rectangle";
-import { MapProperties } from "../abstract/mapProperties";
+import { MapProperties } from "../game/world/mapProperties";
 import { tryParseInt } from "../helpers/parsing";
 
 export class MapResources {
@@ -76,8 +76,10 @@ export class MapResources {
 
   public loadMaps(mapIdentifiers?: string[]): void {
     const watch = { start: Date.now() };
+    console.log(`[DEBUG] loadMaps called with mapIdentifiers:`, mapIdentifiers);
 
     if (mapIdentifiers && mapIdentifiers.length > 0) {
+      console.log(`[DEBUG] Loading ${mapIdentifiers.length} specific maps`);
       const worldNames = this.loadWorldScriptFile();
 
       for (const mapIdentifier of mapIdentifiers) {
@@ -122,9 +124,56 @@ export class MapResources {
         this.mapsById.set(mapId, map);
         this.mapsByIdentifier.set(mapIdentifier, map);
       }
+    } else {
+      // Load all maps when no specific identifiers provided
+      console.log(`[DEBUG] Loading all maps (no specific identifiers provided)`);
+      const worldNames = this.loadWorldScriptFile();
+      console.log(`[DEBUG] Found ${worldNames.size} worlds in world script file`);
+
+      for (const [mapIdentifier, worldName] of Array.from(worldNames)) {
+        console.log(`[DEBUG] Processing map: ${mapIdentifier} -> ${worldName}`);
+
+        if (this.mapsByIdentifier.has(mapIdentifier)) {
+          console.log(`[DEBUG] Map '${mapIdentifier}' already loaded, skipping`);
+          continue;
+        }
+
+        if (!this.defines.has(mapIdentifier)) {
+          console.log(`[DEBUG] Map '${mapIdentifier}' not defined, skipping`);
+          continue;
+        }
+
+        const mapId = this.defines.get(mapIdentifier)!;
+        console.log(`[DEBUG] Loading map ${mapIdentifier} (ID: ${mapId})`);
+
+        const worldInformation = this.loadWorldInformation(worldName);
+        console.log(`[DEBUG] World info for ${worldName}:`, worldInformation);
+
+        const bounds = new Rectangle(0, 0,
+          worldInformation.width * worldInformation.mpu * 128,
+          worldInformation.length * worldInformation.mpu * 128);
+
+        const map = new MapProperties(
+          mapId,
+          worldName,
+          worldInformation.width,
+          worldInformation.length,
+          this.loadHeights(worldName, worldInformation.width, worldInformation.length),
+          worldInformation.revivalMapId,
+          worldInformation.mpu,
+          bounds,
+          this.loadRegions(worldName, worldInformation.revivalMapId),
+          this.loadObjects(worldName)
+        );
+
+        this.mapsById.set(mapId, map);
+        this.mapsByIdentifier.set(mapIdentifier, map);
+        console.log(`[DEBUG] Successfully loaded map ${mapIdentifier}`);
+      }
     }
 
     const elapsed = Date.now() - watch.start;
+    console.log(`[DEBUG] loadMaps completed. Total maps loaded: ${this.mapsById.size}`);
     this.logger.info(`${this.mapsById.size} maps loaded in ${elapsed}ms.`);
   }
 
@@ -187,7 +236,7 @@ export class MapResources {
     for (const region of region3s) {
       let mapRegion: MapRegionProperties | null = null;
       if (region.index === RegionInfoType.Revival) {
-        mapRegion = new MapRevivalRegionProperties(
+        mapRegion = new MapRevivalRegion(
           region.left,
           region.top,
           region.width,
@@ -259,6 +308,7 @@ export class MapResources {
 
   public async loadDefines(): Promise<void> {
     const absolutePath = path.resolve(ResourcePaths.defineWorld);
+    console.log(`[DEBUG] Loading world defines from: ${absolutePath}`);
     if (!fs.existsSync(absolutePath)) {
       this.logger.error(`Unable to load world defines: ${absolutePath}`);
       return;
@@ -266,6 +316,7 @@ export class MapResources {
 
     const data = fs.readFileSync(absolutePath, "utf8");
     const lines = data.split("\n");
+    console.log(`[DEBUG] Read ${lines.length} lines from defineWorld.h`);
 
     for (const line of lines) {
       const trimmed = line.trim();
@@ -277,16 +328,19 @@ export class MapResources {
           const id = parseInt(idStr, 10);
           if (!isNaN(id)) {
             this.defines.set(name, id);
+            console.log(`[DEBUG] Added define: ${name} = ${id}`);
           }
         }
       }
     }
 
     this.logger.info(`${this.defines.size} world defines loaded.`);
+    console.log(`[DEBUG] Total defines loaded: ${this.defines.size}`);
   }
 
   public async loadWorldPaths(): Promise<void> {
     const absolutePath = path.resolve(ResourcePaths.worldPath);
+    console.log(`[DEBUG] Loading world paths from: ${absolutePath}`);
     if (!fs.existsSync(absolutePath)) {
       this.logger.error(`Unable to load world paths: ${absolutePath}`);
       return;
@@ -294,14 +348,17 @@ export class MapResources {
 
     const text = fs.readFileSync(absolutePath, "utf-8");
     const yamlData = yaml.load(text) as any[];
+    console.log(`[DEBUG] Parsed ${yamlData.length} worlds from world.yaml`);
 
     for (const world of yamlData) {
       if (world.id && world.name) {
         this.worldPaths.set(world.id, world.name);
+        console.log(`[DEBUG] Added world path: ${world.id} -> ${world.name}`);
       }
     }
 
     this.logger.info(`${this.worldPaths.size} world paths loaded.`);
+    console.log(`[DEBUG] Total world paths loaded: ${this.worldPaths.size}`);
   }
 
   private parseMapProperties(data: { [key: string]: string }): MapProperties {

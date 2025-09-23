@@ -1,27 +1,15 @@
 import { Vector3 } from "../abstract/vector3";
 import { Rectangle } from "../abstract/rectangle";
-import { AttackFlags } from "../common/attackFlag";
-import { AttackType } from "../common/attackType";
-import { DefineItem } from "../common/defineItem";
-import { ObjectState } from "../common/objectState";
-import { Item } from "../common/item";
+import { AttackFlags } from "../types/attackFlag";
+import { AttackType } from "../types/attackType";
+import { DefineItem } from "../game/definitions/defineItem";
+import { ObjectState } from "../types/objectState";
+import { Item } from "../game/mechanics/item";
 import { MoverProperties } from "../interfaces/resource";
 import { FFRandom } from "../helpers/FFRandom";
 import { timeInSeconds } from "../helpers/time";
 import { Mover } from "./mover";
-
-// Interfaces for Monster-specific properties
-interface DropItemProperties {
-  itemId: number;
-  probability: number;
-  itemMaxRefine: number;
-}
-
-interface DropItemKindProperties {
-  itemKind: string;
-  uniqueMin: number;
-  uniqueMax: number;
-}
+import { DropItemProperties, DropItemKindProperties } from "../interfaces/dropItemProperties";
 
 interface MonsterProperties extends MoverProperties {
   dropGoldMin: number;
@@ -58,7 +46,7 @@ export class Monster extends Mover {
   constructor(properties: MonsterProperties, respawnTime: number = 30, region?: Rectangle) {
     super(properties);
 
-    this.name = properties.szName;
+    this.name = properties.szName || properties.name || `Monster_${properties.id}`;
     this.respawnTime = respawnTime;
     this.region = region || new Rectangle(
       this.position.x - 10,

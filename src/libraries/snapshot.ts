@@ -1,5 +1,5 @@
-import { PacketType } from "../common/packetType";
-import { SnapshotType } from "../common/snapshotType";
+import { PacketType } from "../protocol/packetType";
+import { SnapshotType } from "../protocol/snapshotType";
 import { BinaryStream } from "./binaryStream";
 import { FlyffPacket } from "./flyffPacket";
 
@@ -26,7 +26,7 @@ export class FlyffSnapshot extends FlyffPacket {
       this.writeInt32(0);
       this.writeInt16(++this.count);
       this.writeUInt32(param2);
-      this.writeInt16(param1);
+      this.writeUInt16(param1);
     } else {
       this.count = 0;
       this.writeInt32(0);

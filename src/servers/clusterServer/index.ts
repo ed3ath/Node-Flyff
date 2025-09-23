@@ -7,9 +7,9 @@ import { ConfigBuilder } from "../../builders/configBuilder";
 import { DatabaseBuilder } from "../../builders/databaseBuilder";
 import { HandlerBuilder } from "../../builders/handlerBuilder";
 import { ServerBuilder } from "../../builders/serverBuilder";
-import { ServerType } from "../../common/serverType";
+import { ServerType } from "../../types/serverType";
 import { ClusterServer } from "./clusterServer";
-import { RedisChannel, MessageCommand } from "../../common/redisTypes";
+import { RedisChannel, MessageCommand } from "../../types/redisTypes";
 import { IChannel, ICluster } from "../../interfaces/cluster";
 import { IInstance } from "../../interfaces/instance";
 import {
@@ -43,14 +43,16 @@ export default async () => {
 
   instanceBuilder.buildServer((builder: ServerBuilder) => {
     builder.setServerType(ServerType.CLUSTER_SERVER);
-    builder.addServer(new ClusterServer(instanceBuilder.config?.cluster_server.server));
+    builder.addServer(
+      new ClusterServer(instanceBuilder.config?.cluster_server.server)
+    );
   });
 
   instanceBuilder.buildResource((builder: ResourceBuilder) => {
-    builder.setRedisOptions(instanceBuilder?.config?.cluster_server.redis)
+    builder.setRedisOptions(instanceBuilder?.config?.cluster_server.redis);
     builder.load = false;
   });
-  
+
   const instance = await instanceBuilder.build();
   clusterIntercom(instance);
 };
@@ -118,11 +120,17 @@ async function clusterIntercom(instance: IInstance) {
     message: string
   ) {
     if (!redisChannels.includes(redisChannel)) return;
-    if (!isValidEncryptionString(message, master)) return; // reject invalid messages
+    if (!isValidEncryptionString(message, master)) {
+      logger?.warn("Cluster server received invalid encrypted message");
+      return;
+    }
     const decrypted = parseMessage(decryptString(message, master));
     if (decrypted) {
       if (decrypted.sender === ServerType.CLUSTER_SERVER) return;
-      // console.log(decrypted);
+      // logger?.info(
+      //   "Cluster server received message:",
+      //   JSON.stringify(decrypted)
+      // );
 
       if (redisChannel === RedisChannel.CORE_CHANNEL) {
         switch (decrypted.command) {
@@ -159,20 +167,68 @@ async function clusterIntercom(instance: IInstance) {
       if (redisChannel === RedisChannel.CLUSTER_CHANNEL) {
         switch (decrypted.command) {
           case MessageCommand.ADD_CHANNEL: {
-            if (
-              await client?.getChannelById(initCluster.name, decrypted.data.id)
-            ) {
-              logger?.warn("A channel with id", decrypted.data.id, "already exist.");
-              sendMessage(RedisChannel.CLUSTER_CHANNEL, MessageCommand.CHANNEL_ID_EXIST, decrypted.data);
-            } else if (await client?.getChannel(initCluster.name, decrypted.data.name)) {
+            logger?.info(
+              "ADD_CHANNEL request received:",
+              JSON.stringify(decrypted.data)
+            );
+            logger?.info("Cluster name:", initCluster.name);
+
+            const existingChannelById = await client?.getChannelById(
+              initCluster.name,
+              decrypted.data.id
+            );
+            const existingChannelByName = await client?.getChannel(
+              initCluster.name,
+              decrypted.data.name
+            );
+
+            // logger?.info(
+            //   "Existing channel by ID:",
+            //   JSON.stringify(existingChannelById)
+            // );
+            // logger?.info(
+            //   "Existing channel by name:",
+            //   JSON.stringify(existingChannelByName)
+            // );
+
+            if (existingChannelById) {
+              logger?.warn(
+                "A channel with id",
+                decrypted.data.id,
+                "already exist."
+              );
+              sendMessage(
+                RedisChannel.CLUSTER_CHANNEL,
+                MessageCommand.CHANNEL_ID_EXIST,
+                decrypted.data
+              );
+            } else if (existingChannelByName) {
               logger?.warn("Channel", decrypted.data.name, "already exist.");
-              sendMessage(RedisChannel.CLUSTER_CHANNEL, MessageCommand.CHANNEL_EXIST, decrypted.data);
+              sendMessage(
+                RedisChannel.CLUSTER_CHANNEL,
+                MessageCommand.CHANNEL_EXIST,
+                decrypted.data
+              );
             } else {
               const channel: IChannel = {
                 ...decrypted.data,
                 lastPing: new Date().getTime(),
               };
+              // logger?.info(
+              //   "Attempting to insert channel:",
+              //   JSON.stringify(channel)
+              // );
               await client?.insertChannel(initCluster.name, channel);
+
+              // Verify insertion
+              const allChannels = await client?.getAllChannels(
+                initCluster.name
+              );
+              // logger?.info(
+              //   "All channels after insertion:",
+              //   JSON.stringify(allChannels)
+              // );
+
               sendMessage(
                 RedisChannel.CLUSTER_CHANNEL,
                 MessageCommand.CHANNEL_ADDED,

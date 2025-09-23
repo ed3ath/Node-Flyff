@@ -7,11 +7,11 @@ import { ConfigBuilder } from "../../builders/configBuilder";
 import { DatabaseBuilder } from "../../builders/databaseBuilder";
 import { HandlerBuilder } from "../../builders/handlerBuilder";
 import { ServerBuilder } from "../../builders/serverBuilder";
-import { ServerType } from "../../common/serverType";
+import { ServerType } from "../../types/serverType";
 import { LoginServer } from "./loginServer";
 import { IChannel, ICluster } from "../../interfaces/cluster";
 import { IInstance } from "../../interfaces/instance";
-import { MessageCommand, RedisChannel } from "../../common/redisTypes";
+import { MessageCommand, RedisChannel } from "../../types/redisTypes";
 import {
   buildEncryptionKeyFromString,
   decryptString,
@@ -44,6 +44,7 @@ export default async () => {
   instanceBuilder.buildServer((builder: ServerBuilder) => {
     builder.setServerType(ServerType.LOGIN_SERVER);
     builder.addServer(new LoginServer(instanceBuilder.config?.login_server.server));
+    builder.setConfig(instanceBuilder.config?.login_server);
   });
   const instance = await instanceBuilder.build();
   await coreIntercom(instance);

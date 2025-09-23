@@ -1,34 +1,108 @@
 import { FFRandom } from "../helpers/FFRandom";
 import { Rectangle } from "./rectangle";
 
+/// <summary>
+/// Represents 3D coordinates in space.
+/// </summary>
 export class Vector3 {
-    x: number;
-    y: number;
-    z: number;
+    static readonly EPSILON = 1e-10;
 
-    constructor(x: number = 0, y: number = 0, z: number = 0) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+    /// <summary>
+    /// Gets or sets the X position in the world.
+    /// </summary>
+    public x: number;
 
-    get length(): number {
+    /// <summary>
+    /// Gets or sets the Y position in the world.
+    /// </summary>
+    public y: number;
+
+    /// <summary>
+    /// Gets or sets the Z position in the world.
+    /// </summary>
+    public z: number;
+
+    /// <summary>
+    /// Gets the vector length.
+    /// </summary>
+    public get length(): number {
         return Math.sqrt(this.squaredLength);
     }
 
-    get squaredLength(): number {
+    /// <summary>
+    /// Gets the vector squared length.
+    /// </summary>
+    public get squaredLength(): number {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
-    getDistance2D(otherPosition: Vector3): number {
+    /// <summary>
+    /// Creates a new Vector3 initialized to 0.
+    /// </summary>
+    public constructor();
+
+    /// <summary>
+    /// Creates a new Vector3 with specific values.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    public constructor(x: number, y: number, z: number);
+
+    /// <summary>
+    /// Creates a new Vector3 with specific string values.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    public constructor(x: string, y: string, z: string);
+
+    public constructor(x?: number | string, y?: number | string, z?: number | string) {
+        if (typeof x === "string" && typeof y === "string" && typeof z === "string") {
+            this.x = parseFloat(x);
+            this.y = parseFloat(y);
+            this.z = parseFloat(z);
+        } else {
+            this.x = typeof x === "number" ? x : 0;
+            this.y = typeof y === "number" ? y : 0;
+            this.z = typeof z === "number" ? z : 0;
+        }
+    }
+
+    /// <summary>
+    /// Gets the 2D distance between two vectors.
+    /// </summary>
+    /// <param name="otherPosition">Other position vector.</param>
+    /// <returns>Distance</returns>
+    public getDistance2D(otherPosition: Vector3): number {
         return Math.sqrt(Math.pow(otherPosition.x - this.x, 2) + Math.pow(otherPosition.z - this.z, 2));
     }
 
-    getDistance3D(otherPosition: Vector3): number {
+    /// <summary>
+    /// Gets the 3D distance between two vectors.
+    /// </summary>
+    /// <param name="otherPosition">Other position vector.</param>
+    /// <returns>Distance</returns>
+    public getDistance3D(otherPosition: Vector3): number {
         return Math.sqrt(Math.pow(otherPosition.x - this.x, 2) + Math.pow(otherPosition.y - this.y, 2) + Math.pow(otherPosition.z - this.z, 2));
     }
 
-    isInCircle(otherPosition: Vector3, circleRadius: number): boolean {
+    /// <summary>
+    /// Alias for getDistance3D for convenience.
+    /// </summary>
+    /// <param name="otherPosition">Other position vector.</param>
+    /// <returns>Distance</returns>
+    public distanceTo(otherPosition: Vector3): number {
+        return this.getDistance3D(otherPosition);
+    }
+
+    /// <summary>
+    /// Checks if the current position is in a circle around another position.
+    /// </summary>
+    /// <param name="otherPosition">Center of the circle.</param>
+    /// <param name="circleRadius">Circle radius.</param>
+    /// <returns>True if in circle; false otherwise.</returns>
+    public isInCircle(otherPosition: Vector3, circleRadius: number): boolean {
         return Math.pow(otherPosition.x - this.x, 2) + Math.pow(otherPosition.z - this.z, 2) < Math.pow(circleRadius, 2);
     }
 
@@ -80,8 +154,11 @@ export class Vector3 {
         return FFRandom.getHashCode(this.x) ^ FFRandom.getHashCode(this.y) ^ FFRandom.getHashCode(this.z);
     }
 
-    equals(other: Vector3): boolean {
-        return this == other;
+    equals(other: Vector3 | null): boolean {
+        if (!other) return false;
+        return Math.abs(this.x - other.x) < Vector3.EPSILON &&
+               Math.abs(this.y - other.y) < Vector3.EPSILON &&
+               Math.abs(this.z - other.z) < Vector3.EPSILON;
     }
 
     static dotProduct(a: Vector3, b: Vector3): number {
@@ -99,7 +176,7 @@ export class Vector3 {
     static angleBetween(a: Vector3, b: Vector3): number {
         const dist = b.subtract(a);
         let angle = Math.atan2(dist.x, -dist.z);
-        angle = this.toDegree(angle);
+        angle = Vector3.toDegree(angle);
         if (angle < 0) {
             angle += 360;
         } else if (angle >= 360) {
@@ -181,7 +258,9 @@ export class Vector3 {
         return this;
     }
 
-    static equals(a: Vector3, b: Vector3): boolean {
-        return a == b;
+    static equals(a: Vector3 | null, b: Vector3 | null): boolean {
+        if (a === null && b === null) return true;
+        if (a === null || b === null) return false;
+        return a.equals(b);
     }
 }

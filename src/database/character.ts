@@ -6,7 +6,7 @@ import {
   OneToMany,
   ManyToOne,
 } from "typeorm";
-import { GenderType } from "../common/genderType";
+import { GenderType } from "../types/genderType";
 import EquipmentItemEntity from "./equipmentItem";
 import AccountEntity from "./account";
 
@@ -84,11 +84,11 @@ export default class CharacterEntity extends BaseEntity {
   @Column({ nullable: false, default: 0 })
   experience: number;
 
-  @Column({ nullable: false, default: 0 })
-  jobLevel: number;
+  // @Column({ nullable: false, default: 0 })
+  // jobLevel: number;
 
-  @Column({ nullable: false, default: 0 })
-  jobExperience: number;
+  // @Column({ nullable: false, default: 0 })
+  // jobExperience: number;
 
   @Column({ nullable: false, default: 100 })
   hitPoints: number;
@@ -98,6 +98,9 @@ export default class CharacterEntity extends BaseEntity {
 
   @Column({ nullable: false, default: 100 })
   fatiguePoints: number;
+
+  @Column({ nullable: false, default: 0 })
+  angle: number;
 
   @OneToMany(() => EquipmentItemEntity, (equipmentItem) => equipmentItem.character)
   equipments: EquipmentItemEntity[];

@@ -10,21 +10,27 @@ import {
 import ItemEntity from "./item";
 import CharacterEntity from "./character";
 
-@Entity("EquipmentItem")
+@Entity("equipment_item")
 export default class EquipmentItemEntity
   extends BaseEntity
 {
   @PrimaryGeneratedColumn() // Primary key with auto-increment
   id: number;
   
+  @Column()
+  characterId: number;
+
   @ManyToOne(() => CharacterEntity, (character) => character.equipments)
   character: CharacterEntity;
 
   @Column({ default: 0 })
   slot: number;
 
+  @Column()
+  itemSerialNumber: number;
+
   @OneToOne((type) => ItemEntity)
-  @JoinColumn()
+  @JoinColumn({ name: "itemSerialNumber", referencedColumnName: "serialNumber" })
   item: ItemEntity;
 
   @Column({ default: 1 })

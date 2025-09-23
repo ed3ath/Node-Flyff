@@ -1,4 +1,4 @@
-import _ from "lodash";
+import * as _ from "lodash";
 
 export const tryParseInt = (value: string) => {
   try {
@@ -16,8 +16,11 @@ export const tryParseFloat = (value: string) => {
   }
 };
 
-export const cleanString = (value: string) => {
-  return value === "=" ? "" : value.trim();
+export const cleanString = (value: string | undefined | null) => {
+  if (value === undefined || value === null || value === "=") {
+    return "";
+  }
+  return typeof value === 'string' ? value.trim() : String(value).trim();
 };
 
 export const tryJsonParse = (value: string) => {

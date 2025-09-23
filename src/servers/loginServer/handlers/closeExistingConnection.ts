@@ -1,4 +1,4 @@
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
@@ -9,7 +9,7 @@ export default class Handler extends PacketHandler {
   constructor(packet: FlyffPacket) {
     super();
 
-    this.username = packet.readStringLE();
+    this.username = packet.readString();
   }
 
   async execute(): Promise<void> {

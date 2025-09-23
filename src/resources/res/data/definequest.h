@@ -1,230 +1,230 @@
 #ifndef __DEFINEQUEST
 #define __DEFINEQUEST
 
-#define QUEST_CHANGEJOB1    1 // ï¿½Ó¼ï¿½ï¿½Ê¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_CHANGEJOB2    2 // ï¿½ï¿½Å©ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½ï¿½
-#define QUEST_CHANGEJOB3    3 // ï¿½ï¿½Ã½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_CHANGEJOB4    4 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_CHANGEJOB5    5 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½ï¿½
-#define QUEST_CHANGEPUR     6 // ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ì±ï¿½ï¿½ï¿½
-#define QUEST_1             7 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_2             8 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½Ã¶ó¸®½ï¿½
+#define QUEST_CHANGEJOB1    1 // ¸Ó¼­³Ê¸® ÀüÁ÷ Äù½ºÆ® - ÇÃ¶ó¸®½º
+#define QUEST_CHANGEJOB2    2 // ¾ÆÅ©·Îºª ÀüÁ÷ Äù½ºÆ® ÇöÀç ¹Ì±¸Çö
+#define QUEST_CHANGEJOB3    3 // ¾î½Ã½ºÆ® ÀüÁ÷ Äù½ºÆ® - ÇÃ¶ó¸®½º
+#define QUEST_CHANGEJOB4    4 // ¸ÅÁö¼Ç ÀüÁ÷ Äù½ºÆ® - ÇÃ¶ó¸®½º
+#define QUEST_CHANGEJOB5    5 // ÀÎÇü¼ú»ç ÀüÁ÷ Äù½ºÆ® ÇöÀç ¹Ì±¸Çö
+#define QUEST_CHANGEPUR     6 // ÆÛÆêÆ¼¾î ÀüÁ÷ Äù½ºÆ® ÇöÀç ¹Ì±¸Çö
+#define QUEST_1             7 // °­¾ÆÁöÀÇ º¹¼ö - ÇÃ¶ó¸®½º
+#define QUEST_2             8 // º¸º¸ÄíÀÇ ÆíÁö - ÇÃ¶ó¸®½º
 #define QUEST_3             9 
 #define QUEST_4             10
 #define QUEST_5             11
 #define QUEST_0             12
-#define QUEST_6             13 // ï¿½ï¿½ï¿½ï¿½Ä¡ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½
-#define QUEST_7             14 // ï¿½ï¿½ï¿½î¸¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½
-#define QUEST_8             15 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¹ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½
-#define QUEST_9             16 // ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ 
-#define QUEST_10            17 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½
-#define QUEST_11            18 // Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½
-#define QUEST_12			19 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Í¾ï¿½ - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_13			20 // ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½ ï¿½ï¿½Å¹ - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_14_VAGRANTMIND 21// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½Ã¶ó¸®½ï¿½  
-#define QUEST_15            22 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_16            23 // ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½Æ¶ï¿½ ï¿½Ã°ï¿½ï¿½Â¿ï¿½ - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½
-#define QUEST_17            24 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½ - ï¿½Ã¶ó¸®½ï¿½
-#define QUEST_18            25 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®  1                                 - ï¿½Ã¶ó¸®½ï¿½   (ï¿½ï¿½ï¿½ï¿½ 16) ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½) 
-#define QUEST_19            26 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®  2                                 - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 18) Æ¼ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½)
-#define QUEST_20            27 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®  3                                 - ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 19) ï¿½ï¿½Æ¾(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_21	    28 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½á°¡ ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ 				- ï¿½Ã¶ó¸®½ï¿½   (ï¿½ï¿½ï¿½ï¿½ 18) ï¿½Ì½ï¿½ï¿½ï¿½(ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_22	    29 // ï¿½ï¿½ï¿½Ú·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ°ï¿½ 				- ï¿½Ã¶ó¸®½ï¿½   (ï¿½ï¿½ï¿½ï¿½ 20) ï¿½ï¿½ï¿½ï¿½
-#define QUEST_23	    30 // ï¿½Ð¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 'ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½Å² ï¿½ï¿½ï¿½ï¿½Å©' 		- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 26) ï¿½ï¿½ï¿½ï¿½(ï¿½Ð¼Ç»ï¿½ï¿½ï¿½)
-#define QUEST_24	    31 // ï¿½Ö°ï¿½ï¿½ï¿½ ï¿½ä¸® 'ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ó²¿¶ï¿½' 			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 28) Ä«ï¿½ï¿½(ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½)
-#define QUEST_25	    32 // ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö¿Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 30) ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½(ï¿½Îµï¿½ï¿½ï¿½ï¿½Æ®)
-#define QUEST_26	    33 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½				- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 32) ï¿½ã½º
-#define QUEST_27	    34 // 'ï¿½ï¿½ï¿½ï¿½Æ®È¦ï¿½ï¿½' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 37) ï¿½ï·¹ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Æ®È¦)
-#define QUEST_28	    35 // 'ï¿½ï¿½ï¿½ï¿½Æ®È¦ï¿½ï¿½' ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 37) ï¿½ï·¹ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Æ®È¦)
-#define QUEST_29 	    36 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®ï¿½ï¿½ Ä·ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 43) ï¿½ï¿½
-#define QUEST_30 	    37 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®ï¿½ï¿½ Ä·ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 43) ï¿½ï¿½ï¿½
-#define QUEST_31 	    38 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®ï¿½ï¿½ Ä·ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½			- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 44) ï¿½ï¿½
-#define QUEST_GUILD	    39 // ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ¿ï¿½ 				- ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ 50) ï¿½ï·¹ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Æ®È¦)
-#define QUEST_WARMON_LV1ID  40 // ï¿½Ê°Å´ï¿½ ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½			- ï¿½ï¿½ï¿½ï¿½       (ï¿½ï¿½ï¿½ï¿½ ) ï¿½Ã¸ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST2_HEROSTORY    41 // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®_Main
-#define QUEST2_ACHIVEMENT1  42 // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®_Sub1
-#define QUEST2_ACHIVEMENT2  43 // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®_Sub2
-#define QUEST2_HEROWAY      44 // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®_Sub3
-#define QUEST2_HEROMIND     45 // 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®_Sub4
-#define QUEST_BEGINNER	    46 // ï¿½Êºï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 
-#define QUEST_SANTA	        47 // Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_MASDU1	    48 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 1
-#define QUEST_MASDU2	    49 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_MASDU3	    50 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 3
+#define QUEST_6             13 // ¹ðÅðÄ¡ - ¼¼ÀÎÆ®¸ð´×
+#define QUEST_7             14 // º¸Áî¸¸°ú º¸¼® - ¼¼ÀÎÆ®¸ð´×
+#define QUEST_8             15 // ºôÀÇ ºÎÅ¹ - ¼¼ÀÎÆ®¸ð´×
+#define QUEST_9             16 // ºÒ·èÀÇ ¹®Àå - ¼¼ÀÎÆ®¸ð´× 
+#define QUEST_10            17 // Æ÷Áö½ºÅæÀ» Ã£¾Æ¼­ - ¼¼ÀÎÆ®¸ð´×
+#define QUEST_11            18 // Æ¼³ª¿¡°Ô º¸³»´Â ÆíÁö - ¼¼ÀÎÆ®¸ð´×
+#define QUEST_12			19 // Áý¿¡ °¡°í ½Í¾î - ÇÃ¶ó¸®½º
+#define QUEST_13			20 // ¾ÖÁÖ°¡ÀÇ ºÎÅ¹ - ÇÃ¶ó¸®½º
+#define QUEST_14_VAGRANTMIND 21// ¹æ¶ûÀÚÀÇ ¸¶À½°¡Áü - ÇÃ¶ó¸®½º  
+#define QUEST_15            22 // Áöµµ¸¦ Ã£¾Æ¼­ - ÇÃ¶ó¸®½º
+#define QUEST_16            23 // ´Ù½Ã µ¹¾Æ¶ó ½Ã°èÅÂ¿± - ¼¼ÀÎÆ®¸ð´×
+#define QUEST_17            24 // ¾ÇÁú µ¥¹Ì¾È °ñÅÁ ¸ÔÀÌ±â - ÇÃ¶ó¸®½º
+#define QUEST_18            25 // ºñÇàÄù½ºÆ®  1                                 - ÇÃ¶ó¸®½º   (·¹º§ 16) µð¿Ã(½ºÅ×ÀÌ¼Ç) 
+#define QUEST_19            26 // ºñÇàÄù½ºÆ®  2                                 - ¼¼ÀÎÆ®¸ð´× (·¹º§ 18) Æ¼³ª(½ºÅ×ÀÌ¼Ç)
+#define QUEST_20            27 // ºñÇàÄù½ºÆ®  3                                 - ¼¼ÀÎÆ®¸ð´× (·¹º§ 19) ¸¶Æ¾(¸¶¹ý»óÁ¡)
+#define QUEST_21	    28 // ¿°»ö Àç·á°¡ ¸ðÀÚ¶ó¿ä 				- ÇÃ¶ó¸®½º   (·¹º§ 18) ÀÌ½ºÄÉ(ºäÆ¼»óÁ¡)
+#define QUEST_22	    29 // ºøÀÚ·ç´Â »ç¶ûÀ» ½Æ°í 				- ÇÃ¶ó¸®½º   (·¹º§ 20) Á¦ÇÁ
+#define QUEST_23	    30 // ÆÐ¼ÇÀÇ ´º¿¡ÀÌÁö '¿þÀÌºê ÆßÅ² ¸¶½ºÅ©' 		- ¼¼ÀÎÆ®¸ð´× (·¹º§ 26) ¸£¿£(ÆÐ¼Ç»óÁ¡)
+#define QUEST_24	    31 // ÃÖ°íÀÇ ¿ä¸® '·¹¸ÇÆ¼½º¶ó²¿¶¼' 			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 28) Ä«¸°(À½½Ä»óÁ¡)
+#define QUEST_25	    32 // ¼¼ÀÎÆ®ÆÎ ¾Ö¿Ïµ¿¹° ±¸ÇÏ±â			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 30) ¼¼ÀÎÆ®ÆÎ(·Îµå¶óÀÌÆ®)
+#define QUEST_26	    33 // ÇÁ¸®ÇÁ ÀÌ»çÁü ¼¾ÅÍ				- ¼¼ÀÎÆ®¸ð´× (·¹º§ 32) Çã½º
+#define QUEST_27	    34 // '¼¼ÀÎÆ®È¦¸®' µµ³­ »ç°Ç ÀüÆí			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 37) Çï·¹³ª(¼¼ÀÎÆ®È¦)
+#define QUEST_28	    35 // '¼¼ÀÎÆ®È¦¸®' µµ³­ »ç°Ç ÈÄÆí			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 37) Çï·¹³ª(¼¼ÀÎÆ®È¦)
+#define QUEST_29 	    36 // À¯ÀûÁö »ì¸®±â Ä·ÆäÀÎ ÇÏ³ª			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 43) ¾Ø
+#define QUEST_30 	    37 // À¯ÀûÁö »ì¸®±â Ä·ÆäÀÎ µÑ			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 43) Àò´À
+#define QUEST_31 	    38 // À¯ÀûÁö »ì¸®±â Ä·ÆäÀÎ ¼Â			- ¼¼ÀÎÆ®¸ð´× (·¹º§ 44) ¾Ø
+#define QUEST_GUILD	    39 // ±æµå¸¦ ¸¸µé¾î º¸¾Æ¿ä 				- ¼¼ÀÎÆ®¸ð´× (·¹º§ 50) Çï·¹³ª(¼¼ÀÎÆ®È¦)
+#define QUEST_WARMON_LV1ID  40 // ÃÊ°Å´ë ¸ó½ºÅÍ¿¡ ´ëÇÏ¿©			- ´ÙÄÜ       (·¹º§ ) ¿Ã¸®¿£(°ü°ø¼­)
+#define QUEST2_HEROSTORY    41 // 2Â÷ ÀüÁ÷ Äù½ºÆ®_Main
+#define QUEST2_ACHIVEMENT1  42 // 2Â÷ ÀüÁ÷ Äù½ºÆ®_Sub1
+#define QUEST2_ACHIVEMENT2  43 // 2Â÷ ÀüÁ÷ Äù½ºÆ®_Sub2
+#define QUEST2_HEROWAY      44 // 2Â÷ ÀüÁ÷ Äù½ºÆ®_Sub3
+#define QUEST2_HEROMIND     45 // 2Â÷ ÀüÁ÷ Äù½ºÆ®_Sub4
+#define QUEST_BEGINNER	    46 // ÃÊº¸ÀÚ¿ë Äù½ºÆ® 
+#define QUEST_SANTA	        47 // Å©¸®½º¸¶½º ÀÌº¥Æ®¿ë Äù½ºÆ®
+#define QUEST_MASDU1	    48 // ¸¶½º ´øÀü Äù½ºÆ® 1
+#define QUEST_MASDU2	    49 // ¸¶½º ´øÀü Äù½ºÆ® 2
+#define QUEST_MASDU3	    50 // ¸¶½º ´øÀü Äù½ºÆ® 3
 #define QUEST_VALENTINE	    51 
 #define QUEST_WHITEDAY	    52 
-//#define QUEST_VOCACR_BFTRN  163 //ï¿½ï¿½Å©ï¿½Î¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®1 
-//#define QUEST_VOCACR_TRN1   164 //ï¿½ï¿½Å©ï¿½Î¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®2
-//#define QUEST_VOCACR_TRN2   165 //ï¿½ï¿½Å©ï¿½Î¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®3
-//#define QUEST_VOCACR_TRN3   166 //ï¿½ï¿½Å©ï¿½Î¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®4
+//#define QUEST_VOCACR_BFTRN  163 //¾ÆÅ©·Î¹î ÀüÁ÷ Äù½ºÆ®1 
+//#define QUEST_VOCACR_TRN1   164 //¾ÆÅ©·Î¹î ÀüÁ÷ Äù½ºÆ®2
+//#define QUEST_VOCACR_TRN2   165 //¾ÆÅ©·Î¹î ÀüÁ÷ Äù½ºÆ®3
+//#define QUEST_VOCACR_TRN3   166 //¾ÆÅ©·Î¹î ÀüÁ÷ Äù½ºÆ®4
 
-//ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL1     67 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL2     68 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL3     69 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL4     70 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL5     71 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL6     72 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL7     73 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL8     74 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL9     75 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL10    76 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL11    77 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL12    78 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_DUDK_VOL13    79 //ï¿½ï¿½Ä«ï¿½×½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-//ï¿½Ïºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL1     67 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL2     68 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL3     69 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL4     70 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL5     71 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL6     72 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL7     73 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL8     74 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL9     75 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL10    76 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL11    77 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL12    78 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+#define QUEST_DUDK_VOL13    79 //µ¥Ä«³×½º ´øÀü Äù½ºÆ®
+//ÀÏº» ¿ÍÀÎ ÀÌº¥Æ®
 #define QUEST_JAPEVE_BOZFL 80	
 #define QUEST_JAPEVE_BOZSA 81
 #define QUEST_JAPEVE_BOZDA 82
 
-//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
-#define QUEST_FIND_REDBANGT	83 // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½
-#define QUEST_GETBACK_LUDASAFE	84 // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý°ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½
-#define QUEST_PLOT_COLACK	85 // ï¿½Ý¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_DISAPP_SCRIPT	86 //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ëº»
-#define QUEST_FIND_SCRIPT	87 // ï¿½ëº»ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½
-#define QUEST_MANUAL_HELPER	88	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_FIND_PORTRAIT	89	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê»ï¿½È­ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½
-#define QUEST_CLUE1_PORTRAIT	90	//ï¿½Ê»ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¼ï¿½ 1
-#define QUEST_CLUE2_PORTRAIT	91	//ï¿½Ê»ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¼ï¿½ 2
-#define QUEST_GETBACK_PORTRAIT	92	//ï¿½Ê»ï¿½È­ï¿½ï¿½ ï¿½ï¿½Ã£ï¿½Æ¶ï¿½
-#define QUEST_FIND_BONEWAG	93	//ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
-#define QUEST_FIND_DNAWAG	94	//ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_ORIGIN_BONEBOWL	95	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_FIRST_BONEBOWL	96	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_TRUTH_BONEBOWL	97	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//Äù½ºÆ® Ãß°¡
+#define QUEST_FIND_REDBANGT	83 // ºÓÀº ¹ð µµÀû´ÜÀ» Ã£¾Æ¶ó
+#define QUEST_GETBACK_LUDASAFE	84 // ·ç´ÙÀÇ ±Ý°í¸¦ Ã£¾Æ¶ó
+#define QUEST_PLOT_COLACK	85 // ÄÝ¶ôÀÇ À½¸ð
+#define QUEST_DISAPP_SCRIPT	86 //»ç¶óÁø ´ëº»
+#define QUEST_FIND_SCRIPT	87 // ´ëº»À» Ã£¾Æ¼­
+#define QUEST_MANUAL_HELPER	88	//µµ¿ì¹Ì ±³º»
+#define QUEST_FIND_PORTRAIT	89	//¶óµð¿ÂÀÇ ÃÊ»óÈ­¸¦ Ã£¾Æ¶ó
+#define QUEST_CLUE1_PORTRAIT	90	//ÃÊ»óÈ­¿¡ ´ëÇÑ ´Ü¼­ 1
+#define QUEST_CLUE2_PORTRAIT	91	//ÃÊ»óÈ­¿¡ ´ëÇÑ ´Ü¼­ 2
+#define QUEST_GETBACK_PORTRAIT	92	//ÃÊ»óÈ­¸¦ µÇÃ£¾Æ¶ó
+#define QUEST_FIND_BONEWAG	93	//¿Í±×ÀÛÀÇ »À
+#define QUEST_FIND_DNAWAG	94	//¿Í±×ÀÛÀÇ À¯ÀüÀÚ
+#define QUEST_ORIGIN_BONEBOWL	95	//º»º¸¿ïÀÇ À¯·¡
+#define QUEST_FIRST_BONEBOWL	96	//ÃÖÃÊÀÇ º»º¸¿ï
+#define QUEST_TRUTH_BONEBOWL	97	//º»º¸¿ïÀÇ Áø½Ç
 
-//Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
-#define QUEST_EVE_LOSTXMAS1	98	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_EVE_LOSTXMAS2	99	//ï¿½Ç¸ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_EVE_LOSTXMAS3	100	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//Å©¸®½º¸¶½º ÀÌº¥Æ®
+#define QUEST_EVE_LOSTXMAS1	98	//½½ÇÄÀÇ Å©¸®½º¸¶½º
+#define QUEST_EVE_LOSTXMAS2	99	//¾Ç¸ùÀÇ Å©¸®½º¸¶½º
+#define QUEST_EVE_LOSTXMAS3	100	//Àý¸ÁÀÇ Å©¸®½º¸¶½º
 
-//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
-#define QUEST_TEAR_MOTHER	101	//ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_LOST_CHILD	102	//ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
-#define QUEST_TRUTH_MIA		103	//ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_DOLL_MIA		104	//ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_TRUTH_PAST	105	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//Äù½ºÆ® Ãß°¡
+#define QUEST_TEAR_MOTHER	101	//¾î¸Ó´ÏÀÇ ´«¹°
+#define QUEST_LOST_CHILD	102	//¾ÆÀÌµéÀÌ »ç¶óÁ³´Ù?
+#define QUEST_TRUTH_MIA		103	//¹Ì¾ÆÀÇ Áø½Ç
+#define QUEST_DOLL_MIA		104	//¹Ì¾ÆÀÇ ÀÎÇü
+#define QUEST_TRUTH_PAST	105	//¹àÇôÁö´Â °ú°Å
 
-//ï¿½ï¿½ ï¿½Ìºï¿½Æ®
-#define QUEST_EVE_GBRCSOUP	106	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å»È¯ï¿½Ï¶ï¿½.
+//¼³ ÀÌº¥Æ®
+#define QUEST_EVE_GBRCSOUP	106	//¶±±¹À» Å»È¯ÇÏ¶ó.
 
-//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
-#define QUEST_DREADBIG		107	//ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½
-#define QUEST_DREADKREN		108	//ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½Ãµï¿½
-#define QUEST_DREADMUTE		109	//ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½Æ¸ï¿½ï¿½ï¿½
+//Äù½ºÆ® Ãß°¡
+#define QUEST_DREADBIG		107	//µå·¡µåÆêÀÇ Àü¼³ ºò ½Ã·¹µå
+#define QUEST_DREADKREN		108	//µå·¡µåÆêÀÇ Àü¼³ Å©¸£¿£ ´Ù½Ãµå
+#define QUEST_DREADMUTE		109	//µå·¡µåÆêÀÇ Àü¼³ ¹«Æ® ¾Æ¸£¹Ý
 
-//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
-#define QUEST_REVENGE_RBANG	110	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_RBIDENTITY	111	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
-#define QUEST_ARCTHIEF		112	//ï¿½ëµµï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½
-#define QUEST_SPECHILD		113	//Æ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
-#define QUEST_SECDEAL		114	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å·ï¿½
-#define QUEST_MIACURSE		115	//ï¿½Ì¾ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½Ì¿ï¿½
-#define QUEST_LEGENDREDMANTIS1	116	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½(ï¿½ï¿½)
-#define QUEST_LEGENDREDMANTIS2	117	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½(ï¿½ï¿½)
-#define QUEST_LEGENDREDMANTIS3	118	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½(ï¿½ï¿½)
+//Äù½ºÆ® Ãß°¡
+#define QUEST_REVENGE_RBANG	110	//ºÓÀº ¹ð µµÀû´ÜÀÇ º¹¼ö
+#define QUEST_RBIDENTITY	111	//ºÓÀº ¹ð µµÀû´ÜÀÇ Á¤Ã¼
+#define QUEST_ARCTHIEF		112	//´ëµµÀû ·Îµå ¹ð
+#define QUEST_SPECHILD		113	//Æ¯º°ÇÑ ¾ÆÀÌµé
+#define QUEST_SECDEAL		114	//Àº¹ÐÇÑ °Å·¡
+#define QUEST_MIACURSE		115	//¹Ì¾Æ, ±× ÀúÁÖ¹ÞÀº ÀÌ¸§ÀÌ¿©
+#define QUEST_LEGENDREDMANTIS1	116	//Àü¼³ÀÇ ·¹µå¸ÇÆ¼½º(»ó)
+#define QUEST_LEGENDREDMANTIS2	117	//Àü¼³ÀÇ ·¹µå¸ÇÆ¼½º(Áß)
+#define QUEST_LEGENDREDMANTIS3	118	//Àü¼³ÀÇ ·¹µå¸ÇÆ¼½º(ÇÏ)
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìºï¿½Æ®
-#define QUEST_EVE_LOVEHOUSE	119	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½Ï³ï¿½-
-#define QUEST_EVE_LOVEHOUSE1	120	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_EVE_LOVEHOUSE2	121	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ß»ï¿½-
+//°¡Á¤ÀÇ ´Þ ÀÌº¥Æ®
+#define QUEST_EVE_LOVEHOUSE	119	//»ç¶ûÀÇ ÁýÁþ±â-´Ï³ª-
+#define QUEST_EVE_LOVEHOUSE1	120	//»ç¶ûÀÇ ÁýÁþ±â-ÂîÂî-
+#define QUEST_EVE_LOVEHOUSE2	121	//»ç¶ûÀÇ ÁýÁþ±â-»ß»ß-
 
-//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
-#define QUEST_RBCIVILWAR	122	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_NEWLORDB		123	//ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Îµï¿½ ï¿½ï¿½
-#define QUEST_LORDBAMBITION	124	//ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½
-#define QUEST_UNITYREDB		125	//ï¿½ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_NEWPETYORN	126	//ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ä¸¥
-#define QUEST_PUMPKINCHILD	127	//ï¿½ï¿½Å² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù·ï¿½ï¿½ï¿½
-#define QUEST_DORIVINIG		128	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¹ï¿½
-#define QUEST_SUMMONDARK	129	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½
-#define QUEST_PHANTASM		130	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¯ï¿½ï¿½
-#define QUEST_SERUSURIEL	131	//ï¿½ï¿½ï¿½ç½ºï¿½ì¸®ï¿½ï¿½
-#define QUEST_THEWAR		132	//ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_EXISTDESIRE	133	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_CLOCK1ST		134	//1ï¿½ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
-#define QUEST_CLOCK2ND		135	//2ï¿½ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
-#define QUEST_ABILITYYE		136	//ï¿½×´ï¿½ï¿½ï¿½ï¿½ ï¿½É·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_IBLBOSS	        137     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ìºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_DARKGATE		138	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
-#define QUEST_CLOWNTEMPLE	139	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-#define QUEST_EXISTDARK		140	//ï¿½×µï¿½ï¿½ï¿½ ï¿½ï¿½È°
-#define QUEST_INTHEDARK		141	//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_CREGUILD		142	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!
+//Äù½ºÆ® Ãß°¡
+#define QUEST_RBCIVILWAR	122	//ºÓÀº ¹ð µµÀû´Ü ³»Àü
+#define QUEST_NEWLORDB		123	//»õ·Î¿î ·Îµå ¹ð
+#define QUEST_LORDBAMBITION	124	//·Îµå ¹ðÀÇ ¾ß½É
+#define QUEST_UNITYREDB		125	//ÅëÀÏ! ºÓÀº ¹ð µµÀû´Ü
+#define QUEST_NEWPETYORN	126	//»õ·Î¿î °­¾ÆÁö ¿ä¸¥
+#define QUEST_PUMPKINCHILD	127	//ÆßÅ² ¸¶À»ÀÇ ¸»½é²Ù·¯±â
+#define QUEST_DORIVINIG		128	//µµ¸®µµ¸® ÃÊ¹ä
+#define QUEST_SUMMONDARK	129	//¾îµÒÀ» ºÎ¸£´Â ¼Ò¸®
+#define QUEST_PHANTASM		130	//°øÆ÷ÀÇ È¯¿µ
+#define QUEST_SERUSURIEL	131	//¼¼·ç½º¿ì¸®¿¤
+#define QUEST_THEWAR		132	//ÀüÀï(À§Çè)
+#define QUEST_EXISTDESIRE	133	//¿å¸ÁÀÌ ºÎ¸¥ Á¸Àç
+#define QUEST_CLOCK1ST		134	//1Â÷ ´ë Å¬¶ô¿öÅ© ÀüÀï
+#define QUEST_CLOCK2ND		135	//2Â÷ ´ë Å¬¶ô¿öÅ© ÀüÀï
+#define QUEST_ABILITYYE		136	//±×´ëµéÀÇ ´É·ÂÀ» º¸¿©¶ó(À§Çè)
+#define QUEST_IBLBOSS	        137     //¹ÌÁöÀÇ Á¸Àç(ÀÌºí¸®½ºÀÇ »ç¿ø º¸½º)
+#define QUEST_DARKGATE		138	//¾îµÒÀÇ ¹®
+#define QUEST_CLOWNTEMPLE	139	//±¤´ëÀÇ »ç¿ø
+#define QUEST_EXISTDARK		140	//±×µéÀÇ ºÎÈ°
+#define QUEST_INTHEDARK		141	//¾îµÒ ¼ÓÀ¸·Î
+#define QUEST_CREGUILD		142	//µµ¿ø°áÀÇ!
 
-//15ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//15Â÷ »çÁ¦ ÀÏ¹Ý Äù½ºÆ®
 
-#define QUEST_TEACHERICINISONE	148 // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - 1ï¿½ï¿½ï¿½
-#define QUEST_TEACHERICINISTWO	149 // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - 2ï¿½ï¿½ï¿½
-#define QUEST_TEACHERICINISTHR	150 // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - 3ï¿½ï¿½ï¿½
+#define QUEST_TEACHERICINISONE	148 // ´ë ½º½Â - 1µî±Þ
+#define QUEST_TEACHERICINISTWO	149 // ´ë ½º½Â - 2µî±Þ
+#define QUEST_TEACHERICINISTHR	150 // ´ë ½º½Â - 3µî±Þ
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®(1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)	151 ~
-//1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_VOCMER_BFTRN	151	//ï¿½Ó¼ï¿½ï¿½Ê¸ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ó¼ï¿½ï¿½Ê¸ï¿½)
-#define QUEST_VOCMER_TRN1	152	//ï¿½Ó¼ï¿½ï¿½Ê¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_VOCMER_TRN2	153	//ï¿½Ó¼ï¿½ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½Â¾î³ªï¿½ï¿½
-#define QUEST_VOCMER_TRN3	154	//17ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//½ºÆä¼È Äù½ºÆ®(1Â÷ ÀüÁ÷, 2Â÷ ÀüÁ÷, Àü½Â Äù½ºÆ®)	151 ~
+//1Â÷ ÀüÁ÷ Äù½ºÆ®
+#define QUEST_VOCMER_BFTRN	151	//¸Ó¼­³Ê¸® ¿¬¸Í(¸Ó¼­³Ê¸®)
+#define QUEST_VOCMER_TRN1	152	//¸Ó¼­³Ê¸® ¸¶½ºÅÍ
+#define QUEST_VOCMER_TRN2	153	//¸Ó¼­³Ê¸®·Î ÅÂ¾î³ª´Ù
+#define QUEST_VOCMER_TRN3	154	//17Â÷¿¡ »èÁ¦
 
-#define QUEST_VOCASS_BFTRN	155	//ï¿½ï¿½ï¿½Ã½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã½ï¿½Æ®ï¿½ï¿½(ï¿½ï¿½Ã½ï¿½Æ®)
-#define QUEST_VOCASS_TRN1	156	//ï¿½ï¿½Ã½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_VOCASS_TRN2	157	//ï¿½ï¿½Ã½ï¿½Æ®ï¿½ï¿½ ï¿½Â¾î³ªï¿½ï¿½
-#define QUEST_VOCASS_TRN3	158	//17ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+#define QUEST_VOCASS_BFTRN	155	//¸®½Ã½º Âù¾ç ¾î½Ã½ºÆ®±³(¾î½Ã½ºÆ®)
+#define QUEST_VOCASS_TRN1	156	//¾î½Ã½ºÆ® ¸¶½ºÅÍ
+#define QUEST_VOCASS_TRN2	157	//¾î½Ã½ºÆ®·Î ÅÂ¾î³ª´Ù
+#define QUEST_VOCASS_TRN3	158	//17Â÷¿¡ »èÁ¦
 
-#define QUEST_VOCMAG_BFTRN	159	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_VOCMAG_TRN1	160	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_VOCMAG_TRN2	161	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¾î³ªï¿½ï¿½
-#define QUEST_VOCMAG_TRN3	162	//17ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+#define QUEST_VOCMAG_BFTRN	159	//¸¶¹ý¿¬±¸¼Ò(¸ÅÁö¼Ç)
+#define QUEST_VOCMAG_TRN1	160	//¸ÅÁö¼Ç ¸¶½ºÅÍ
+#define QUEST_VOCMAG_TRN2	161	//¸ÅÁö¼ÇÀ¸·Î ÅÂ¾î³ª´Ù
+#define QUEST_VOCMAG_TRN3	162	//17Â÷¿¡ »èÁ¦
 
-#define QUEST_VOCACR_BFTRN  53 	//ï¿½ï¿½Å©ï¿½Î¹ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½Å©ï¿½Î¹ï¿½) 
-#define QUEST_VOCACR_TRN1   54 	//ï¿½ï¿½Å©ï¿½Î¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_VOCACR_TRN2   55 	//ï¿½ï¿½Å©ï¿½Î¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¾î³ªï¿½ï¿½
-#define QUEST_VOCACR_TRN3   56 	//17ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-
-
-//2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_HEROKNI_TRN1	163	//ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½Æ®-
-#define QUEST_HEROKNI_TRN2	164	//È£ï¿½ï¿½ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½Æ®-
-#define QUEST_HEROKNI_TRN3	165	//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½Æ® -ï¿½ï¿½ï¿½ï¿½Æ®-
-#define QUEST_HEROKNI_TRN4	166	//ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HEROBLA_TRN1	168	//ï¿½ì·»ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½-
-#define QUEST_HEROBLA_TRN2	169	//ï¿½ê¸±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½-
-#define QUEST_HEROBLA_TRN3	170	//ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½-
-#define QUEST_HEROBLA_TRN4	171	//ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HEROBIL_TRN1	173	//ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROBIL_TRN2	174	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROBIL_TRN3	175	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROBIL_TRN4	176	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HERORIN_TRN1	178	//ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HERORIN_TRN2	179	//Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¹ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HERORIN_TRN3	180	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HERORIN_TRN4	181	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HEROPSY_TRN1	183	//ï¿½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½-
-#define QUEST_HEROPSY_TRN2	184	//ï¿½ï¿½ï¿½Æ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½-
-#define QUEST_HEROPSY_TRN3	185	//ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Û¿ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½-
-#define QUEST_HEROPSY_TRN4	186	//ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HEROELE_TRN1	188	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROELE_TRN2	189	//Ä¿ï¿½î¸±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROELE_TRN3	190	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Üµï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROELE_TRN4	191	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HEROJES_TRN1  	57	//Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-	
-#define QUEST_HEROJES_TRN2  	58	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROJES_TRN3  	59	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HEROJES_TRN4  	60	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
-
-#define QUEST_HERORAN_TRN1  	62	//ï¿½ï¿½ï¿½Ì³ï¿½ï¿½ï¿½ ï¿½Ä°ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HERORAN_TRN2  	63	//Å°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HERORAN_TRN3  	64	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-
-#define QUEST_HERORAN_TRN4  	65	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ?ï¿½ï¿½ï¿½-
+#define QUEST_VOCACR_BFTRN  53 	//¾ÆÅ©·Î¹î ¿¬¸Í(¾ÆÅ©·Î¹î) 
+#define QUEST_VOCACR_TRN1   54 	//¾ÆÅ©·Î¹î ¸¶½ºÅÍ
+#define QUEST_VOCACR_TRN2   55 	//¾ÆÅ©·Î¹îÀ¸·Î ÅÂ¾î³ª´Ù
+#define QUEST_VOCACR_TRN3   56 	//17Â÷¿¡ »èÁ¦
 
 
-//3ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//2Â÷ ÀüÁ÷ Äù½ºÆ®
+#define QUEST_HEROKNI_TRN1	163	//ºô·¹ÀÌ¾ðÀÇ ÈÄ°èÀÚ -³ªÀÌÆ®-
+#define QUEST_HEROKNI_TRN2	164	//È£¸£¸Þ½ºÀÇ ½ÃÇè -³ªÀÌÆ®-
+#define QUEST_HEROKNI_TRN3	165	//³ªÀÌÆ® »çÁ¦ ·Îºñ¿¡Æ® -³ªÀÌÆ®-
+#define QUEST_HEROKNI_TRN4	166	//³ªÀÌÆ® ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HEROBLA_TRN1	168	//Çì·»ÀÇ ÈÄ°èÀÚ -ºí·¹ÀÌµå-
+#define QUEST_HEROBLA_TRN2	169	//ºê¸±ÀÇ ½ÃÇè -ºí·¹ÀÌµå-
+#define QUEST_HEROBLA_TRN3	170	//ºí·¹ÀÌµå »çÁ¦ Á¦ÆÛµð -ºí·¹ÀÌµå-
+#define QUEST_HEROBLA_TRN4	171	//ºí·¹ÀÌµå ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HEROBIL_TRN1	173	//·Î¿£ÅÚÀÇ ÈÄ°èÀÚ -ºôÆ÷½ºÅÍ-
+#define QUEST_HEROBIL_TRN2	174	//µµ¸ßÀÇ ½ÃÇè -ºôÆ÷½ºÅÍ-
+#define QUEST_HEROBIL_TRN3	175	//ºôÆ÷½ºÅÍ »çÁ¦ Æä¶ó -ºôÆ÷½ºÅÍ-
+#define QUEST_HEROBIL_TRN4	176	//ºôÆ÷½ºÅÍ ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HERORIN_TRN1	178	//¿¡ÀÌ¿£´ÀÀÇ ÈÄ°èÀÚ -¸µ¸¶½ºÅÍ-
+#define QUEST_HERORIN_TRN2	179	//Å¬·¥ºêÀÇ ºÎÅ¹ -¸µ¸¶½ºÅÍ-
+#define QUEST_HERORIN_TRN3	180	//¸µ¸¶½ºÅÍ »çÁ¦ È÷´í -¸µ¸¶½ºÅÍ-
+#define QUEST_HERORIN_TRN4	181	//¸µ¸¶½ºÅÍ ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HEROPSY_TRN1	183	//¿ÀÆÛ¿¦ÀÇ ÈÄ°èÀÚ -»çÀÌÅ°ÆÛ-
+#define QUEST_HEROPSY_TRN2	184	//Äí¾Æ¸°ÀÇ ½ÃÇè -»çÀÌÅ°ÆÛ-
+#define QUEST_HEROPSY_TRN3	185	//»çÀÌÅ°ÆÛ »çÁ¦ ÆÛ¿¡ºê -»çÀÌÅ°ÆÛ-
+#define QUEST_HEROPSY_TRN4	186	//»çÀÌÅ°ÆÛ ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HEROELE_TRN1	188	//¸±¸³ÀÇ ÈÄ°èÀÚ -¿¤¸®¸àÅÍ-
+#define QUEST_HEROELE_TRN2	189	//Ä¿Áî¸±ÀÇ ½ÃÇè -¿¤¸®¸àÅÍ-
+#define QUEST_HEROELE_TRN3	190	//¿¤¸®¸àÅÍ »çÁ¦ ÄÜµå¶÷ -¿¤¸®¸àÅÍ-
+#define QUEST_HEROELE_TRN4	191	//¿¤¸®¸àÅÍ ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HEROJES_TRN1  	57	//Ä¿¿¡³ÙÀÇ ÈÄ°èÀÚ -Á¦½ºÅÍ-	
+#define QUEST_HEROJES_TRN2  	58	//¶óµð¿ÂÀÇ °úÁ¦ -Á¦½ºÅÍ-
+#define QUEST_HEROJES_TRN3  	59	//Á¦½ºÅÍ »çÁ¦ È£¸ÞÀÕ -Á¦½ºÅÍ-
+#define QUEST_HEROJES_TRN4  	60	//Á¦½ºÅÍ ¼öÈ£ÀÚ ?°è½Â-
+
+#define QUEST_HERORAN_TRN1  	62	//ÇÏÀÌ³­ÀÇ ÈÄ°èÀÚ -·¹ÀÎÀú-
+#define QUEST_HERORAN_TRN2  	63	//Å°¸áÀÇ °úÁ¦ -·¹ÀÎÀú-
+#define QUEST_HERORAN_TRN3  	64	//·¹ÀÎÀú »çÁ¦ ·çÇË -·¹ÀÎÀú-
+#define QUEST_HERORAN_TRN4  	65	//·¹ÀÎÀú ¼öÈ£ÀÚ ?°è½Â-
+
+
+//3Â÷ ÀüÁ÷ Äù½ºÆ®
 
 #define QUEST_HEROLORDK_TRN1	193
 #define QUEST_HEROLORDK_TRN2	194
@@ -281,125 +281,125 @@
 #define QUEST_HEROMENT_TRN4	237
 #define QUEST_HEROMENT_TRN5	238
 
-// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ì½º ï¿½ï¿½ï¿½ï¿½Æ®
+// ÁßÇü ±æµåÇÏ¿ì½º Äù½ºÆ®
 
 #define QUEST_GUILDHOUSE_TRN1	239
 #define QUEST_GUILDHOUSE_TRN2	240
 #define QUEST_GUILDHOUSE_TRN3	241
 
-// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+// Á¦·Ã Á¤·É Äù½ºÆ®
 
 #define QUEST_NEWSMELT_TRN1	242
 #define QUEST_NEWSMELT_TRN2	243
 #define QUEST_NEWSMELT_TRN3	244
 
-// 17ï¿½ï¿½ ï¿½Ï¹ï¿½ ï¿½Ù½Ç¸ï¿½ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+// 17Â÷ ÀÏ¹Ý ¹Ù½Ç¸®½ºÅ©ÀÇ ¿­¸Å
 #define QUEST_BASILISK_FRUIT01	245
 #define QUEST_BASILISK_FRUIT02	246
 #define QUEST_BASILISK_FRUIT03	247
 #define QUEST_BASILISK_FRUIT04	248
 
-//17ï¿½ï¿½ ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ Ä®ï¿½ï¿½ï¿½ï¿½
+//17Â÷ ÀÏ¹Ý ¾ÏÈæÀÇ ¼ö·· ÁöÇÏµ¿±¼ Ä®°¡½º
 #define QUEST_DARKNESS_KALGAS01	249
 #define QUEST_DARKNESS_KALGAS02	250
 #define QUEST_DARKNESS_KALGAS03	251
 
 
-//ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_SCENARIO1	   	1000 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 1
-#define QUEST_SCENARIO1_1	1001 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 1_1
-#define QUEST_SCENARIO1_2	1002 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 1_2
-#define QUEST_SCENARIO1_3	1003 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 1_3
-#define QUEST_SCENARIO2		1004 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3		1005 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3_1	1006 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3_2	1007 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3_3	1008 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3_4	1009 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3_5	1010 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO3_6	1011 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2
-#define QUEST_SCENARIO4		1012 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 4
-#define QUEST_SCENARIO5		1013 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 4
-#define QUEST_SCENARIO5_1	1014 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 4
-#define QUEST_SCENARIO5_2	1015 // ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 4
+//½Ã³ª¸®¿À Äù½ºÆ®
+#define QUEST_SCENARIO1	   	1000 // ½Ã³ª¸®¿À Äù½ºÆ® 1
+#define QUEST_SCENARIO1_1	1001 // ½Ã³ª¸®¿À Äù½ºÆ® 1_1
+#define QUEST_SCENARIO1_2	1002 // ½Ã³ª¸®¿À Äù½ºÆ® 1_2
+#define QUEST_SCENARIO1_3	1003 // ½Ã³ª¸®¿À Äù½ºÆ® 1_3
+#define QUEST_SCENARIO2		1004 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3		1005 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3_1	1006 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3_2	1007 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3_3	1008 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3_4	1009 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3_5	1010 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO3_6	1011 // ½Ã³ª¸®¿À Äù½ºÆ® 2
+#define QUEST_SCENARIO4		1012 // ½Ã³ª¸®¿À Äù½ºÆ® 4
+#define QUEST_SCENARIO5		1013 // ½Ã³ª¸®¿À Äù½ºÆ® 4
+#define QUEST_SCENARIO5_1	1014 // ½Ã³ª¸®¿À Äù½ºÆ® 4
+#define QUEST_SCENARIO5_2	1015 // ½Ã³ª¸®¿À Äù½ºÆ® 4
 #define QUEST_SCENARIO5_3	1016 
 
-//ï¿½ß°ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_SCE_BEGINDOUT		1017	//ï¿½Ç¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_REASONCONDIV		1018	//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_PLOTBEGIN		1019	//ï¿½ï¿½ï¿½ÛµÇ´ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_BUBBLEPLN		1020	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-#define QUEST_SCE_STRMARK		1021	//ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_VIOMAGTRP		1022	//ï¿½Ú»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½
-#define QUEST_SCE_SHADEHILL		1023	//ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-#define QUEST_SCE_VMTAM			1024	//ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_TRBHISTORY		1025	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_BLKMAGI		1026	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_SCEALTAR		1027	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-#define QUEST_SCE_MYSTGEM		1028	//ï¿½Ç¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_SCE_LAOLA			1029	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¶ï¿½
-#define QUEST_SCE_VMIDEN		1030	//ï¿½Ú»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
-#define QUEST_SCE_SHADOW		1031	//ï¿½×µï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
-#define QUEST_SCE_DAILYBOOK		1032	//ï¿½Ï±ï¿½ï¿½ï¿½
-#define QUEST_SCE_DAILYBOOK1		1033	//ï¿½Ï±ï¿½ï¿½ï¿½1
-#define QUEST_SCE_DAILYBOOK2		1034	//ï¿½Ï±ï¿½ï¿½ï¿½2
-#define QUEST_SCE_HARMONINFIND		1035	//ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½Æ¼ï¿½
-#define QUEST_SCE_HARMONINFIND1 	1036	//ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½Æ¼ï¿½1
-#define QUEST_SCE_HARMONINFIND2		1037	//ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½Æ¼ï¿½2
-#define QUEST_SCE_HARMONINFIND3		1039	//ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½Æ¼ï¿½3
-#define QUEST_SCE_HARMONINFIND4		1040	//ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½Æ¼ï¿½4
-#define QUEST_SCE_HARMONINFIND5		1041	//ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½Æ¼ï¿½5
+//Ãß°¡ ½Ã³ª¸®¿À Äù½ºÆ®
+#define QUEST_SCE_BEGINDOUT		1017	//ÀÇ¹®ÀÇ ½ÃÀÛ
+#define QUEST_SCE_REASONCONDIV		1018	//´ë·úÀÌ °¥¶óÁø ÀÌÀ¯
+#define QUEST_SCE_PLOTBEGIN		1019	//½ÃÀÛµÇ´Â À½¸ð
+#define QUEST_SCE_BUBBLEPLN		1020	//¹öºíÀÇ Æò¿ø
+#define QUEST_SCE_STRMARK		1021	//ÀÌ»óÇÑ ¹®¾ç
+#define QUEST_SCE_VIOMAGTRP		1022	//ÀÚ»öÀÇ ¸¶¹ý ±Ø´Ü
+#define QUEST_SCE_SHADEHILL		1023	//½¦ÀÌµåÀÇ ¾ð´ö
+#define QUEST_SCE_VMTAM			1024	//´ë±Ø´ÜÀå µîÀå
+#define QUEST_SCE_TRBHISTORY		1025	//°í³­ÀÇ ¿ª»ç
+#define QUEST_SCE_BLKMAGI		1026	//ºí·¢ ¸ÅÁö¼Ç
+#define QUEST_SCE_SCEALTAR		1027	//Á¦´ÜÀÇ ºñ¹Ð
+#define QUEST_SCE_MYSTGEM		1028	//ÀÇ¹®ÀÇ ±¸½½
+#define QUEST_SCE_LAOLA			1029	//´ë¸ÅÁö¼Ç ¶ó¿Ã¶ó
+#define QUEST_SCE_VMIDEN		1030	//ÀÚ»öÀÇ ¸¶¹ý»çÀÇ Á¤Ã¼
+#define QUEST_SCE_SHADOW		1031	//±×µéÀÇ ±×¸²ÀÚ
+#define QUEST_SCE_DAILYBOOK		1032	//ÀÏ±âÀå
+#define QUEST_SCE_DAILYBOOK1		1033	//ÀÏ±âÀå1
+#define QUEST_SCE_DAILYBOOK2		1034	//ÀÏ±âÀå2
+#define QUEST_SCE_HARMONINFIND		1035	//ÇÏ¸£¸ð´ÑÀ»Ã£¾Æ¼­
+#define QUEST_SCE_HARMONINFIND1 	1036	//ÇÏ¸£¸ð´ÑÀ»Ã£¾Æ¼­1
+#define QUEST_SCE_HARMONINFIND2		1037	//ÇÏ¸£¸ð´ÑÀ»Ã£¾Æ¼­2
+#define QUEST_SCE_HARMONINFIND3		1039	//ÇÏ¸£¸ð´ÑÀ»Ã£¾Æ¼­3
+#define QUEST_SCE_HARMONINFIND4		1040	//ÇÏ¸£¸ð´ÑÀ»Ã£¾Æ¼­4
+#define QUEST_SCE_HARMONINFIND5		1041	//ÇÏ¸£¸ð´ÑÀ»Ã£¾Æ¼­5
 
-//15ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_SCE_HARMONINDAILYBOOK1	1042 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ 1ï¿½ï¿½
-#define QUEST_SCE_HARMONINDAILYBOOK2	1043 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ 2ï¿½ï¿½
-#define QUEST_SCE_HARMONINDAILYBOOK3	1044 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ 3ï¿½ï¿½
-#define QUEST_SCE_HARMONINDAILYBOOK4	1045 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ 4ï¿½ï¿½
-#define QUEST_SCE_HARMONINDAILYBOOK5	1046 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ 5ï¿½ï¿½
+//15Â÷ ½Ã³ª¸®¿À Äù½ºÆ®
+#define QUEST_SCE_HARMONINDAILYBOOK1	1042 // ÇÏ¸£¸ð´ÑÀÇ ÀÏÁö 2±Ç 1Àå
+#define QUEST_SCE_HARMONINDAILYBOOK2	1043 // ÇÏ¸£¸ð´ÑÀÇ ÀÏÁö 2±Ç 2Àå
+#define QUEST_SCE_HARMONINDAILYBOOK3	1044 // ÇÏ¸£¸ð´ÑÀÇ ÀÏÁö 2±Ç 3Àå
+#define QUEST_SCE_HARMONINDAILYBOOK4	1045 // ÇÏ¸£¸ð´ÑÀÇ ÀÏÁö 2±Ç 4Àå
+#define QUEST_SCE_HARMONINDAILYBOOK5	1046 // ÇÏ¸£¸ð´ÑÀÇ ÀÏÁö 2±Ç 5Àå
 
-#define QUEST_SCE_QUESTIONDAILY1	1047 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½ 1ï¿½ï¿½
-#define QUEST_SCE_QUESTIONDAILY2	1048 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½ 2ï¿½ï¿½
-#define QUEST_SCE_QUESTIONDAILY3	1049 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½ 3ï¿½ï¿½
-#define QUEST_SCE_QUESTIONDAILY4	1050 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½ 4ï¿½ï¿½
-#define QUEST_SCE_QUESTIONDAILY5	1051 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½ 5ï¿½ï¿½
-#define QUEST_SCE_QUESTIONDAILY6	1061 // ï¿½Ï¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¶ï¿½ 6ï¿½ï¿½
+#define QUEST_SCE_QUESTIONDAILY1	1047 // ÇÏ¸£¸ð´Ñ ÀÏÁö 3±ÇÀ» Ã£¾Æ¶ó 1Àå
+#define QUEST_SCE_QUESTIONDAILY2	1048 // ÇÏ¸£¸ð´Ñ ÀÏÁö 3±ÇÀ» Ã£¾Æ¶ó 2Àå
+#define QUEST_SCE_QUESTIONDAILY3	1049 // ÇÏ¸£¸ð´Ñ ÀÏÁö 3±ÇÀ» Ã£¾Æ¶ó 3Àå
+#define QUEST_SCE_QUESTIONDAILY4	1050 // ÇÏ¸£¸ð´Ñ ÀÏÁö 3±ÇÀ» Ã£¾Æ¶ó 4Àå
+#define QUEST_SCE_QUESTIONDAILY5	1051 // ÇÏ¸£¸ð´Ñ ÀÏÁö 3±ÇÀ» Ã£¾Æ¶ó 5Àå
+#define QUEST_SCE_QUESTIONDAILY6	1061 // ÇÏ¸£¸ð´Ñ ÀÏÁö 3±ÇÀ» Ã£¾Æ¶ó 6Àå
 
-#define QUEST_SCE_CAVEDISCOVERY1	1052 // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ 1ï¿½ï¿½
-#define QUEST_SCE_CAVEDISCOVERY2	1053 // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ 2ï¿½ï¿½
-#define QUEST_SCE_CAVEDISCOVERY3	1054 // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ 3ï¿½ï¿½
-#define QUEST_SCE_CAVEDISCOVERY4	1055 // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Æ¼ï¿½ 4ï¿½ï¿½
+#define QUEST_SCE_CAVEDISCOVERY1	1052 // »õ·Î¿î µ¿±¼À» Ã£¾Æ¼­ 1Àå
+#define QUEST_SCE_CAVEDISCOVERY2	1053 // »õ·Î¿î µ¿±¼À» Ã£¾Æ¼­ 2Àå
+#define QUEST_SCE_CAVEDISCOVERY3	1054 // »õ·Î¿î µ¿±¼À» Ã£¾Æ¼­ 3Àå
+#define QUEST_SCE_CAVEDISCOVERY4	1055 // »õ·Î¿î µ¿±¼À» Ã£¾Æ¼­ 4Àå
 
-//15ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//15Â÷ »çÁ¦ ½Ã³ª¸®¿À Äù½ºÆ®
 
-#define QUEST_SCE_MDRIGALTEACHER1	1056 // ï¿½ï¿½ï¿½å¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½
-#define QUEST_SCE_MDRIGALTEACHER2	1057 // ï¿½ï¿½ï¿½å¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½
-#define QUEST_SCE_MDRIGALTEACHER3	1058 // ï¿½ï¿½ï¿½å¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½
-#define QUEST_SCE_MDRIGALTEACHER4	1059 // ï¿½ï¿½ï¿½å¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 4ï¿½ï¿½
-#define QUEST_SCE_MDRIGALTEACHER5	1060 // ï¿½ï¿½ï¿½å¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 5ï¿½ï¿½
+#define QUEST_SCE_MDRIGALTEACHER1	1056 // ¸¶µå¸®°¥ÀÇ ½º½Â 1Àå
+#define QUEST_SCE_MDRIGALTEACHER2	1057 // ¸¶µå¸®°¥ÀÇ ½º½Â 2Àå
+#define QUEST_SCE_MDRIGALTEACHER3	1058 // ¸¶µå¸®°¥ÀÇ ½º½Â 3Àå
+#define QUEST_SCE_MDRIGALTEACHER4	1059 // ¸¶µå¸®°¥ÀÇ ½º½Â 4Àå
+#define QUEST_SCE_MDRIGALTEACHER5	1060 // ¸¶µå¸®°¥ÀÇ ½º½Â 5Àå
 
-//16ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//16Â÷ ½Ã³ª¸®¿À Äù½ºÆ®
 
-#define QUEST_SCE_NEWTRIBE1			1062 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 1ï¿½ï¿½(ï¿½Å´ï¿½ï¿½ Ä«ï¿½Ï·ï¿½
-#define QUEST_SCE_NEWTRIBE2			1063 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 2ï¿½ï¿½(ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½)
-#define QUEST_SCE_NEWTRIBE3			1064 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 3ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½Üºï¿½ï¿½ï¿½)
-#define QUEST_SCE_NEWTRIBE4			1065 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 4ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_SCE_NEWTRIBE5			1066 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 5ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_SCE_NEWTRIBE6			1067 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 6ï¿½ï¿½(È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_SCE_NEWTRIBE7			1068 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 7ï¿½ï¿½(ï¿½Ø¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_SCE_NEWTRIBE8			1069 // ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½ 8ï¿½ï¿½(ï¿½ï¿½ ï¿½Î·ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ñ°ï¿½)
+#define QUEST_SCE_NEWTRIBE1			1062 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 1Àå(½Å´ë·ú Ä«ÀÏ·é
+#define QUEST_SCE_NEWTRIBE2			1063 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 2Àå(»õ·Î¿î ¼¼°è·Î ÇÑ°ÉÀ½)
+#define QUEST_SCE_NEWTRIBE3			1064 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 3Àå(³¸¼± ¿ÜºÎÀÎ)
+#define QUEST_SCE_NEWTRIBE4			1065 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 4Àå(ÃÌÀåÀÇ ÆíÁö)
+#define QUEST_SCE_NEWTRIBE5			1066 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 5Àå(ÀÐÀ» ¼ö ¾ø´Â ÆíÁö)
+#define QUEST_SCE_NEWTRIBE6			1067 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 6Àå(È£¼ö ¼ÓÀÇ µ¸º¸±â)
+#define QUEST_SCE_NEWTRIBE7			1068 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 7Àå(ÇØ¼® µÈ ÆíÁö)
+#define QUEST_SCE_NEWTRIBE8			1069 // ½Å ÀÎ·ù¿© ¾È³çÇÑ°¡ 8Àå(½Å ÀÎ·ù¿© ¾È³çÇÑ°¡)
 
-//17ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//17Â÷ ½Ã³ª¸®¿À Äù½ºÆ®
 
-#define QUEST_SCE_UNENDEDEXPEDITION1	1070 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½
-#define QUEST_SCE_UNENDEDEXPEDITION2	1071 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½
-#define QUEST_SCE_UNENDEDEXPEDITION3	1072 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½
-#define QUEST_SCE_UNENDEDEXPEDITION4	1073 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 4ï¿½ï¿½
-#define QUEST_SCE_UNENDEDEXPEDITION5	1074 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 5ï¿½ï¿½
-#define QUEST_SCE_UNENDEDEXPEDITION6	1075 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 6ï¿½ï¿½
-#define QUEST_SCE_UNENDEDEXPEDITION7	1076 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 7ï¿½ï¿½
+#define QUEST_SCE_UNENDEDEXPEDITION1	1070 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 1Àå
+#define QUEST_SCE_UNENDEDEXPEDITION2	1071 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 2Àå
+#define QUEST_SCE_UNENDEDEXPEDITION3	1072 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 3Àå
+#define QUEST_SCE_UNENDEDEXPEDITION4	1073 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 4Àå
+#define QUEST_SCE_UNENDEDEXPEDITION5	1074 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 5Àå
+#define QUEST_SCE_UNENDEDEXPEDITION6	1075 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 6Àå
+#define QUEST_SCE_UNENDEDEXPEDITION7	1076 // ³¡³ªÁö ¾ÊÀº ¸ðÇè 7Àå
 
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//Àú·¾ ½Ã³ª¸®¿À Äù½ºÆ®
 
 #define QUEST_SCE_ADVENTURER01		1077
 #define QUEST_SCE_ADVENTURER02		1078
@@ -426,16 +426,16 @@
 #define QUEST_SCE_ADVENTURER23		1099
 #define QUEST_SCE_ADVENTURER24		1100
 
-#define QUEST_SCE_DEADTHBAHARA01	1101 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ 1ï¿½ï¿½
-#define QUEST_SCE_DEADTHBAHARA02	1102 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ 2ï¿½ï¿½
-#define QUEST_SCE_DEADTHBAHARA03	1103 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ 3ï¿½ï¿½
-#define QUEST_SCE_DEADTHBAHARA04	1104 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ 4ï¿½ï¿½
-#define QUEST_SCE_DEADTHBAHARA05	1105 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ 5ï¿½ï¿½
-#define QUEST_SCE_DEADTHBAHARA06	1106 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¶ï¿½ 6ï¿½ï¿½
+#define QUEST_SCE_DEADTHBAHARA01	1101 // Á×À½ÀÇ ¶¥ ¹ÙÇÏ¶ó 1Àå
+#define QUEST_SCE_DEADTHBAHARA02	1102 // Á×À½ÀÇ ¶¥ ¹ÙÇÏ¶ó 2Àå
+#define QUEST_SCE_DEADTHBAHARA03	1103 // Á×À½ÀÇ ¶¥ ¹ÙÇÏ¶ó 3Àå
+#define QUEST_SCE_DEADTHBAHARA04	1104 // Á×À½ÀÇ ¶¥ ¹ÙÇÏ¶ó 4Àå
+#define QUEST_SCE_DEADTHBAHARA05	1105 // Á×À½ÀÇ ¶¥ ¹ÙÇÏ¶ó 5Àå
+#define QUEST_SCE_DEADTHBAHARA06	1106 // Á×À½ÀÇ ¶¥ ¹ÙÇÏ¶ó 6Àå
 
 
-//18ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 1ï¿½ï¿½
-#define QUEST_SCE_MADRIGALCOLLAPSE01	1107 // ï¿½ï¿½ï¿½å¸®ï¿½ï¿½ ï¿½Ø±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//18Â÷ ½Ã³ª¸®¿À Äù½ºÆ® 1Àå
+#define QUEST_SCE_MADRIGALCOLLAPSE01	1107 // ¸¶µå¸®°¥ ºØ±«ÀÇ Á¶Áü
 #define QUEST_SCE_MADRIGALCOLLAPSE02	1108
 #define QUEST_SCE_MADRIGALCOLLAPSE03	1109
 #define QUEST_SCE_MADRIGALCOLLAPSE04	1110
@@ -457,8 +457,8 @@
 #define QUEST_SCE_MADRIGALCOLLAPSE20	1126
 #define QUEST_SCE_MADRIGALCOLLAPSE21	1187
 
-//18ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2ï¿½ï¿½
-#define QUEST_SCE_FORGOTTENPAST01	1129 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ Ã£ï¿½Æ¼ï¿½
+//18Â÷ ½Ã³ª¸®¿À Äù½ºÆ® 2Àå
+#define QUEST_SCE_FORGOTTENPAST01	1129 // ÀØÇôÁø °ú°Å¸¦ Ã£¾Æ¼­
 #define QUEST_SCE_FORGOTTENPAST02	1130
 #define QUEST_SCE_FORGOTTENPAST03	1131
 #define QUEST_SCE_FORGOTTENPAST04	1132
@@ -486,8 +486,8 @@
 #define QUEST_SCE_FORGOTTENPAST26	1185
 #define QUEST_SCE_FORGOTTENPAST27	1186
 
-//18ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 3ï¿½ï¿½
-#define QUEST_SCE_HEROCOMBACK01	1150 // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+//18Â÷ ½Ã³ª¸®¿À Äù½ºÆ® 3Àå
+#define QUEST_SCE_HEROCOMBACK01	1150 // Èð¾îÁø ¿µ¿õµéÀÇ ±ÍÈ¯
 #define QUEST_SCE_HEROCOMBACK02	1151
 #define QUEST_SCE_HEROCOMBACK03	1152
 #define QUEST_SCE_HEROCOMBACK04	1153
@@ -519,8 +519,8 @@
 #define QUEST_SCE_HEROCOMBACK30	1179
 #define QUEST_SCE_HEROCOMBACK31	1180
 
-//18ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 4ï¿½ï¿½
-#define QUEST_SCE_PERCUSSIONALWORLD01	1188 // ï¿½Ýµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
+//18Â÷ ½Ã³ª¸®¿À Äù½ºÆ® 4Àå
+#define QUEST_SCE_PERCUSSIONALWORLD01	1188 // °Ýµ¿ÇÏ´Â ¼¼°è
 #define QUEST_SCE_PERCUSSIONALWORLD02	1189
 #define QUEST_SCE_PERCUSSIONALWORLD03	1190
 #define QUEST_SCE_PERCUSSIONALWORLD04	1191
@@ -541,194 +541,59 @@
 #define QUEST_SCE_PERCUSSIONALWORLD19	1206
 #define QUEST_SCE_PERCUSSIONALWORLD20	1207
 
-// Additional quest defines for existing quest files (2000-2132 range)
-#define QUEST_2000    2000
-#define QUEST_2001    2001
-#define QUEST_2002    2002
-#define QUEST_2003    2003
-#define QUEST_2004    2004
-#define QUEST_2005    2005
-#define QUEST_2006    2006
-#define QUEST_2007    2007
-#define QUEST_2008    2008
-#define QUEST_2009    2009
-#define QUEST_2010    2010
-#define QUEST_2011    2011
-#define QUEST_2012    2012
-#define QUEST_2013    2013
-#define QUEST_2014    2014
-#define QUEST_2015    2015
-#define QUEST_2016    2016
-#define QUEST_2017    2017
-#define QUEST_2018    2018
-#define QUEST_2019    2019
-#define QUEST_2020    2020
-#define QUEST_2021    2021
-#define QUEST_2022    2022
-#define QUEST_2023    2023
-#define QUEST_2024    2024
-#define QUEST_2025    2025
-#define QUEST_2026    2026
-#define QUEST_2027    2027
-#define QUEST_2028    2028
-#define QUEST_2029    2029
-#define QUEST_2030    2030
-#define QUEST_2031    2031
-#define QUEST_2032    2032
-#define QUEST_2033    2033
-#define QUEST_2034    2034
-#define QUEST_2035    2035
-#define QUEST_2036    2036
-#define QUEST_2037    2037
-#define QUEST_2038    2038
-#define QUEST_2039    2039
-#define QUEST_2040    2040
-#define QUEST_2041    2041
-#define QUEST_2042    2042
-#define QUEST_2043    2043
-#define QUEST_2044    2044
-#define QUEST_2045    2045
-#define QUEST_2046    2046
-#define QUEST_2047    2047
-#define QUEST_2048    2048
-#define QUEST_2049    2049
-#define QUEST_2050    2050
-#define QUEST_2051    2051
-#define QUEST_2052    2052
-#define QUEST_2053    2053
-#define QUEST_2054    2054
-#define QUEST_2055    2055
-#define QUEST_2056    2056
-#define QUEST_2057    2057
-#define QUEST_2058    2058
-#define QUEST_2059    2059
-#define QUEST_2060    2060
-#define QUEST_2061    2061
-#define QUEST_2062    2062
-#define QUEST_2063    2063
-#define QUEST_2064    2064
-#define QUEST_2065    2065
-#define QUEST_2066    2066
-#define QUEST_2067    2067
-#define QUEST_2068    2068
-#define QUEST_2069    2069
-#define QUEST_2070    2070
-#define QUEST_2071    2071
-#define QUEST_2072    2072
-#define QUEST_2073    2073
-#define QUEST_2074    2074
-#define QUEST_2075    2075
-#define QUEST_2076    2076
-#define QUEST_2077    2077
-#define QUEST_2078    2078
-#define QUEST_2079    2079
-#define QUEST_2080    2080
-#define QUEST_2081    2081
-#define QUEST_2082    2082
-#define QUEST_2083    2083
-#define QUEST_2084    2084
-#define QUEST_2085    2085
-#define QUEST_2086    2086
-#define QUEST_2087    2087
-#define QUEST_2088    2088
-#define QUEST_2089    2089
-#define QUEST_2090    2090
-#define QUEST_2091    2091
-#define QUEST_2092    2092
-#define QUEST_2093    2093
-#define QUEST_2094    2094
-#define QUEST_2095    2095
-#define QUEST_2096    2096
-#define QUEST_2097    2097
-#define QUEST_2098    2098
-#define QUEST_2099    2099
-#define QUEST_2100    2100
-#define QUEST_2101    2101
-#define QUEST_2102    2102
-#define QUEST_2103    2103
-#define QUEST_2104    2104
-#define QUEST_2105    2105
-#define QUEST_2106    2106
-#define QUEST_2107    2107
-#define QUEST_2108    2108
-#define QUEST_2109    2109
-#define QUEST_2110    2110
-#define QUEST_2111    2111
-#define QUEST_2112    2112
-#define QUEST_2113    2113
-#define QUEST_2114    2114
-#define QUEST_2115    2115
-#define QUEST_2116    2116
-#define QUEST_2117    2117
-#define QUEST_2118    2118
-#define QUEST_2119    2119
-#define QUEST_2120    2120
-#define QUEST_2121    2121
-#define QUEST_2122    2122
-#define QUEST_2123    2123
-#define QUEST_2124    2124
-#define QUEST_2125    2125
-#define QUEST_2126    2126
-#define QUEST_2127    2127
-#define QUEST_2128    2128
-#define QUEST_2129    2129
-#define QUEST_2130    2130
-#define QUEST_2131    2131
-#define QUEST_2132    2132
-
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_WARMON_LV1    1 // ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½Å©                                  - ï¿½ï¿½ï¿½ï¿½       (ï¿½ï¿½ï¿½ï¿½ 70) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Ê°Å´ï¿½ ï¿½ï¿½ï¿½ï¿½ Warp)
-#define QUEST_BOSS_LV1	2 // ï¿½ï¿½Ó½ï¿½
-#define QUEST_BOSS_LV2	3 // Å©ï¿½ï¿½ï¿½ï¿½
-#define QUEST_BOSS_LV3	4 // ï¿½Ó½ï¿½ï¿½ï¿½Æ®
+//±æµå¿ë Äù½ºÆ®
+#define QUEST_WARMON_LV1    1 // µîÀå Å¬¶ô¿öÅ©                                  - ´ÙÄÜ       (·¹º§ 70) ¿¡½¯·Ó(ÃÊ°Å´ë ¸ó½ºÅÍ Warp)
+#define QUEST_BOSS_LV1	2 // ºò¸Ó½½
+#define QUEST_BOSS_LV2	3 // Å©¸£¸ª
+#define QUEST_BOSS_LV3	4 // ¸Ó½¬¹«Æ®
 
 
-//07ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ 5000ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_RICECAKE1		   143	// ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½
-#define QUEST_RICECAKE2		   144	// ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½
-#define QUEST_RICECAKE3		   145	// ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½	
-#define QUEST_RICECAKE4		   146	// ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½	
-#define QUEST_RICECAKE5		   147	// ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½	
-#define QUEST_AUTUMNEVENT01	  5000 // 06.ï¿½Ø¿Ü°ï¿½ï¿½ï¿½ï¿½Ìºï¿½Æ®ï¿½ï¿½
-#define QUEST_AUTUMNEVENT02	  5001 // 06.ï¿½Ø¿Ü°ï¿½ï¿½ï¿½ï¿½Ìºï¿½Æ®ï¿½ï¿½	
-#define QUEST_AUTUMNEVENT03	  5002 // 06.ï¿½Ø¿Ü°ï¿½ï¿½ï¿½ï¿½Ìºï¿½Æ®ï¿½ï¿½	
-#define QUEST_AUTUMNEVENT04	  5003 // 06.ï¿½Ø¿Ü°ï¿½ï¿½ï¿½ï¿½Ìºï¿½Æ®ï¿½ï¿½	
-#define QUEST_PKMINUS         5004 // ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_TEACHER01       5005 // ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_TEACHER02       5006 // ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½(È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_TEACHER03       5007 // ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½å¼±ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_COOKER01	      5008 // È­ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ä¸®ï¿½ï¿½)
-#define QUEST_COOKER02	      5009 // È­ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ä¸®ï¿½ï¿½)
-#define QUEST_COOKER02	      5009 // È­ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ä¸®ï¿½ï¿½)
-#define QUEST_ARBORDAY01  	  5010 // ï¿½Ä¸ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®(Çªï¿½ï¿½ï¿½ï¿½ ï¿½Ä¼ï¿½ï¿½ï¿½)
-#define QUEST_ARBORDAY02      5011 // ï¿½Ä¸ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_ARBORDAY03	  5012 // ï¿½Ä¸ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®(È¯ï¿½ï¿½îµ¿ï¿½ï¿½)
-#define QUEST_ARBORDAY04	  5013 // ï¿½Ä¸ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
-#define QUEST_PANG			  5014 // ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½×½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® (1ï¿½ï¿½)
-#define QUEST_KAWIBAWIBO01	  5015 // ï¿½Î¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ê¸ï¿½ï¿½ï¿½)
-#define QUEST_VOLCANETELEPORT 5016 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½ï¿½ï¿½Æ®
+//07³â ºÎÅÍ Äù½ºÆ®´Â 5000¹ø ºÎÅÍ ½ÃÀÛ
+#define QUEST_RICECAKE1		   143	// ÇÑ°¡À§ ÀÌº¥Æ®¿ë
+#define QUEST_RICECAKE2		   144	// ÇÑ°¡À§ ÀÌº¥Æ®¿ë
+#define QUEST_RICECAKE3		   145	// ÇÑ°¡À§ ÀÌº¥Æ®¿ë	
+#define QUEST_RICECAKE4		   146	// ÇÑ°¡À§ ÀÌº¥Æ®¿ë	
+#define QUEST_RICECAKE5		   147	// ÇÑ°¡À§ ÀÌº¥Æ®¿ë	
+#define QUEST_AUTUMNEVENT01	  5000 // 06.ÇØ¿Ü°¡À»ÀÌº¥Æ®¿ë
+#define QUEST_AUTUMNEVENT02	  5001 // 06.ÇØ¿Ü°¡À»ÀÌº¥Æ®¿ë	
+#define QUEST_AUTUMNEVENT03	  5002 // 06.ÇØ¿Ü°¡À»ÀÌº¥Æ®¿ë	
+#define QUEST_AUTUMNEVENT04	  5003 // 06.ÇØ¿Ü°¡À»ÀÌº¥Æ®¿ë	
+#define QUEST_PKMINUS         5004 // ÂüÈ¸ÀÇ Äù½ºÆ®
+#define QUEST_TEACHER01       5005 // ½ÅÇÐ±â ÀûÀÀÇÏ±â ÀÌº¥Æ®¿ë(¿ï°íÀÖ´Â ¼±»ý´Ô)
+#define QUEST_TEACHER02       5006 // ½ÅÇÐ±â ÀûÀÀÇÏ±â ÀÌº¥Æ®¿ë(È­°¡³­ ±³°¨¼±»ý´Ô)
+#define QUEST_TEACHER03       5007 // ½ÅÇÐ±â ÀûÀÀÇÏ±â ÀÌº¥Æ®¿ë(ÀÎÀÚÇÑ ±³Àå¼±»ý´Ô)
+#define QUEST_COOKER01	      5008 // È­ÀÌÆ® µ¥ÀÌ ÀÌº¥Æ®¿ë(¼ö½À ¿ä¸®»ç)
+#define QUEST_COOKER02	      5009 // È­ÀÌÆ® µ¥ÀÌ ÀÌº¥Æ®¿ë(ºÎÀå ¿ä¸®»ç)
+#define QUEST_COOKER02	      5009 // È­ÀÌÆ® µ¥ÀÌ ÀÌº¥Æ®¿ë(ºÎÀå ¿ä¸®»ç)
+#define QUEST_ARBORDAY01  	  5010 // ½Ä¸ñÀÏ ÀÌº¥Æ®(Çª¸¥½£ ÆÄ¼ö²Û)
+#define QUEST_ARBORDAY02      5011 // ½Ä¸ñÀÏ ÀÌº¥Æ®(¹¦¸ñ °ü¸®ÀÚ)
+#define QUEST_ARBORDAY03	  5012 // ½Ä¸ñÀÏ ÀÌº¥Æ®(È¯°æ¿îµ¿°¡)
+#define QUEST_ARBORDAY04	  5013 // ½Ä¸ñÀÏ ÀÌº¥Æ®(±¹¸³°ø¿ø °ü¸®ÀÚ)
+#define QUEST_PANG			  5014 // ÇÊ¸®ÇÉ ³×½½·¹ ÀÌº¥Æ® (1Â÷)
+#define QUEST_KAWIBAWIBO01	  5015 // ·Î¶Ç º¸´Ù Áñ°Å¿î °¡À§ ¹ÙÀ§ º¸ °ÔÀÓ (ÇÊ¸®ÇÉ)
+#define QUEST_VOLCANETELEPORT 5016 // º¼ÄÉÀÎ Áö¿ªÀ¸·Î ÅÚ·¹Æ÷Æ®
 
-//Pet ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_PETTAME01		5017 // ï¿½ï¿½ -> Dï¿½ï¿½
-#define QUEST_PETTAME02		5018 //Dï¿½ï¿½ -> Cï¿½ï¿½
-#define QUEST_PETTAME03		5019 //Cï¿½ï¿½ -> Bï¿½ï¿½
-#define QUEST_PETTAME04		5020 //Bï¿½ï¿½ -> Aï¿½ï¿½
-#define QUEST_PETTAME05		5021 //Aï¿½ï¿½ -> Sï¿½ï¿½
+//Pet Äù½ºÆ®
+#define QUEST_PETTAME01		5017 // ¾Ë -> D±Þ
+#define QUEST_PETTAME02		5018 //D±Þ -> C±Þ
+#define QUEST_PETTAME03		5019 //C±Þ -> B±Þ
+#define QUEST_PETTAME04		5020 //B±Þ -> A±Þ
+#define QUEST_PETTAME05		5021 //A±Þ -> S±Þ
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//Àü½Â Äù½ºÆ®
 #define QUEST_MASTER		5022
 #define QUEST_HERO			5023
 
-//2007ï¿½ï¿½ ï¿½Ïºï¿½ Ä¥ï¿½ï¿½ï¿½Ìºï¿½Æ®
+//2007³â ÀÏº» Ä¥¼®ÀÌº¥Æ®
 #define QUEST_JULY01		5024
 #define QUEST_JULY02		5025
 
-#define QUEST_NESTLE02_1  5026 // ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½×½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® (2ï¿½ï¿½) Original Hoverboard
-#define QUEST_NESTLE02_2  5027 // ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½×½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® (2ï¿½ï¿½) Sweet 'n Creamy Hoverboard
-#define QUEST_NESTLE02_3  5028 // ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½×½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® (2ï¿½ï¿½) Intense Hoverboard
-#define QUEST_NESTLE03	  5029 // ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½×½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® (3ï¿½ï¿½)
+#define QUEST_NESTLE02_1  5026 // ÇÊ¸®ÇÉ ³×½½·¹ ÀÌº¥Æ® (2Â÷) Original Hoverboard
+#define QUEST_NESTLE02_2  5027 // ÇÊ¸®ÇÉ ³×½½·¹ ÀÌº¥Æ® (2Â÷) Sweet 'n Creamy Hoverboard
+#define QUEST_NESTLE02_3  5028 // ÇÊ¸®ÇÉ ³×½½·¹ ÀÌº¥Æ® (2Â÷) Intense Hoverboard
+#define QUEST_NESTLE03	  5029 // ÇÊ¸®ÇÉ ³×½½·¹ ÀÌº¥Æ® (3Â÷)
 
-#define QUEST_KAWIBAWIBO02	  5030 //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+#define QUEST_KAWIBAWIBO02	  5030 //±¹³» °¡À§¹ÙÀ§º¸ ÀÌº¥Æ®
 
 #define	QUEST_STUFF		5031
 
@@ -738,33 +603,33 @@
 #define QUEST_COLLECTOR	5034
 #define QUEST_DARKON	5035
 
-#define QUEST_KAWIBAWIBO03	5036  //ï¿½ë¸¸ ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+#define QUEST_KAWIBAWIBO03	5036  //´ë¸¸ Áñ°Å¿î °¡À§ ¹ÙÀ§ º¸ °ÔÀÓ ÀÌº¥Æ®
 
 #define QUEST_DARKON02		5037
 
 #define QUEST_PREPAIDCARD	5038
 
-//Æ©ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define QUEST_TUTORIAL01	5039  //ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define QUEST_TUTORIAL02	5040  //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(1)
-#define QUEST_TUTORIAL03	5041  //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(2)
-#define QUEST_TUTORIAL04	5042  //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(3)
-#define QUEST_TUTORIAL05	5043  //ï¿½ï¿½ï¿½ï¿½Ú·Î¼ï¿½ï¿½ï¿½ Ã¹ï¿½ï¿½ï¿½ï¿½(1)
-#define QUEST_TUTORIAL06	5044  //ï¿½ï¿½ï¿½ï¿½Ú·Î¼ï¿½ï¿½ï¿½ Ã¹ï¿½ï¿½ï¿½ï¿½(2)
+//Æ©Åä¸®¾ó Äù½ºÆ®
+#define QUEST_TUTORIAL01	5039  //»õ·Î¿î ÀÌ¹æÀÎÀÇ µîÀå
+#define QUEST_TUTORIAL02	5040  //¹æ¶ûÀÚ ±³À°(1)
+#define QUEST_TUTORIAL03	5041  //¹æ¶ûÀÚ ±³À°(2)
+#define QUEST_TUTORIAL04	5042  //¹æ¶ûÀÚ ±³À°(3)
+#define QUEST_TUTORIAL05	5043  //¹æ¶ûÀÚ·Î¼­ÀÇ Ã¹°ÉÀ½(1)
+#define QUEST_TUTORIAL06	5044  //¹æ¶ûÀÚ·Î¼­ÀÇ Ã¹°ÉÀ½(2)
 
-//2008ï¿½ï¿½ ï¿½Ïºï¿½ Ä¥ï¿½ï¿½ï¿½Ìºï¿½Æ®
+//2008³â ÀÏº» Ä¥¼®ÀÌº¥Æ®
 #define QUEST_JULY03		5045
 #define QUEST_JULY04		5046
 
-#define	QUEST_MINIWHEEL		5047  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¹ï¿½ï¿½ï¿½ 200ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½Ï¶ï¿½ ï¿½Ìºï¿½Æ®
-#define	QUEST_EVENTBALL		5048  //ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¶ï¿½ ï¿½Ìºï¿½Æ®
+#define	QUEST_MINIWHEEL		5047  //ÀÛÀºÅé´Ï¹ÙÄû 200°³¸¦ Ã¤ÁýÇÏ¶ó ÀÌº¥Æ®
+#define	QUEST_EVENTBALL		5048  //ÀÌº¥Æ® ±¸½½À» ¼öÁýÇÏ¶ó ÀÌº¥Æ®
 
-//2008ï¿½ï¿½ ï¿½Ïºï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//2008³â ÀÏº» ÇÒ·ÎÀ© µ¥ÀÌ ÀÌº¥Æ®
 #define	QUEST_HALLOWEEN01	5049
 #define	QUEST_HALLOWEEN02	5050
 #define	QUEST_HALLOWEEN03	5051
 
-//2009ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å³ï¿½ ï¿½Ìºï¿½Æ®
+//2009³â À¯·Æ ½Å³â ÀÌº¥Æ®
 #define	QUEST_SNOWMAN01		5052
 #define	QUEST_SNOWMAN02		5053
 #define	QUEST_SNOWMAN03		5054
@@ -795,44 +660,44 @@
 
 #define	QUEST_SEVENTH2009	5072
 
-//ï¿½Ïºï¿½ 5ï¿½Ö³ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//ÀÏº» 5ÁÖ³â ±â³ä ÀÌº¥Æ®
 #define	QUEST_MERON			5073
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//À¯·´ ¸ÆÁÖÁ¦Á¶ ÀÌº¥Æ®
 #define QUEST_AUGUSTBEER01	5074
 #define QUEST_AUGUSTBEER02	5075
 
-//ï¿½Ïºï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//ÀÏº» ÇÒ·ÎÀ© ÀÌº¥Æ®
 #define QUEST_PICKSIROSE	5076
 
-#define QUEST_BRAVERYCHALLENGE 5077 //ï¿½Ê¸ï¿½ï¿½ï¿½ HERO ï¿½Ìºï¿½Æ® 2Åº
+#define QUEST_BRAVERYCHALLENGE 5077 //ÇÊ¸®ÇÉ HERO ÀÌº¥Æ® 2Åº
 
-//2009 ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//2009 ÇÒ·ÎÀ© ÀÌº¥Æ®
 #define QUEST_HALLOWEEN01_2009	5078
 #define QUEST_HALLOWEEN02_2009	5079
 #define QUEST_HALLOWEEN03_2009	5080
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ìºï¿½Æ®
+//À¯·´ ¹ìÆÄÀÌ¾î Äù½ºÆ® ÀÌº¥Æ®
 #define QUEST_VanHarlen01		5081
 #define QUEST_VanHarlen02		5082
 
-//ï¿½Ïºï¿½ Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//ÀÏº» Å©¸®½º¸¶½º ÀÌº¥Æ®
 #define QUEST_CHRISTMASROMEO	5083
 #define QUEST_CHRISTMASJULIET	5084
 
-//ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//À¯·´ Å©¸®½º¸¶½º ÀÌº¥Æ®
 #define	QUEST_CHRISTMAS2009_1	5085
 #define	QUEST_CHRISTMAS2009_2	5086
 
-//2009ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å³ï¿½ ï¿½Ìºï¿½Æ®2
+//2009³â À¯·Æ ½Å³â ÀÌº¥Æ®2
 #define	QUEST_SNOWMAN01_1	5087
 #define	QUEST_SNOWMAN02_1	5088
 #define	QUEST_SNOWMAN03_1	5089
 
-//2010ï¿½ï¿½ ï¿½ß·ï¿½Å¸ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//2010³â ¹ß·»Å¸ÀÎ ÀÌº¥Æ®
 #define	QUEST_VALENTINE2010	5090
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//±¹³» ´ººñ Áö¿ø ÀÌº¥Æ®
 #define	QUEST_NEWBIE1_ASS	5091
 #define	QUEST_NEWBIE1_MER	5092
 #define	QUEST_NEWBIE1_MAG	5093
@@ -879,10 +744,10 @@
 #define	QUEST_BULLSFESTIVAL11	5125
 
 #define	QUEST_SEVENTH2010		5126
-//ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//ÇÊ¸®ÇÉ ½ºÇÁ¸µ ÀÌº¥Æ®
 #define	QUEST_EVENTSPRING	5127
 
-//ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//¹Ì±¹ ·¹º§¾÷ ÀÌº¥Æ®
 #define	QUEST_EVENTGOLD1	5128
 #define	QUEST_EVENTGOLD2	5129
 #define	QUEST_EVENTGOLD3	5130
@@ -894,7 +759,7 @@
 #define	QUEST_EVENTGOLD9	5136
 #define	QUEST_EVENTGOLD10	5137
 
-//16ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//16Â÷ ·¹º§¾÷ ÀÌº¥Æ®
 
 #define	QUEST_JUMPINGMEWRANG01	5138
 #define	QUEST_JUMPINGMEWRANG02	5139
@@ -904,7 +769,7 @@
 #define	QUEST_JUMPINGMEWRANG06	5143
 #define	QUEST_JUMPINGMEWRANG07	5144
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® 1
+//ÇÁ·ÎÆä½Ã ÀÌº¥Æ® 1
 
 #define	QUEST_BRAVERT1	5145
 #define	QUEST_BRAVERT2	5146
@@ -912,36 +777,36 @@
 #define	QUEST_DARKSIDE	5148
 #define	QUEST_BRAVERT0	5151
 
-//ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® 
+//ÇÒ·ÎÀ© Á»ºñÄù½ºÆ® 
 #define	QUEST_ZOMBIES1	5152
 #define	QUEST_ZOMBIES2	5153
 #define	QUEST_ZOMBIES3	5154
-//ï¿½Ú½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 
+//ÀÚ½Å¿¡ ´ëÇÑ µµÀü Äù½ºÆ® 
 #define	QUEST_ATMAM	5155
 #define	QUEST_ATMAH	5156
 
-//2010 Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-#define	QUEST_CHRISTMASFAIRY	5157	//Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-#define	QUEST_CHRISTMASSNOW		5158	//Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//2010 Å©¸®½º¸¶½º Äù½ºÆ®
+#define	QUEST_CHRISTMASFAIRY	5157	//Å©¸®½º¸¶½º Á¤·É
+#define	QUEST_CHRISTMASSNOW		5158	//Å©¸®½º¸¶½º ´«»ç¶÷ ÀÌº¥Æ®
 
-//ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//±¹³» Å©¸®½º¸¶½º Äù½ºÆ®
 #define	QUEST_CHRISTMASSANTA01		5159
 #define	QUEST_CHRISTMASSANTA02		5160
 
-//17ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
+//17Â÷ ÀÌº¥Æ® Äù½ºÆ®
 #define	QUEST_KIMPDEVENT01		5161
 
-//ï¿½Ø¿ï¿½ ï¿½ß·ï¿½Å¸ï¿½Îµï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
+//ÇØ¿Ü ¹ß·»Å¸ÀÎµ¥ÀÌ ÀÌº¥Æ® Äù½ºÆ®
 #define	QUEST_VALENTINEDAY01		5162
 #define	QUEST_VALENTINEDAY02		5163
 
-//ï¿½ï¿½ï¿½ï¿½, ï¿½Ïºï¿½ È­ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//±¹³», ÀÏº» È­ÀÌÆ® µ¥ÀÌ ÀÌº¥Æ®
 #define QUEST_WHITEDAY01			5164
 #define QUEST_WHITEDAY02			5165
 #define QUEST_WHITEDAY03			5166
 #define QUEST_WHITEDAY04			5167
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+//¸®¾îÆê ·¹º§¾÷ Äù½ºÆ® (¿¤¸®¿î)
 #define QUEST_ELLIUNPETTAME01			5168
 #define QUEST_ELLIUNPETTAME02			5169
 #define QUEST_ELLIUNPETTAME03			5170
@@ -949,10 +814,10 @@
 #define QUEST_ELLIUNPETTAME05			5172
 
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Òµï¿½ ï¿½Ýºï¿½ï¿½ï¿½
+//±¹³» ½Ä¸ñÀÏ º£È÷¸ð½º ¿ìµç ¼Òµå ¹Ýº¹Äù
 #define QUEST_WOODDAY					5173
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½î¸°ï¿½Ì³ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
+//À¯·´ ¾î¸°ÀÌ³¯ ÀÌº¥Æ® Äù½ºÆ®
 #define QUEST_CHILDRENWEEK01			5174
 #define QUEST_CHILDRENWEEK02			5175
 #define QUEST_CHILDRENWEEK03			5176
@@ -976,7 +841,7 @@
 
 #define QUEST_KIMPDNIMGIFT	5193
 
-//ï¿½ï¿½ï¿½ï¿½ 1~4ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//À¯·´ 1~4ÁÖÂ÷ ÁÖ°£ ·¹º§¾÷ Äù½ºÆ®
 #define QUEST_WEEKEVENT_1_60_01	5194
 #define QUEST_WEEKEVENT_1_60_02	5195
 #define QUEST_WEEKEVENT_61_120_01	5196
@@ -986,7 +851,7 @@
 #define QUEST_WEEKEVENT_101M_139H_01	5200
 #define QUEST_WEEKEVENT_101M_139H_02	5201
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//À¯·´ ¿ù°£ Äù½ºÆ®
 #define QUEST_MONTH_1_60_01	5202
 #define QUEST_MONTH_1_60_02	5203
 #define QUEST_MONTH_1_60_03	5204
@@ -1004,7 +869,7 @@
 #define QUEST_MONTH_101M_150H_03	5216
 #define QUEST_MONTH_101M_150H_04	5217
 
-//ï¿½ï¿½ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ß°ï¿½
+//À¯´ÏÅ© ¹«±â ±³È¯¿ë ÁõÇ¥ ¹× Äù½ºÆ® Ãß°¡
 #define QUEST_TRADE_CHIP_SUHO		5218
 #define QUEST_TRADE_CHIP_USU		5219
 #define QUEST_TRADE_CHIP_ANGEL		5220
@@ -1027,7 +892,7 @@
 
 
 
-//ï¿½ï¿½ï¿½ï¿½ 1~4ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 2ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+//À¯·´ 1~4ÁÖÂ÷ ÁÖ°£ ·¹º§¾÷ Äù½ºÆ® 2Â÷ºÐ(¸¶Áö¸·)
 #define QUEST_WEEKEVENT_1_60_03			5234
 #define QUEST_WEEKEVENT_1_60_04			5235
 #define QUEST_WEEKEVENT_61_120_03		5236
@@ -1037,7 +902,7 @@
 #define QUEST_WEEKEVENT_101M_139H_03	5240
 #define QUEST_WEEKEVENT_101M_139H_04	5241
 
-//ï¿½Ý·Î¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½Æ®
+//ÄÝ·Î¼¼¿ò Åõ»çÀÇ ÁõÇ¥ Äù½ºÆ®
 #define	QUEST_COLOSSEUM_EASY_FAKE_END		5242
 #define	QUEST_COLOSSEUM_EASY_REAL_END		5243
 #define	QUEST_COLOSSEUM_HARD_FAKE_3ROUND	5244
@@ -1045,49 +910,49 @@
 #define	QUEST_COLOSSEUM_HARD_FAKE_END		5246
 #define	QUEST_COLOSSEUM_HARD_REAL_END		5247
 
-//ï¿½Ïºï¿½ ï¿½Þ¸ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
+//ÀÏº» ´Þ¸ÂÀÌ ÀÌº¥Æ® Äù½ºÆ®
 #define	QUEST_JAP_THEMOON		5248
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
+//±¹³» ÇÒ·ÎÀ© ÀÌº¥Æ®
 #define	QUEST_KOR_2011HALLOWEEN	5249
 
 
-//Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®2011
+//Å©¸®½º¸¶½º ÀÌº¥Æ®2011
 #define	QUEST_SANTAGIFT2011		5250
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
+//¹öÇÁÆÎ Å×½ºÆ® Äù½ºÆ®
 #define	QUEST_BUFFPANGTEST		5251
 
-//2012 ï¿½î¸°ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//2012 ¾î¸°ÀÌ ÁÖ°£ Äù½ºÆ®
 #define QUEST_2012CHILDRENWEEK01		5252
 #define QUEST_2012CHILDRENWEEK02		5253
 #define QUEST_2012CHILDRENWEEK03		5254
 #define QUEST_2012CHILDRENWEEK04		5255
 
-//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+//±¹³» ÇØÇ°´Þ Äù½ºÆ®
 #define	QUEST_KOR_SUNHUGMOON			5256
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 4ï¿½ï¿½
-#define	QUEST_BUFFPANG_01		5257	//ï¿½ß±ï¿½ï¿½ï¿½(1)
-#define	QUEST_BUFFPANG_02		5258	//ï¿½ß±ï¿½ï¿½ï¿½(2)
-#define	QUEST_BUFFPANG_03		5259	//ï¿½ï¿½ï¿½ï¿½ï¿½(1)
-#define	QUEST_BUFFPANG_04		5260	//ï¿½ï¿½ï¿½ï¿½ï¿½(2)
+//¹öÇÁÆÎ ¹öÇÁ Äù½ºÆ® 4Á¾
+#define	QUEST_BUFFPANG_01		5257	//Áß±ÞÀÚ(1)
+#define	QUEST_BUFFPANG_02		5258	//Áß±ÞÀÚ(2)
+#define	QUEST_BUFFPANG_03		5259	//»ó±ÞÀÚ(1)
+#define	QUEST_BUFFPANG_04		5260	//»ó±ÞÀÚ(2)
 
 
-//ï¿½ï¿½ï¿½ï¿½ï¿½ä½ºÆ¼ï¿½ï¿½
+//¹ÂÁ÷Æä½ºÆ¼¹ú
 #define	QUEST_MUSICFESTIVALGUITAR	5261
 
-// ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ define ï¿½ï¿½ï¿½: 1800 ~ 4500ï¿½Ì»ï¿½
-// SetHeadQuest()ï¿½ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½
-// ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½(2ï¿½ï¿½)	1800 ~ 1991
-// ï¿½Ìºï¿½Æ®		1992
-// 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½    		1993
-// 2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½    		1994
-// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 		1995
-// ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 	1996
-// ï¿½Ï¹ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 		1997
-// PK ï¿½ï¿½ï¿½ï¿½Æ® 		1998
-// ï¿½Ç·Ú¼ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® 	1999
+// »ç¿ë ºÒ°¡ define »ó¼ö: 1800 ~ 4500ÀÌ»ó
+// SetHeadQuest()ÀÇ ÀÎÀÚ°ª
+// ½Ã³ª¸®¿À(2Â÷)	1800 ~ 1991
+// ÀÌº¥Æ®		1992
+// 1Â÷ ÀüÁ÷    		1993
+// 2Â÷ ÀüÁ÷    		1994
+// ´øÀü Äù½ºÆ® 		1995
+// ½Ã³ª¸®¿À Äù½ºÆ® 	1996
+// ÀÏ¹Ý Äù½ºÆ® 		1997
+// PK Äù½ºÆ® 		1998
+// ÀÇ·Ú¼Ò Äù½ºÆ® 	1999
 
 #define QUEST_KIND_SCENARIO	6000
 #define QUEST_KIND_NORMAL	6001
@@ -1095,37 +960,37 @@
 #define QUEST_KIND_EVENT	6003
 
 
-// QUEST_REQUEST_BEGIN	    2000 ~ 2099   ï¿½Ê±ï¿½ ï¿½Ç·Ú¼ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-// QUEST_REQUEST_INTER	    2100 ~ 2499   ï¿½ß±ï¿½ ï¿½Ç·Ú¼ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-// QUEST_REQUEST_HIGH	    2500 ~ 2799   ï¿½ï¿½ï¿½ï¿½ ï¿½Ç·Ú¼ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
-// QUEST_REQUEST_SPECIAL    2800 ~        Æ¯ï¿½ï¿½ ï¿½Ç·Ú¼ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+// QUEST_REQUEST_BEGIN	    2000 ~ 2099   ÃÊ±Þ ÀÇ·Ú¼Ò Äù½ºÆ®
+// QUEST_REQUEST_INTER	    2100 ~ 2499   Áß±Þ ÀÇ·Ú¼Ò Äù½ºÆ®
+// QUEST_REQUEST_HIGH	    2500 ~ 2799   °í±Þ ÀÇ·Ú¼Ò Äù½ºÆ®
+// QUEST_REQUEST_SPECIAL    2800 ~        Æ¯±Þ ÀÇ·Ú¼Ò Äù½ºÆ®
 
-// QUEST_REQUEST_BEGIN	    4000 ~ 4500   PK ï¿½ï¿½ï¿½ï¿½Æ®
+// QUEST_REQUEST_BEGIN	    4000 ~ 4500   PK Äù½ºÆ®
 
 
 #define QS_END              14
 
-// ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½ 
+// Äù½ºÆ® Å¸ÀÔ 
 #define QT_GENERAL        0
 #define QT_REQUEST        1
 #define QT_SCENARIO1      2
 
-// ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ 
-// ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ NPCï¿½ï¿½ ï¿½ï¿½ï¿½ 
-#define QSAY_BEGIN1            0  // "ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? ï¿½ï¿½/ï¿½Æ´Ï¿ï¿½"
-#define QSAY_BEGIN2            1  // "ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? ï¿½ï¿½/ï¿½Æ´Ï¿ï¿½"
-#define QSAY_BEGIN3            2  // "ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? ï¿½ï¿½/ï¿½Æ´Ï¿ï¿½"
-#define QSAY_BEGIN4            3  // "ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? ï¿½ï¿½/ï¿½Æ´Ï¿ï¿½"
-#define QSAY_BEGIN5            4  // "ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½? ï¿½ï¿½/ï¿½Æ´Ï¿ï¿½"
-#define QSAY_BEGIN_YES         5  // "ï¿½ï¿½"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
-#define QSAY_BEGIN_NO          6 // "ï¿½Æ´Ï¿ï¿½"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
-#define QSAY_END_COMPLETE1 7 // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½_1
-#define QSAY_END_COMPLETE2 8 // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½_2
-#define QSAY_END_COMPLETE3 9 // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½_3
-#define QSAY_END_FAILURE1  10 // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½_1
-#define QSAY_END_FAILURE2  11 // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½_2
-#define QSAY_END_FAILURE3  12 // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½_3
-// ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½. ï¿½ï¿½Å¸ ï¿½ß°ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Íµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½. SayQuestï¿½ï¿½ ï¿½Ø¾ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® Å¸ï¿½ï¿½Æ²ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½.
+// Äù½ºÆ® ´ë»ç 
+// Äù½ºÆ®¸¦ ÁØ NPCÀÇ ´ë»ç 
+#define QSAY_BEGIN1            0  // "Äù½ºÆ®¸¦ ÇÏ½Ã°Ú½À´Ï±î? ¿¹/¾Æ´Ï¿À"
+#define QSAY_BEGIN2            1  // "Äù½ºÆ®¸¦ ÇÏ½Ã°Ú½À´Ï±î? ¿¹/¾Æ´Ï¿À"
+#define QSAY_BEGIN3            2  // "Äù½ºÆ®¸¦ ÇÏ½Ã°Ú½À´Ï±î? ¿¹/¾Æ´Ï¿À"
+#define QSAY_BEGIN4            3  // "Äù½ºÆ®¸¦ ÇÏ½Ã°Ú½À´Ï±î? ¿¹/¾Æ´Ï¿À"
+#define QSAY_BEGIN5            4  // "Äù½ºÆ®¸¦ ÇÏ½Ã°Ú½À´Ï±î? ¿¹/¾Æ´Ï¿À"
+#define QSAY_BEGIN_YES         5  // "¿¹"ÀÏ ¶§ÀÇ ´ë»ç 
+#define QSAY_BEGIN_NO          6 // "¾Æ´Ï¿À"ÀÏ ¶§ÀÇ ´ë»ç 
+#define QSAY_END_COMPLETE1 7 // Äù½ºÆ® ¿Ï·á ½Ã ´ë»ç_1
+#define QSAY_END_COMPLETE2 8 // Äù½ºÆ® ¿Ï·á ½Ã ´ë»ç_2
+#define QSAY_END_COMPLETE3 9 // Äù½ºÆ® ¿Ï·á ½Ã ´ë»ç_3
+#define QSAY_END_FAILURE1  10 // Äù½ºÆ® ¿Ï·á Á¶°Ç ¹ÌÃæÁ·½Ã ´ë»ç_1
+#define QSAY_END_FAILURE2  11 // Äù½ºÆ® ¿Ï·á Á¶°Ç ¹ÌÃæÁ·½Ã ´ë»ç_2
+#define QSAY_END_FAILURE3  12 // Äù½ºÆ® ¿Ï·á Á¶°Ç ¹ÌÃæÁ·½Ã ´ë»ç_3
+// ¿¢½ºÆ®¶ó ´ë»ç. ±âÅ¸ Ãß°¡ÇÏ°í ½ÍÀº °ÍµéÀ» À§ÇØ »ç¿ë. SayQuest·Î ÇØ¾ß Äù½ºÆ® Å¸ÀÌÆ²ÀÌ ³ªÅ¸³­´Ù.
 #define QSAY_EXTRA01       15 //
 #define QSAY_EXTRA02       16 //
 #define QSAY_EXTRA03       17 //
@@ -1141,56 +1006,5 @@
 #define QSAY_EXTRA13       27 //
 #define QSAY_EXTRA14       28 //
 #define QSAY_EXTRA15       29 //
-
-// TRN5 Hero Quests (6004-6011)
-#define QUEST_HEROBIL_TRN5    6004  // Billposter TRN5 Hero Quest
-#define QUEST_HEROBLA_TRN5    6005  // Blade TRN5 Hero Quest
-#define QUEST_HEROELE_TRN5    6006  // Elementor TRN5 Hero Quest
-#define QUEST_HEROJES_TRN5    6007  // Jester TRN5 Hero Quest
-#define QUEST_HEROKNI_TRN5    6008  // Knight TRN5 Hero Quest
-#define QUEST_HEROPSY_TRN5    6009  // Psychikeeper TRN5 Hero Quest
-#define QUEST_HERORAN_TRN5    6010  // Ranger TRN5 Hero Quest
-#define QUEST_HERORIN_TRN5    6011  // Ringmaster TRN5 Hero Quest
-
-// Additional named quest defines (6012-6049)
-#define QUEST_ABEROO01        6012  // Aberoo Event Quest 1
-#define QUEST_ABEROO02        6013  // Aberoo Event Quest 2
-#define QUEST_ALICE01         6014  // Alice Event Quest 1
-#define QUEST_ALICE02         6015  // Alice Event Quest 2
-#define QUEST_ALICE03         6016  // Alice Event Quest 3
-#define QUEST_ALICE04         6017  // Alice Event Quest 4
-#define QUEST_ALICE05         6018  // Alice Event Quest 5
-#define QUEST_ALICE06         6019  // Alice Event Quest 6
-#define QUEST_ALICE07         6020  // Alice Event Quest 7
-#define QUEST_BUBBLEGIFT      6021  // Bubble Gift Event Quest
-#define QUEST_COOK01          6022  // Cooking Quest 1
-#define QUEST_EVENTBALL       6023  // Event Ball Quest
-#define QUEST_GRAHOO01        6024  // Grahoo Event Quest 1
-#define QUEST_LEPRECHAUN01    6025  // Leprechaun Event Quest 1
-#define QUEST_LEPRECHAUN02    6026  // Leprechaun Event Quest 2
-#define QUEST_MINIWHEEL       6027  // Mini Wheel Event Quest
-#define QUEST_NEWBIE1_ACR     6028  // Newbie Quest 1 - Acrobat
-#define QUEST_NEWBIE1_ASS     6029  // Newbie Quest 1 - Assist
-#define QUEST_NEWBIE1_MAG     6030  // Newbie Quest 1 - Magician
-#define QUEST_NEWBIE1_MER     6031  // Newbie Quest 1 - Mercenary
-#define QUEST_NEWBIE2_ACR     6032  // Newbie Quest 2 - Acrobat
-#define QUEST_NEWBIE2_ASS     6033  // Newbie Quest 2 - Assist
-#define QUEST_NEWBIE2_MAG     6034  // Newbie Quest 2 - Magician
-#define QUEST_NEWBIE2_MER     6035  // Newbie Quest 2 - Mercenary
-#define QUEST_NEWBIE3_BIL     6036  // Newbie Quest 3 - Billposter
-#define QUEST_NEWBIE3_BLA     6037  // Newbie Quest 3 - Blade
-#define QUEST_NEWBIE3_ELE     6038  // Newbie Quest 3 - Elementor
-#define QUEST_NEWBIE3_JST     6039  // Newbie Quest 3 - Jester
-#define QUEST_NEWBIE3_KIN     6040  // Newbie Quest 3 - Knight
-#define QUEST_NEWBIE3_PSY     6041  // Newbie Quest 3 - Psychikeeper
-#define QUEST_NEWBIE3_RAG     6042  // Newbie Quest 3 - Ranger
-#define QUEST_NEWBIE3_RIN     6043  // Newbie Quest 3 - Ringmaster
-#define QUEST_SEVENTH2009     6044  // Seventh Anniversary 2009 Event
-#define QUEST_SKELETON01      6045  // Skeleton Event Quest 1
-#define QUEST_SNOWMAN01_1     6046  // Snowman Event Quest 1_1
-#define QUEST_SNOWMAN02_1     6047  // Snowman Event Quest 2_1
-#define QUEST_SNOWMAN03_1     6048  // Snowman Event Quest 3_1
-#define QUEST_WHITE2010       6049  // White Day 2010 Event Quest
-
 #endif
 

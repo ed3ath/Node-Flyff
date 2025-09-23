@@ -7,11 +7,11 @@ import { ConfigBuilder } from "../../builders/configBuilder";
 import { DatabaseBuilder } from "../../builders/databaseBuilder";
 import { HandlerBuilder } from "../../builders/handlerBuilder";
 import { ServerBuilder } from "../../builders/serverBuilder";
-import { ServerType } from "../../common/serverType";
+import { ServerType } from "../../types/serverType";
 import { WorldServer } from "./worldServer";
 import { IChannel, ICluster } from "../../interfaces/cluster";
 import { IInstance } from "../../interfaces/instance";
-import { MessageCommand, RedisChannel } from "../../common/redisTypes";
+import { MessageCommand, RedisChannel } from "../../types/redisTypes";
 import {
   buildEncryptionKeyFromString,
   decryptString,
@@ -22,6 +22,8 @@ import {
 import { RedisBuilder } from "../../builders/redisBuilder";
 import { FFRandom } from "../../helpers/FFRandom";
 import { ResourceBuilder } from "../../builders/resourceBuilder";
+import { PlayerDataService } from "../../services/playerDataService";
+import { ChatLogMigration } from "../../services/chatLogMigration";
 
 export default async () => {
   const instanceBuilder = new InstanceBuilder();
@@ -52,7 +54,28 @@ export default async () => {
   });
 
   const instance = await instanceBuilder.build();
+
+  // Initialize PlayerDataService with database connection
+  if (instance.database) {
+    // Ensure ChatLog table exists
+    try {
+      await ChatLogMigration.ensureChatLogTable(instance.database);
+    } catch (error) {
+      console.error("Failed to initialize ChatLog table:", error);
+    }
+
+    const playerDataService = PlayerDataService.getInstance();
+    playerDataService.setDataSource(instance.database);
+    console.log("✓ PlayerDataService initialized with database connection");
+  } else {
+    console.warn("⚠ Database not available - PlayerDataService will not function");
+  }
+
   worldIntercom(instance);
+
+  // Initialize packet logging for world server
+  const { PacketLogger } = require("../../helpers/packetLogger");
+  PacketLogger.logCustomMessage("World server started - packet logging initialized");
 
   global.GameConfig = instanceBuilder.config
   global.TimeStarted = new Date().getTime();
@@ -80,11 +103,13 @@ function worldIntercom(instance: IInstance) {
 
   subscriber?.subscribe(RedisChannel.CLUSTER_CHANNEL, (err) => {
     if (!err) {
+      logger?.info("World server subscribed to CLUSTER_CHANNEL successfully");
       setTimeout(() => {
+        logger?.info("Sending ADD_CHANNEL message:", JSON.stringify(channel));
         sendMessage(MessageCommand.ADD_CHANNEL, channel);
       }, 500); // for dev: temp delay for 500ms
     } else {
-      logger?.error(err);
+      logger?.error("Failed to subscribe to CLUSTER_CHANNEL:", err);
     }
   });
   subscriber?.on("message", processChannelMessage.bind(this));
@@ -95,11 +120,14 @@ function worldIntercom(instance: IInstance) {
 
   function processChannelMessage(redisChannel: RedisChannel, message: string) {
     if (redisChannel !== RedisChannel.CLUSTER_CHANNEL) return;
-    if (!isValidEncryptionString(message, master)) return; // reject invalid messages
+    if (!isValidEncryptionString(message, master)) {
+      logger?.warn("Received invalid encrypted message");
+      return;
+    }
     const decrypted = parseMessage(decryptString(message, master));
     if (decrypted) {
       if (decrypted.sender === ServerType.WORLD_SERVER) return;
-      // console.log(decrypted);
+      logger?.info("World server received message:", JSON.stringify(decrypted));
       switch (decrypted.command) {
         case MessageCommand.CLUSTER_ONLINE: {
           sendMessage(MessageCommand.ADD_CHANNEL, channel);

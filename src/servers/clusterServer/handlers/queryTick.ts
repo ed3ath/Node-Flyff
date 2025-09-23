@@ -1,4 +1,4 @@
-import { PacketType } from "../../../common/packetType";
+import { PacketType } from "../../../protocol/packetType";
 import { FlyffPacket } from "../../../libraries/flyffPacket";
 import { PacketHandler } from "../../../libraries/packetHandler";
 import { SetPacketType } from "../../../decorators/packetHandler";
@@ -8,14 +8,16 @@ export default class Handler extends PacketHandler {
   time: number;
   constructor(packet: FlyffPacket) {
     super();
-    this.time = packet.readInt32LE();
+    this.time = packet.readInt32();
+    console.log(packet.buffer.toString('hex'))
   }
 
   async execute(): Promise<void> {
     const packet = new FlyffPacket(PacketType.QUERY_TICK_COUNT);
-    const elapsed = new Date().getTime() - this.server.time;
-    packet.writeUInt32LE(this.time);
-    packet.writeInt64LE(elapsed);
+    const serverStartTime = this.server.time || new Date().getTime();
+    const elapsed = new Date().getTime() - serverStartTime;
+    packet.writeUInt32(this.time);
+    packet.writeInt64(elapsed);
     this.send(packet);
   }
 }

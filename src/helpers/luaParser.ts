@@ -1,4 +1,4 @@
-import fs from "fs-extra";
+import * as fs from "fs-extra";
 import { Logger } from "./logger";
 
 export interface LuaTable {
@@ -41,7 +41,7 @@ export class LuaParser {
       .trim();
 
     // Find the main table definition using a more robust regex
-    const tableMatch = cleanContent.match(/(\w+)\s*=\s*(\{.*\})/s);
+    const tableMatch = cleanContent.match(/(\w+)\s*=\s*(\{[\s\S]*\})/);
     if (!tableMatch) {
       return result;
     }

@@ -7,7 +7,7 @@ import { DatabaseBuilder } from "./databaseBuilder";
 import { HandlerBuilder } from "./handlerBuilder";
 import { ServerBuilder } from "./serverBuilder";
 import { HandlerConstructor } from "../libraries/packetHandler";
-import { PacketType } from "../common/packetType";
+import { PacketType } from "../protocol/packetType";
 import { sleep } from "../helpers/sleep";
 import { IConfig } from "../interfaces/config";
 import { RedisBuilder } from "./redisBuilder";
@@ -75,16 +75,34 @@ export class InstanceBuilder {
     let gameResources: GameResources | null = null;
 
     // build database
-    if (this.config?.database) {
+    let dbConfig: any = null;
+    if (this.serverBuilder?.serverType) {
+      switch (this.serverBuilder.serverType) {
+        case "LoginServer":
+          dbConfig = this.config?.login_server?.database;
+          break;
+        case "ClusterServer":
+          dbConfig = this.config?.cluster_server?.database;
+          break;
+        case "WorldServer":
+          dbConfig = this.config?.world_server?.database;
+          break;
+      }
+    } else {
+      dbConfig = this.config?.database;
+    }
+
+    if (dbConfig && this.databaseBuilder) {
       await this.databaseBuilder.addConnection({
+        name: "default",
         dataSource: {
-          type: _.get(this.config?.database, "provider"),
-          database: _.get(this.config?.database, "connection-string"),
-          url: _.get(this.config?.database, "url"),
-          host: _.get(this.config?.database, "host"),
-          port: _.get(this.config?.database, "port"),
-          username: _.get(this.config?.database, "username"),
-          password: _.get(this.config?.database, "password"),
+          type: (dbConfig as any).provider || (dbConfig as any).type,
+          database: (dbConfig as any)["connection-string"] || (dbConfig as any).database,
+          url: (dbConfig as any).url,
+          host: (dbConfig as any).host,
+          port: (dbConfig as any).port,
+          username: (dbConfig as any).username,
+          password: (dbConfig as any).password,
         },
         entities: [],
       } as IDatabaseOptions);

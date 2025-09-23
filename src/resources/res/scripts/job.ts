@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import _ from "lodash";
 import yaml from "js-yaml";
-import { DefineJob, JobMax, JobType } from "../../../common/defineJob";
+import { DefineJob, JobMax, JobType } from "../../../game/definitions/defineJob";
 
 // Read the file content
 fs.readFile(
